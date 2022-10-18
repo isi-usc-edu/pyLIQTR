@@ -1,0 +1,106 @@
+\documentclass[11pt]{revtex4-1}
+
+
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{braket}
+\usepackage{tikz}
+
+
+\definecolor{orangelt}{RGB}{254,216,177}
+\definecolor{bluelt}{RGB}{173,216,230}
+\definecolor{purplelt}{RGB}{242,216,243}
+\definecolor{greenlt}{RGB}{173,216,230}
+\definecolor{yellowlt}{RGB}{173,216,230}
+\definecolor{redlt}{RGB}{173,216,230}
+
+\newcommand{\pmat}[2]{\sigma^{#1}_{#2}}
+
+
+\tikzset{every picture/.style={line width=1.5pt}}
+
+
+
+\newenvironment{diagram}
+{
+\begin{tikzpicture}[baseline = (X.base),every node/.style={scale=0.7},scale=.55]
+}
+{
+\end{tikzpicture}
+}
+
+\begin{document}
+
+\begin{equation}
+\Omega = dv \, dx
+\end{equation}
+
+\begin{equation}
+\Phi_L = f(x,v,t)\, v\,dv
+\end{equation}
+
+\begin{equation}
+\Phi_R = f(x+dx,v,t)\, v\,dv
+\end{equation}
+
+\begin{equation}
+\Phi_B = f(x,v,t) \, a(x,v,t)\, dx
+\end{equation}
+
+\begin{equation}
+\Phi_T = f(x,v+dv,t) \, a(x,v+dv,t)\, dx
+\end{equation}
+
+\begin{equation}
+(x,v)
+\end{equation}
+
+\begin{equation}
+dx
+\end{equation}
+
+\begin{equation}
+dv
+\end{equation}
+
+\begin{equation}
+d\Omega
+\end{equation}
+
+\begin{equation}
+d\Omega_1
+\end{equation}
+
+\begin{equation}
+d\Omega_2
+\end{equation}
+
+\begin{equation}
+(x+dx,v+dv)
+\end{equation}
+
+\begin{equation}
+x
+\end{equation}
+
+\begin{equation}
+v
+\end{equation}
+
+
+\begin{equation}
+\delta v
+\end{equation}
+
+\begin{equation}
+\delta v_1 + \delta v
+\end{equation}
+
+\begin{equation}
+\delta v_2 - \delta v
+\end{equation}
+
+\end{document}
