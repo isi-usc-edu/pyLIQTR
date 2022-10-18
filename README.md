@@ -45,7 +45,7 @@ The notebook outputs an OpenQASM 2.0 file containing the quantum circuit.
 The notebook <b>~/Examples/Tutorial_4_Circuit_Scaling.ipynb</b> containst a series of cells focused on scaling the QSP generated circuit to larger problems using the Vlasov-Hermite Hamiltonian as a test case. Note, some of the cells may take a significant amount of time to run, but the array dictating the problem sizes spanned can be trimmed as appropriate. Additionally, data can be saved to a csv file for later or further analysis
 
 <h2> Citation </h2>
-[![DOI](https://zenodo.org/badge/545621986.svg)](https://zenodo.org/badge/latestdoi/545621986)
+<a href="https://zenodo.org/badge/latestdoi/545621986"><img src="https://zenodo.org/badge/545621986.svg" alt="DOI"></a>
 
 <h2> Disclaimer </h2>
 
