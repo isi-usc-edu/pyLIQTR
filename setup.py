@@ -38,6 +38,13 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         'numpy',
-        'cirq'
+        'cirq',
+        'pandas',
+        'scipy',
+        'matplotlib',
+        'tqdm',
+        'openfermion',
+        'pyscf',
+        'portalocker'
     ]
 )
