@@ -9,16 +9,17 @@ Several jupyter notebooks are included in the repo to demonstrate how the code w
 <h2> Installation and Environment Setup </h2>
 It is recommended that conda is used to manage the environment. A yaml file is included to facilitate this.
 
-- Create and activate the environment:
+- Create and activate a baseline conda environment:
 
-        conda env create -n <Environment Name> --file pyQSP_env.yml
+        conda create -n <Environment Name> python=3.8
 
         conda activate <Environment Name>
-        
-- Install MPSolve polynomial solver, which is used in the angle generation algorithm. Instructions for installation can be found here: https://numpi.dm.unipi.it/software/mpsolve
-- Install the pyQuantumAlgos package
+- Install the pyLIQTR package
 
         pip install .
+        
+- Install MPSolve polynomial solver, which is used in the angle generation algorithm. Instructions for installation can be found here: https://numpi.dm.unipi.it/software/mpsolve
+
 
 <h2> Overview of Examples Included as Jupyter Notebooks </h2>
 
