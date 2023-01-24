@@ -78,38 +78,38 @@ def clifford_plus_t_direct_transform(
         A new circuit where the single qubit rotations have been replaced by approximations
         using the gates listed in the list clifford_plus_T_ops above
     """
-    new_circuit = cirq.Circuit()
+    operations = []
     for moment in circuit:
         for op in moment:
             if len(op.qubits) != 1 or is_gate_clifford(op):
-                new_circuit.append(op)
+                operations.append(op)
             else:
                 qubit = op.qubits[0]
                 gate_list = parse_gate(op.gate)
                 for gate_tuple in gate_list:
                     # if Z rotation, can directly approximate
                     if gate_tuple[0] == "z":
-                        new_circuit.append(
+                        operations.append(
                             decompose_diagonal_cirq(D(gate_tuple[1]), precision, qubit)
                         )
                     # if Y gate, can approximate with RY(θ) = (SH)RZ(θ)(SH)dag
                     # = (SH)RZ(θ)(HSdag)
                     if gate_tuple[0] == "y":
-                        new_circuit.append(cirq.S(qubit) ** -1)
-                        new_circuit.append(cirq.H(qubit))
-                        new_circuit.append(
+                        operations.append(cirq.S(qubit) ** -1)
+                        operations.append(cirq.H(qubit))
+                        operations.append(
                             decompose_diagonal_cirq(D(gate_tuple[1]), precision, qubit)
                         )
-                        new_circuit.append(cirq.H(qubit))
-                        new_circuit.append(cirq.S(qubit))
+                        operations.append(cirq.H(qubit))
+                        operations.append(cirq.S(qubit))
                     # if X gate, can approximate with RX(θ) = H RZ(θ) H
                     if gate_tuple[0] == "x":
-                        new_circuit.append(cirq.H(qubit))
-                        new_circuit.append(
+                        operations.append(cirq.H(qubit))
+                        operations.append(
                             decompose_diagonal_cirq(D(gate_tuple[1]), precision, qubit)
                         )
-                        new_circuit.append(cirq.H(qubit))
-    return new_circuit
+                        operations.append(cirq.H(qubit))
+    return cirq.Circuit(operations)
 
 
 def parse_gate(gate: cirq.Gate) -> List[Tuple[str, float]]:
