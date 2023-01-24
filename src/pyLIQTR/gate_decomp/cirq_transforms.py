@@ -30,6 +30,7 @@ from decimal import getcontext, Decimal
 from pyLIQTR.gate_decomp.exact_decomp import exact_decomp
 from pyLIQTR.gate_decomp.decimal_utils import prec_pi
 from pyLIQTR.gate_decomp.gate_approximation import get_ring_elts_direct
+from functools import lru_cache
 
 D = Decimal
 
@@ -178,6 +179,7 @@ def check_common_angles(angle: D, precision: int) -> Union[None, cirq.Gate]:
     return None
 
 
+@lru_cache
 def decompose_diagonal_cirq(
     angle: D, precision: int, qubit: cirq.Qid
 ) -> Iterable[cirq.Operation]:
