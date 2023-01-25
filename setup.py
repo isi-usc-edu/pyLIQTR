@@ -22,8 +22,8 @@ from setuptools import setup, find_packages
 
 DISTNAME     = "pyLIQTR"
 LICENSE      = 'BDS-2'
-AUTHOR       = 'Joe Belarge, Arthur Kurlej, Justin Elenewski, John Blue'
-AUTHOR_EMAIL = 'Joseph.Belarge@ll.mit.edu'
+AUTHOR       = 'Joe Belarge, Arthur Kurlej, Justin Elenewski, John Blue, Kevin Obenland'
+AUTHOR_EMAIL = 'Kevin.Obenland@ll.mit.edu'
 DESCRIPTION  = 'A python package for generating quantum circuits using quantum algorithms.'
 
 setup(
