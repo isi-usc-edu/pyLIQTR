@@ -1,58 +1,75 @@
-<h1> pyLIQTR Version 0.2.0</h1>
-pyLIQTR (<em>LI</em>ncoln Laboratory <em>Q</em>uantum algorithm <em>T</em>est and <em>R</em>esearch), is a python-based implementation of Quantum Algorithms. The codebase is actively developed, and currently supports Hamiltonian Simulation via the Quantum Signal Processing (QSP) algorithm. 
-<br><br>
-The current implementation of QSP supports real Hamiltonians, but development is ongoing to support Hamiltonians with imaginary components.
-<br>
-<br>
-Several jupyter notebooks are included in the repo to demonstrate how the code works.
+# pyLIQTR Version 0.3.0
+_Kevin Obenland, Justin Elenewski, Arthur Kurlej, Joe Belarge, John Blue &  Robert Rood_
 
-<h2> Installation and Environment Setup </h2>
-It is recommended that conda is used to manage the environment. A yaml file is included to facilitate this.
+---
+## Description
+`pyLIQTR` (<em>LI</em>ncoln Laboratory <em>Q</em>uantum algorithm <em>T</em>est and <em>R</em>esearch), is a python library for building quantum circuits derived from quantum algorithms. Once the circuits have been generated, one can simulate them (if they are small enough), or utilize them for resource estimations. The codebase is actively developed, and currently supports the following algorithms:
+- Hamiltonian Simulation using Quantum Signal Processing (QSP) for real-valued Hamiltonians
 
-- Create and activate a baseline conda environment:
+- Ground State Estimation (GSE) using the Hadamard Test architecture with Trotterization
+    - Requires openfermion (which is by default not installed), see note in Optional Installs section below. 
+
+---
+
+## Installation and Environment Setup
+It is recommended that conda be used to manage the environment. A setup.py file is included to facilitate this.
+Change directory to the location of setup.py, then perform the following commands.
+
+- Create and activate the environment:
 
         conda create -n <Environment Name> python=3.8
 
         conda activate <Environment Name>
-- Install the pyLIQTR package
+        
+- Install the package
 
         pip install .
         
+### Optional Installs
 - Install MPSolve polynomial solver, which is used in the angle generation algorithm. Instructions for installation can be found here: https://numpi.dm.unipi.it/software/mpsolve
+- If not installed, then scipy will be used to calculate valid angles. Angle generation using scipy will generally take longer than angle generation using mpsolve.
+Effort is underway to deprecate the existing angle generation in favor of a more portable and efficient method.
+- Install openfermion & pyscf. 
+    - Openfermion is used for the implementation of Suzuki-Trotter and as the input to our implementation of GSE. This is required to use the GSE implementation.
+    - pyscf is used in conjunction with openfermion in order to generate new problem instances as input into our GSE implementation.
 
+---
 
-<h2> Overview of Examples Included as Jupyter Notebooks </h2>
+## Overview of Examples Included as Jupyter Notebooks
 
-<h3> Example Physical Problem - Quantum Computation for the Vlasov Equation </h3>
-Many physical problems can reformulated from a quantum algorithms perspective. The notebooks, <b>~/Examples/Tutorial_1a_Vlasov_Evolution.ipynb</b> describes an approach to treating the Vlasov Euqation in such a manner. Additionally, the notebook <b>~/Examples/Tutorial_1b_QSP_Demonstration-Operator_Level.ipynb</b> implements QSP at an operator level, as opposed to a gate level, to solve example problems, including an Ising model problem and the Vlasov-Hermite problem.
+There are a variety of examples provided to demonstrate the capabilities of `pyLIQTR`. In particular, there are demonstrations of the following algorithms (and example problems) under `<pyLIQTR root>/Examples`:
+* QSP
+    * Vlasov-Hermite Model
+    * Heisenberg Model
+    * Transverse-field Ising Model
+* GSE
 
+Where each demonstration contains five tutorial notebooks, which each serve the following purpose:
+* _Tutorial_1a (Problem Description & Classical Solving)_
+    * This tutorial provides a brief introduction to the physical problem of interest and how `pyLIQTR` can be used to generate a representation of the model. This tutorial then showcases how `pyLIQTR` and/or `numpy`/`scipy` methods can then be used to classically solve the problem or simulate the system. We note that since we are interested in classically hard problems, these notebooks focus on small problems or special cases that can be executed on most personal computers.
+* _Tutorial_1b (Solving with a Quantum Algorithm)_
+    * This tutorial, in conjunction with 1a, shows how this problem can be mapped from a _"classical"_ method of solving the problem to a method conducive to running on a quantum computer, and shows how similar results can be achieved.
+* _Tutorial_2 (Simulation of quantum circuit and classical comparison)_
+    * This tutorial contains a step-by-step `pyLIQTR` demo for generating a representation of the problem of interest, generating quantum circuits that simulate or solve the problem, and then simulating the quantum circuit and comparing the results against a classical technique to show that the implementation of the quantum algorithm is correct. Again, since we are interested in classically hard problems and since, for the most part, classical computers cannot efficiently simulate a quantum computer, we focus on small problems or special cases that can be ran on most personal computers.
+* _Tutorial_3 (Circuit manipulation and output)_
+    * This tutorial shows how to take the `cirq` circuits that `pyLIQTR` generates in <i>Tutorial_2</i> and decompose them to simple gates, transform them to Clifford+T gates, and to export to an _OpenQASM_ format in order to allow for further analysis or manipulation in other tools.
+* _Tutorial_4 (Circuit scaling and simple analysis)_
+    * This tutorial is intended to provide a _"jumping off point"_ for using `pyLIQTR` to investigate problem/algorithm scaling by generating circuits of various different sizes and how they can be analyzed in python. 
 
-<h3> QSP for Hamiltonian Simulation </h3>
-The notebook <b>~/Examples/Tutorial_2_QSP_Simulation.ipynb</b> contains a step-by-step demo for generating a quantum circuit using QSP for the Vlasov Equation problem formulated in the Vlasov (1a) notebook. After the intial QSP circuit is generated, subsequent circuits are produced at future timesteps to time-evolve the system. The results of the quantum simulation are obtained, using cirq's simulator as a backend. 
+**To summarize**, Tutorials 1a, 1b, and 2 are useful for those interested in better understanding the physical models or problems, how they are classically solved and/or simulated, and how a particular quantum algorithm can be used to solve and/or simulate the problem. Tutorials 3 and 4 are useful for those interested in generating circuits for downstream analyses, such as resource analysis, for a specific problem.
 
-<br>
-A classical simulation of the system is also performed, following the methods outlined in the Vlasov (1a) noteobok. 
+---
 
-<br>
-The two solutions, the QSP gate-based quantum circuit simulation, and the classical simulation, are compared to demonstrate agreement.
-
-<h3>Quantum Circuit Generation</h3>
-The notebook <b>~/Examples/Tutorial_3_Generate_Circuit.ipynb</b> contains a step-by-step demo for generating a quantum circuit for a given Hamiltonian. Note: The user must provide a Hamiltonian as a list of Pauli Strings. These can be obtained from previously referenced notebooks in the repository. 
-
-<br>
-The notebook outputs an OpenQASM 2.0 file containing the quantum circuit.
-
-<h3> Circuit Scaling</h3>
-The notebook <b>~/Examples/Tutorial_4_Circuit_Scaling.ipynb</b> containst a series of cells focused on scaling the QSP generated circuit to larger problems using the Vlasov-Hermite Hamiltonian as a test case. Note, some of the cells may take a significant amount of time to run, but the array dictating the problem sizes spanned can be trimmed as appropriate. Additionally, data can be saved to a csv file for later or further analysis
-
-<h2> Citation </h2>
+## Citation
 <a href="https://zenodo.org/badge/latestdoi/545621986"><img src="https://zenodo.org/badge/545621986.svg" alt="DOI"></a>
 
-<h2> Disclaimer </h2>
+---
+
+## Disclaimer
 
 DISTRIBUTION STATEMENT A. Approved for public release: distribution unlimited.
 
-© 2022 MASSACHUSETTS INSTITUTE OF TECHNOLOGY
+© 2023 MASSACHUSETTS INSTITUTE OF TECHNOLOGY
     
     Subject to FAR 52.227-11 – Patent Rights – Ownership by the Contractor (May 2014)
     SPDX-License-Identifier: BSD-2-Clause

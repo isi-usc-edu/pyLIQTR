@@ -597,7 +597,7 @@ def diffphis(phis):
     twopi = 2 * _mp.pi
     if len(phis) & 1:
         m = len(phis) - 1
-        ph = _np.zeros(m+1,dtype=_np.float128)
+        ph = _np.zeros(m+1,dtype=_np.float64)
         ph[0] = ((phis[0] + phis[1] + _mp.pi) % twopi) - _mp.pi
         ph[m] = ((        - phis[m]         ) % twopi) - _mp.pi
         for k in range(1,m):
@@ -699,7 +699,12 @@ def find_roots(ft,tol,mt=None,mpargs=()):
         has_mpsolve = False
 
     if has_mpsolve:
-        roots,err = mproots(ft.all_coeffs()[::-1],rational=True,mt=mt,mpargs=mpargs)
+        try:
+            roots,err = mproots(ft.all_coeffs()[::-1],rational=True,mt=mt,mpargs=mpargs)
+        except:
+            _sys.set_int_max_str_digits(0)
+            roots,err = mproots(ft.all_coeffs()[::-1],rational=True,mt=mt,mpargs=mpargs)
+            _sys.set_int_max_str_digits(4300)
     else:
         prec  = 50+_mp.mp.dps
         roots = ft.nroots(n=prec,maxsteps=50+prec)

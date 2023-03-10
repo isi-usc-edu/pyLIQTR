@@ -356,9 +356,9 @@ def qsp_decompose_once(circuit, debug=False):
             if debug:
                 print(f'>> circuit op = {op}')
             if (str(op).startswith(('reset','Rx','Ry','Rz',\
-                'X','Y','Z','S',\
+                'X','Y','Z','S', 'H',\
                 'CX','CZ','CCZ','CCX',\
-                'TOFFOLI'))):
+                'TOFFOLI', 'CCXi', 'ccxi', 'cirq.Measure'))):
                 if "**-1.0" in str(op) and \
                     (("TOFFOLI" in str(op)) \
                      or ("CNOT" in str(op))):
@@ -367,7 +367,17 @@ def qsp_decompose_once(circuit, debug=False):
                     decomposed_gates.append(op)
                 continue
             try:
-                decomp_gates = cirq.decompose_once(op)
+                tmp_gates    = cirq.decompose_once(op)
+                decomp_gates = []
+
+                # Note: If this decomposes into a MatrixGate, 
+                #  lets decompose it once more so its not 
+                #  a MatrixGate
+                for gate in tmp_gates:
+                    if str(gate).startswith('[['):
+                        decomp_gates.extend(cirq.decompose_once(gate))
+                    else:
+                        decomp_gates.append(gate)
                 if debug:
                     print(f"\t>> ops = {decomp_gates}")
                 decomposed_gates.append(decomp_gates)

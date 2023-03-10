@@ -20,15 +20,17 @@ may violate any copyrights that exist in this work.
 
 from setuptools import setup, find_packages
 
-DISTNAME     = "pyLIQTR"
-LICENSE      = 'BDS-2'
-AUTHOR       = 'Joe Belarge, Arthur Kurlej, Justin Elenewski, John Blue, Kevin Obenland'
-AUTHOR_EMAIL = 'Kevin.Obenland@ll.mit.edu'
-DESCRIPTION  = 'A python package for generating quantum circuits using quantum algorithms.'
+DISTNAME = "pyLIQTR"
+LICENSE = "BDS-2"
+AUTHOR = "Kevin Obenland, Justin Elenewski, Arthur Kurlej,  Joe Belarge, John Blue, and Robert Rood"
+AUTHOR_EMAIL = "Kevin.Obenland@ll.mit.edu"
+DESCRIPTION = (
+    "A python package for generating quantum circuits using quantum algorithms."
+)
 
 setup(
     name=DISTNAME,
-    version='0.2.0',
+    version="0.3.0",
     license=LICENSE,
     description=DESCRIPTION,
     author=AUTHOR,
@@ -37,14 +39,12 @@ setup(
     package_dir={"": "src"},
     python_requires=">=3.8",
     install_requires=[
-        'numpy',
-        'cirq',
-        'pandas',
-        'scipy',
-        'matplotlib',
-        'tqdm',
-        'openfermion',
-        'pyscf',
-        'portalocker'
-    ]
+        "cirq",
+        "numpy",
+        "pandas",
+        "scipy",
+        "matplotlib",
+        "tqdm",
+        "portalocker",
+    ],
 )

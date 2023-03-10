@@ -7,7 +7,7 @@ findings, conclusions or recommendations expressed in this material are those of
 author(s) and do not necessarily reflect the views of the Under Secretary of Defense
 for Research and Engineering.
 
-© 2022 Massachusetts Institute of Technology.
+© 2023 Massachusetts Institute of Technology.
 
 The software/firmware is provided to you on an As-Is basis
 
@@ -40,12 +40,13 @@ import pyLIQTR.QSP.QSP         as _pyQSP
 import pyLIQTR.QSP.qspangles   as _qa
 import cirq
 
+import warnings
 
 
 
 class QSP_Simulator():
 
-    def __init__(self, timestep_vec, angles, init_state, qsp_H):
+    def __init__(self, timestep_vec, angles, init_state:cirq.Circuit, qsp_H):
         self.timestep_vec = timestep_vec
         self.angles       = angles
         self.init_state   = init_state
@@ -65,11 +66,14 @@ class QSP_Simulator():
         return self.sim_results
 
 def getlogepsilon(tau,steps,nsegs=1):
-    q  = steps//2 + 1
-    val  = _np.log(32)
-    val += _np.log(tau/2) * q
-    val -= _spc.gammaln(q+1) # == log(q!)
-    val -= _np.log(nsegs) * (q-1)
+    if _np.isclose(tau,0):
+        val = -_np.inf
+    else:
+        q  = steps//2 + 1
+        val  = _np.log(32)
+        val += _np.log(tau/2) * q
+        val -= _spc.gammaln(q+1) # == log(q!)
+        val -= _np.log(nsegs) * (q-1)
     return val
 
 def get_steps_from_logeps(true_eps,tau,nsegs=1):
@@ -95,7 +99,41 @@ def diffphis(phis):
     return phis
 
 
-def get_phis(hamiltonian,simtime,req_prec, balance=False, ex=False, steps_only=False):
+def get_phis(hamiltonian, simtime,req_prec, balance = False, ex=False, steps_only=False):
+    msgblk = """\n
+    get_phis will be deprected by 'compute_hamiltonian_angles' in a future release
+
+    The equivalent call is:
+    \tcompute_hamiltonian_angles(<Hamiltonian>,<simtime>,<req_prec>,<mode>)
+    \t\tSupported modes: random (random angles),legacy("old" generation)
+    \t\tUpcoming modes: expander (a more powerful, faster, flexible angle calculation tool)
+    \n
+    """
+    warnings.warn(msgblk)
+    
+    return legacy_get_phis(hamiltonian, simtime, req_prec, balance, ex, steps_only)
+
+def compute_hamiltonian_angles(hamiltonian, simtime, req_prec, mode : str = "random" , max_iter = None):
+    """
+    """
+    if mode not in ["legacy","random"]:
+        raise ValueError("Mode must be one of legacy/random")
+    
+    if mode == "legacy":
+        return legacy_get_phis(hamiltonian, simtime, req_prec)
+    elif mode == "random":
+        tau = simtime*hamiltonian.alpha
+        steps,closeval = get_steps_from_logeps(_np.log(req_prec),tau,1)
+        while getlogepsilon(tau,steps)>_np.log(req_prec):
+            steps+=4
+        phis = _np.pi*_np.random.random(steps+1)
+        error = None
+        return phis,error
+    elif mode == "expander":
+        return None
+
+
+def legacy_get_phis(hamiltonian,simtime,req_prec, balance=False, ex=False, steps_only=False):
     #return anything required for QSP to be properly setup.
     tau = simtime*hamiltonian.alpha
     #have tau and epsilon, backtrack in order to get steps

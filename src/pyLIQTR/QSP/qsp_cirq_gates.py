@@ -20,6 +20,7 @@ may violate any copyrights that exist in this work.
 
 import cirq
 import numpy as np
+from typing import ( Optional, Tuple )
 from pyLIQTR.QSP.qsp_helpers  import getLineQubitIndexMap, getQubitFromMap
 from pyLIQTR.QSP.qsp_select_v import SelVBase
 from pyLIQTR.QSP.qsp_prepare  import QSP_Prepare
@@ -110,7 +111,8 @@ class MultiCZ(cirq.Gate):
                 ctl_q_2 = getQubitFromMap(ctl_2, self.__ctl_q, self.__trgt_q, self.__anc_q)
                 tgt_q_1 = getQubitFromMap(tgt_1, self.__ctl_q, self.__trgt_q, self.__anc_q)
 
-                yield(cirq.CCNOT(ctl_q_1, ctl_q_2, tgt_q_1))
+                # trying to use my new class
+                yield(cirq.CCX(ctl_q_1, ctl_q_2, tgt_q_1))
                 
                 if len(ctl_list) == 2 and not anc_list:
                     ctl_q_1 = getQubitFromMap(ctl_list[0], self.__ctl_q, self.__trgt_q, self.__anc_q)
@@ -120,7 +122,47 @@ class MultiCZ(cirq.Gate):
 
     def _circuit_diagram_info_(self, args):
         return ["MultiCZ"] * self.num_qubits()
+
+# This is almost a CCX gate, up to an additional CS applied to the coontrol qubits
+# This can be used in cases where the CCX gate is paired with an inverse and the control
+# qubits have no intervening gates applied to them
+#
+class CCXi(cirq.Gate):
+    def __init__(self, c0, c1, t):
+        self.__ctl_q0 = c0
+        self.__ctl_q1 = c1
+        self.__trg_q = t
+        
+        super(CCXi, self)
+
+    def __str_(self) -> str:
+        if self._exponent == 1:
+            return 'ccxi {}, {}, {}'.format(self.__ctl_q0, self.__ctl_q1, self.__trg_q)
+        else:
+            return 'ccxi**{} {}, {}, {}'.format(self._exponent, self.__ctl_q0, self.__ctl_q1, self.__trg_q)
             
+    def __repr_(self) -> str:
+        if self._exponent == 1:
+            return 'ccxi {}, {}, {}'.format(self.__ctl_q0, self.__ctl_q1, self.__trg_q)
+        else:
+            return 'ccxi**{} {}, {}, {}'.format(self._exponent, self.__ctl_q0, self.__ctl_q1, self.__trg_q)
+    
+    def _num_qubits_(self):
+        return 3
+
+    def _decompose_(self, qubits):
+        c0, c1, t = qubits
+        yield(cirq.CCX(self.__ctl_q0, self.__ctl_q1, self.__trg_q))
+
+    def _circuit_diagram_info_(self, args):
+        return ["CCXi"] * self.num_qubits()        
+
+    def _qasm_(self, args: 'cirq.QasmArgs', qubits: Tuple['cirq.Qid', ...]) -> Optional[str]:
+        args.validate_version('2.0')
+        lines = [
+            args.format('ccxi {0},{1},{2};\n', qubits[0], qubits[1], qubits[2]),
+        ]
+        return ''.join(lines)
 
 class Reflect(cirq.Gate):
     def __init__(self, phi, phase_qubit, control_qubits, ancilla_qubits):

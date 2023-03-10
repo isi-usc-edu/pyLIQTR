@@ -95,6 +95,8 @@ class QSP_Prepare(cirq.Gate):
         return angles, new_coefs
 
     def expOp(self, phi, tgt_q, debug=False):
+        if np.isclose(phi,0):
+            return []
         if self.pp_exp==cirq.X:
             return [cirq.Rx(rads=phi*2).on(tgt_q)]
         elif self.pp_exp==cirq.Y:

@@ -57,7 +57,8 @@ class QSPBase:
     def __init__(self, 
                  phis: List[float], 
                  hamiltonian: Hamiltonian,
-                 target_size: int):
+                 target_size: int,
+                 singleElement: bool=False):
         """
         Initializes QSP Base class and generates target, control, and phase qubits.
 
@@ -72,6 +73,10 @@ class QSPBase:
             target_size : int
                 Number of spins in the spin-chain (?)
 
+            singleElement: bool
+                Set to True to get a circuit with single selectV/reflect pair
+                (useful for circuit analysis)
+
         Returns:
             None
         """
@@ -82,6 +87,7 @@ class QSPBase:
         self.__phase = self.generate_phase_qubit()
         self.__control = self.generate_control_qubits()
         self.__ancilla = None
+        self.__singleElement = singleElement
         
     def get_number_of_control_qubits(self) -> int:
         #hamiltonian should be a list of tuples [(),(),...()]
@@ -147,17 +153,21 @@ class QSPBase:
         circuit = self.add_correction(circuit,beginning=True)
         circuit = self.add_phase_rotation(circuit, phi0, rot_type='X')
         #phased iterates
-        for idx in range(0,len(phiLo)-1,2):
-            circuit = self.add_phased_iterate(circuit, phiLo[idx],phiLo[idx+1],invert=0)
+        if not self.__singleElement:
+            for idx in range(0,len(phiLo)-1,2):
+                circuit = self.add_phased_iterate(circuit, phiLo[idx],phiLo[idx+1],invert=0)
         #selectV
-        circuit = self.add_select_v(circuit,phiLo[-1])
+            circuit = self.add_select_v(circuit,phiLo[-1])
+
         #reflection
         circuit = self.add_reflection(circuit, phiMid)
         #selectV
         circuit = self.add_select_v(circuit, phiHi[0])
         #phased iterates
-        for idx in range(1,len(phiHi),2):
-            circuit = self.add_phased_iterate(circuit,phiHi[idx],phiHi[idx+1],invert=1)
+        if not self.__singleElement:
+            for idx in range(1,len(phiHi),2):
+                circuit = self.add_phased_iterate(circuit,phiHi[idx],phiHi[idx+1],invert=1)
+
         circuit = self.add_phase_rotation(circuit, phiN, rot_type='X')
         circuit = self.add_correction(circuit,beginning=False)
         circuit = self.clear_register(circuit)
@@ -301,7 +311,8 @@ class QSP(QSPBase):
     def __init__(self, 
                  phis: List[float], 
                  hamiltonian: List[Tuple[str, float]],
-                 target_size: int):
+                 target_size: int,
+                 singleElement: bool=False):
         """
         Initializes QSP class and generates target, control, and phase qubits.
 
@@ -319,7 +330,7 @@ class QSP(QSPBase):
         Returns:
             None
         """
-        super(QSP, self).__init__(phis, hamiltonian, target_size)
+        super(QSP, self).__init__(phis, hamiltonian, target_size, singleElement)
         n_ = len(self.control) + 1 #always only 1 phase qubit
         n_anc = n_ - 3
         if n_anc > 0:

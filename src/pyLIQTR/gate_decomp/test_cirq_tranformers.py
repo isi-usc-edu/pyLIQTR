@@ -25,6 +25,7 @@ from time import perf_counter
 from random import random
 import math
 import numpy as np
+from numpy.random import default_rng
 
 
 class TestCirqTransforms(unittest.TestCase):
@@ -53,7 +54,7 @@ class TestCirqTransforms(unittest.TestCase):
             "Avg time over 50 decomps was greater than 0.1s (prec=10)",
         )
 
-    def test_profile_prec20(self):
+    def test_profile_prec15(self):
         q0 = cirq.NamedQubit("q0")
         original_circuit = cirq.Circuit()
         times = []
@@ -64,15 +65,15 @@ class TestCirqTransforms(unittest.TestCase):
             original_circuit.append(cirq.rz(angle).on(q0))
             start = perf_counter()
             new_circuit = clifford_plus_t_direct_transform(
-                original_circuit, precision=20
+                original_circuit, precision=15
             )
             end = perf_counter()
             times.append(end - start)
         avg_time = sum(times) / len(times)
         self.assertLessEqual(
             avg_time,
-            0.1,
-            "Avg time over 50 decomps was greater than 0.1s (prec=20)",
+            0.05,
+            "Avg time over 50 decomps was greater than 0.05s (prec=15)",
         )
 
     def test_single_qubit_z_rotation(self):
@@ -153,7 +154,7 @@ class TestCirqTransforms(unittest.TestCase):
         original_circuit.append(cirq.rz(1.7896).on(q0))
         num_original_gates = 10
         new_circuit = clifford_plus_t_direct_transform(original_circuit, precision)
-        max_error = num_original_gates * (2 * 10 ** -precision)
+        max_error = num_original_gates * (2 * 10**-precision)
 
         vec1 = self.sim.simulate(original_circuit).state_vector()
         vec2 = self.sim.simulate(new_circuit).state_vector()
@@ -179,7 +180,7 @@ class TestCirqTransforms(unittest.TestCase):
         original_circuit.append(cirq.rz(1.7896).on(q0))
         new_circuit = clifford_plus_t_direct_transform(original_circuit, precision)
         num_original_gates = 10
-        max_error = num_original_gates * (2 * 10 ** -precision)
+        max_error = num_original_gates * (2 * 10**-precision)
 
         vec1 = self.sim.simulate(original_circuit).state_vector()
         vec2 = self.sim.simulate(new_circuit).state_vector()
@@ -196,7 +197,7 @@ class TestCirqTransforms(unittest.TestCase):
             for op in moment:
                 if "Rx" in str(op) or "Ry" in str(op) or "Rz" in str(op):
                     num_original_rotations += 1
-        max_error = num_original_rotations * (2 * 10 ** -precision)
+        max_error = num_original_rotations * (2 * 10**-precision)
         new_circuit = clifford_plus_t_direct_transform(original_circuit)
         vec1 = self.sim.simulate(original_circuit).state_vector()
         vec2 = self.sim.simulate(new_circuit).state_vector()
@@ -206,6 +207,59 @@ class TestCirqTransforms(unittest.TestCase):
             )
 
         self.assertTrue(cirq.allclose_up_to_global_phase(vec1, vec2))
+
+    def test_XPow_gates(self):
+        q0, q1, q2 = cirq.LineQubit.range(3)
+        original_circuit = cirq.Circuit()
+        original_circuit.append(cirq.X.on(q0) ** 0.4254)
+        original_circuit.append(cirq.X.on(q1) ** -1.7438)
+        original_circuit.append(cirq.X.on(q2) ** 2.782)
+        original_circuit.append(cirq.rz(0.437268).on(q1))
+        original_circuit.append(cirq.Y.on(q1) ** 2.782)
+        original_circuit.append(cirq.Z.on(q1) ** 0.782)
+        transformed_circuit = clifford_plus_t_direct_transform(original_circuit)
+        vec1 = self.sim.simulate(original_circuit).state_vector()
+        vec2 = self.sim.simulate(transformed_circuit).state_vector()
+        self.assertTrue(cirq.allclose_up_to_global_phase(vec1, vec2))
+
+    def test_gse_circuit(self):
+        original_circuit = cirq.read_json("data/gse_h2_decomp_circuit_example.json")
+        new_circuit = clifford_plus_t_direct_transform(original_circuit)
+        vec1 = self.sim.simulate(original_circuit).state_vector()
+        vec2 = self.sim.simulate(new_circuit).state_vector()
+        self.assertTrue(cirq.allclose_up_to_global_phase(vec1, vec2))
+
+    def test_circuit_precision(self):
+        q0 = cirq.NamedQubit("q0")
+        original_circuit = cirq.Circuit()
+        precision = 5
+        rng = np.random.default_rng(1)
+        for _ in range(50):
+            original_circuit.append(cirq.rx((2 * rng.random() - 1) * np.pi).on(q0))
+            original_circuit.append(cirq.ry((2 * rng.random() - 1) * np.pi).on(q0))
+            original_circuit.append(cirq.rz((2 * rng.random() - 1) * np.pi).on(q0))
+        new_circuit = clifford_plus_t_direct_transform(
+            original_circuit, circuit_precision=precision
+        )
+        max_error = 2 * 10**-precision
+        vec1 = self.sim.simulate(original_circuit).state_vector()
+        vec2 = self.sim.simulate(new_circuit).state_vector()
+        self.assertLessEqual(abs((abs(vec1[0]) ** 2 - abs(vec2[0]) ** 2)), max_error)
+        self.assertLessEqual(abs((abs(vec1[1]) ** 2 - abs(vec2[1]) ** 2)), max_error)
+
+    def test_arb_precision(self):
+        q0 = cirq.NamedQubit("q0")
+        original_circuit = cirq.Circuit()
+        precision = 5.648e-14
+        original_circuit.append(cirq.rz(1.734).on(q0))
+        new_circuit = clifford_plus_t_direct_transform(
+            original_circuit, precision=precision
+        )
+        max_error = 2 * precision
+        vec1 = self.sim.simulate(original_circuit).state_vector()
+        vec2 = self.sim.simulate(new_circuit).state_vector()
+        self.assertLessEqual(abs((abs(vec1[0]) ** 2 - abs(vec2[0]) ** 2)), max_error)
+        self.assertLessEqual(abs((abs(vec1[1]) ** 2 - abs(vec2[1]) ** 2)), max_error)
 
 
 if __name__ == "__main__":
