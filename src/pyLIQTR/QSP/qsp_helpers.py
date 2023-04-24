@@ -72,11 +72,7 @@ def print_to_openqasm(f,circuit,print_header=True,qubits=None):
     Frustratingly required because of circ very 'kindly' converting ccz/ccx/cz/X^1/T for us...
     '''
     
-    def getOp(myIdx):
-        for idx,op in enumerate(circuit.all_operations()):
-            if myIdx == idx:
-                return op
-        return None
+    op_list = list(circuit.all_operations())
 
     gateCounter = -1
     myReg = None
@@ -117,7 +113,7 @@ def print_to_openqasm(f,circuit,print_header=True,qubits=None):
             #get gate
             gateCounter += 1
             skipLines = True
-            op = getOp(gateCounter)
+            op = op_list[gateCounter]
             #fix the damn line
             ogline = str(op)
             
