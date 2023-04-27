@@ -22,8 +22,8 @@ import cirq
 import numpy as np
 from typing import ( Optional, Tuple )
 from pyLIQTR.QSP.qsp_helpers  import getLineQubitIndexMap, getQubitFromMap
-from pyLIQTR.QSP.qsp_select_v import SelVBase
-from pyLIQTR.QSP.qsp_prepare  import QSP_Prepare
+from pyLIQTR.QSP.qsp_select_v import SelVBase, SelectOracle
+from pyLIQTR.QSP.qsp_prepare  import QSP_Prepare, PrepareOracle
 
         
 class SelectV(cirq.Gate):
@@ -32,8 +32,8 @@ class SelectV(cirq.Gate):
         self.__hamiltonian = hamiltonian
         self.__angle = phi #this is in radians already
         self.__phs_q = phase_qubit
-        self.__ctl_q = control_qubits
         self.__tgt_q = target_qubits
+        self.__ctl_q = control_qubits
         self.__anc_q = ancilla_qubits
         super(SelectV, self)
 
@@ -66,12 +66,101 @@ class SelectV(cirq.Gate):
     def _circuit_diagram_info_(self, args):
         return ["SelectV".format(self.__angle)] * self.num_qubits()
 
+"""
+Generate a Unitary Block encoding of the LCU Hamiltonian
+This only includes a single Prepare+Select Oracle
+"""
+class UnitaryBlockEncode(cirq.Gate):
+    def __init__(self, hamiltonian, phase_qubit, target_qubits, control_qubits, ancilla_qubits):
+        self.__hamiltonian = hamiltonian
+        self.__phs_q = phase_qubit    # this is the global control (None if there is none)
+        self.__tgt_q = target_qubits
+        self.__ctl_q = control_qubits
+        self.__anc_q = ancilla_qubits
+        super(UnitaryBlockEncode, self)
+
+    def _num_qubits_(self):
+        if self.__phs_q == None:
+            return len(self.__tgt_q)+len(self.__ctl_q)+len(self.__anc_q)
+        else:
+            return len(self.__tgt_q)+len(self.__ctl_q)+1+len(self.__anc_q)
+
+    def _decompose_(self, qubits):
+
+        # prepare expects qubits in |1> state
+        circuitX = cirq.Circuit()
+        for qb in (self.__ctl_q):
+            circuitX.append(cirq.X.on(qb))
+        yield circuitX
+        
+        yield QSP_Prepare(qubit_reg = self.__ctl_q, \
+                            alphas = self.__hamiltonian.alphas, 
+                            pp_exp=cirq.Y, pp_ctl = cirq.X, pp_com = cirq.I).\
+                                on(*self.__ctl_q)
+        #RESET ANCILLA?
+        for q in self.__anc_q:
+            yield cirq.ResetChannel().on(q)
+        if self.__phs_q == None:
+            yield SelVBase(False, self.__hamiltonian, self.__phs_q, self.__tgt_q, self.__ctl_q, self.__anc_q).\
+                           on(*(self.__tgt_q + self.__ctl_q + self.__anc_q))
+        else:
+            yield SelVBase(False, self.__hamiltonian, self.__phs_q, self.__tgt_q, self.__ctl_q, self.__anc_q).\
+                           on(*([self.__phs_q] + self.__tgt_q + self.__ctl_q + self.__anc_q))
+                           
+            
+        for q in self.__anc_q:
+            yield cirq.ResetChannel().on(q)
+
+        yield cirq.inverse(QSP_Prepare(qubit_reg = self.__ctl_q, \
+                            alphas = self.__hamiltonian.alphas, 
+                            pp_exp=cirq.Y, pp_ctl = cirq.X, pp_com = cirq.I).\
+                                on(*self.__ctl_q))
+                                
+    def _circuit_diagram_info_(self, args):
+        return ["UnitaryBE"] * self.num_qubits()
+
+class SzegedyWalkOperator(cirq.Gate):
+    def __init__(self, hamiltonian, phase_qubit, target_qubits, control_qubits, ancilla_qubits):
+        self.__hamiltonian = hamiltonian
+        self.__phs_q = phase_qubit    # this is the global control (None if there is none)
+        self.__tgt_q = target_qubits
+        self.__ctl_q = control_qubits
+        self.__anc_q = ancilla_qubits
+        super(SzegedyWalkOperator, self)
+
+    def _num_qubits_(self):
+        return len(self.__tgt_q)+len(self.__ctl_q)+1+len(self.__anc_q)
+
+    def _decompose_(self, qubits):
+        print("generating Walk operator, total_qubits = {}".format(self._num_qubits_()))
+        
+        yield SelectOracle(self.__hamiltonian, self.__phs_q, self.__tgt_q, self.__ctl_q, self.__anc_q)
+
+        yield PrepareOracle(self.__hamiltonian, self.__ctl_q, self.__anc_q)
+
+        # produce a zero-controlled multi-CZ gate
+        circuitX = cirq.Circuit()
+        for qb in (self.__ctl_q):
+            circuitX.append(cirq.X.on(qb))
+        yield circuitX
+        
+        n_anc = len(self.__ctl_q) - 2
+        yield MultiCZ(self.__ctl_q, [self.__phs_q], self.__anc_q[:n_anc], clear_ancilla=True).on(*(self.__ctl_q + [self.__phs_q] + self.__anc_q[:n_anc]))
+
+        yield circuitX
+        # this should probably be inverted
+        yield PrepareOracle(self.__hamiltonian, self.__ctl_q, self.__anc_q)
+        
+    def _circuit_diagram_info_(self, args):
+        return ["WalkOP"] * self.num_qubits()
+    
 
 class MultiCZ(cirq.Gate):
-    def __init__(self, control_qubits, target_qubits, ancilla_qubits):
+    def __init__(self, control_qubits, target_qubits, ancilla_qubits, clear_ancilla=False):
         self.__ctl_q   = control_qubits
         self.__trgt_q  = target_qubits
         self.__anc_q   = ancilla_qubits
+        self.__clear_ancilla = clear_ancilla
         super(MultiCZ,self)
 
     def _num_qubits_(self):
@@ -92,6 +181,8 @@ class MultiCZ(cirq.Gate):
         if len(ctl_list) == 2:
             yield(cirq.CCZ(self.__ctl_q[0],self.__ctl_q[1],self.__trgt_q[0]))
         else:
+            reverse_circ = cirq.Circuit()
+            
             while len(ctl_list) > 2:
                 # get two ctl qubits:
                 ctl_1 = ctl_list[0]
@@ -113,13 +204,17 @@ class MultiCZ(cirq.Gate):
 
                 # trying to use my new class
                 yield(cirq.CCX(ctl_q_1, ctl_q_2, tgt_q_1))
-                
+                if self.__clear_ancilla:
+                    reverse_circ.append(cirq.CCX.on(ctl_q_1, ctl_q_2, tgt_q_1))
+                    
                 if len(ctl_list) == 2 and not anc_list:
                     ctl_q_1 = getQubitFromMap(ctl_list[0], self.__ctl_q, self.__trgt_q, self.__anc_q)
                     ctl_q_2 = getQubitFromMap(ctl_list[1], self.__ctl_q, self.__trgt_q, self.__anc_q)
                     tgt_q_1 = getQubitFromMap(tgt_list[0], self.__ctl_q, self.__trgt_q, self.__anc_q)
                     yield(cirq.CCZ(ctl_q_1, ctl_q_2, tgt_q_1))
-
+                    
+            yield cirq.inverse(reverse_circ)
+            
     def _circuit_diagram_info_(self, args):
         return ["MultiCZ"] * self.num_qubits()
 
@@ -196,3 +291,27 @@ class Reflect(cirq.Gate):
 
     def _circuit_diagram_info_(self, args):
         return ["Reflect".format(self.__angle)] * self.num_qubits()
+
+class MultiFredkin(cirq.Gate):
+    def __init__(self, select_q, qubit_reg1, qubit_reg2):
+        self.__sel_q = select_q
+        self.__reg1_q = qubit_reg1
+        self.__reg2_q = qubit_reg2
+
+        super(MultiFredkin, self)
+        
+    def _num_qubits_(self):
+        return (len(self.__reg1_q) + len(self.__reg2_q) + 1)
+
+    def _decompose_(self, qubits):
+
+        circuit = cirq.Circuit()
+        for q1,q2 in zip(self.__reg1_q, self.__reg2_q):
+            circuit.append(cirq.CX.on(q1,q2))
+            circuit.append(cirq.CCX.on(self.__sel_q,q2,q1))
+            circuit.append(cirq.CX.on(q1,q2))
+
+        yield circuit
+        
+    def _circuit_diagram_info_(self, args):
+        return ["Fredkin"] * self.num_qubits()

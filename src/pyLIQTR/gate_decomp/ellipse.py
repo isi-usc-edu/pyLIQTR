@@ -19,13 +19,15 @@ may violate any copyrights that exist in this work.
 """
 
 from decimal import Decimal, getcontext, localcontext
-from pyLIQTR.gate_decomp.decimal_utils import prec_cos, prec_sin, prec_pi
+from typing import Tuple
+
+from pyLIQTR.gate_decomp.decimal_utils import prec_cos, prec_pi, prec_sin
 
 D = Decimal
 
 
 class Ellipse:
-    """A class representing ellipses as positive definite matrices """
+    """A class representing ellipses as positive definite matrices"""
 
     def __init__(
         self,
@@ -85,13 +87,13 @@ class Ellipse:
             False
 
     def determinant(self) -> D:
-        return self.a * self.d - self.b ** 2
+        return self.a * self.d - self.b**2
 
     def descriminant(self) -> D:
         current_prec = getcontext().prec
         with localcontext() as ctx:
             ctx.prec = current_prec + 1
-            descriminant = (self.a + self.d) ** 2 - 4 * (self.a * self.d - self.b ** 2)
+            descriminant = (self.a + self.d) ** 2 - 4 * (self.a * self.d - self.b**2)
         return +descriminant
 
     def is_positive_semi_definite(self) -> bool:
@@ -102,9 +104,29 @@ class Ellipse:
             )
         return ((self.a + self.d - descriminant.sqrt())) > 0
 
+    def compute_y_points(self, x: D) -> Tuple[D, D]:
+        x -= self.x
+        descriminant = pow(self.b, 2) * pow(x, 2) - self.d * (self.a * pow(x, 2) - 1)
+        if descriminant < 0:
+            raise ValueError("x value is outside ellipse")
+        descriminant_sqrt = descriminant.sqrt()
+        y1 = (-self.b * x - descriminant_sqrt) / self.d
+        y2 = (-self.b * x + descriminant_sqrt) / self.d
+        return y1 + self.y, y2 + self.y
+
+    def compute_x_points(self, y: D) -> Tuple[D, D]:
+        y -= self.y
+        descriminant = pow(y, 2) * (pow(self.b, 2) - self.a * self.d) + self.a
+        if descriminant < 0:
+            raise ValueError("y value is outside ellipse")
+        descriminant_sqrt = descriminant.sqrt()
+        x1 = (-self.b * y - descriminant_sqrt) / self.a
+        x2 = (-self.b * y + descriminant_sqrt) / self.a
+        return x1 + self.x, x2 + self.x
+
 
 def calculate_skew(a: Ellipse, b: Ellipse):
-    return a.b ** 2 + b.b ** 2
+    return a.b**2 + b.b**2
 
 
 def calculate_bias(a: Ellipse, b: Ellipse):

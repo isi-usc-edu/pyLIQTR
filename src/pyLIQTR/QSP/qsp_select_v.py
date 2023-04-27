@@ -144,9 +144,51 @@ def incrementBooleanTree(n):
     n.reverse()
     return n
 
+def convert_hamiltonian_terms_to_operators(ham_terms):
+    def apply_gate(p, ctrl, tq):
+        gate_list = []
+        if p == "I":
+            pass
+        elif p == "X":
+            gate_list.append(cirq.CX.on(ctrl,tq))
+        elif p == "Y":
+            gate_list.append(cirq.inverse(cirq.S.on(tq)))
+            gate_list.append(cirq.CX.on(ctrl,tq))
+            gate_list.append(cirq.S.on(tq))
+        elif p == "Z":
+            gate_list.append(cirq.CZ.on(ctrl,tq))
+
+        return gate_list
+
+    # pauliString can be a string or a list of tuples of the form: [(P,0), ...]
+    #
+    def controlled_pauli_gate(pauliString, ctrl, targets):
+        gate_sequence = []
+        if type(pauliString) is list:
+            for pv in pauliString:
+                p = pv[0]
+                tq = targets[pv[1]]
+                gate_sequence.append(apply_gate(p, ctrl, tq))
+        else:
+            for p,tq in zip(pauliString,targets):
+                gate_sequence.append(apply_gate(p, ctrl, tq))
+
+        return gate_sequence
+
+    operator_generators = []
+    for term in ham_terms:
+        if (term[1] < 0):
+            add_z = lambda ctrl, qubits : [cirq.Z.on(ctrl)]
+            gate_seq = lambda ctrl, qubits, pauli=term[0]: add_z(ctrl, qubits)+controlled_pauli_gate(pauli,ctrl,qubits)
+            operator_generators.append(gate_seq)
+        else:
+            gate_seq = lambda ctrl, qubits, pauli=term[0]: controlled_pauli_gate(pauli,ctrl,qubits)
+            operator_generators.append(gate_seq)
+    return operator_generators
+
 # apply operators from Hamiltonian controlled on address bits using a QROM
 #
-def applyAndWalk(operators, pos1, pos2, ctl_q, sel_q, anc_q, tgt_q):
+def applyAndWalk(ham_terms, pos1, pos2, ctl_q, sel_q, anc_q, tgt_q, opType='select'):
 
     # Generate a circuit that implements a QROM (based on construction in Fig. 2 of arXiv:1905.07682)
     # This circuit accepts a dictionary with (address,data) pairs for each uniquue entry
@@ -178,7 +220,7 @@ def applyAndWalk(operators, pos1, pos2, ctl_q, sel_q, anc_q, tgt_q):
     # key_values - list of address values
     # operators - operators for each key
     #
-    def qrom(qubit_dict, width, key_vals, operators):
+    def qrom(qubit_dict, width, key_vals, operators, opType):
 
         circuit = cirq.Circuit()
         circuit2 = cirq.Circuit()
@@ -189,7 +231,9 @@ def applyAndWalk(operators, pos1, pos2, ctl_q, sel_q, anc_q, tgt_q):
         selQubit = qubit_dict['s']   # global select
         trgtQubits = qubit_dict['t']   # target for memory
 
-        for key_val in key_vals:
+        #print("num keys = {}, len(addr) = {}, len(anc) = {}, len(trgt) = {}".format(len(key_vals), len(addrQubits), len(ancQubits), len(trgtQubits)))
+    
+        for kidx,key_val in enumerate(key_vals):
             if prev_key_val == -1:
                 # special case for the first value, build up the initial set of ancilla
                 for bi in range(width)[::-1]:
@@ -197,7 +241,14 @@ def applyAndWalk(operators, pos1, pos2, ctl_q, sel_q, anc_q, tgt_q):
 
                     # Extend the address starting from the MSB, the first gate is controlled on the global select
                     if bi+1 == width:
-                        circuit.append(toffoli(True, ctlSense, selQubit , addrQubits[bi], ancQubits[bi]))
+                        if selQubit==None:
+                            if not ctlSense:
+                                circuit.append(cirq.X.on(addrQubits[bi]))
+                            circuit.append(cirq.CX.on(addrQubits[bi], ancQubits[bi]))
+                            if not ctlSense:
+                                circuit.append(cirq.X.on(addrQubits[bi]))
+                        else:
+                            circuit.append(toffoli(True, ctlSense, selQubit , addrQubits[bi], ancQubits[bi]))
                     else:
                         circuit.append(toffoli(True, ctlSense, ancQubits[bi + 1] , addrQubits[bi], ancQubits[bi]))
                     
@@ -214,7 +265,10 @@ def applyAndWalk(operators, pos1, pos2, ctl_q, sel_q, anc_q, tgt_q):
 
                 # flip the address of the least signfificant bit that is different
                 if (ci + 1) == width:
-                    circuit.append(cirq.CX.on(selQubit, ancQubits[ci]))
+                    if selQubit==None:
+                        circuit.append(cirq.X.on(ancQubits[ci]))
+                    else:
+                        circuit.append(cirq.CX.on(selQubit, ancQubits[ci]))
                 else:
                     circuit.append(cirq.CX.on(ancQubits[ci + 1], ancQubits[ci]))
 
@@ -226,8 +280,15 @@ def applyAndWalk(operators, pos1, pos2, ctl_q, sel_q, anc_q, tgt_q):
                     ci -= 1
 
             # apply the operator
-            circuit.append(operators[key_val](ancQubits[0], trgtQubits))
-            
+            if opType=='select':
+                circuit.append(operators[key_val](ancQubits[0], trgtQubits))
+            elif opType=='fermion':
+                circuit.append(operators[key_val](ancQubits[0], trgtQubits))
+                if (kidx+1) != len(key_vals):
+                    circuit.append(cirq.CX.on(ancQubits[0], selQubit))
+                    assert(key_val < len(trgtQubits))
+                    circuit.append(cirq.CZ.on(selQubit, trgtQubits[key_val]))
+                        
             prev_key_val = key_val
 
         # clear the ancilla register
@@ -236,7 +297,14 @@ def applyAndWalk(operators, pos1, pos2, ctl_q, sel_q, anc_q, tgt_q):
                 ctlSense = (prev_key_val >> ci) % 2 == 1
 
                 if (ci + 1) == width:
-                    circuit.append(toffoli(True, ctlSense, selQubit, addrQubits[ci], ancQubits[ci]))
+                    if selQubit==None:
+                        if not ctlSense:
+                            circuit.append(cirq.X.on(addrQubits[ci]))
+                        circuit.append(cirq.CX.on(addrQubits[ci], ancQubits[ci]))
+                        if not ctlSense:
+                            circuit.append(cirq.X.on(addrQubits[ci]))
+                    else:
+                        circuit.append(toffoli(True, ctlSense, selQubit, addrQubits[ci], ancQubits[ci]))
                 else:
                     circuit.append(toffoli(True, ctlSense, ancQubits[ci + 1], addrQubits[ci], ancQubits[ci]))
 
@@ -249,8 +317,9 @@ def applyAndWalk(operators, pos1, pos2, ctl_q, sel_q, anc_q, tgt_q):
     qubit_dict['t'] = tgt_q
     
     key_values = [ii+pos1 for ii in range(pos2-pos1)]
+    operators = convert_hamiltonian_terms_to_operators(ham_terms)
     
-    return qrom(qubit_dict, len(ctl_q), key_values, operators)
+    return qrom(qubit_dict, len(ctl_q), key_values, operators, opType)
 
 class SelVBase(cirq.Gate):
     #do we need knowledge of the hamiltonian here?
@@ -265,35 +334,10 @@ class SelVBase(cirq.Gate):
         super(SelVBase, self)
         
     def _num_qubits_(self):
-        return len(self.__tgt_q)+len(self.__ctl_q)+1+len(self.__anc_q)
-
-    def convert_hamiltonian_terms_to_operators(self):
-        def controlled_pauli_gate(pauliString, ctrl, targets):
-            gate_sequence = []
-            for p,tq in zip(pauliString,targets):
-                if p == "I":
-                    continue
-                elif p == "X":
-                    gate_sequence.append(cirq.CX.on(ctrl,tq))
-                elif p == "Y":
-                    gate_sequence.append(cirq.inverse(cirq.S.on(tq)))
-                    gate_sequence.append(cirq.CX.on(ctrl,tq))
-                    gate_sequence.append(cirq.S.on(tq))
-                elif p == "Z":
-                    gate_sequence.append(cirq.CZ.on(ctrl,tq))
-
-            return gate_sequence
-
-        operator_generators = []
-        for term in self.__hamiltonian.terms:
-            if (term[1] < 0):
-                add_z = lambda ctrl, qubits : [cirq.Z.on(ctrl)]
-                gate_seq = lambda ctrl, qubits, pauli=term[0]: add_z(ctrl, qubits)+controlled_pauli_gate(pauli,ctrl,qubits)
-                operator_generators.append(gate_seq)
-            else:
-                gate_seq = lambda ctrl, qubits, pauli=term[0]: controlled_pauli_gate(pauli,ctrl,qubits)
-                operator_generators.append(gate_seq)
-        return operator_generators
+        if self.__phs_q == None:
+            return len(self.__tgt_q)+len(self.__ctl_q)+len(self.__anc_q)
+        else:
+            return len(self.__tgt_q)+len(self.__ctl_q)+1+len(self.__anc_q)
 
     def _decompose_(self, qubits):
         #this is selectV!
@@ -310,26 +354,120 @@ class SelVBase(cirq.Gate):
         #this travels a tree and implements the selectV as appropriate
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        if True:
-            # this is the new way to do SelectV
-            ham_as_ops = self.convert_hamiltonian_terms_to_operators()
-            circuit = applyAndWalk(ham_as_ops, pos1, pos2, self.__ctl_q, self.__phs_q, self.__anc_q, self.__tgt_q)
-            yield circuit
-        else:
-            # this is the new way to do selectV
-            ham_as_ops = self.convert_hamiltonian_terms_to_operators()[pos1::]
-            start_node = [True]+constructBooleanTree(pos1,len(self.__ctl_q))
-            end_node = [True]+constructBooleanTree(pos2-1,len(self.__ctl_q))
-
-            downCircuit = walkDown(start_node, [self.__phs_q]+self.__ctl_q, self.__anc_q)
-            applyCircuit = applyAndStep(ham_as_ops, start_node, end_node, \
-                                        self.__ctl_q, [self.__phs_q]+self.__anc_q, self.__tgt_q)
-
-            upCircuit =  cirq.inverse(walkDown(end_node, [self.__phs_q]+self.__ctl_q, self.__anc_q))
-
-            yield downCircuit
-            yield applyCircuit
-            yield upCircuit
+        # this is the new way to do SelectV
+        #ham_as_ops = convert_hamiltonian_terms_to_operators(self.__hamiltonian.terms)
+        circuit = applyAndWalk(self.__hamiltonian.terms, pos1, pos2, self.__ctl_q, self.__phs_q, self.__anc_q, self.__tgt_q)
+        yield circuit
 
     def _circuit_diagram_info_(self, args):
         return ["SelVBase"] * self.num_qubits()
+
+class UnaryIterate(cirq.Gate):
+    def __init__(self, ham_terms, phase_qubit, target_qubits, control_qubits, ancilla_qubits, op_type):
+        self.__ham = ham_terms
+        self.__phs_q = phase_qubit
+        self.__ctl_q = control_qubits
+        self.__tgt_q = target_qubits
+        self.__anc_q = ancilla_qubits
+        self.__op_type = op_type
+
+        super(UnaryIterate)
+
+    def _num_qubits_(self):
+        return len(self.__tgt_q)+len(self.__ctl_q)+1+len(self.__anc_q)
+
+    def _decompose_(self, qubits):
+        yield applyAndWalk(self.__ham, 0, len(self.__ham), self.__ctl_q, self.__phs_q, self.__anc_q, self.__tgt_q, opType=self.__op_type)
+        
+    def _circuit_diagram_info_(self, args):
+        return ["UnaryIterate"] * self.num_qubits()
+
+class FermionSelect(cirq.Gate):
+
+    def __init__(self, hamiltonian, phase_qubit, target_qubits, control_qubits, ancilla_qubits):
+        #from pyLIQTR.QSP.Hamiltonian import Hamiltonian as pyH
+        
+        self.__phs_q = phase_qubit
+        self.__ctl_q = control_qubits
+        self.__tgt_q = target_qubits
+        self.__anc_q = ancilla_qubits
+        self.__hamiltonian = hamiltonian
+
+        print("len(ctl) = {}, len(tgt) = {}, len(anc) = {}".format(len(self.__ctl_q), len(self.__tgt_q), len(self.__anc_q)))
+        
+        # the Hamiltonian contains three components:
+        # U(p), T(p-q), V(p-q)
+        # Each component contains a number of terms: [(p,alpha,q,beta), amp]
+        # The number of orbitals + spin is specified as N
+        N = self.__hamiltonian.problem_size
+        Nu = N  # number of U terms in the Hamiltonian (p,sigma,p,sigma)
+        Nt = 2*((N//2)**2 - N//2)   # number of Utterms in the Hamiltonian (p,sigma,q,sigma) (p != q)
+        #Nt = 2*Nt    # for now the prep does all combination of alpha,beta
+        Nv = (N**2) - N  # number of V terms in the Hamiltonian (p,alpha) != (q,beta)
+        #print("N = {}, Nu = {}, Nt = {}, Nv = {}".format(N, Nu, Nt, Nv))
+        
+        # separate the coefficients for each term
+        coefU = [self.__hamiltonian.terms[ii][1] for ii in range(0,N)]
+        coefT = [self.__hamiltonian.terms[ii][1] for ii in range(N,2*N)]
+        coefV = [self.__hamiltonian.terms[ii][1] for ii in range(2*N,4*N)]
+
+        # Create the three select iterators used
+        fermY = [([("Y",ni)], 1.0) for ni in range(N)]   # Fermionic YpZp-1...Z0
+        self.__selFermY = fermY
+        fermX = [([("X",ni)], 1.0) for ni in range(N)]   # Fermionic XpZp-1...Z0
+        self.__selFermX = fermX
+        fermZ = [([("Z",ni)], 1.0) for ni in range(N)]   # Zp
+        self.__selAplyZ = fermZ
+
+        self.__N = N
+        self.__np = int(np.ceil(np.log2(N)))
+        
+        super(FermionSelect, self)
+        
+    def _num_qubits_(self):
+        return len(self.__tgt_q)+len(self.__ctl_q)+1+len(self.__anc_q)
+
+    def _decompose_(self, qubits):
+        from pyLIQTR.QSP.qsp_cirq_gates import MultiFredkin
+        
+        np = self.__np
+        
+        # Iterate on p
+        #ham_as_ops = convert_hamiltonian_terms_to_operators(self.__selFermY)
+        yield UnaryIterate(self.__selFermY, self.__phs_q, self.__tgt_q, self.__ctl_q[:np], self.__anc_q[:np], 'fermion').\
+            on(*([self.__phs_q]+self.__tgt_q+self.__ctl_q[:np]+self.__anc_q[:np]))
+
+        # Controlled swap p,alpha with q,beta
+        yield MultiFredkin(self.__ctl_q[2*np+1], self.__ctl_q[:np], self.__ctl_q[np:2*np]).\
+          on(*([self.__ctl_q[2*np+1]] + self.__ctl_q[:np] + self.__ctl_q[np:2*np]))
+          
+        # Iterate on q
+        ham_as_ops = convert_hamiltonian_terms_to_operators(self.__selFermX)
+        yield UnaryIterate(self.__selFermX, self.__phs_q, self.__tgt_q, self.__ctl_q[np:2*np], self.__anc_q[:np], 'fermion').\
+            on(*([self.__phs_q]+self.__tgt_q+self.__ctl_q[np:2*np]+self.__anc_q[:np]))
+            
+        # Controlled swap p,alpha with q,beta
+        yield MultiFredkin(self.__ctl_q[2*np+1], self.__ctl_q[:np], self.__ctl_q[np:2*np]).\
+          on(*([self.__ctl_q[2*np+1]] + self.__ctl_q[:np] + self.__ctl_q[np:2*np]))
+
+        yield cirq.CCX.on(self.__phs_q, self.__ctl_q[2*np+1], self.__anc_q[np])
+        
+        # Iterate on q
+        ham_as_ops = convert_hamiltonian_terms_to_operators(self.__selAplyZ)
+        yield UnaryIterate(self.__selAplyZ, self.__anc_q[np], self.__tgt_q, self.__ctl_q[np:2*np], self.__anc_q[:np], 'select').\
+            on(*([self.__anc_q[np]]+self.__tgt_q+self.__ctl_q[np:2*np]+self.__anc_q[:np]))
+
+        yield cirq.CCX.on(self.__phs_q, self.__ctl_q[2*np+1], self.__anc_q[np])
+
+    def _circuit_diagram_info_(self, args):
+        return ["FermionSelect"] * self.num_qubits()
+
+def SelectOracle(hamiltonian, phase_qubit, target_qubits, control_qubits, ancilla_qubits):
+    if hamiltonian.is_fermionic:
+        # this is a fermionic Hamiltonian
+        yield FermionSelect(hamiltonian, phase_qubit, target_qubits, control_qubits, ancilla_qubits).\
+              on(*([phase_qubit] + target_qubits + control_qubits + ancilla_qubits))
+    else:
+        yield SelVBase(False, hamiltonian, phase_qubit, target_qubits, control_qubits, ancilla_qubits).\
+              on(*([phase_qubit] + target_qubits + control_qubits + ancilla_qubits))
+    

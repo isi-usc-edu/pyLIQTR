@@ -18,9 +18,11 @@ above. Use of this work other than as specifically authorized by the U.S. Govern
 may violate any copyrights that exist in this work.
 """
 
-from pyLIQTR.gate_decomp.rings import Z_OMEGA
-import numpy as np
 from decimal import Decimal as D
+
+import numpy as np
+
+from pyLIQTR.gate_decomp.rings import Z_OMEGA
 
 
 class GridOperator:
@@ -53,8 +55,16 @@ class GridOperator:
         return cls(1, 0, -2, 0, 0, 0, 1, 0)
 
     @classmethod
+    def APowN(cls, n: int):
+        return cls(1, 0, -2 * n, 0, 0, 0, 1, 0)
+
+    @classmethod
     def B(cls):
         return cls(1, 0, 0, 2, 0, 0, 1, 0)
+
+    @classmethod
+    def BPowN(cls, n: int):
+        return cls(1, 0, 0, 2 * n, 0, 0, 1, 0)
 
     @classmethod
     def K(cls):

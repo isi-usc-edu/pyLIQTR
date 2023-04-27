@@ -30,7 +30,7 @@ DESCRIPTION = (
 
 setup(
     name=DISTNAME,
-    version="0.3.0",
+    version="0.3.1",
     license=LICENSE,
     description=DESCRIPTION,
     author=AUTHOR,
@@ -39,12 +39,15 @@ setup(
     package_dir={"": "src"},
     python_requires=">=3.8",
     install_requires=[
-        "cirq",
+        "cirq-core",
         "numpy",
         "pandas",
         "scipy",
         "matplotlib",
         "tqdm",
+        "openfermion",
+        # "openfermionpyscf",
         "portalocker",
+        "ply"
     ],
 )

@@ -71,12 +71,13 @@ def print_to_openqasm(f,circuit,print_header=True,qubits=None):
     '''
     Frustratingly required because of circ very 'kindly' converting ccz/ccx/cz/X^1/T for us...
     '''
-    
+
     op_list = list(circuit.all_operations())
 
     gateCounter = -1
     myReg = None
     skipLines = False
+    skip_gate_counter_count = 0
     if qubits is None:
         qasm_circuit = circuit.to_qasm().split("\n")
     else:
@@ -89,7 +90,7 @@ def print_to_openqasm(f,circuit,print_header=True,qubits=None):
 
         if len(line)==0:
             continue
-        
+
         if not print_header and (("// Generated" in line) or ("OPENQASM" in line) or ("include" in line) or ('qreg' in line)):
             continue
 
@@ -107,30 +108,45 @@ def print_to_openqasm(f,circuit,print_header=True,qubits=None):
         #book keep
         if ("q[" in line) and ("qreg" not in line):
             if not skipLines:
-                gateCounter+=1
-        
+                if skip_gate_counter_count > 0:
+                    skip_gate_counter_count -= 1
+                else:
+                    gateCounter+=1
+
         if "// Gate:" in line:
             #get gate
             gateCounter += 1
+            # These gates have already been handled
+            # Additionally, for each of these cirq ops multiple gates get written out.
+            # In order to make sure that we keep a valid index for the cirq.circuit, we
+            # need to skip incrementing the gate counter for each gate written out.
+            if "Rx_d" in line:
+                skip_gate_counter_count = 2
+                continue
+            elif "Ry_d" in line:
+                skip_gate_counter_count = 5
+                continue
+            elif "Rz_d" in line:
+                skip_gate_counter_count = 1
+                continue
             skipLines = True
             op = op_list[gateCounter]
-            #fix the damn line
             ogline = str(op)
-            
+
             line = str(op).replace("**-1.0",'').replace('**-1','')\
                 .replace('TOFFOLI','ccx').replace("CCX","ccx")\
                 .replace('CX','cx').replace('CNOT','cx')\
                 .replace("CCZ","ccz").replace("CZ","cz")#.replace(')','')
-            
+
             for r in myReg:
                 if r in line:
                     line = line.replace(r,myReg[r])
-            
+
             line = line.replace(' ','').replace('(',' ').replace(')','')
             #write it.
             f.write("{};\n".format(line))
             skipLines = True
-            
+
         if not skipLines:
             line = line.replace("rx(pi*-1)",'x')
             line = line.replace("rz(pi*0.25)","t")

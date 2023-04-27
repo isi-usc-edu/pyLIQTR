@@ -343,7 +343,7 @@ class Expander(ChebyshevPoly):
 
         max_order = np.ceil(oterm1 * oterm2)
 
-        N_cf = np.int(max_order/2)
+        N_cf = int(max_order/2)
 
         coeffs = np.zeros(N_cf)
 

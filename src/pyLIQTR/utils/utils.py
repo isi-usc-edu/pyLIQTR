@@ -17,9 +17,11 @@ rights in this work are defined by DFARS 252.227-7013 or DFARS 252.227-7014 as d
 above. Use of this work other than as specifically authorized by the U.S. Government
 may violate any copyrights that exist in this work.
 """
-from openfermion   import jordan_wigner
 import numpy       as np
-import openfermion as of
+from typing import List, Tuple
+from cirq   import LineQubit
+import cirq
+#from pyLIQTR.
 
 
 qasm_convert_one_qubit_gates = {
@@ -99,10 +101,63 @@ def count_T_gates(circuit):
 
     '''
     T_gate_counter = 0
-        
+
     for moment in circuit:
         for op in moment:
-            if (str(op).startswith('T')):
+            #add a check if it is a rx/y/z_d decomp
+            if (str(op).lower().startswith(("rx_d","ry_d","rz_d"))):
+                count = 0
+                for dop in cirq.decompose(op):
+                    count+=str(dop).lower().startswith("t")
+                T_gate_counter += count
+            elif (str(op).startswith('T')):
                 T_gate_counter += 1
 
     return (T_gate_counter)
+
+def getLineQubitIndexMap(qubit_line:List[LineQubit], name:str) -> List[tuple]:
+    """
+    Helper function for mapping qubits to their register names.
+
+    Parameters:
+        qubit_line: List of cirq.LineQubit's
+
+        name: A string describing the register's name.
+
+    Returns:
+        out_map: A list of tuples mapping the LineQubit index to its register name.
+    """
+    out_map = []
+    for ii in range(len(qubit_line)):
+        tmp = (ii, name)
+        out_map.append(tmp)
+    return out_map
+
+def getQubitFromMap(tuple_in:tuple, ctl_q:List[LineQubit], tgt_q:List[LineQubit], anc_q:List[LineQubit]):
+    """
+    Helper function for getting a specific qubit from a list of 
+    LineQubits using the map generated using the getLineQubitIndexMap
+    function.
+    
+    Parameters:
+        tuple_in: A tuple of the form (idx, reg_name)
+
+        ctl_q: The list of LineQubits representing the control register
+        
+        tgt_q: The list of LineQubits representing the target register
+
+        anc_q: The list of LineQubits representing the ancilla register
+
+    Returns:
+        _: The LineQubit corresponding to the index idx from the tuple_in
+    """
+
+
+    if tuple_in[1] == 'ctl':
+        return ctl_q[tuple_in[0]]
+    elif tuple_in[1] == 'tgt':
+        return tgt_q[tuple_in[0]]
+    elif tuple_in[1] == 'anc':
+        return anc_q[tuple_in[0]]
+    else:
+        raise RuntimeError('Function getQubitFromMap malfunctioning...')

@@ -22,21 +22,22 @@ disk. Uses methods described in [1].
 [1] - arXiv:1403.2975
 """
 
-from pyLIQTR.gate_decomp.rings import Z_SQRT2, Z_OMEGA
-from decimal import ROUND_FLOOR, Decimal
-from typing import List, Tuple, Iterable
 import math
+import sys
+from copy import deepcopy
+from decimal import ROUND_FLOOR, Decimal
+from typing import Iterable, List, Tuple, Union
+
+from pyLIQTR.gate_decomp.decimal_utils import *
 from pyLIQTR.gate_decomp.ellipse import (
     Ellipse,
-    calculate_skew,
-    scale_ellipse,
-    force_det_one,
     calculate_bias,
+    calculate_skew,
+    force_det_one,
+    scale_ellipse,
 )
 from pyLIQTR.gate_decomp.grid_operator import GridOperator
-from pyLIQTR.gate_decomp.decimal_utils import *
-from copy import deepcopy
-import sys
+from pyLIQTR.gate_decomp.rings import Z_OMEGA, Z_SQRT2, is_reducible, reduce
 
 D = Decimal
 
@@ -50,20 +51,82 @@ def scaled_one_dim_grid_problem(x0: D, x1: D, y0: D, y1: D) -> Iterable[Z_SQRT2]
     [y0, y1], i.e solve the one dimensional grid problem in the specific case that
     -1 + √2 <= x1 - x0 < 1.
     """
-    SQRT_2 = D("2").sqrt()
-    assert x1 - x0 >= 1 - SQRT_2
-    lower_bound_b = (x0 - y1) / (2 * SQRT_2)
-    upper_bound_b = (x1 - y0) / (2 * SQRT_2)
-    # enumerate over possible b values
-    for b in range(math.ceil(lower_bound_b), math.floor(upper_bound_b) + 1):
-        lower_bound_a = x0 - b * SQRT_2
-        upper_bound_a = x1 - b * SQRT_2
-        if math.ceil(lower_bound_a) == math.floor(upper_bound_a):
-            a = math.ceil(lower_bound_a)
-            alpha = a + b * SQRT_2
-            beta = a - b * SQRT_2
-            if alpha >= x0 and alpha <= x1 and beta >= y0 and beta <= y1:
-                yield Z_SQRT2(math.ceil(lower_bound_a), b)
+    num_places = abs(x0.as_tuple().exponent - y0.as_tuple().exponent)
+    max_digits = 0
+    for num in [x0, x1, y0, y1]:
+        if len(num.as_tuple().digits) > max_digits:
+            max_digits = len(num.as_tuple().digits)
+    current_prec = getcontext().prec
+    with localcontext() as ctx:
+        ctx.prec = max(current_prec, max_digits + num_places)
+        SQRT_2 = D("2").sqrt()
+        assert x1 - x0 >= 1 - SQRT_2
+        lower_bound_b = (x0 - y1) / (2 * SQRT_2)
+        upper_bound_b = (x1 - y0) / (2 * SQRT_2)
+
+        for b in range(math.floor(upper_bound_b), math.ceil(lower_bound_b) - 1, -1):
+            lower_bound_a = x0 - b * SQRT_2
+            upper_bound_a = x1 - b * SQRT_2
+            if math.ceil(lower_bound_a) == math.floor(upper_bound_a):
+                a = math.ceil(lower_bound_a)
+                alpha = a + b * SQRT_2
+                beta = a - b * SQRT_2
+                if alpha >= x0 and alpha <= x1 and beta >= y0 and beta <= y1:
+                    yield Z_SQRT2(math.ceil(lower_bound_a), b)
+
+
+def get_num_pot_sols_scaled(x0: D, x1: D, y0: D, y1: D) -> int:
+    num_places = abs(x0.as_tuple().exponent - y0.as_tuple().exponent)
+    max_digits = 0
+    for num in [x0, x1, y0, y1]:
+        if len(num.as_tuple().digits) > max_digits:
+            max_digits = len(num.as_tuple().digits)
+    current_prec = getcontext().prec
+    with localcontext() as ctx:
+        ctx.prec = max(current_prec, max_digits + num_places)
+        SQRT_2 = D("2").sqrt()
+        assert x1 - x0 >= 1 - SQRT_2
+        lower_bound_b = (x0 - y1) / (2 * SQRT_2)
+        upper_bound_b = (x1 - y0) / (2 * SQRT_2)
+        return int(upper_bound_b - lower_bound_b) + 1
+
+
+def get_num_pot_sols(
+    x0: D,
+    x1: D,
+    y0: D,
+    y1: D,
+) -> int:
+    delta = x1 - x0
+    Delta = y1 - y0
+
+    l = Z_SQRT2(1, 1)
+    linv = Z_SQRT2(-1, 1)
+    kd = find_k(delta)
+    kD = find_k(Delta)
+    if abs(kd) <= abs(kD):
+        k = find_k(delta)
+        if k < 0:
+            x_scale = (l ** (-k)).to_decimal()
+            y_scale = (-D(1)) ** (k) * (linv ** (-k)).to_decimal()
+        else:
+            x_scale = (linv**k).to_decimal()
+            y_scale = ((-l) ** k).to_decimal()
+        x0_scaled = x_scale * x0
+        x1_scaled = x_scale * x1
+        y0_scaled = y_scale * y0
+        y1_scaled = y_scale * y1
+        if y0_scaled < y1_scaled:
+            num_potential_sols = get_num_pot_sols_scaled(
+                x0_scaled, x1_scaled, y0_scaled, y1_scaled
+            )
+        else:
+            num_potential_sols = get_num_pot_sols_scaled(
+                x0_scaled, x1_scaled, y1_scaled, y0_scaled
+            )
+        return num_potential_sols
+    else:
+        return get_num_pot_sols(y0, y1, x0, x1)
 
 
 def find_k(delta: D) -> int:
@@ -88,14 +151,22 @@ def solve_one_dim_grid_problem(x0: D, x1: D, y0: D, y1: D) -> Iterable[Z_SQRT2]:
     """
     delta = x1 - x0
     Delta = y1 - y0
-    l = 1 + D(2).sqrt()
-    linv = l ** (-1)
-    if Delta <= delta:
+    l = Z_SQRT2(1, 1)
+    linv = Z_SQRT2(-1, 1)
+    kd = find_k(delta)
+    kD = find_k(Delta)
+    if abs(kd) <= abs(kD):
         k = find_k(delta)
-        x0_scaled = linv ** k * x0
-        x1_scaled = linv ** k * x1
-        y0_scaled = (-l) ** k * y0
-        y1_scaled = (-l) ** k * y1
+        if k < 0:
+            x_scale = (l ** (-k)).to_decimal()
+            y_scale = (-D(1)) ** (k) * (linv ** (-k)).to_decimal()
+        else:
+            x_scale = (linv**k).to_decimal()
+            y_scale = ((-l) ** k).to_decimal()
+        x0_scaled = x_scale * x0
+        x1_scaled = x_scale * x1
+        y0_scaled = y_scale * y0
+        y1_scaled = y_scale * y1
         if y0_scaled < y1_scaled:
             scaled_solutions = scaled_one_dim_grid_problem(
                 x0_scaled, x1_scaled, y0_scaled, y1_scaled
@@ -121,44 +192,113 @@ def solve_two_dim_grid_problem_upright_rectangles(
     Bx1: D,
     By0: D,
     By1: D,
+    ellipse1: Union[Ellipse, None] = None,
+    ellipse2: Union[Ellipse, None] = None,
 ) -> Iterable[Z_OMEGA]:
     """
     Given two subregions A and B, of R^2, of the form A,B = [x0, x1] x [y0, y1], find
     all u ∈ Z[ω] such that u ∈ A and u.conj2() ∈ B (where conj2 is sqrt(2) conjugation)
     """
     solutions = []
-    alpha_solutions1 = solve_one_dim_grid_problem(Ax0, Ax1, Bx0, Bx1)
-    beta_solutions1 = solve_one_dim_grid_problem(Ay0, Ay1, By0, By1)
-    found_beta1_solutions = []
-    for alpha in alpha_solutions1:
-        if len(found_beta1_solutions) == 0:
-            for beta in beta_solutions1:
-                found_beta1_solutions.append(beta)
-                yield Z_OMEGA.from_Z_SQRT2(alpha, beta)
-        else:
-            for beta in found_beta1_solutions:
-                yield Z_OMEGA.from_Z_SQRT2(alpha, beta)
+    num_x_grid_points = get_num_pot_sols(Ax0, Ax1, Bx0, Bx1)
+    num_y_grid_points = get_num_pot_sols(Ay0, Ay1, By0, By1)
+    if num_x_grid_points > 100 * num_y_grid_points and ellipse1 is not None:
+        beta_solutions1 = solve_one_dim_grid_problem(Ay0, Ay1, By0, By1)
+        for beta in beta_solutions1:
+            assert beta.to_decimal() >= Ay0
+            assert beta.to_decimal() <= Ay1
+            Ax0_tmp, Ax1_tmp = ellipse1.compute_x_points(beta.to_decimal())
+            assert beta.conj().to_decimal() <= By1
+            assert beta.conj().to_decimal() >= By0
+            Bx0_tmp, Bx1_tmp = ellipse2.compute_x_points(beta.conj().to_decimal())
+            if Ax1_tmp - Ax0_tmp > 0 and Bx1_tmp - Bx0_tmp > 0:
+                new_alpha_solutions = solve_one_dim_grid_problem(
+                    Ax0_tmp, Ax1_tmp, Bx0_tmp, Bx1_tmp
+                )
+                for alpha in new_alpha_solutions:
+                    yield Z_OMEGA.from_Z_SQRT2(alpha, beta)
+    elif num_y_grid_points > 100 * num_x_grid_points and ellipse1 is not None:
+        alpha_solutions1 = solve_one_dim_grid_problem(Ax0, Ax1, Bx0, Bx1)
+        for alpha in alpha_solutions1:
+            Ay0_tmp, Ay1_tmp = ellipse1.compute_y_points(alpha.to_decimal())
+            By0_tmp, By1_tmp = ellipse2.compute_y_points(alpha.conj().to_decimal())
+            if Ay1_tmp - Ay0_tmp > 0 and By1_tmp - By0_tmp > 0:
+                new_beta_solutions = solve_one_dim_grid_problem(
+                    Ay0_tmp, Ay1_tmp, By0_tmp, By1_tmp
+                )
+                for beta in new_beta_solutions:
+                    yield Z_OMEGA.from_Z_SQRT2(alpha, beta)
+    else:
+        alpha_solutions1 = solve_one_dim_grid_problem(Ax0, Ax1, Bx0, Bx1)
+        beta_solutions1 = solve_one_dim_grid_problem(Ay0, Ay1, By0, By1)
+        found_beta1_solutions = []
+        for alpha in alpha_solutions1:
+            if len(found_beta1_solutions) == 0:
+                for beta in beta_solutions1:
+                    found_beta1_solutions.append(beta)
+                    yield Z_OMEGA.from_Z_SQRT2(alpha, beta)
+            else:
+                for beta in found_beta1_solutions:
+                    yield Z_OMEGA.from_Z_SQRT2(alpha, beta)
 
     offset = 1 / D("2").sqrt()
-    alpha_solutions2 = solve_one_dim_grid_problem(
-        D(Ax0) - offset, D(Ax1) - offset, D(Bx0) + offset, D(Bx1) + offset
-    )
-    beta_solutions2 = solve_one_dim_grid_problem(
-        D(Ay0) - offset, D(Ay1) - offset, D(By0) + offset, D(By1) + offset
-    )
-    found_beta2_solutions = []
-    for alpha in alpha_solutions2:
-        if len(found_beta2_solutions) == 0:
-            for beta in beta_solutions2:
-                found_beta2_solutions.append(beta)
-                yield Z_OMEGA.from_Z_SQRT2(alpha, beta) + Z_OMEGA(0, 0, 1, 0)
-                solutions.append(
-                    Z_OMEGA.from_Z_SQRT2(alpha, beta) + Z_OMEGA(0, 0, 1, 0)
+    Ax0 -= offset
+    Ax1 -= offset
+    Ay0 -= offset
+    Ay1 -= offset
+    Bx0 += offset
+    Bx1 += offset
+    By0 += offset
+    By1 += offset
+
+    if ellipse1 is not None:
+        ellipse1_offset = Ellipse(
+            ellipse1.a, ellipse1.b, ellipse1.d, ellipse1.x - offset, ellipse1.y - offset
+        )
+        ellipse2_offset = Ellipse(
+            ellipse2.a, ellipse2.b, ellipse2.d, ellipse2.x - offset, ellipse2.y - offset
+        )
+
+    num_x_grid_points = get_num_pot_sols(Ax0, Ax1, Bx0, Bx1)
+    num_y_grid_points = get_num_pot_sols(Ay0, Ay1, By0, By1)
+    if num_x_grid_points > 100 * num_y_grid_points and ellipse1 is not None:
+        beta_solutions1 = solve_one_dim_grid_problem(Ay0, Ay1, By0, By1)
+        for beta in beta_solutions1:
+            Ax0_tmp, Ax1_tmp = ellipse1_offset.compute_x_points(beta.to_decimal())
+            Bx0_tmp, Bx1_tmp = ellipse2_offset.compute_x_points(
+                beta.conj().to_decimal()
+            )
+            if Ax1_tmp - Ax0_tmp > 0 and Bx1_tmp - Bx0_tmp > 0:
+                new_alpha_solutions = solve_one_dim_grid_problem(
+                    Ax0_tmp, Ax1_tmp, Bx0_tmp, Bx1_tmp
                 )
-        else:
-            for beta in found_beta2_solutions:
-                yield Z_OMEGA.from_Z_SQRT2(alpha, beta) + Z_OMEGA(0, 0, 1, 0)
-    return solutions
+                for alpha in new_alpha_solutions:
+                    yield Z_OMEGA.from_Z_SQRT2(alpha, beta) + Z_OMEGA(0, 0, 1, 0)
+    elif num_y_grid_points > 100 * num_x_grid_points and ellipse1 is not None:
+        alpha_solutions1 = solve_one_dim_grid_problem(Ax0, Ax1, Bx0, Bx1)
+        for alpha in alpha_solutions1:
+            Ay0_tmp, Ay1_tmp = ellipse1_offset.compute_y_points(alpha.to_decimal())
+            By0_tmp, By1_tmp = ellipse2_offset.compute_y_points(
+                alpha.conj().to_decimal()
+            )
+            if Ay1_tmp - Ay0_tmp > 0 and By1_tmp - By0_tmp > 0:
+                new_beta_solutions = solve_one_dim_grid_problem(
+                    Ay0_tmp, Ay1_tmp, By0_tmp, By1_tmp
+                )
+                for beta in new_beta_solutions:
+                    yield Z_OMEGA.from_Z_SQRT2(alpha, beta) + Z_OMEGA(0, 0, 1, 0)
+    else:
+        alpha_solutions2 = solve_one_dim_grid_problem(Ax0, Ax1, Bx0, Bx1)
+        beta_solutions2 = solve_one_dim_grid_problem(Ay0, Ay1, By0, By1)
+        found_beta2_solutions = []
+        for alpha in alpha_solutions2:
+            if len(found_beta2_solutions) == 0:
+                for beta in beta_solutions2:
+                    found_beta2_solutions.append(beta)
+                    yield Z_OMEGA.from_Z_SQRT2(alpha, beta) + Z_OMEGA(0, 0, 1, 0)
+            else:
+                for beta in found_beta2_solutions:
+                    yield Z_OMEGA.from_Z_SQRT2(alpha, beta) + Z_OMEGA(0, 0, 1, 0)
 
 
 def find_ellipse_bounding_box(ellipse: Ellipse) -> Tuple[D, D, D, D]:
@@ -197,7 +337,9 @@ def solve_2_dim_grid_problem_ellipse(
         boxB[3] + ellipse2.y,
     )
     params = boxA + boxB
-    potential_solutions = solve_two_dim_grid_problem_upright_rectangles(*params)
+    potential_solutions = solve_two_dim_grid_problem_upright_rectangles(
+        *params, ellipse1, ellipse2
+    )
     for solution in potential_solutions:
         x1 = solution.to_complexAP().real
         y1 = solution.to_complexAP().imaginary
@@ -213,8 +355,8 @@ def determine_shift_operator(
     lmbda = 1 + D(2).sqrt()
     bias = calculate_bias(ellipse1, ellipse2)
     k = math.floor((1 - bias) / 2)
-    lmbda_pow_k = lmbda ** k
-    lmbda_pow_neg_k = lmbda ** -k
+    lmbda_pow_k = lmbda**k
+    lmbda_pow_neg_k = lmbda**-k
     ellipse1.a *= lmbda_pow_k
     ellipse1.d *= lmbda_pow_neg_k
     ellipse1.z -= k
@@ -294,8 +436,8 @@ def reduce_skew(
             grid_op = grid_op * GridOperator.K()
         elif new_ellipse1.z >= D("0.3") and new_ellipse2.z >= D("0.3"):
             c = min(new_ellipse1.z, new_ellipse2.z)
-            n = max(1, math.floor((lmbda ** c) / 2))
-            grid_op = grid_op * (GridOperator.A() ** n)
+            n = max(1, math.floor((lmbda**c) / 2))
+            grid_op = grid_op * GridOperator.APowN(n)
         elif new_ellipse1.z >= D("0.8") and new_ellipse2.z <= D("0.3"):
             grid_op = grid_op * GridOperator.K().conj2()
         else:
@@ -309,8 +451,8 @@ def reduce_skew(
             grid_op = grid_op * GridOperator.R()
         elif new_ellipse1.z >= D("-0.2") and new_ellipse2.z >= D("-0.2"):
             c = min(new_ellipse1.z, new_ellipse2.z)
-            n = max(1, math.floor((lmbda ** c) / 2))
-            grid_op = grid_op * (GridOperator.B() ** n)
+            n = max(1, math.floor((lmbda**c) / 2))
+            grid_op = grid_op * GridOperator.BPowN(n)
         else:
             raise ValueError(
                 f"Ellipse pair did not match any case. First ellipse = {new_ellipse1}. Second ellipse = {new_ellipse2}"
@@ -399,10 +541,10 @@ def find_bounding_ellipse_direct(epsilon: D, phi: D, k: int = 0) -> Ellipse:
     where z = exp(iφ)
     """
     sqrt2 = D(2).sqrt()
-    c = 1 - epsilon ** 2 / 2
+    c = 1 - epsilon**2 / 2
     x = c * prec_cos(phi)
     y = c * prec_sin(phi)
-    semi_major = epsilon ** 2 / 2
+    semi_major = epsilon**2 / 2
     if k % 2 == 0:
         scale = 2 ** (k // 2)
     else:
@@ -411,7 +553,7 @@ def find_bounding_ellipse_direct(epsilon: D, phi: D, k: int = 0) -> Ellipse:
     x += prec_cos(phi) * shift
     y += prec_sin(phi) * shift
     semi_major = semi_major * D(2) / D(3)
-    semi_minor = (epsilon ** 2 - epsilon ** 4 / 4).sqrt()
+    semi_minor = (epsilon**2 - epsilon**4 / 4).sqrt()
     semi_minor = semi_minor * D(2) / D(3).sqrt()
     semi_major = semi_major * scale
     semi_minor = semi_minor * scale
@@ -449,21 +591,19 @@ def candidate_generator_direct(epsilon: D, phi: D) -> Iterable[Tuple[Z_OMEGA, in
         potential_solutions = solve_2_dim_grid_problem_ellipse(ellipse1, ellipse2)
         # now we have to rotate the solutions back and check if they work
         for sol in potential_solutions:
-            sol = grid_op.multiply_z_omega(sol)
-            is_reducible = False
-            if (sol.a1 + sol.a3) % 2 == 0 and (sol.a2 + sol.a4) % 2 == 0:
-                is_reducible = True
-            if not is_reducible:
-                sol_complex = sol.to_complexAP()
-                magnitude_squared = sol_complex.conj() * sol_complex
-                dot_prod = (
-                    z.real * sol_complex.real + z.imaginary * sol_complex.imaginary
-                )
-                dot_prod = dot_prod / radius
-                if abs(magnitude_squared) <= 2 ** k and dot_prod >= (
-                    1 - epsilon ** 2 / 2
-                ):
-                    yield sol, k
+            scaled_sol = grid_op.multiply_z_omega(sol)
+            tmp_k = k
+
+            while is_reducible(scaled_sol):
+                scaled_sol = reduce(scaled_sol)
+                tmp_k -= 1
+
+            sol_complex = scaled_sol.to_complexAP()
+            magnitude_squared = scaled_sol.magnitude_squared().to_zsqrt().to_decimal()
+            dot_prod = z.real * sol_complex.real + z.imaginary * sol_complex.imaginary
+            dot_prod = dot_prod / radius
+            if abs(magnitude_squared) <= 2**k and dot_prod >= (1 - epsilon**2 / 2):
+                yield scaled_sol, tmp_k
 
         k += 1
         i += 1
@@ -554,8 +694,8 @@ def candidate_generator_fallback(
                 magnitude_squared = sol_complex.conj() * sol_complex
 
                 if (
-                    abs(magnitude_squared) <= 2 ** k
-                    and abs(magnitude_squared) >= pow(2, k) * r ** 2
+                    abs(magnitude_squared) <= 2**k
+                    and abs(magnitude_squared) >= pow(2, k) * r**2
                     and abs(arg_u - phi) <= delta
                 ):
                     yield sol, k

@@ -23,17 +23,28 @@ import numpy as np
 from typing import Union, List, Tuple
 
 class Hamiltonian:
-    def __init__(self, ham_input: Union[List[Tuple[str, float]],str]):
-        if isinstance(ham_input,str):
-            rdr = QSPFilesIO()
-            self.terms = QSPFilesIO.readHaml(ham_input)
-        elif isinstance(ham_input,list):
-            self.terms = ham_input
-        else:
-            raise ValueError("Unsupported hamiltonian input...")
+    def __init__(self, ham_input, ham_type='lcu', N=0):
+        # generic init. I don't like it, but can't figure out how to get the types to work!!!
+        if ham_type == 'lcu':
+            if isinstance(ham_input,str):
+                rdr = QSPFilesIO()
+                self.terms = QSPFilesIO.readHaml(ham_input)
+            elif isinstance(ham_input,list):
+                self.terms = ham_input
+            else:
+                raise ValueError("Unsupported hamiltonian input...")
         
-        self.problem_size = len(self.terms[0][0])
-
+            self.problem_size = len(self.terms[0][0])
+            self.__ham_type = 'lcu'
+        elif ham_type=='fermionic':
+            self.terms = ham_input
+            self.problem_size = N
+            self.__ham_type = 'fermionic'
+        else:
+            self.terms = ham_input
+            self.problem_size = len(self.terms)
+            self.__ham_type = 'list'
+            
     def __len__(self):
         return len(self.terms)
 
@@ -56,6 +67,14 @@ class Hamiltonian:
     def terms(self, new_val):
         self.__ham = new_val
 
+    @property
+    def is_lcu(self):
+        return self.__ham_type == 'lcu'
+    
+    @property
+    def is_fermionic(self):
+        return self.__ham_type == 'fermionic'
+    
     @property
     def loglen(self):
         return int(np.ceil(np.log2(len(self.terms))))

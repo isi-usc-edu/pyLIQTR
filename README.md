@@ -1,4 +1,4 @@
-# pyLIQTR Version 0.3.0
+# pyLIQTR Version 0.3.1
 _Kevin Obenland, Justin Elenewski, Arthur Kurlej, Joe Belarge, John Blue &  Robert Rood_
 
 ---
@@ -24,6 +24,10 @@ Change directory to the location of setup.py, then perform the following command
 - Install the package
 
         pip install .
+
+- Or, as a developer:
+
+        pip install --editable .
         
 ### Optional Installs
 - Install MPSolve polynomial solver, which is used in the angle generation algorithm. Instructions for installation can be found here: https://numpi.dm.unipi.it/software/mpsolve
@@ -62,7 +66,6 @@ Where each demonstration contains five tutorial notebooks, which each serve the 
 
 ## Citation
 <a href="https://zenodo.org/badge/latestdoi/545621986"><img src="https://zenodo.org/badge/545621986.svg" alt="DOI"></a>
-
 ---
 
 ## Disclaimer

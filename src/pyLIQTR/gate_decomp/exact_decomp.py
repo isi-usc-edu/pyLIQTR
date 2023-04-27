@@ -26,7 +26,7 @@ Amano normal form for single qubit Clifford+T operators [1,2,3]
 """
 
 from pyLIQTR.gate_decomp.matrices import MAT_D_OMEGA, SO3
-from pyLIQTR.gate_decomp.rings    import Z_OMEGA
+from pyLIQTR.gate_decomp.rings import Z_OMEGA
 import numpy as np
 from numpy.typing import ArrayLike
 from pyLIQTR.gate_decomp.clifford_gates import clifford_tuple
@@ -136,6 +136,101 @@ def exact_decomp(
         return decompose(s, return_objs), s.k
     else:
         return decompose(s, return_objs)[::-1], s.k
+
+
+def exact_decomp_compressed(
+    u: Z_OMEGA, t: Z_OMEGA, k: int, return_objs: Sequence[A]
+) -> Tuple[bool, int, int, A]:
+    """
+    Decompose a matrix
+    >>> ((1/sqrt(2)**k) * ([[u, -t.conj()],
+                            [t,  u.conj()]])
+
+    exactly into clifford+T gates.
+
+
+    Every Clifford+T operator U can be represented in MA normal form (arXiv:0806.3834):
+
+    U = B_n B_{n-1} B_{n-2} ... B_1 C_0
+
+    where B_k ∈ {HT, SHT} for k ≠ n,  B_n ∈ {T, HT, SHT}, and C_0 is a clifford
+    operator. This function returns a "compressed" representation of the MA normal
+    form of a given Clifford+T operator. The compressed representation is a tuple of
+    four elements:
+
+    1. A bool indicating whether or not B_n = T
+    2. An integer who's binary representation corresponds to B_n ... B_1 (if 1 is false)
+    or B_{n-1} ... B_1 if (1 is true). We represent HT by 0 and SHT by 1.
+    3. The length of the sequence.
+    4. The clifford operator at the end of the sequence.
+
+    Example 1:
+    (T)(HT)(HT)(SHT)(SHT)(HT)(X)
+    has a binary representation 00110, so this becomes the tuple
+    (True, 6, 5, X)
+
+    Example 2:
+    (SHT)(SHT)(HT)(HT)(SHT)(S)
+    has binary representation 11001, so this becomes the tuple
+    (False, 25, 5, S)
+
+    Note that the binary representation is in "Matrix order" - this means that when we
+    want to convert the integer to a sequence of gates, we read the binary
+    representation "backwards" starting from the LSB.
+    """
+    m = MAT_D_OMEGA(u, -t.conj(), t, u.conj(), k)
+    return exact_decomp_compressed_m(m, return_objs)
+
+
+def exact_decomp_compressed_m(
+    m: MAT_D_OMEGA, return_objs: Sequence[A]
+) -> Tuple[bool, int, int, List[A]]:
+    s = m.convert_to_so3()
+    sequence_length = s.k
+    sequence_index = sequence_length - 1
+    gate_sequence = 0
+    equiv_class = get_equiv_class(s.get_parity())
+    first_gate = False
+    if equiv_class == 3:
+        first_gate = True
+        sequence_length -= 1
+    else:
+        gate_sequence += (equiv_class - 1) * pow(2, sequence_index)
+    sequence_index -= 1
+    s = gates[equiv_class - 1] @ s
+    equiv_class = get_equiv_class(s.get_parity())
+    while equiv_class != 0:
+        assert equiv_class in [1, 2]
+        gate_sequence += (equiv_class - 1) * pow(2, sequence_index)
+        s = gates[equiv_class - 1] @ s
+        equiv_class = get_equiv_class(s.get_parity())
+        sequence_index -= 1
+
+    i = 0
+    while clifford_tuple[i][1] != s:
+        i += 1
+        if i > 23:
+            sys.exit(
+                "Final matrix did not match an element of the clifford group. Gate = ",
+                s,
+            )
+    final_gates = clifford_tuple[i][0]
+    clifford_part = []
+    for j in range(len(final_gates)):
+        if final_gates[j : j + 2] == "Sd":
+            clifford_part.insert(0, return_objs[1])
+        elif final_gates[j : j + 1] == "S":
+            clifford_part.insert(0, return_objs[0])
+        elif final_gates[j : j + 1] == "H":
+            clifford_part.insert(0, return_objs[2])
+        elif final_gates[j : j + 1] == "X":
+            clifford_part.insert(0, return_objs[3])
+        elif final_gates[j : j + 1] == "Y":
+            clifford_part.insert(0, return_objs[4])
+        elif final_gates[j : j + 1] == "Z":
+            clifford_part.insert(0, return_objs[5])
+
+    return first_gate, gate_sequence, sequence_length, clifford_part
 
 
 def decompose(s: SO3, return_objs: Sequence[A]) -> List[A]:
@@ -254,10 +349,10 @@ def are_equivalent(gates: str, U: MAT_D_OMEGA, verbose=True) -> bool:
         U = U.mult_pow_2(diff // 2)
         matm.k += 1
         matm = matm * Z_OMEGA(0, 1, 0, 1)
-        matm = matm * zw ** 7
+        matm = matm * zw**7
 
     for i in range(8):
-        if (matm * zw ** i) == U:
+        if (matm * zw**i) == U:
             if verbose:
                 print(
                     f"The circuit is equal to the matrix up to a global phase of ω^{i}"

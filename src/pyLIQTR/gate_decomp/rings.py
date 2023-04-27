@@ -18,8 +18,9 @@ above. Use of this work other than as specifically authorized by the U.S. Govern
 may violate any copyrights that exist in this work.
 """
 
-from decimal import Decimal
 import math
+from decimal import Decimal
+
 import numpy as np
 
 D = Decimal
@@ -79,7 +80,7 @@ class ComplexAP:
             )
 
     def __abs__(self):
-        return (self.real ** 2 + self.imaginary ** 2).sqrt()
+        return (self.real**2 + self.imaginary**2).sqrt()
 
     def conj(self):
         return ComplexAP(self.real, -self.imaginary)
@@ -88,7 +89,7 @@ class ComplexAP:
         return "{} + {}j".format(self.real, self.imaginary)
 
     def __truediv__(self, other):
-        scale = other.real ** 2 + other.imaginary ** 2
+        scale = other.real**2 + other.imaginary**2
         real = self.real * other.real + self.imaginary * other.imaginary
         imaginary = self.imaginary * other.real - self.real * other.imaginary
         return ComplexAP(real / scale, imaginary / scale)
@@ -146,7 +147,7 @@ class Z_SQRT2:
     def __truediv__(self, other):
         if other.a == 0:
             return self.divide_sqrt2(other.b)
-        denominator = other.a ** 2 - 2 * other.b ** 2
+        denominator = other.a**2 - 2 * other.b**2
         numerator = self.b * other.a - self.a * other.b
 
         if numerator % denominator != 0:
@@ -191,7 +192,7 @@ class Z_SQRT2:
         return Z_SQRT2(self.a, -self.b)
 
     def __abs__(self):
-        return self.a ** 2 - 2 * self.b ** 2
+        return self.a**2 - 2 * self.b**2
 
     def __float__(self):
         return float(self.a + self.b * D("2").sqrt())
@@ -213,8 +214,8 @@ class Z_SQRT2:
         return result
 
     def sqrt(self):
-        b_squared_plus = (self.a + D(self.a ** 2 - 2 * self.b ** 2).sqrt()) / 4
-        b_squared_minus = (self.a - D(self.a ** 2 - 2 * self.b ** 2).sqrt()) / 4
+        b_squared_plus = (self.a + D(self.a**2 - 2 * self.b**2).sqrt()) / 4
+        b_squared_minus = (self.a - D(self.a**2 - 2 * self.b**2).sqrt()) / 4
         if (D(b_squared_plus).sqrt()).to_integral_value() ** 2 == b_squared_plus:
             b = D(b_squared_plus).sqrt()
         elif (D(b_squared_minus).sqrt()).to_integral_value() ** 2 == b_squared_minus:
@@ -381,12 +382,15 @@ class Z_OMEGA:
         return Z_OMEGA(-self.a1, self.a2, -self.a3, self.a4)
 
     def __abs__(self):
-        return (self.a1 ** 2 + self.a2 ** 2 + self.a3 ** 2 + self.a4 ** 2) ** 2 - 2 * (
+        return (self.a1**2 + self.a2**2 + self.a3**2 + self.a4**2) ** 2 - 2 * (
             self.a1 * self.a2
             + self.a2 * self.a3
             + self.a3 * self.a4
             - self.a4 * self.a1
         ) ** 2
+
+    def magnitude_squared(self):
+        return self * self.conj()
 
     def to_zsqrt(self):
         assert self.a1 + self.a3 == 0
@@ -397,3 +401,39 @@ class Z_OMEGA:
         assert self.a2 == 0 and self.a4 == 0
         assert (self.a3 + self.a1) % 2 == 0 and (self.a3 - self.a1) % 2 == 0
         return Z_OMEGA(0, (self.a1 + self.a3) // 2, 0, (self.a3 - self.a1) // 2)
+
+
+## static functions
+
+
+def is_reducible(u: Z_OMEGA) -> bool:
+    """
+    Given a value u ∈ Z[ω], determine that supposing if we had some
+    w = (1/√2^k)u ∈ D[ω], we could re-write w as w = (1/√2^(k-1))u' ∈ D[ω]
+    for some u' ∈ Z[ω].
+    """
+    if (u.a1 + u.a3) % 2 == 0 and (u.a2 + u.a4) % 2 == 0:
+        return True
+
+    else:
+        return False
+
+
+def reduce(u: Z_OMEGA) -> Z_OMEGA:
+    """
+    Given a u ∈ Z[ω] such that is_reducible(u) is True, return u' such that
+    (1/√2^k)u = (1/√2^(k-1))u'.
+    """
+    a1p = (u.a2 - u.a4) // 2
+    a2p = (u.a1 + u.a3) // 2
+    a3p = (u.a2 + u.a4) // 2
+    a4p = (u.a3 - u.a1) // 2
+    return Z_OMEGA(a1p, a2p, a3p, a4p)
+
+
+def increase(u: Z_OMEGA) -> Z_OMEGA:
+    a1p = u.a2 - u.a4
+    a2p = u.a1 + u.a3
+    a3p = u.a2 + u.a4
+    a4p = u.a3 - u.a1
+    return Z_OMEGA(a1p, a2p, a3p, a4p)

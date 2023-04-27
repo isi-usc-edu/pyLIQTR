@@ -19,7 +19,7 @@ may violate any copyrights that exist in this work.
 """
 
 from logging import raiseExceptions
-from pyLIQTR.QSP.qsp_cirq_gates import SelectV, Reflect
+from pyLIQTR.QSP.qsp_cirq_gates import SelectV, Reflect, UnitaryBlockEncode, SzegedyWalkOperator
 import pyLIQTR.QSP.Hamiltonian as Hamiltonian
 
 import cirq
@@ -82,7 +82,8 @@ class QSPBase:
         """
         self.phis = np.array(phis,dtype=np.double)
         self.hamiltonian = hamiltonian
-        self.hamiltonian.adjust_hamiltonian()
+        if self.hamiltonian.is_lcu:
+            self.hamiltonian.adjust_hamiltonian()
         self.__target = self.generate_target_qubits(target_size)
         self.__phase = self.generate_phase_qubit()
         self.__control = self.generate_control_qubits()
@@ -92,7 +93,14 @@ class QSPBase:
     def get_number_of_control_qubits(self) -> int:
         #hamiltonian should be a list of tuples [(),(),...()]
         #so the required number of control qubtis is:
-        return self.hamiltonian.loglen
+        if self.hamiltonian.is_lcu:
+            return self.hamiltonian.loglen
+        elif self.hamiltonian.is_fermionic:
+            # N is the total system size (functions + spins)
+            # the control contains (p,alpha), (q,beta), and (U,V,theta)
+            N = self.hamiltonian.problem_size
+            nval = int(np.ceil(np.log2(N)))
+            return 2*nval + 3
 
     def add_phased_iterate(self, circuit, phiA, phiB,invert=0):
         """
@@ -127,6 +135,7 @@ class QSPBase:
     def circuit(self):
         """
         Generates the high-level circuit of the QSP-ed Hamiltonian
+        This generates a circuit for the complete dynamic evolution using the prepare and select Oracles
 
         Parameters:
             None (Note, all inputs are class variables that come from class initialization)
@@ -173,6 +182,48 @@ class QSPBase:
         circuit = self.clear_register(circuit)
         return circuit
 
+    def circuit_unitary_operator(self, controlled=True):
+        """
+        Generates the high-level circuit for a Unitary that provides a
+        block encoding of the specified Hamiltonian
+        Note: this represents a single operator to be used for applications
+        such as GSEE etc.
+
+        Parameters:
+            None (Note, all inputs are class variables that come from class initialization)
+
+        Returns:
+            circuit : no type, could be cirq.circuit
+                The generated high-level circuit
+        """
+
+        circuit = self.initialize_circuit()
+
+        circuit = self.add_unitary_block_encode(circuit, controlled)
+
+        return circuit
+    
+    def circuit_walk_operator(self):
+        """
+        Generates the high-level circuit for a Unitary that provides a
+        block encoding of the Szegedy walk operator of the specified Hamiltonian
+        Note: this represents a single operator to be used for applications
+        such as GSEE etc.
+
+        Parameters:
+            None (Note, all inputs are class variables that come from class initialization)
+
+        Returns:
+            circuit : no type, could be cirq.circuit
+                The generated high-level circuit
+        """
+
+        circuit = self.initialize_circuit()
+
+        circuit = self.add_walk_block_encode(circuit)
+
+        return circuit
+    
     @property
     def phase(self):
         return self.__phase[0]
@@ -250,6 +301,12 @@ class QSPBase:
         return circuit
 
     def add_select_v(self, circuit, angle):
+        return circuit
+
+    def add_unitary_block_encode(self, circuit, controlled):
+        return circuit
+    
+    def add_walk_block_encode(self, circuit, controlled):
         return circuit
     
     def add_reflection(self, circuit, angle):
@@ -409,6 +466,47 @@ class QSP(QSPBase):
                 on(*(self.target+[self.phase]+self.control+self.ancilla)))
         return circuit
     
+    def add_unitary_block_encode(self, circuit, controlled):
+        """
+        Adds a Unitary Block Encoding to the circuit
+        
+        Parameters:
+             None
+
+        Returns:
+            cirq.Gate which implements a unitary block encoding
+        """
+
+        self.ancilla =  self.get_number_of_control_qubits()
+        if controlled:
+            circuit.append(UnitaryBlockEncode(self.hamiltonian, self.phase, self.target, self.control, self.ancilla).\
+                    on(*(self.target+[self.phase]+self.control+self.ancilla)))
+        else:
+            circuit.append(UnitaryBlockEncode(self.hamiltonian, None, self.target, self.control, self.ancilla).\
+                    on(*(self.target+self.control+self.ancilla)))
+                
+        return circuit
+
+    def add_walk_block_encode(self, circuit):
+        """
+        Adds a Szegedy Walk operator circuit
+        
+        Parameters:
+             None
+
+        Returns:
+            cirq.Gate which implements a Szegedy Walk operator
+        """
+
+        #self.ancilla =  self.get_number_of_control_qubits()
+        N = self.hamiltonian.problem_size
+        npb = int(np.ceil(np.log2(N)))
+        self.ancilla = npb + 6
+        circuit.append(SzegedyWalkOperator(self.hamiltonian, self.phase, self.target, self.control, self.ancilla).\
+                        on(*(self.target+[self.phase]+self.control+self.ancilla)))
+                
+        return circuit
+        
     def add_reflection(self, circuit, angle: float):
         """
         Adds a Reflection gate to the circuit.
@@ -460,3 +558,99 @@ class QSP(QSPBase):
         for q in self.ancilla:
             circuit.append(cirq.ResetChannel().on(q))
         return circuit
+
+"""    
+class FermionBlockEncode:
+    def __init__(self, hamiltonian: List[Tuple[str, float]], target_size: int):
+        self.hamiltonian = hamiltonian
+        control_size = self.get_number_of_control_qubits()
+        
+        self.__target = cirq.LineQubit.range(target_size)
+        self.__phase = cirq.NamedQubit.range(target_size, target_size+1, prefix="phs_q")
+        self.__control = cirq.NamedQubit.range(target_size+1, target_size+control_size, prefix="ctl_q")
+        self.__ancilla = None
+        
+    def __str__(self):
+        ph=[self.phase]
+        return f'''FermionBE\n\tTarget:  {self.target}\n\tPhase:   {ph}\n\tControl: {self.control}\n\tAncilla: {self.ancilla}\n\n\tAngles: {self.phis}\n\tHamiltonian {self.hamiltonian}'''
+    
+    def initialize_circuit(self):
+        return cirq.Circuit()
+
+    @property
+    def n_ancilla(self):
+        if self.ancilla is None:
+            return 0
+        else:
+            return len(self.ancilla)
+
+    @property
+    def n_qubits(self):
+        return 1+len(self.target)+len(self.control) #phase + target + control, should we include ancilla counts??
+
+    @property
+    def n_ancilla(self):
+        if self.ancilla is None:
+            return 0
+        else:
+            return len(self.ancilla)
+    @property
+    def ancilla(self):
+        return self.__ancilla
+
+    def generate_ancilla_qubits(self,new_val):        
+        return cirq.NamedQubit.range(self.n_qubits + self.n_ancilla, \
+            self.n_qubits+self.n_ancilla+new_val, prefix='z_anc_q')
+
+    @ancilla.setter
+    def ancilla(self, new_val):
+        '''
+        This function generates new ancilla qubits to use, as necessary for a given implementation of a subcircuit
+        '''
+        if not isinstance(new_val, int):
+            raise ValueError('Input to QSP.ancilla is expected to be an integer.')
+        else:
+            if self.n_ancilla == 0:
+                self.__ancilla = self.generate_ancilla_qubits(new_val)
+            else:
+                if self.n_ancilla < new_val:
+                    tmp_new_ancilla = self.generate_ancilla_qubits(new_val - len(self.ancilla))
+                    self.__ancilla.extend(tmp_new_ancilla)
+                    
+    @property
+    def phase(self):
+        return self.__phase[0]
+    
+    @phase.setter
+    def phase(self, new_val):
+        self.__phase = new_val
+    
+    @property
+    def control(self):
+        return self.__control
+
+    @control.setter
+    def control(self, new_val):
+        self.__control = new_val
+    
+    @property
+    def target(self):
+        return self.__target
+
+    @target.setter
+    def target(self, new_val):
+        self.__target = new_val
+
+    def get_number_of_control_qubits(self) -> int:
+        #hamiltonian should be a list of tuples [(),(),...()]
+        #so the required number of control qubtis is:
+        return self.hamiltonian.loglen
+
+    def circuit(self):
+        circuit = self.initialize_circuit()
+
+        self.ancilla = self.get_number_of_control_qubits()
+        circuit.append(FermionEncode(self.hamiltonian, self.phase, self.target, self.control, self.ancilla).on(*(self.target+[self.phase]+self.control+self.ancilla)))
+
+        return circuit
+"""    

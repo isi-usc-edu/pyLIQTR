@@ -1,4 +1,11 @@
 # High-level changelog (not all inclusive of all changes)
+## v0.3.1
+* Update to QASM printing to be generator based & faster (see Examples/Utilities/Import_Export_and_Printing notebook)
+* Updates to Clifford+T decomposition (see Examples/Utilities/Import_Export_and_Printing notebook)
+    * Condensed printing of rx/ry/rz gates via exporting of rx_d/ry_d/rz_d gates
+    * Randomized generation
+* Setup now only requires cirq.core
+
 ## v0.3.0
 * Implemented a version of GSE using Suzuki-Trotter, and provided examples
 * Added ability to more easily generate random angles with the number of angles equal to required precision (see `compute_hamiltonain_angles` notes in the exmaple tutorials)
