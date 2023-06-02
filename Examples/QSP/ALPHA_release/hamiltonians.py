@@ -54,7 +54,7 @@ def hamiltonian_fh_2d_strings(N_x=4,N_y=4,J=1.0,U=0.0,mu=0.0,hz=0.0):
     N_th    = int(N_tot/2)
 
     Jcr = -J/2
-    Jcc =  J/2 * ((-1)**N_x)
+    Jcc = -J/2  
 
     lcu_str = os.lcu_strings(N_tot)
 
