@@ -1,4 +1,4 @@
-# pyLIQTR Version 0.3.1
+# pyLIQTR
 _Kevin Obenland, Justin Elenewski, Arthur Kurlej, Joe Belarge, John Blue &  Robert Rood_
 
 ---
