@@ -33,7 +33,7 @@ LONG_DESCRIPTION = (THIS_DIRECTORY / "README.md").read_text()
 
 setup(
     name=DISTNAME,
-    version="0.3.2",
+    version="0.3.3",
     license=LICENSE,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
