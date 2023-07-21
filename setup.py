@@ -19,6 +19,7 @@ may violate any copyrights that exist in this work.
 """
 
 from setuptools import setup, find_packages
+from pathlib import Path
 
 DISTNAME = "pyLIQTR"
 LICENSE = "BDS-2"
@@ -27,12 +28,16 @@ AUTHOR_EMAIL = "Kevin.Obenland@ll.mit.edu"
 DESCRIPTION = (
     "A python package for generating quantum circuits using quantum algorithms."
 )
+THIS_DIRECTORY = Path(__file__).parent
+LONG_DESCRIPTION = (THIS_DIRECTORY / "README.md").read_text()
 
 setup(
     name=DISTNAME,
     version="0.3.1",
     license=LICENSE,
     description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
+    long_description_content_type='text/markdown'
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
     packages=find_packages(where="src"),
