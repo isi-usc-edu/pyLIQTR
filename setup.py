@@ -47,10 +47,10 @@ DESCRIPTION = (
 THIS_DIRECTORY = Path(__file__).parent
 LONG_DESCRIPTION = (THIS_DIRECTORY / "README.md").read_text()
 
-REQUIREMENTS = open("requirements.txt").readlines()
+REQUIREMENTS = open("requirements.txt").read().readlines()
 REQUIREMENTS = [r.strip() for r in REQUIREMENTS]
 
-REQUIREMENTS_DEV = open("requirements-dev.txt").readlines()
+REQUIREMENTS_DEV = open("requirements-dev.txt").read().readlines()
 REQUIREMENTS_DEV = [r.strip() for r in REQUIREMENTS_DEV]
 
 __version__ = ""
@@ -68,20 +68,6 @@ setup(
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     python_requires=">=3.8",
-    install_requires=[
-        "cirq-core==1.3.0.dev20231102230836",
-        "cirq-ft==1.3.0.dev20231102230836",
-        "cirq-google==1.3.0.dev20231102230836",
-        "numpy",
-        "pandas",
-        "scipy",
-        "matplotlib",
-        "tqdm",
-        "openfermion",
-        "portalocker",
-        "ply",
-        "gmpy2",
-        "networkx"
-    ],
+    install_requires=REQUIREMENTS,
     extras_require={"dev": REQUIREMENTS_DEV},
 )
