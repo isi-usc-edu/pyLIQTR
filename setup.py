@@ -68,6 +68,20 @@ setup(
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     python_requires=">=3.8",
-    install_requires=REQUIREMENTS,
+    install_requires=[
+        "cirq-core==1.3.0.dev20231102230836",
+        "cirq-ft==1.3.0.dev20231102230836",
+        "cirq-google==1.3.0.dev20231102230836",
+        "numpy",
+        "pandas",
+        "scipy",
+        "matplotlib",
+        "tqdm",
+        "openfermion",
+        "portalocker",
+        "ply",
+        "gmpy2",
+        "networkx"
+    ],
     extras_require={"dev": REQUIREMENTS_DEV},
 )
