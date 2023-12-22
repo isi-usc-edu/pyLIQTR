@@ -13,5 +13,5 @@ This notebook provides a high-level overview of the `Angler`, `Expander`, and `F
 This notebook discusses how `Expander` can provide a polynomial approximation for a variety of functions through deidcated methods in `pyLIQTR`. Methods in `Expander` return Chebyshev expansion coefficients at a desired precision of $\epsilon_0 = $ `eps0`.  The degree $d$ of this approximation is thus set the precision target. For instance, the expansion for a Gaussian $f(x) = \exp[-\alpha x^2]$ may be generated using the `gaussian(alpha,eps0)` method.
 
 ### Angle_Generation_Fitter.ipynb
-This notebook describes how one can use `Fitter`, which uses a  Remez multiple-exhange algorithm to find the best degree-$d$  polynomial approximation $\pi_d$ to an arbitrary function $f$. The notebook demonstrates the usage of the Remez algorithm, with an emphasis on the nuances that are required by QSP/QSVT.
+This notebook describes how one can use `Fitter`, which uses a  Remez multiple-exhange algorithm to find the best degree-$d$  polynomial approximation $\pi_d$ to an arbitrary function $f$. The notebook demonstrates the usage of the Remez algorithm, with an emphasis on the nuances that are required by QSP/QET/QSVT.
 

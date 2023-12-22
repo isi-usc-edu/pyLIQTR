@@ -24,8 +24,6 @@ import scipy.special        as sfn
 import matplotlib.pyplot    as plt
 from IPython.display        import display, clear_output
 
-from   pyLIQTR.sim_methods.expander               import Expander
-
 from IPython.display import set_matplotlib_formats
 set_matplotlib_formats('svg')
 

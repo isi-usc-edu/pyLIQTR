@@ -1,4 +1,14 @@
 # High-level changelog (not all inclusive of all changes)
+## v1.0.0
+* Beginning mass deprecation of legacy code (primarily QSP and PhaseEstimation related, sim_methods, angle generation). Some old code may break!
+* Beginning to leverage cirq-ft for faster resource estimation
+* Introduction of various problem instances
+* Introduction of various block encodings
+* Rework of QSP circuit generation via pyLIQTR.qubitization
+* Introduction of julia package for generating electronic structure hamiltonians
+* Introduction of classical method package
+
+
 ## v0.3.1
 * Update to QASM printing to be generator based & faster (see Examples/Utilities/Import_Export_and_Printing notebook)
 * Updates to Clifford+T decomposition (see Examples/Utilities/Import_Export_and_Printing notebook)

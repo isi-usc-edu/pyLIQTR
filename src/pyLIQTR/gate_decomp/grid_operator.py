@@ -18,9 +18,11 @@ above. Use of this work other than as specifically authorized by the U.S. Govern
 may violate any copyrights that exist in this work.
 """
 
-from decimal import Decimal as D
+from typing import Tuple
 
+import gmpy2
 import numpy as np
+from gmpy2 import mpfr
 
 from pyLIQTR.gate_decomp.rings import Z_OMEGA
 
@@ -251,10 +253,8 @@ class GridOperator:
         new_c = (beta + alpha) // 2
         return Z_OMEGA(new_a, new_b, new_c, new_d)
 
-    def to_numpy_arr(self) -> np.array:
-        SQRT_2 = D(2).sqrt()
-        a11 = self.a + self.ap / SQRT_2
-        a12 = self.b + self.bp / SQRT_2
-        a21 = self.c + self.cp / SQRT_2
-        a22 = self.d + self.dp / SQRT_2
-        return np.array([[float(a11), float(a12)], [float(a21), float(a22)]])
+    def mult_x_y_pt(self, x: mpfr, y: mpfr) -> Tuple[mpfr, mpfr]:
+        SQRT_2 = gmpy2.sqrt(2)
+        x_new = (self.a + self.ap / SQRT_2) * x + (self.b + self.bp / SQRT_2) * y
+        y_new = (self.c + self.cp / SQRT_2) * x + (self.d + self.dp / SQRT_2) * y
+        return x_new, y_new

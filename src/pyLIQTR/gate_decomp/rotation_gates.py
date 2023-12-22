@@ -23,18 +23,19 @@ and then implement that when cirq.decompose() is called.
 
 import math
 import random
-from decimal import Decimal, getcontext
 from functools import lru_cache
 from typing import Dict, List, Optional, Tuple, Union
 
 import cirq
 from cirq import protocols, value
 from cirq._compat import proper_repr
+import gmpy2
+from gmpy2 import mpfr
 
-from pyLIQTR.circuits.pyLOperator import pyLOperator
-from pyLIQTR.gate_decomp.decimal_utils import prec_pi, prec_sin
 from pyLIQTR.gate_decomp.exact_decomp import exact_decomp_compressed
-from pyLIQTR.gate_decomp.gate_approximation import get_ring_elts_direct
+from pyLIQTR.gate_decomp.gate_approximation import (
+    get_ring_elts_direct,
+)
 
 # these vales were determined by finding the T counts at varying precisions of 1000
 # random angles.
@@ -42,7 +43,6 @@ T_COUNT_SLOPE = 3.02
 T_COUNT_CONST = 0.77
 T_COUNT_STD_DEV = 2.06
 
-D = Decimal
 
 clifford_plus_T_ops = [cirq.S, cirq.S**-1, cirq.H, cirq.X, cirq.Y, cirq.Z, cirq.T]
 
@@ -74,7 +74,7 @@ clifford_gates = [
 ]
 
 
-def check_common_angles(angle: D, precision: D) -> Union[None, cirq.Gate]:
+def check_common_angles(angle: mpfr, precision: mpfr) -> Union[None, cirq.Gate]:
     """
     Note that if θ2 is our target angle and θ1 is one of the rotations we can perform
     exactly (i.e a multiple of π/8), and |θ1 - θ2|/2 is less than our desired
@@ -86,7 +86,8 @@ def check_common_angles(angle: D, precision: D) -> Union[None, cirq.Gate]:
 
     NOTE: Assumes incoming rotation angles are in the range [-π, π]
     """
-    pi = prec_pi()
+    pi = gmpy2.const_pi()
+    pi = gmpy2.const_pi()
     while angle < -pi:
         angle += 2 * pi
     while angle > pi:
@@ -103,25 +104,34 @@ def check_common_angles(angle: D, precision: D) -> Union[None, cirq.Gate]:
         [cirq.Z],
     ]
     coeffs = [
-        D(-1),
-        D("-0.75"),
-        D("-0.5"),
-        D("-0.25"),
-        D(0),
-        D("0.25"),
-        D("0.5"),
-        D("0.75"),
-        D(1),
+        mpfr(-1),
+        mpfr("-0.75"),
+        mpfr("-0.5"),
+        mpfr("-0.25"),
+        mpfr(0),
+        mpfr("0.25"),
+        mpfr("0.5"),
+        mpfr("0.75"),
+        mpfr(1),
+        mpfr(-1),
+        mpfr("-0.75"),
+        mpfr("-0.5"),
+        mpfr("-0.25"),
+        mpfr(0),
+        mpfr("0.25"),
+        mpfr("0.5"),
+        mpfr("0.75"),
+        mpfr(1),
     ]
     for gate, coeff in zip(gates, coeffs):
-        if abs(prec_sin((pi * coeff - angle) / 4)) <= precision:
+        if abs(gmpy2.sin((pi * coeff - angle) / 4)) <= precision:
             return gate
     return None
 
 
 @lru_cache
 def _cliff_plus_t_decomp(
-    rads: Union[float, D], eps: Union[D, None]
+    rads: Union[float, mpfr], eps: Union[mpfr, None]
 ) -> Tuple[bool, int, int, List[cirq.Gate]]:
     """
     Compute the Clifford+T decomposition given an angle and precision.
@@ -132,13 +142,24 @@ def _cliff_plus_t_decomp(
     return exact_decomp_compressed(u, t, k, clifford_plus_T_ops)
 
 
-class decomp_mixin(pyLOperator):
+class decomp_mixin(cirq.Gate):
     def __init__(
         self, rads, precision=1e-10, use_random_decomp=False, *args, **kwargs
     ) -> None:
-        eps = D(precision)
-        getcontext().prec = int(2 * abs(eps.log10().to_integral_value("ROUND_UP"))) + 4
-        self.clifford_part: List[cirq.Gate] = check_common_angles(D(rads), precision)
+        eps = mpfr(precision)
+        gmpy2.get_context().precision = max(
+            int(gmpy2.ceil(gmpy2.log2(10 ** (2.5 * precision + 15)))), 100
+        )
+        self.clifford_part: List[cirq.Gate] = check_common_angles(
+            mpfr(rads), precision
+        )
+        eps = mpfr(precision)
+        gmpy2.get_context().precision = max(
+            int(gmpy2.ceil(gmpy2.log2(10 ** (2.5 * precision + 15)))), 100
+        )
+        self.clifford_part: List[cirq.Gate] = check_common_angles(
+            mpfr(rads), precision
+        )
         self.leading_T: bool = False
         self.gate_sequence: int = 0
         self.sequence_length: int = 0
@@ -149,7 +170,7 @@ class decomp_mixin(pyLOperator):
                 self.gate_sequence,
                 self.sequence_length,
                 self.clifford_part,
-            ) = _cliff_plus_t_decomp(rads, eps)
+            ) = _cliff_plus_t_decomp(mpfr(rads), eps)
         elif self.clifford_part is None and use_random_decomp:
             self.sequence_length = int(
                 random.gauss(

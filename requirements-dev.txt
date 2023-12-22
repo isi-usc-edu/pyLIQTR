@@ -1,0 +1,20 @@
+# Analysis (Jupyter, etc.)
+ipykernel
+ipython
+jupyter
+jupyterlab
+
+# Testing
+black
+mypy
+pylint
+pytest
+pytest-cov
+pytest-pep8
+
+# Generating documentation
+nbsphinx
+pypandoc
+recommonmark
+Sphinx
+sphinx_rtd_theme

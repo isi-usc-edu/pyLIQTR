@@ -22,6 +22,7 @@ from typing import List, Tuple
 from cirq   import LineQubit
 import cirq
 #from pyLIQTR.
+from pyLIQTR.circuits.pyLCircuit import get_T_counts_from_rotations
 
 
 qasm_convert_one_qubit_gates = {
@@ -39,7 +40,7 @@ qasm_convert_two_qubit_gates = {
     'CNOT': 'cx'
 }
 
-def open_fermion_to_qasm(n_qubits:int, ofq_str, reg_name:str='reg', include_heading:bool=True):
+def open_fermion_to_qasm(n_qubits:int, ofq_str, reg_name:str='reg', include_heading:bool=True, decompose_rotations:bool=False):
     """
     A function for converting the openfermion qasm to OpenQASM 2.0
 
@@ -51,6 +52,8 @@ def open_fermion_to_qasm(n_qubits:int, ofq_str, reg_name:str='reg', include_head
         reg_name : The prefix name for the register qubits
 
         include_heading: Boolean, if you want to include the heading in the file
+
+        decompose_rotations: Boolean, if you want to decompose rotation gates to Clifford+T
 
     Returns:
         str_out : a string containing the OpenQASM 2.0 circuit
@@ -82,7 +85,10 @@ def open_fermion_to_qasm(n_qubits:int, ofq_str, reg_name:str='reg', include_head
             
             rotation = float(moment_str.split(' ')[1])/np.pi
             qubit_id = int(moment_str.split(' ')[-1])
-            str_out += f'{qasm_convert_rotation_gates[gate]}(pi*{rotation}) {reg_name}[{qubit_id}];\n'
+            if decompose_rotations:
+                str_out += f'{get_T_counts_from_rotations(gate)} {reg_name}[{qubit_id}];\n'
+            else:
+                str_out += f'{qasm_convert_rotation_gates[gate]}(pi*{rotation}) {reg_name}[{qubit_id}];\n'
         else:
             print(f'> Gate = {gate} not in gate tables')
         

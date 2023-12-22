@@ -1,0 +1,18 @@
+#!/bin/sh
+
+
+##
+## The environment variable $PEST_DIR must be set to the 
+## location of PEST source (or just the pest_commander.jl 
+## file if PEST has been installed as a ## Julia package)
+##
+
+
+NUM_THREADS=8
+
+if [ -z "${PEST_DIR}" ] ; then
+   echo "ERROR:  The environment variable PEST_DIR has not been set.  It must point to the location of the PEST source."
+else
+   julia --threads $NUM_THREADS  $PEST_DIR/pest_commander.jl $@
+fi
+

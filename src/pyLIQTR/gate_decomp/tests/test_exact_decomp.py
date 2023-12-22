@@ -19,16 +19,19 @@ may violate any copyrights that exist in this work.
 """
 
 import unittest
+from math import gcd
+from random import randint
+import random
+
+import gmpy2
+from gmpy2 import mpfr
+
 from pyLIQTR.gate_decomp.exact_decomp import *
-from decimal import Decimal as D, getcontext
 from pyLIQTR.gate_decomp.gate_approximation import (
     get_ring_elts_direct,
     get_ring_elts_fallback,
 )
-from pyLIQTR.gate_decomp.decimal_utils import prec_pi, arg
 from pyLIQTR.gate_decomp.matrices import MAT_D_OMEGA
-from random import randint
-from math import gcd
 
 
 class TestExactDecomp(unittest.TestCase):
@@ -36,11 +39,11 @@ class TestExactDecomp(unittest.TestCase):
     # the gate decomposition is equal to the approximate unitary found
     def test_exact_decomp_prec10(self):
         prec = 10
-        PI = prec_pi()
+        PI = gmpy2.const_pi()
         for i in range(239):
             i += 1
             if i % 15 != 0:
-                u, t, k = get_ring_elts_direct(D(i * PI / 120), prec)
+                u, t, k = get_ring_elts_direct(i * PI / 120, prec)
                 circuit, _ = exact_decomp_to_matrix_string(u, t, k)
                 mat = MAT_D_OMEGA(u, -t.conj(), t, u.conj(), k)
                 self.assertTrue(
@@ -50,42 +53,42 @@ class TestExactDecomp(unittest.TestCase):
     # for higher precisions just pick random gates instead of looping through everything
     def test_exact_decomp_prec20(self):
         prec = 20
-        PI = prec_pi()
+        PI = gmpy2.const_pi()
         for _ in range(10):
             i = randint(1, 240)
             while i % 15 == 0:
                 i = randint(1, 240)
-            u, t, k = get_ring_elts_direct(D(i * PI / 120), prec)
+            u, t, k = get_ring_elts_direct(i * PI / 120, prec)
             circuit, _ = exact_decomp_to_matrix_string(u, t, k)
             mat = MAT_D_OMEGA(u, -t.conj(), t, u.conj(), k)
             self.assertTrue(are_equivalent(circuit, mat, False), f"Failed for {i}π/120")
 
     def test_exact_decomp_prec30(self):
         prec = 30
-        PI = prec_pi()
-        for _ in range(10):
+        PI = gmpy2.const_pi()
+        for _ in range(11):
             i = randint(1, 240)
             while i % 15 == 0:
                 i = randint(1, 240)
-            u, t, k = get_ring_elts_direct(D(i * PI / 120), prec)
+            u, t, k = get_ring_elts_direct(i * PI / 120, prec)
             circuit, _ = exact_decomp_to_matrix_string(u, t, k)
             mat = MAT_D_OMEGA(u, -t.conj(), t, u.conj(), k)
             self.assertTrue(are_equivalent(circuit, mat, False), f"Failed for {i}π/120")
 
     def test_exact_decomp_prec40(self):
         prec = 40
-        PI = prec_pi()
+        PI = gmpy2.const_pi()
         for _ in range(10):
             i = randint(1, 240)
             while i % 15 == 0:
                 i = randint(1, 240)
-            u, t, k = get_ring_elts_direct(D(i * PI / 120), prec)
+            u, t, k = get_ring_elts_direct(i * PI / 120, prec)
             circuit, _ = exact_decomp_to_matrix_string(u, t, k)
             mat = MAT_D_OMEGA(u, -t.conj(), t, u.conj(), k)
             self.assertTrue(are_equivalent(circuit, mat, False), f"Failed for {i}π/120")
 
     def test_rand_angles_prec50(self):
-        getcontext().prec = 104
+        gmpy2.get_context().precision = 346
         for _ in range(5):
             denom = 10000
             num = randint(1, 20000)
@@ -98,7 +101,7 @@ class TestExactDecomp(unittest.TestCase):
                 common_factor = gcd(num, denom)
                 num //= common_factor
                 denom //= common_factor
-            u, t, k = get_ring_elts_direct(D(num) * prec_pi() / D(denom), 50)
+            u, t, k = get_ring_elts_direct(num * gmpy2.const_pi() / denom, 50)
             circuit, _ = exact_decomp_to_matrix_string(u, t, k)
             mat = MAT_D_OMEGA(u, -t.conj(), t, u.conj(), k)
             self.assertTrue(
@@ -107,13 +110,13 @@ class TestExactDecomp(unittest.TestCase):
 
     def test_exact_decomp_fallback_prec10(self):
         prec = 10
-        PI = prec_pi()
-        r = D("0.999")
-        for _ in range(10):
+        PI = gmpy2.const_pi()
+        r = mpfr("0.999")
+        for i in range(10):
             i = randint(1, 240)
             while i % 15 == 0:
                 i = randint(1, 240)
-            angle = D(i * PI / 120)
+            angle = i * PI / 120
             u1, t1, k1, u2, t2, k2 = get_ring_elts_fallback(angle, prec, r)
             circuit1, _ = exact_decomp_to_matrix_string(u1, t1, k1)
             mat1 = MAT_D_OMEGA(u1, -t1.conj(), t1, u1.conj(), k1)
@@ -128,13 +131,14 @@ class TestExactDecomp(unittest.TestCase):
 
     def test_exact_decomp_fallback_prec20(self):
         prec = 20
-        PI = prec_pi()
-        r = D("0.999")
+        PI = gmpy2.const_pi()
+        r = mpfr("0.999")
+        times = []
         for _ in range(10):
             i = randint(1, 240)
             while i % 15 == 0:
                 i = randint(1, 240)
-            angle = D(i * PI / 120)
+            angle = i * PI / 120
             u1, t1, k1, u2, t2, k2 = get_ring_elts_fallback(angle, prec, r)
             circuit1, _ = exact_decomp_to_matrix_string(u1, t1, k1)
             mat1 = MAT_D_OMEGA(u1, -t1.conj(), t1, u1.conj(), k1)
@@ -149,13 +153,14 @@ class TestExactDecomp(unittest.TestCase):
 
     def test_exact_decomp_fallback_prec30(self):
         prec = 30
-        PI = prec_pi()
-        r = D("0.999")
+        PI = gmpy2.const_pi()
+        r = mpfr("0.999")
+        random.seed(1)
         for _ in range(10):
             i = randint(1, 240)
             while i % 15 == 0:
                 i = randint(1, 240)
-            angle = D(i * PI / 120)
+            angle = i * PI / 120
             u1, t1, k1, u2, t2, k2 = get_ring_elts_fallback(angle, prec, r)
             circuit1, _ = exact_decomp_to_matrix_string(u1, t1, k1)
             mat1 = MAT_D_OMEGA(u1, -t1.conj(), t1, u1.conj(), k1)
@@ -170,13 +175,13 @@ class TestExactDecomp(unittest.TestCase):
 
     def test_exact_decomp_fallback_prec40(self):
         prec = 40
-        PI = prec_pi()
-        r = D("0.999")
+        PI = gmpy2.const_pi()
+        r = mpfr("0.999")
         for _ in range(5):
             i = randint(1, 240)
             while i % 15 == 0:
                 i = randint(1, 240)
-            angle = D(i * PI / 120)
+            angle = i * PI / 120
             u1, t1, k1, u2, t2, k2 = get_ring_elts_fallback(angle, prec, r)
             circuit1, _ = exact_decomp_to_matrix_string(u1, t1, k1)
             mat1 = MAT_D_OMEGA(u1, -t1.conj(), t1, u1.conj(), k1)
@@ -191,13 +196,13 @@ class TestExactDecomp(unittest.TestCase):
 
     def test_exact_decomp_fallback_prec50(self):
         prec = 50
-        PI = prec_pi()
-        r = D("0.999")
+        PI = gmpy2.const_pi()
+        r = mpfr("0.999")
         for _ in range(5):
             i = randint(1, 240)
             while i % 15 == 0:
                 i = randint(1, 240)
-            angle = D(i * PI / 120)
+            angle = i * PI / 120
             u1, t1, k1, u2, t2, k2 = get_ring_elts_fallback(angle, prec, r)
             circuit1, _ = exact_decomp_to_matrix_string(u1, t1, k1)
             mat1 = MAT_D_OMEGA(u1, -t1.conj(), t1, u1.conj(), k1)

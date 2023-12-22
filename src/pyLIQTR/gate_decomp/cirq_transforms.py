@@ -28,15 +28,17 @@ import math
 import random
 import re
 import warnings
-from decimal import Decimal, getcontext
 from functools import lru_cache
 from typing import FrozenSet, Iterable, List, Tuple, Union
 
 import cirq
+import gmpy2
+from gmpy2 import mpfr
 
-from pyLIQTR.gate_decomp.decimal_utils import prec_sin
 from pyLIQTR.gate_decomp.exact_decomp import exact_decomp
-from pyLIQTR.gate_decomp.gate_approximation import get_ring_elts_direct
+from pyLIQTR.gate_decomp.gate_approximation import (
+    get_ring_elts_direct,
+)
 from pyLIQTR.gate_decomp.rotation_gates import (
     T_COUNT_CONST,
     T_COUNT_SLOPE,
@@ -49,7 +51,6 @@ from pyLIQTR.gate_decomp.rotation_gates import (
     rz_decomp,
 )
 
-D = Decimal
 
 # Single qubit gates that don't get decomposed.
 clifford_plus_T_gates = [
@@ -79,10 +80,20 @@ filtered_gates = [
     "reset",
 ]
 
+
 def parse_and_reconstruct(line):
-    #The Clifford + T representation can be reconstructed by:
-    def reconstruct(leading_T,gate_sequence,sequence_length, clifford_part):
-        cirq_cliffs = {"S":cirq.S,"Sd":cirq.inverse(cirq.S), "H": cirq.H, "Z":cirq.Z,"X":cirq.X, "Y":cirq.Y,"T":cirq.T}
+    # The Clifford + T representation can be reconstructed by:
+    def reconstruct(leading_T, gate_sequence, sequence_length, clifford_part):
+        cirq_cliffs = {
+            "S": cirq.S,
+            "Sd": cirq.inverse(cirq.S),
+            "H": cirq.H,
+            "Z": cirq.Z,
+            "X": cirq.X,
+            "Y": cirq.Y,
+            "T": cirq.T,
+        }
+
         def fixS(g):
             if "S" in g and len(g) > 1:
                 return "Sd"
@@ -101,17 +112,17 @@ def parse_and_reconstruct(line):
         if leading_T:
             ops += [cirq.T]
         return ops
+
     parsed_line = line
-    for rmv in ["// ","(",")","[","]"]:
-        parsed_line = parsed_line.replace(rmv,"")
-    parsed_line = parsed_line.split(', ')
+    for rmv in ["// ", "(", ")", "[", "]"]:
+        parsed_line = parsed_line.replace(rmv, "")
+    parsed_line = parsed_line.split(", ")
     print(parsed_line)
     leadingT = bool(parsed_line[0])
     gate_sequence = int(parsed_line[1])
     sequence_length = int(parsed_line[2])
     clifford_part = parsed_line[3:]
-    return reconstruct(leadingT,gate_sequence,sequence_length, clifford_part)
-
+    return reconstruct(leadingT, gate_sequence, sequence_length, clifford_part)
 
 
 # direct decomposition of a gate into Clifford+T
@@ -176,8 +187,8 @@ def count_rotation_gates(circuit: cirq.AbstractCircuit):
         for op in moment:
             if is_filtered_gate(op):
                 pass
-            elif (len(op.qubits) == 1) and (not is_gate_clifford(op)):
-                m = re.search("R[xyz]\(([^\)]+)\)", str(op))
+            elif (len(op.qubits) == 1) and (not is_gate_clifford_plus_T(op)):
+                m = re.search("R[xyz]\\(([^\)]+)\\)", str(op))
                 if m:
                     angle_str = m.groups()[0]
                     angle = float(
@@ -203,7 +214,7 @@ def count_rotation_gates(circuit: cirq.AbstractCircuit):
 
 def clifford_plus_t_direct_transform(
     circuit: cirq.AbstractCircuit,
-    precision: Union[int, float, None] = 10,
+    gate_precision: Union[int, float, None] = 10,
     circuit_precision: Union[int, float, None] = None,
     num_rotation_gates: Union[int, None] = None,
     use_rotation_decomp_gates: bool = False,
@@ -266,7 +277,8 @@ def clifford_plus_t_direct_transform(
         initial pass over the circuit to count the number of rotation gates, unless
         `num_rotation_gates` is specified by the caller.
     num_rotation_gates: Union[int, None]:
-        The number of rotation gates in the circuit.
+        The number of rotation gates in the circuit. If known, pass this in as it will cut down
+        on the amount of execution time, particularly if the number of gates is very large.
     use_rotation_decomp_gates: bool
         If true, replace `cirq.r<x/y/z>` gates with
         `pyLIQTR.gate_decomp.r<x/y/z>_decomp` gates, which can be expanded later into a
@@ -289,7 +301,7 @@ def clifford_plus_t_direct_transform(
         using the gates listed in the list clifford_plus_T_ops above
     """
     gate_precision = determine_gate_precision(
-        circuit, precision, circuit_precision, num_rotation_gates
+        circuit, gate_precision, circuit_precision, num_rotation_gates
     )
     operations = []
     for moment in circuit:
@@ -311,7 +323,7 @@ def clifford_plus_t_direct_transform(
                 operations.append(new_gates)
             elif (
                 len(op.qubits) != 1
-                or is_gate_clifford(op.without_classical_controls())
+                or is_gate_clifford_plus_T(op.without_classical_controls())
                 or "Measurement" in str(op)
             ):
                 operations.append(op)
@@ -329,28 +341,6 @@ def clifford_plus_t_direct_transform(
                     for gate_tuple in gate_list:
                         if gate_tuple[1] == 0:
                             continue
-                        exp = math.frexp(float(gate_tuple[1]))[1]
-                        # subtract 1 b/c frexp returns an exponent such that
-                        # x = 0.1b_1b_2...b_52 x 2^E
-                        # instead of
-                        # x = 1.b_1b_2...b_52 x 2^E (1)
-                        # and double precision rounding error is 2^(E-53) for E in
-                        # equation 1
-                        # error due to floating point rep
-                        rounding_err_angle = pow(2, exp - 53 - 1)
-                        # error in operator norm due to floating point rounding in angle
-                        rounding_err_rotation = 2 * prec_sin(D(rounding_err_angle / 4))
-                        if D(gate_precision) < rounding_err_rotation:
-                            gate_precision = D(
-                                f"1e-{math.floor(abs(math.log10(rounding_err_rotation)))}"
-                            )
-                            warning_string = (
-                                "Desired precision of decomposition exceeds the"
-                                " precision from floating point representation of"
-                                " angle. Setting the precision of this gate to ε ="
-                                + str(gate_precision)
-                            )
-                            warnings.warn(warning_string)
 
                         # if Z rotation, can directly approximate
                         if gate_tuple[0] == "z":
@@ -376,7 +366,7 @@ def clifford_plus_t_direct_transform(
                             else:
                                 operations.append(
                                     decompose_diagonal_cirq(
-                                        D(gate_tuple[1]),
+                                        mpfr(gate_tuple[1]),
                                         gate_precision,
                                         qubit,
                                         classical_controls,
@@ -410,7 +400,7 @@ def clifford_plus_t_direct_transform(
                                 operations.append(cirq.H(qubit))
                                 operations.append(
                                     decompose_diagonal_cirq(
-                                        D(gate_tuple[1]),
+                                        mpfr(gate_tuple[1]),
                                         gate_precision,
                                         qubit,
                                         classical_controls,
@@ -444,7 +434,7 @@ def clifford_plus_t_direct_transform(
                                 operations.append(cirq.H(qubit))
                                 operations.append(
                                     decompose_diagonal_cirq(
-                                        D(gate_tuple[1]),
+                                        mpfr(gate_tuple[1]),
                                         gate_precision,
                                         qubit,
                                         classical_controls,
@@ -466,9 +456,10 @@ def determine_gate_precision(
         if num_rotation_gates is None:
             num_rotation_gates = get_num_rotation_gates(circuit)
         if isinstance(circuit_precision, float):
-            return circuit_precision / num_rotation_gates
+            return (circuit_precision / num_rotation_gates) if num_rotation_gates > 0 else circuit_precision
         else:
-            return pow(10, -circuit_precision) / num_rotation_gates
+            precision = pow(10, -circuit_precision)
+            return (precision / num_rotation_gates) if num_rotation_gates > 0 else precision
     else:
         if isinstance(gate_precision, float):
             return gate_precision
@@ -482,9 +473,73 @@ def get_num_rotation_gates(
     num_rotation_gates = 0
     for moment in circuit:
         for op in moment:
-            if parse_gate(op.gate) is not None:
-                num_rotation_gates += 1
+            gate_string = str(op.gate)
+            if (len(op.qubits) == 1) and ("R" in gate_string):
+                if parse_gate(op.gate) is not None:
+                    num_rotation_gates += 1
     return num_rotation_gates
+
+
+def get_approximate_t_depth(
+    circuit: cirq.AbstractCircuit,
+    depthToff: int = 7,
+    gate_precision: Union[int, float, None] = 10,
+    circuit_precision: Union[int, float, None] = None,
+) -> int:
+    """
+    Get the approximate T depth of a circuit.
+
+    This function approximates the T depth of a circuit using the following heuristic:
+    for each moment in the cirq circuit, it finds the gate with the highest T-count
+    when decomposed to Clifford+T, and then adds up the the T count from each moment.
+
+    Gate T counts are determined as follows:
+    - Single qubit rotation gate: For a precision of ε, the T count is
+    3.02 * log2(1/ε) + 0.77 (these numbers were obtained from decomposing 1000 random
+    angles at varying precisions).
+    - CCX/CCZ Gates: `depthToff` T gates (7 by default)
+    - T or T^{\dagger}: 1 T gate
+
+    Parameters
+    ----------
+    circuit: cirq.AbstractCircuit
+        The circuit whose T depth will be estimated
+    depthToff: int
+        The number of T gates that a CCX or CCZ gate counts as
+    gate_precision: Union[int, float, None]
+        Used to determine the how many T gates a single qubit rotation counts as.
+        If given an int, precision used to estimate the gate_count will be
+        10^{-gate_precision} whereas if given a float the precision will simply be
+        gate_precision.
+    circuit_precision: Union[int, float, None]
+        If not None, the precision for each gate will be either `circuit_precision`
+        divided by the number of rotation gates (if given a float), or
+        10^{-circuit_precision} divided by the number of rotation gates (if given an
+        int). Note that this requires doing an initial pass over the circuit to count
+        the number of rotation gates, unless `num_rotation_gates` is specified by the caller.
+    """
+    precision = determine_gate_precision(circuit, gate_precision, circuit_precision)
+    t_depth = 0
+    for moment in circuit:
+        max_t_count = 0
+        for op in moment:
+            t_count = 0
+            if op.gate in [cirq.T, cirq.T**-1]:
+                t_count = 1
+            for cc_gate in directCpT_gates:
+                if str(op.gate).strip().startswith(cc_gate):
+                    t_count = depthToff
+            if len(op.qubits) == 1:
+                if parse_gate(
+                    op.gate, False
+                ) is not None and not is_gate_clifford_plus_T(op):
+                    t_count = int(
+                        T_COUNT_SLOPE * math.log2(1 / precision) + T_COUNT_CONST
+                    )
+            if t_count > max_t_count:
+                max_t_count = t_count
+        t_depth += max_t_count
+    return t_depth
 
 
 def parse_gate(
@@ -510,7 +565,7 @@ def parse_gate(
         if axis in ["x", "y", "z"]:
             angle = gate._rads
     elif ("X" in gate_string or "Y" in gate_string or "Z" in gate_string) and (
-        "**" in gate_string
+        ("**" in gate_string) or ("Pow" in gate_string)
     ):
         axis = gate_string[0].lower()
         angle = math.pi * gate.exponent
@@ -527,7 +582,7 @@ def parse_gate(
 
 @lru_cache
 def decompose_diagonal_cirq(
-    angle: D,
+    angle: mpfr,
     precision: float,
     qubit: cirq.Qid,
     classical_control: Union[None, FrozenSet[cirq.Condition]] = None,
@@ -538,8 +593,10 @@ def decompose_diagonal_cirq(
     If the original operation was classically controlled, all of the gates from the
     decomposition will be classically controlled as well.
     """
-    eps = D(precision)
-    getcontext().prec = int(2 * abs(eps.log10().to_integral_value("ROUND_UP"))) + 4
+    eps = mpfr(precision)
+    gmpy2.get_context().precision = max(
+        int(gmpy2.ceil(gmpy2.log2(10 ** (2.5 * precision + 15)))), 100
+    )
     easy_approx = check_common_angles(angle, precision)
     if classical_control is None:
         if easy_approx is not None:
@@ -574,13 +631,13 @@ def decompose_diagonal_cirq(
                 ]
 
 
-def is_gate_clifford(op):
+def is_gate_clifford_plus_T(op: cirq.Operation) -> bool:
     if str(op.gate).strip() in clifford_plus_T_gates:
         return True
     return False
 
 
-def is_directCpT_gate(op):
+def is_directCpT_gate(op: cirq.Operation) -> bool:
     gate = str(op.gate).strip()
     for dGate in directCpT_gates:
         if gate.startswith(dGate):
@@ -589,7 +646,7 @@ def is_directCpT_gate(op):
     return False
 
 
-def is_filtered_gate(op):
+def is_filtered_gate(op: cirq.Operation) -> bool:
     gate = str(op.gate).strip()
     for dGate in filtered_gates:
         if gate.startswith(dGate):
@@ -598,7 +655,7 @@ def is_filtered_gate(op):
     return False
 
 
-def random_decomp(eps: D):
+def random_decomp(eps: mpfr):
     gates = clifford_gates[random.randint(0, 23)]
     sequence_length = int(
         random.gauss(

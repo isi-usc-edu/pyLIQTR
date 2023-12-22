@@ -18,21 +18,26 @@ above. Use of this work other than as specifically authorized by the U.S. Govern
 may violate any copyrights that exist in this work.
 """
 
-from decimal import Decimal, getcontext
-from pyLIQTR.gate_decomp.decimal_utils import prec_pi, exp_c_ap, arg
-from pyLIQTR.gate_decomp.rings import Z_OMEGA, Z_SQRT2, ComplexAP
-from pyLIQTR.gate_decomp.point_enumeration import candidate_generator_direct, candidate_generator_fallback
-from pyLIQTR.gate_decomp.solve_diophantine import solveDiophantine
-from time import perf_counter
+from math import gcd
 from typing import Tuple, Union
+
+import gmpy2
+from gmpy2 import mpc, mpfr
+
 from pyLIQTR.gate_decomp.exact_decomp import (
     exact_decomp_to_matrix_string,
     exact_decomp_to_qasm,
 )
-from math import gcd
-
-D = Decimal
-PI = prec_pi()
+from pyLIQTR.gate_decomp.point_enumeration import (
+    candidate_generator_direct,
+    candidate_generator_fallback,
+)
+from pyLIQTR.gate_decomp.point_enumeration import (
+    candidate_generator_direct,
+    candidate_generator_fallback,
+)
+from pyLIQTR.gate_decomp.rings import Z_OMEGA, Z_SQRT2
+from pyLIQTR.gate_decomp.solve_diophantine import solveDiophantine
 
 
 def is_reducible(u: Z_OMEGA) -> bool:
@@ -66,56 +71,21 @@ def corrections(theta):
     theta+correction ∈ [-pi/4, pi/4]
     """
     u_correction = Z_OMEGA(0, 0, 0, 1)
-    theta_correction = D("0")
+    theta_correction = mpfr()
+    PI = gmpy2.const_pi()
     if theta >= PI / 4 and theta < 3 * PI / 4:
         u_correction = Z_OMEGA(0, 1, 0, 0)
-        theta_correction = -prec_pi() / D("2")
+        theta_correction = -gmpy2.const_pi() / 2
     if theta >= 3 * PI / 4 and theta < 5 * PI / 4:
         u_correction = Z_OMEGA(0, 0, 0, -1)
-        theta_correction = -prec_pi()
+        theta_correction = -gmpy2.const_pi()
     if theta >= 5 * PI / 4 and theta < 7 * PI / 4:
         u_correction = Z_OMEGA(0, -1, 0, 0)
-        theta_correction = -3 * prec_pi() / D("2")
+        theta_correction = -3 * gmpy2.const_pi() / 2
     return u_correction, theta_correction
 
 
-def approxRzAnalysis(eps: D, theta: D) -> Tuple[Z_OMEGA, Z_OMEGA, int, int, D, float]:
-    """
-    Approximate Rz(theta) as a unitary with entries from the ring D[ω] where
-    D[ω] = {1/√2^k(aω^3 + bω^2 + cω + d) | k ∈ N, a, b, c, d ∈ Z}
-
-    This version of the function returns additional information about the solution,
-    such as the number of candidates tried, the true error of the approximation,
-    and the time it took to find the approximation.
-    """
-    start = perf_counter()
-    u_correction, theta_correction = corrections(theta)
-    u_generator = candidate_generator_direct(eps, theta + theta_correction)
-    ii = 0
-    z = exp_c_ap(theta)
-    for u, k in u_generator:
-        ii += 1
-        while is_reducible(u):
-            print("u = ", u, " is reducible")
-            k -= 1
-            u = reduce(u)
-        xi = Z_SQRT2(2 ** k, 0) - (u * u.conj()).to_zsqrt()
-        t = solveDiophantine(xi)
-        if t is not None:
-            end = perf_counter()
-            if k % 2 == 0:
-                scale = 2 ** (k // 2)
-            else:
-                scale = 2 ** (k // 2) * D(2).sqrt()
-            uc = (u * u_correction).to_complexAP() * (1 / D(scale))
-            print("uc = ", uc)
-            print("z  = ", z)
-            assert (t.conj() * t).to_zsqrt() == xi
-            err = get_error(uc, z)
-            return u * u_correction, t * u_correction, k, ii, err, end - start
-
-
-def approxRz_direct(eps: D, theta: D) -> Tuple[Z_OMEGA, Z_OMEGA, int]:
+def approxRz_direct(eps: mpfr, theta: mpfr) -> Tuple[Z_OMEGA, Z_OMEGA, int]:
     """
     Approximate Rz(theta) as a unitary with entries from the ring D[ω]
     where D[ω] = {1/√2^k(aω^3 + bω^2 + cω + d) | k ∈ N, a, b, c, d ∈ Z}
@@ -126,68 +96,29 @@ def approxRz_direct(eps: D, theta: D) -> Tuple[Z_OMEGA, Z_OMEGA, int]:
         while is_reducible(u):
             k -= 1
             u = reduce(u)
-        xi = Z_SQRT2(2 ** k, 0) - (u * u.conj()).to_zsqrt()
+        xi = Z_SQRT2(2**k, 0) - (u * u.conj()).to_zsqrt()
         t = solveDiophantine(xi)
         if t is not None:
             assert (t.conj() * t).to_zsqrt() == xi
             return u * u_correction, t * u_correction, k
 
 
-def approxRz_fallback(eps: D, theta: D, r: D) -> Tuple[Z_OMEGA, Z_OMEGA, int]:
-    """"""
+def approxRz_fallback(eps: mpfr, theta: mpfr, r: mpfr) -> Tuple[Z_OMEGA, Z_OMEGA, int]:
     u_correction, theta_correction = corrections(theta)
     u_generator = candidate_generator_fallback(eps, theta + theta_correction, r)
     for u, k in u_generator:
         while is_reducible(u):
             k -= 1
             u = reduce(u)
-        xi = Z_SQRT2(2 ** k, 0) - (u * u.conj()).to_zsqrt()
+        xi = Z_SQRT2(2**k, 0) - (u * u.conj()).to_zsqrt()
         t = solveDiophantine(xi)
         if t is not None:
             assert (t.conj() * t).to_zsqrt() == xi
             return u * u_correction, t * u_correction, k
 
 
-def get_ring_elts_analysis(
-    init_theta: Union[float, D], prec: int
-) -> Tuple[Z_OMEGA, Z_OMEGA, int, int, float]:
-    """A version of get_ring_elts used for profiling"""
-    getcontext().prec = max(2 * prec + 3, 28)
-    eps = D("1e-{}".format(prec))
-    theta = -D(init_theta)
-    while theta < D("0"):
-        theta += 2 * prec_pi()
-    while theta > 2 * prec_pi():
-        theta -= 2 * prec_pi()
-    u, t, k, num_cands, err, time = approxRzAnalysis(eps, theta)
-    print("u = ", u)
-    print(
-        "u = ",
-        u.to_complexAP().real / D(2).sqrt() ** k,
-        " + ",
-        u.to_complexAP().imaginary / D(2).sqrt() ** k,
-        "i",
-    )
-    print("t = ", t)
-    print(
-        "t = ",
-        t.to_complexAP().real / D(2).sqrt() ** k,
-        " + ",
-        t.to_complexAP().imaginary / D(2).sqrt() ** k,
-        "i",
-    )
-    print("t*t = ", (t.conj() * t).to_zsqrt())
-    print("k = ", k)
-    print("2^k - u*u = ", Z_SQRT2(2 ** k, 0) - (u.conj() * u).to_zsqrt())
-    print("num cands = ", num_cands)
-    print("Total time: {:.3f}s".format(time))
-    print("Time per candidate: {:.3f}s".format((time) / num_cands))
-    print("Actual error: {:.3e}".format(err))
-    return u, t, k, num_cands, time
-
-
 def get_ring_elts_direct(
-    init_theta: Union[float, D], prec: int, eps: Union[D, None] = None
+    init_theta: Union[float, mpfr], prec: int, eps: Union[mpfr, None] = None
 ) -> Tuple[Z_OMEGA, Z_OMEGA, int]:
     """
     Given an angle θ, find elements u, t ∈ Z[ω], and an integer k such that the matrix
@@ -198,45 +129,48 @@ def get_ring_elts_direct(
     |   0 exp(iθ/2) |
     """
     if prec == 0:
-        prec = abs(eps.log10().to_integral_value("ROUND_UP"))
-    getcontext().prec = max(2 * int(prec) + 4, 28)
+        prec = gmpy2.ceil(abs(gmpy2.log10(eps)))
+
     if eps is None:
-        eps = D("1e-{}".format(prec))
-    theta = -D(init_theta) / D(2)
-    while theta < D("0"):
-        theta += 2 * prec_pi()
-    while theta > 2 * prec_pi():
-        theta -= 2 * prec_pi()
-    u, t, k = approxRz_direct(eps, theta)
+        with gmpy2.local_context(gmpy2.get_context(), round=gmpy2.RoundDown):
+            eps = mpfr("1e-{}".format(prec))
+    theta = -mpfr(init_theta) / 2
+    PI = gmpy2.const_pi()
+    while theta < 0:
+        theta += 2 * PI
+    while theta > 2 * PI:
+        theta -= 2 * PI
+    tmp_precision = max(int(gmpy2.ceil(gmpy2.log2(10 ** (2.5 * prec + 15)))), 100)
+    with gmpy2.local_context(gmpy2.get_context(), precision=tmp_precision):
+        u, t, k = approxRz_direct(eps, theta)
     return u, t, k
 
 
 def get_ring_elts_fallback(
-    init_theta: D, prec: int, r: D
+    init_theta: Union[float, mpfr], prec: int, r: mpfr
 ) -> Tuple[Z_OMEGA, Z_OMEGA, int, Z_OMEGA, Z_OMEGA, int]:
-    getcontext().prec = max(2 * prec + 4, 28)
-    eps = D("1e-{}".format(prec))
-    theta = D(init_theta) / D(2)
-    while theta < D("0"):
-        theta += 2 * prec_pi()
-    while theta > 2 * prec_pi():
-        theta -= 2 * prec_pi()
-    u1, t1, k1 = approxRz_fallback(eps / 2, theta, r)
-    u1 = u1.conj()
-    t1 = -t1.conj()
-    # if the projective rotation "fails", we will instead apply
-    # the rotation exp(i*Arg(t)*Z). When this happens, need
-    # to use the "fallback" correction theta - Arg(t)
-    t1c = t1.to_complexAP()
-    t1_mag_squared = (t1c.real ** 2 + t1c.imaginary ** 2) / (2 ** k1)
-    theta_fallback = theta - arg(t1c)
-    u2, t2, k2 = get_ring_elts_direct(theta_fallback, 0, eps / (2 * t1_mag_squared))
+    with gmpy2.local_context(gmpy2.get_context(), round=gmpy2.RoundDown):
+        eps = mpfr("1e-{}".format(prec))
+        half_eps = eps / 2
+    theta = init_theta / 2
+    PI = gmpy2.const_pi()
+    while theta < 0:
+        theta += 2 * PI
+    while theta > 2 * PI:
+        theta -= 2 * PI
+    tmp_precision = max(int(gmpy2.ceil(gmpy2.log2(10 ** (2.5 * prec + 15)))), 100)
+    with gmpy2.local_context(gmpy2.get_context(), precision=tmp_precision):
+        u1, t1, k1 = approxRz_fallback(half_eps, theta, r)
+        u1 = u1.conj()
+        t1 = -t1.conj()
+        # if the projective rotation "fails", we will instead apply
+        # the rotation exp(i*Arg(t)*Z). When this happens, need
+        # to use the "fallback" correction theta - Arg(t)
+        t1c = mpc(t1)
+        t1_mag_squared = gmpy2.norm(t1c) / (2**k1)
+        theta_fallback = theta - gmpy2.phase(t1c)
+        u2, t2, k2 = get_ring_elts_direct(theta_fallback, 0, eps / (2 * t1_mag_squared))
     return u1, t1, k1, u2, t2, k2
-
-
-def get_error(u: ComplexAP, z: ComplexAP) -> D:
-    err = 2 - 2 * (z.real * u.real + z.imaginary * u.imaginary)
-    return err.sqrt()
 
 
 def check_common_cases(
@@ -282,8 +216,12 @@ def approximate_rz_direct(
     if simple_sol is not None:
         return simple_sol
 
-    getcontext().prec = 2 * precision + 4
-    u, t, k = get_ring_elts_direct(D(numerator) * prec_pi() / D(denominator), precision)
+    gmpy2.get_context().precision = max(
+        int(gmpy2.ceil(gmpy2.log2(10 ** (2.5 * precision + 15)))), 100
+    )
+    u, t, k = get_ring_elts_direct(
+        numerator * gmpy2.const_pi() / denominator, precision
+    )
     if use_qasm:
         return exact_decomp_to_qasm(u, t, k)
     else:
@@ -294,7 +232,7 @@ def approximate_rz_fallback(
     numerator: int,
     denominator: int,
     precision: int,
-    r: D = D("0.999"),
+    r: mpfr = mpfr("0.999"),
     use_qasm: bool = False,
 ) -> Union[Tuple[str, int, str, int], Tuple[str, int, int]]:
     """
@@ -320,10 +258,11 @@ def approximate_rz_fallback(
     if simple_sol is not None:
         return simple_sol
 
-    getcontext().prec = 2 * (precision + 1) + 4
-
+    gmpy2.get_context().precision = max(
+        int(gmpy2.ceil(gmpy2.log2(10 ** (2.5 * precision + 15)))), 100
+    )
     u1, t1, k1, u2, t2, k2 = get_ring_elts_fallback(
-        D(numerator) * prec_pi() / D(denominator), precision, r
+        mpfr(numerator) * gmpy2.const_pi() / mpfr(denominator), precision, r
     )
 
     if use_qasm:

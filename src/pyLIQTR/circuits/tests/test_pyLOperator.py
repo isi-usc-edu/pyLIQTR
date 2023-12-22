@@ -7,7 +7,7 @@ findings, conclusions or recommendations expressed in this material are those of
 author(s) and do not necessarily reflect the views of the Under Secretary of Defense
 for Research and Engineering.
 
-© 2022 Massachusetts Institute of Technology.
+© 2023 Massachusetts Institute of Technology.
 
 The software/firmware is provided to you on an As-Is basis
 

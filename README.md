@@ -1,13 +1,47 @@
 # pyLIQTR
-_Kevin Obenland, Justin Elenewski, Arthur Kurlej, Joe Belarge, John Blue &  Robert Rood_
+_Kevin Obenland, Justin Elenewski, Kaitlyn Morrell, Rylee Neumann, Arthur Kurlej, Robert Rood, John Blue, Joe Belarge & Parker Kuklinski_
 
 ---
 ## Description
-`pyLIQTR` (<em>LI</em>ncoln Laboratory <em>Q</em>uantum algorithm <em>T</em>est and <em>R</em>esearch), is a python library for building quantum circuits derived from quantum algorithms. Once the circuits have been generated, one can simulate them (if they are small enough), or utilize them for resource estimations. The codebase is actively developed, and currently supports the following algorithms:
-- Hamiltonian Simulation using Quantum Signal Processing (QSP) for real-valued Hamiltonians
+`pyLIQTR` (<em>LI</em>ncoln Laboratory <em>Q</em>uantum algorithm <em>T</em>est and <em>R</em>esearch), is a python library for building quantum circuits derived from quantum algorithms and generating Clifford+T resource estimates. 
 
-- Ground State Estimation (GSE) using the Hadamard Test architecture with Trotterization
-    - Requires openfermion (which is by default not installed), see note in Optional Installs section below. 
+This package is built extensively atop `cirq` & the recent release of `cirq-ft`. 
+
+pyLIQTR is primarily structured as:
+- pyLIQTR.ProblemInstances
+    - A set of code that provides an easy interface (through `pyLIQTR.ProblemInstances.getInstance`) to generate Hamiltonians that capture various physical models of interest.
+- pyLIQTR.BlockEncodings
+    - A set of codes that provides an easy interface (through `pyLIQTR.BlockEncodings.getEncoding`) to generate BlockEncodings that encode the action of a ProblemInstance through various different encodings.
+- pyLIQTR.clam
+    - A set of code that provides various classical utilities supporting:
+        - Integration of classical ODE’s (following application problems)
+        - Conversion of spin / fermionic Hamiltonians to classical numerics
+        - Simulation of quantum dynamics
+        - Quadratic / Integrable Hamiltonians (fast; polynomial scaling)
+        - General Hamiltonians (exponentially scaling)
+        - Source / Notebooks: This is scattered diffusely throughout the examples (Vlasov, Nonequilibrium, Heisenberg / Hubbard).
+- pyLIQTR.qubitization
+    - A set of code that provides ways of building QSP/QSVT circuits in the context of the pyLIQTR package.
+- pyLIQTR.phase_factors
+    - A set of code that calculates the angles required for a given QSP/QSVT sequence
+- pyLIQTR.circuits
+    - A set of pyLIQTR cirq circuits/gates used in our implementation of block encodings and algorithms.
+- pyLIQTR.gate_decomp
+    - A set of code that performs gate synthesis (converting rotations to Clifford+T gates) for a specified precision.
+- pyLIQTR.pest_interface
+    - A pythonic interface to the PEST Julia package.
+- pyLIQTR.utils
+    - A set of various utility functions. 
+    - `pyLIQTR.utils.resource_analysis.estimate_resources` (adds robust estimation in addition to `cirq_ft.t_complexity`) can be used to determine the Clifford+T cost of any circuit generated with pyLIQTR
+    - `pyLIQTR.utils.circuit_decomposition.circuit_decompose_multi` (adds robust decomposition in addition to `cirq`'s decomposition functions) can be used to decompose circuits to 1+2QB gates
+
+In addition, a seperate Julia package for generating electronic structure hamiltonians (root/PEST) is included with pyLIQTR.
+
+pyLIQTR is a work-in-progress, as time goes on, we hope to provide better and more extensive documentation and examples in addition to new features. Please reach out to us if anything is unclear, so we can prioritize the documentation of the aspects that are most frequently used or most unclear.
+
+---
+## Features
+The features of this package are described in detail in [FEATURES.md](FEATURES.md). This includes not only descriptions, but also source files and example notebooks.
 
 ---
 
@@ -17,7 +51,10 @@ Change directory to the location of setup.py, then perform the following command
 
 - Create and activate the environment:
 
-        conda create -n <Environment Name> python=3.8
+        on Windows use:
+        conda create -n <Environment Name> "python>=3.8,<=3.11.5"
+        on Mac use:
+        conda create -n <Environment Name> python'>=3.8,<=3.11.5'
 
         conda activate <Environment Name>
         
@@ -25,9 +62,9 @@ Change directory to the location of setup.py, then perform the following command
 
         pip install .
 
-- Or, as a developer:
+- Or, as a developer (for all platforms and shells):
 
-        pip install --editable .
+        pip install -e ."[dev]"
         
 ### Optional Installs
 - Install MPSolve polynomial solver, which is used in the angle generation algorithm. Instructions for installation can be found here: https://numpi.dm.unipi.it/software/mpsolve
@@ -41,31 +78,22 @@ Effort is underway to deprecate the existing angle generation in favor of a more
 
 ## Overview of Examples Included as Jupyter Notebooks
 
-There are a variety of examples provided to demonstrate the capabilities of `pyLIQTR`. In particular, there are demonstrations of the following algorithms (and example problems) under `<pyLIQTR root>/Examples`:
-* QSP
-    * Vlasov-Hermite Model
-    * Heisenberg Model
-    * Transverse-field Ising Model
-* GSE
-
-Where each demonstration contains five tutorial notebooks, which each serve the following purpose:
-* _Tutorial_1a (Problem Description & Classical Solving)_
-    * This tutorial provides a brief introduction to the physical problem of interest and how `pyLIQTR` can be used to generate a representation of the model. This tutorial then showcases how `pyLIQTR` and/or `numpy`/`scipy` methods can then be used to classically solve the problem or simulate the system. We note that since we are interested in classically hard problems, these notebooks focus on small problems or special cases that can be executed on most personal computers.
-* _Tutorial_1b (Solving with a Quantum Algorithm)_
-    * This tutorial, in conjunction with 1a, shows how this problem can be mapped from a _"classical"_ method of solving the problem to a method conducive to running on a quantum computer, and shows how similar results can be achieved.
-* _Tutorial_2 (Simulation of quantum circuit and classical comparison)_
-    * This tutorial contains a step-by-step `pyLIQTR` demo for generating a representation of the problem of interest, generating quantum circuits that simulate or solve the problem, and then simulating the quantum circuit and comparing the results against a classical technique to show that the implementation of the quantum algorithm is correct. Again, since we are interested in classically hard problems and since, for the most part, classical computers cannot efficiently simulate a quantum computer, we focus on small problems or special cases that can be ran on most personal computers.
-* _Tutorial_3 (Circuit manipulation and output)_
-    * This tutorial shows how to take the `cirq` circuits that `pyLIQTR` generates in <i>Tutorial_2</i> and decompose them to simple gates, transform them to Clifford+T gates, and to export to an _OpenQASM_ format in order to allow for further analysis or manipulation in other tools.
-* _Tutorial_4 (Circuit scaling and simple analysis)_
-    * This tutorial is intended to provide a _"jumping off point"_ for using `pyLIQTR` to investigate problem/algorithm scaling by generating circuits of various different sizes and how they can be analyzed in python. 
-
-**To summarize**, Tutorials 1a, 1b, and 2 are useful for those interested in better understanding the physical models or problems, how they are classically solved and/or simulated, and how a particular quantum algorithm can be used to solve and/or simulate the problem. Tutorials 3 and 4 are useful for those interested in generating circuits for downstream analyses, such as resource analysis, for a specific problem.
-
+Notebooks showcasing features are organized as follows in the /Examples directory.
+- Algorithm_and_Infrastructure
+    - A set of notebooks that go over the ProblemInstance and BlockEncoding infrastructure, in addition to a QSVT/QSP overview. Note that these are still being drafted.
+- AngleGeneration
+    - Contains three notebooks describing the reworked angle generation features
+- ApplicationInstances
+    - Contains four directories showing different types of physical models and how one may use the pyLIQTR package to generate circuits and provide resource estimates.
+- PEST
+    - An introduction to the generating electronic structure hamiltonians using the PEST package.
 ---
 
 ## Citation
-<a href="https://zenodo.org/badge/latestdoi/545621986"><img src="https://zenodo.org/badge/545621986.svg" alt="DOI"></a>
+To be populated once code is posted. Cannot create DOI on zenodo without link to repo.
+
+Should generally also include citations of cirq.
+
 ---
 
 ## Disclaimer

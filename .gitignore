@@ -14,6 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
+.idea/
 lib/
 lib64/
 parts/
@@ -109,6 +110,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.idea/
 
 # Spyder project settings
 .spyderproject
@@ -116,6 +118,9 @@ venv.bak/
 
 # Rope project settings
 .ropeproject
+
+# vscode project settings
+.vscode/
 
 # mkdocs documentation
 /site
@@ -128,6 +133,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Mac only
+*.DS_Store
 
 #haskell
 *.dyn_hi
