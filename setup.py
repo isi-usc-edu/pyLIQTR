@@ -47,10 +47,10 @@ DESCRIPTION = (
 THIS_DIRECTORY = Path(__file__).parent
 LONG_DESCRIPTION = (THIS_DIRECTORY / "README.md").read_text()
 
-REQUIREMENTS = open("requirements.txt").read().readlines()
+REQUIREMENTS = open(THIS_DIRECTORY / "requirements.txt").readlines()
 REQUIREMENTS = [r.strip() for r in REQUIREMENTS]
 
-REQUIREMENTS_DEV = open("requirements-dev.txt").read().readlines()
+REQUIREMENTS_DEV = open(THIS_DIRECTORY / "requirements-dev.txt").readlines()
 REQUIREMENTS_DEV = [r.strip() for r in REQUIREMENTS_DEV]
 
 __version__ = ""
