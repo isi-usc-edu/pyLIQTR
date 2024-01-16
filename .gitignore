@@ -149,9 +149,6 @@ src/QSP/originalQSP/hs/QSP
 # gen_circuits.sh output:
 src/QSP/originalQSP/prec1em6*
 
-# Images:
-*.png
-
 # QASM:
 *.qasm
 
