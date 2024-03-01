@@ -55,19 +55,25 @@ class Add(algos.AdditionGate):
             context = cirq.DecompositionContext(cirq.ops.SimpleQubitManager())
         input_bits = qubits[: self.bitsize][::-1]
         output_bits = qubits[self.bitsize :][::-1]
-        ancillas = context.qubit_manager.qalloc(self.bitsize - 1)[::-1]
-        # Start off the addition by anding into the ancilla
-        yield and_gate.And().on(input_bits[0], output_bits[0], ancillas[0])
-        # Left part of Fig.2
-        yield from self._left_building_block(input_bits, output_bits, ancillas, 1)
-        yield cirq.CX(ancillas[-1], output_bits[-1])
-        yield cirq.CX(input_bits[-1], output_bits[-1])
-        # right part of Fig.2
-        yield from self._right_building_block(input_bits, output_bits, ancillas, self.bitsize - 2)
-        yield and_gate.And(adjoint=True).on(input_bits[0], output_bits[0], ancillas[0])
-        yield cirq.CX(input_bits[0], output_bits[0])
-        context.qubit_manager.qfree(ancillas)
-    
+        if self.bitsize == 1:
+            assert(len(input_bits) == 1)
+            assert(len(output_bits) == 1)
+            #I dont love this because it drops the carry bit...
+            yield cirq.CX(input_bits[0],output_bits[0])
+        else:
+            ancillas = context.qubit_manager.qalloc(self.bitsize - 1)[::-1]
+            # Start off the addition by anding into the ancilla
+            yield and_gate.And().on(input_bits[0], output_bits[0], ancillas[0])
+            # Left part of Fig.2
+            yield from self._left_building_block(input_bits, output_bits, ancillas, 1)
+            yield cirq.CX(ancillas[-1], output_bits[-1])
+            yield cirq.CX(input_bits[-1], output_bits[-1])
+            # right part of Fig.2
+            yield from self._right_building_block(input_bits, output_bits, ancillas, self.bitsize - 2)
+            yield and_gate.And(adjoint=True).on(input_bits[0], output_bits[0], ancillas[0])
+            yield cirq.CX(input_bits[0], output_bits[0])
+            context.qubit_manager.qfree(ancillas)
+
 
 class AddMod(algos.AddMod):
     def _decompose_with_context_(
@@ -92,7 +98,7 @@ class AddMod(algos.AddMod):
         MSB = 0
         
         #Cirq-ft add_mod is semiclassical (ie adds or subtracts a classical value)
-        assert(np.abs(self.add_val) < 2**(self.bitsize-1))
+        assert(np.abs(self.add_val) <= 2**(self.bitsize-1))
         #Classical value implemented.
         addVal = two_complement(self.add_val,self.bitsize)
         sign = self.add_val >= 0

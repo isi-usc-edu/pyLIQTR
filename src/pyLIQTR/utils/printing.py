@@ -18,6 +18,8 @@ above. Use of this work other than as specifically authorized by the U.S. Govern
 may violate any copyrights that exist in this work.
 """
 
+from typing_extensions import deprecated
+from warnings import warn
 import cirq
 from collections import defaultdict
 from pyLIQTR.gate_decomp.rotation_gates import decomp_mixin
@@ -170,8 +172,9 @@ def openqasm(circuit: cirq.AbstractCircuit,
                     raise e
     
 
-
+@deprecated("Use openqasm() instead.")
 def to_openqasm(circuit_in,use_rotation_decomp_gates=False) -> str:
+    warn('\n\n\n*********************************************************************************************\nThis function is deprecated -- Recommend switching to pyLIQTR.utils.printing.openqasm\n*********************************************************************************************\n\n\n', DeprecationWarning, 2)
     str_out =  '// Generated from Cirq, Openfermion, and MIT LL\n\n'
     str_out += 'OPENQASM 2.0;\n'
     str_out += 'include \"qelib1.inc\";\n\n'

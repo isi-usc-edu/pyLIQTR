@@ -31,6 +31,8 @@ from pyLIQTR.utils.printing import to_openqasm
 
 from cirq_ft import infra, algos, t_complexity
 
+from src.pyLIQTR.utils.printing import openqasm
+
 # class syntax
 class RESOURCE_ANALYSIS_MODE(Enum):
     Exact = 0
@@ -333,7 +335,8 @@ class pyLCircuit (cirq.Circuit):
         return self.resources
 
     def to_openqasm(self,use_rotation_decomp_gates=False):
-        yield from to_openqasm(self,use_rotation_decomp_gates=use_rotation_decomp_gates)
+        # yield from to_openqasm(self,use_rotation_decomp_gates=use_rotation_decomp_gates)
+        yield from openqasm(self, rotation_allowed=use_rotation_decomp_gates)
 
 
 def get_T_counts_from_rotations(num_rotation_gates,gate_precision=1e-8,circuit_precision=None):

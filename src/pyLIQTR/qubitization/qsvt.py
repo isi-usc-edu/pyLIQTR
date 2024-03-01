@@ -273,10 +273,11 @@ class QSVT_real_polynomial(QSVT_abstract):
         default: DefaultDict = RaiseTypeErrorIfNotProvided,
     ) -> Union[str, TDefault]:
 
-        args.validate_version('2.0')
-        allQ = [*self.__phs_q, *self.__anc_q, *self.__ctl_q, *self.__tgt_q]
-        allQStr = ",".join([args.format(str(x)) for x in allQ])
-        return "{}({})\n".format(self.__strName,allQStr)
+        # args.validate_version('2.0')
+        # allQ = [*self.__phs_q, *self.__anc_q, *self.__ctl_q, *self.__tgt_q]
+        # allQStr = ",".join([args.format(str(x)) for x in allQ])
+        # return "{}({})\n".format(self.__strName,allQStr)
+        raise NotImplementedError
 
 
 
