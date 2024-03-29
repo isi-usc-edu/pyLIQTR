@@ -17,18 +17,20 @@ rights in this work are defined by DFARS 252.227-7013 or DFARS 252.227-7014 as d
 above. Use of this work other than as specifically authorized by the U.S. Government
 may violate any copyrights that exist in this work.
 """
-import cirq_ft
+import qualtran as qt
 import cirq
 import attr
 import warnings
 import numpy as np
-from cirq_ft import linalg,infra
-from cirq._compat import cached_property
+from qualtran import linalg,_infra
+from qualtran.linalg.lcu_util import preprocess_lcu_coefficients_for_reversible_sampling
+from qualtran.bloqs.qrom import QROM
+from functools import cached_property
 from typing import List, Tuple, Sequence
 from numpy.typing import NDArray
 from pyLIQTR.circuits.operators.AddMod import Add
 
-class FermionicPrepare_LinearT(infra.GateWithRegisters):
+class FermionicPrepare_LinearT(_infra.gate_with_registers.GateWithRegisters):
     '''
     Implements circuit from Fig. 16 of https://arxiv.org/pdf/1805.03662.pdf using cirq_ft gates.
 
@@ -72,14 +74,14 @@ class FermionicPrepare_LinearT(infra.GateWithRegisters):
         super(FermionicPrepare_LinearT, self)
 
     @cached_property
-    def selection_registers(self) -> Tuple[infra.SelectionRegister]:
-        theta_reg = infra.SelectionRegister(name="theta",bitsize=1)
-        U_reg = infra.SelectionRegister(name="U",bitsize=1)
-        V_reg = infra.SelectionRegister(name="V",bitsize=1)
-        p_reg = infra.SelectionRegister(name="p",bitsize=self.__Np_bits)
-        a_reg = infra.SelectionRegister(name="a",bitsize=1)
-        q_reg = infra.SelectionRegister(name="q",bitsize=self.__Np_bits)
-        b_reg = infra.SelectionRegister(name="b",bitsize=1)
+    def selection_registers(self) -> Tuple[_infra.registers.SelectionRegister]:
+        theta_reg = _infra.registers.SelectionRegister(name="theta",bitsize=1)
+        U_reg = _infra.registers.SelectionRegister(name="U",bitsize=1)
+        V_reg = _infra.registers.SelectionRegister(name="V",bitsize=1)
+        p_reg = _infra.registers.SelectionRegister(name="p",bitsize=self.__Np_bits)
+        a_reg = _infra.registers.SelectionRegister(name="a",bitsize=1)
+        q_reg = _infra.registers.SelectionRegister(name="q",bitsize=self.__Np_bits)
+        b_reg = _infra.registers.SelectionRegister(name="b",bitsize=1)
         return (theta_reg,U_reg,V_reg,p_reg,a_reg,q_reg,b_reg)
 
     @cached_property
@@ -92,9 +94,9 @@ class FermionicPrepare_LinearT(infra.GateWithRegisters):
         return self.__mu
 
     @cached_property
-    def junk_registers(self) -> Tuple[infra.Register]:
+    def junk_registers(self) -> Tuple[_infra.registers.Register]:
         # These make up the temp register. They are not perfectly uncomputed due to entanglement with the selection register and so must be retained and passed to the next instance of Subprepare/prepare.
-        return ( infra.Signature.build(
+        return ( _infra.registers.Signature.build(
             sigma_mu=self.__mu,
             alt=self.alternates_bitsize,
             keep=self.keep_bitsize,
@@ -103,8 +105,8 @@ class FermionicPrepare_LinearT(infra.GateWithRegisters):
         ) )
 
     @cached_property
-    def signature(self) -> infra.Signature:
-        return infra.Signature([*self.selection_registers, *self.junk_registers])
+    def signature(self) -> _infra.registers.Signature:
+        return _infra.registers.Signature([*self.selection_registers, *self.junk_registers])
    
     def __repr__(self) -> str:
         T_repr = cirq._compat.proper_repr(self.__T_array)
@@ -144,7 +146,7 @@ class FermionicPrepare_LinearT(infra.GateWithRegisters):
 
         # prepare a uniform superposition over M for each dimension on the q register, zero-controlled on U
         for qi, q_reg in enumerate(q_regs):
-            yield cirq_ft.PrepareUniformSuperposition(int(self.__M_vals[qi]),cv=(0,)).on_registers(controls=U,target=q_reg)
+            yield qt.bloqs.prepare_uniform_superposition.PrepareUniformSuperposition(int(self.__M_vals[qi]),cvs=(0,)).on_registers(ctrl=U,target=q_reg)
 
         yield cirq.H.on(*a)
 
@@ -154,7 +156,7 @@ class FermionicPrepare_LinearT(infra.GateWithRegisters):
 
         yield cirq.CNOT(*a,*b)
 
-        yield cirq_ft.MultiTargetCSwap.make_on(control=U, target_x=q, target_y=p)
+        yield qt.bloqs.basic_gates.swap.CSwap.make_on(ctrl=U, x=q, y=p)
 
         for Mi,logM in enumerate(self.__logM_vals):
             yield Add(bitsize=logM).on(*q_regs[Mi],*p_regs[Mi])
@@ -162,7 +164,7 @@ class FermionicPrepare_LinearT(infra.GateWithRegisters):
 
 @cirq.value_equality()
 @attr.frozen
-class Subprepare_LinearT(infra.GateWithRegisters):
+class Subprepare_LinearT(_infra.gate_with_registers.GateWithRegisters):
 
     '''
     Implements circuit from Fig. 15 of https://arxiv.org/pdf/1805.03662.pdf using cirq_ft gates. Code structure based on cirq_ft.StatePreparationAliasSampling. 
@@ -205,7 +207,7 @@ class Subprepare_LinearT(infra.GateWithRegisters):
         coefficients = [coeff[1] for coeff in T_array + V_array + U_array]
         theta = np.array([coeff[0] for coeff in T_array + V_array + U_array]) # entries should be 0 or 1
 
-        alt, keep, mu = linalg.preprocess_lcu_coefficients_for_reversible_sampling(
+        alt, keep, mu = preprocess_lcu_coefficients_for_reversible_sampling(
             lcu_coefficients=coefficients, epsilon=approx_error
         )
         theta_alt = np.array([theta[i] for i in alt])
@@ -239,10 +241,9 @@ class Subprepare_LinearT(infra.GateWithRegisters):
         return int(sum(self.logM_vals) + 2)
 
     @cached_property
-    def junk_registers(self) -> Tuple[infra.Register]:
+    def junk_registers(self) -> Tuple[_infra.registers.Register]:
         # These (except for theta) make up the temp register. They are not perfectly uncomputed due to entanglement with the selection register and so must be retained and passed to the next instance of Subprepare/prepare.
-        # TODO: should theta be seperated out? Doesn't contribute to selection iteration so not a selection register but is used by select oracle.
-        return ( infra.Signature.build(
+        return ( _infra.registers.Signature.build(
             sigma_mu=self.mu,
             alt=self.alternates_bitsize,
             keep=self.keep_bitsize,
@@ -252,10 +253,10 @@ class Subprepare_LinearT(infra.GateWithRegisters):
         ) )
 
     @cached_property
-    def selection_registers(self) -> Tuple[infra.SelectionRegister]:
-        U_reg = infra.SelectionRegister(name="U",bitsize=1)
-        V_reg = infra.SelectionRegister(name="V",bitsize=1)
-        d_reg = infra.SelectionRegister(name="d",bitsize=int(sum(self.logM_vals)))
+    def selection_registers(self) -> Tuple[_infra.registers.SelectionRegister]:
+        U_reg = _infra.registers.SelectionRegister(name="U",bitsize=1)
+        V_reg = _infra.registers.SelectionRegister(name="V",bitsize=1)
+        d_reg = _infra.registers.SelectionRegister(name="d",bitsize=int(sum(self.logM_vals)))
         return (
             U_reg,
             V_reg,
@@ -263,8 +264,8 @@ class Subprepare_LinearT(infra.GateWithRegisters):
         )
 
     @cached_property
-    def signature(self) -> infra.Signature:
-        return infra.Signature([*self.selection_registers, *self.junk_registers])
+    def signature(self) -> _infra.registers.Signature:
+        return _infra.registers.Signature([*self.selection_registers, *self.junk_registers])
 
 
     def __repr__(self) -> str:
@@ -316,40 +317,40 @@ class Subprepare_LinearT(infra.GateWithRegisters):
             i += logM
 
         # prepare a uniform superposition on the UV bits to produce |00>_UV -> (|00>_UV + |01>_UV + |10>_UV)/sqrt(3)
-        yield cirq_ft.PrepareUniformSuperposition(3).on_registers(target=list(quregs['U'])+list(quregs['V']),controls=[])
+        yield qt.bloqs.prepare_uniform_superposition.PrepareUniformSuperposition(3).on_registers(target=list(quregs['U'])+list(quregs['V']),controls=[])
         # prepare a uniform superposition over M for each dimension on the d register
         for di, d_reg in enumerate(d_regs):
-            yield cirq_ft.PrepareUniformSuperposition(self.M_vals[di]).on(*d_reg)
+            yield qt.bloqs.prepare_uniform_superposition.PrepareUniformSuperposition(self.M_vals[di]).on(*d_reg)
         # prepare uniform superposition on sigma_mu register for comparing to keep during alias sampling procedure
         yield cirq.H.on_each(*sigma_mu)
         # use QROM to iterate over combined UV-d registers to load theta, alt and keep data
-        qrom_gate = cirq_ft.QROM(
+        qrom_gate = qt.bloqs.qrom.QROM(
             [self.alt, self.keep, self.theta, self.theta_alt],
             (self.selection_bitsize,),
             (self.alternates_bitsize, self.keep_bitsize, 1, 1),
         )
-        yield qrom_gate.on_registers(selection=list(quregs['U'])+list(quregs['V'])+list(quregs['d']), target0=alt, target1=keep, target2=theta, target3=theta_alt)
+        yield qrom_gate.on_registers(selection=list(quregs['U'])+list(quregs['V'])+list(quregs['d']), target0_=alt, target1_=keep, target2_=theta, target3_=theta_alt)
         # flip less_than_equal bit when keep is less than sigma_mu
-        yield cirq_ft.LessThanEqualGate(self.mu, self.mu).on(
+        yield qt.bloqs.arithmetic.comparison.LessThanEqual(self.mu, self.mu).on(
             *keep, *sigma_mu, *less_than_equal
         )
         # swap alt data controlled on less_than_equal_bit
-        yield cirq_ft.MultiTargetCSwap.make_on(
-            control=less_than_equal, target_x=theta_alt, target_y=theta
+        yield qt.bloqs.basic_gates.swap.CSwap.make_on(
+            ctrl=less_than_equal, x=theta_alt, y=theta
         )
         ## the zero indexed alt bit corresponds to U
-        yield cirq_ft.MultiTargetCSwap.make_on(
-            control=less_than_equal, target_x=[alt[0]], target_y=U
+        yield qt.bloqs.basic_gates.swap.CSwap.make_on(
+            ctrl=less_than_equal, x=[alt[0]], y=U
         )
         ## the one indexed alt bit corresponds to V
-        yield cirq_ft.MultiTargetCSwap.make_on(
-            control=less_than_equal, target_x=[alt[1]], target_y=V
+        yield qt.bloqs.basic_gates.swap.CSwap.make_on(
+            ctrl=less_than_equal, x=[alt[1]], y=V
         )
         ## the remaining alt bits correspond to d
-        yield cirq_ft.MultiTargetCSwap.make_on(
-            control=less_than_equal, target_x=alt[2:], target_y=d
+        yield qt.bloqs.basic_gates.swap.CSwap.make_on(
+            ctrl=less_than_equal, x=alt[2:], y=d
         )
         # undo the less than comparison so the less_than_equal_bit returns to |0>
-        yield cirq_ft.LessThanEqualGate(self.mu, self.mu).on(
+        yield qt.bloqs.arithmetic.comparison.LessThanEqual(self.mu, self.mu).on(
             *keep, *sigma_mu, *less_than_equal
         )

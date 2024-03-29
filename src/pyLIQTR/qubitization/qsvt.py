@@ -26,8 +26,8 @@ may violate any copyrights that exist in this work.
 from typing import Any, DefaultDict, Iterable, Optional, Tuple, TypeVar, Union
 import  numpy                  as  np
 import  cirq                   as  cirq
-import  cirq_ft                as  cirq_ft
-import  cirq_ft.infra.testing  as  cirq_test
+import  qualtran               as  qt
+import  qualtran.cirq_interop.testing  as  qt_test
 from cirq import QasmArgs
 
 from  pyLIQTR.phase_factors.phase_factors   import  PhaseFactors
@@ -41,7 +41,7 @@ RaiseTypeErrorIfNotProvided: Any = ([],)
 
 
 
-class QSVT_abstract(cirq_ft.GateWithRegisters):
+class QSVT_abstract(qt._infra.gate_with_registers.GateWithRegisters):
     def __init__( self, 
                   block_encoding, 
                   phis, 
@@ -94,12 +94,12 @@ class QSVT_abstract(cirq_ft.GateWithRegisters):
     
     @property
     def all_qubits(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.all_qubits)
 
     @property
     def circuit(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.circuit)  
     
     @property
@@ -120,7 +120,7 @@ class QSVT_abstract(cirq_ft.GateWithRegisters):
 
     @property
     def phase_registers(self):
-        return( [cirq_ft.Register('phase',1)] )
+        return( [qt._infra.registers.Register('phase',1)] )
 
     # @property
     # def phase_registers(self):
@@ -132,11 +132,11 @@ class QSVT_abstract(cirq_ft.GateWithRegisters):
     #    phase_reg =  (cirq_ft.Register('phase',1),)
 
         if self._controlled:
-            ctl_reg =  (cirq_ft.Register('control',1),)
+            ctl_reg =  (qt._infra.registers.Register('control',1),)
         else:
             ctl_reg = ()
 
-        return cirq_ft.Signature( [ *ctl_reg, *self.selection_registers, 
+        return qt._infra.registers.Signature( [ *ctl_reg, *self.selection_registers, 
               *self.target_registers, *self.junk_registers, *self.phase_registers] )
     
 #            [ *phase_reg, *ctl_reg, *self.selection_registers, 
@@ -247,7 +247,7 @@ class QSVT_real_polynomial(QSVT_abstract):
         
 
 
-    def _t_complexity_(self) -> cirq_ft.infra.TComplexity:
+    def _t_complexity_(self) -> qt.cirq_interop.t_complexity_protocol.TComplexity:
 
         n_reflect_controls  =  0
 
@@ -258,9 +258,9 @@ class QSVT_real_polynomial(QSVT_abstract):
             n_reflect_controls += reg.bitsize
 
 
-        encoding_cost   =  cirq_ft.t_complexity(self._block_encoding)
-        rotation_cost   =  cirq_ft.t_complexity( QubitizedRotation( n_reflect_controls, control_val=self._control_val ))
-        clifford_cost   =  cirq_ft.infra.TComplexity(clifford=(2 + 2*(self._n_phis-1)))
+        encoding_cost   =  qt.cirq_interop.t_complexity_protocol.t_complexity(self._block_encoding)
+        rotation_cost   =  qt.cirq_interop.t_complexity_protocol.t_complexity( QubitizedRotation( n_reflect_controls, control_val=self._control_val ))
+        clifford_cost   =  qt.cirq_interop.t_complexity_protocol.TComplexity(clifford=(2 + 2*(self._n_phis-1)))
 
         return ( rotation_cost*(self._n_phis) + encoding_cost*(self._n_phis-1) + clifford_cost)
 
@@ -272,11 +272,23 @@ class QSVT_real_polynomial(QSVT_abstract):
         qubits: Optional[Iterable['cirq.Qid']] = None,
         default: DefaultDict = RaiseTypeErrorIfNotProvided,
     ) -> Union[str, TDefault]:
-
         # args.validate_version('2.0')
-        # allQ = [*self.__phs_q, *self.__anc_q, *self.__ctl_q, *self.__tgt_q]
-        # allQStr = ",".join([args.format(str(x)) for x in allQ])
-        # return "{}({})\n".format(self.__strName,allQStr)
+        # # build up all the qubits, minus the ancilla ones for now
+        # allQ = [
+        #     *self.selection_registers,
+        #     *self.control_registers,
+        #     *self.target_registers,
+        #     *self.phase_registers
+        #     ]
+
+        # ops = self.decompose_from_registers(allQ)
+        # return QasmOutput(
+        #     operations=self._block_encoding,
+        #     qubits=allQ,
+        #     # header=None,
+        #     # precision=10,
+        #     # version='2.0',
+        # )
         raise NotImplementedError
 
 
@@ -291,7 +303,7 @@ class QSVT_real_polynomial(QSVT_abstract):
 
 
 
-class QSVT_real_polynomial_sum(cirq_ft.GateWithRegisters):
+class QSVT_real_polynomial_sum(qt._infra.gate_with_registers.GateWithRegisters):
     
     def __init__( self, 
                   block_encoding, 
@@ -352,13 +364,13 @@ class QSVT_real_polynomial_sum(cirq_ft.GateWithRegisters):
 
     @property
     def all_qubits(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.all_qubits)
 
 
     @property
     def circuit(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.circuit)  
 
 
@@ -395,14 +407,14 @@ class QSVT_real_polynomial_sum(cirq_ft.GateWithRegisters):
     @property
     def signature(self):
 
-        phase_reg =  (cirq_ft.Register('phase',1),)
+        phase_reg =  (qt._infra.registers.Register('phase',1),)
 
         if self._controlled:
-            ctl_reg =  (cirq_ft.Register('control',1),)
+            ctl_reg =  (qt._infra.registers.Register('control',1),)
         else:
             ctl_reg = ()
 
-        return cirq_ft.Signature(
+        return qt._infra.registers.Signature(
             [ *phase_reg, *self.control_registers,
               *self.target_registers,  *self.selection_registers, 
               *self.junk_registers] )
@@ -442,16 +454,16 @@ class QSVT_real_polynomial_sum(cirq_ft.GateWithRegisters):
             yield cirq.H.on(quregs['control'][0])
         
 
-    def _t_complexity_(self) -> cirq_ft.infra.TComplexity:
+    def _t_complexity_(self) -> qt.cirq_interop.t_complexity_protocol.TComplexity:
 
         n_reflect_controls  =  0
 
-        encoding_cost_0   =  cirq_ft.t_complexity(self.qsvt_gate_0)
-        encoding_cost_1   =  cirq_ft.t_complexity(self.qsvt_gate_1)
+        encoding_cost_0   =  qt.cirq_interop.t_complexity_protocol.t_complexity(self.qsvt_gate_0)
+        encoding_cost_1   =  qt.cirq_interop.t_complexity_protocol.t_complexity(self.qsvt_gate_1)
 
         cliff  =  2*self._ctl_h_gate + self._ctl_s_gate + self._ctl_z_gate
 
-        clifford_cost   =  cirq_ft.infra.TComplexity(clifford=cliff)
+        clifford_cost   =  qt.cirq_interop.t_complexity_protocol.TComplexity(clifford=cliff)
 
         return ( encoding_cost_0 + encoding_cost_1 + clifford_cost)
 
@@ -553,7 +565,7 @@ class QSP_fourier_response(QSVT_abstract):
 
 
 
-    def _t_complexity_(self) -> cirq_ft.infra.TComplexity:
+    def _t_complexity_(self) -> qt.cirq_interop.t_complexity_protocol.TComplexity:
 
         n_reflect_controls  =  0
 
@@ -565,9 +577,9 @@ class QSP_fourier_response(QSVT_abstract):
 
 
 
-        encoding_cost   =  cirq_ft.t_complexity(self._block_encoding)
-        rotation_cost   =  cirq_ft.t_complexity( QubitizedRotation( n_reflect_controls))
-        clifford_cost   =  cirq_ft.infra.TComplexity(clifford=(2 + 2*(self._n_phis-1)))
+        encoding_cost   =  qt.cirq_interop.t_complexity_protocol.t_complexity(self._block_encoding)
+        rotation_cost   =  qt.cirq_interop.t_complexity_protocol.t_complexity( QubitizedRotation( n_reflect_controls))
+        clifford_cost   =  qt.cirq_interop.t_complexity_protocol.TComplexity(clifford=(2 + 2*(self._n_phis-1)))
 
         return ( rotation_cost*(self._n_phis) + encoding_cost*(self._n_phis-1) + clifford_cost)
 

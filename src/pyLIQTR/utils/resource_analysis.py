@@ -20,7 +20,7 @@ may violate any copyrights that exist in this work.
 import random
 import numpy    as  np
 import cirq     as  cirq
-import cirq_ft  as  cirq_ft
+import qualtran as  qt
 from typing import Dict, Any
 
 
@@ -42,7 +42,7 @@ def estimate_resources(circuit_element:Any, rotation_gate_precision=1e-10, circu
         resource_dict = {'LogicalQubits':cirq.num_qubits(circuit_element)}
     except:
         resource_dict={}
-    t_cliff_rot_resources = cirq_ft.t_complexity(circuit_element)
+    t_cliff_rot_resources = qt.cirq_interop.t_complexity_protocol.t_complexity(circuit_element)
 
     resource_dict["T"] = t_cliff_rot_resources.t 
     resource_dict["Clifford"] = t_cliff_rot_resources.clifford
@@ -151,7 +151,7 @@ def t_complexity_from_circuit(circ):
 
     n_clifford,n_rotation,n_other = count_clifford_and_rotations(circ)
 
-    t_complexity = cirq_ft.infra.TComplexity(t=n_t,clifford=n_clifford,rotations=n_rotation)
+    t_complexity = qt.cirq_interop.t_complexity_protocol.TComplexity(t=n_t,clifford=n_clifford,rotations=n_rotation)
 
     return(t_complexity)
 

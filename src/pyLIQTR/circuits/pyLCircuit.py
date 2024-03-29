@@ -29,9 +29,9 @@ from pyLIQTR.gate_decomp.cirq_transforms import clifford_plus_t_direct_transform
 from pyLIQTR.gate_decomp.rotation_gates import decomp_mixin, T_COUNT_CONST, T_COUNT_SLOPE, T_COUNT_STD_DEV
 from pyLIQTR.utils.printing import to_openqasm
 
-from cirq_ft import infra, algos, t_complexity
-
-from src.pyLIQTR.utils.printing import openqasm
+from qualtran import _infra, bloqs
+import qualtran.cirq_interop.testing as qt_test
+import qualtran.cirq_interop.t_complexity_protocol as t_complexity
 
 # class syntax
 class RESOURCE_ANALYSIS_MODE(Enum):
@@ -259,7 +259,7 @@ class pyLCircuit (cirq.Circuit):
         for x in self.all_operations():
             if self._is_pyLOperator(x):
                 self._do_resource_analysis(x,mode)
-            elif isinstance(x._gate, infra.GateWithRegisters):
+            elif isinstance(x._gate, _infra.gate_with_registers.GateWithRegisters):
                 # Handle Complex (cirq-ft) Gate/Qubits operations
                 # Hold off on calling the cirq.decompose and simply run the cirq_ft.t_complexity
                 # then populate self.resources intelligently from that result
@@ -267,7 +267,7 @@ class pyLCircuit (cirq.Circuit):
                 # tmp = tmp._decompose_(self=tmp)
                 gate_dict = {"PRECLIFFT_{}".format(str(x.gate)):1}
 
-                t = t_complexity(x)
+                t = t_complexity.t_complexity(x)
 
                 # estimate gate counts based on number of rotations, but only if we don't want rotations
                 if decompose_rotations:
@@ -288,7 +288,7 @@ class pyLCircuit (cirq.Circuit):
                 # Need to add some specific logic for this as currently cirq doesn't have a way to calculate the resources of it's own QFT
                 gate_dict = {"PRECLIFFT_{}".format(str(x.gate)):1}
 
-                t = t_complexity(x)
+                t = t_complexity.t_complexity(x)
 
                 # estimate gate counts based on number of rotations, but only if we don't want rotations
                 if decompose_rotations:
@@ -335,8 +335,7 @@ class pyLCircuit (cirq.Circuit):
         return self.resources
 
     def to_openqasm(self,use_rotation_decomp_gates=False):
-        # yield from to_openqasm(self,use_rotation_decomp_gates=use_rotation_decomp_gates)
-        yield from openqasm(self, rotation_allowed=use_rotation_decomp_gates)
+        yield from to_openqasm(self,use_rotation_decomp_gates=use_rotation_decomp_gates)
 
 
 def get_T_counts_from_rotations(num_rotation_gates,gate_precision=1e-8,circuit_precision=None):

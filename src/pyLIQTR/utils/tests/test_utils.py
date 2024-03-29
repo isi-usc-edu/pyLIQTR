@@ -17,6 +17,7 @@ rights in this work are defined by DFARS 252.227-7013 or DFARS 252.227-7014 as d
 above. Use of this work other than as specifically authorized by the U.S. Government
 may violate any copyrights that exist in this work.
 """
+import platform
 import cirq
 import pkg_resources
 import pytest
@@ -33,7 +34,7 @@ import random
 from pyLIQTR.utils.Hamiltonian             import Hamiltonian as pyH
 from pyLIQTR.utils.qsp_helpers             import circuit_decompose_once
 #utils
-from pyLIQTR.utils.utils import open_fermion_to_qasm
+from pyLIQTR.utils.utils import isWindows, open_fermion_to_qasm
 from pyLIQTR.utils.printing import to_openqasm
 from pyLIQTR.gate_decomp.cirq_transforms import clifford_plus_t_direct_transform
 
@@ -187,3 +188,19 @@ class TestUtils:
             jw_ham * 2, evolution_time=1, trotter_number=1, trotter_order=1
         )
         assert invalid_trotterized_hamiltonian is None
+
+    @pytest.mark.skipif(platform.system() != 'Windows', reason = "cannot run this test on Mac or Linux")
+    def test_is_windows_on_windows(self):
+        assert isWindows() == True
+
+    @pytest.mark.skipif(platform.system() == 'Windows', reason = "cannot run this test on Windows")
+    def test_is_windows_on_mac_or_linux(self):
+        assert isWindows() == False
+    
+    @pytest.mark.skipif(platform.system() != 'Mac', reason = "cannot run this test on anything other than Mac")
+    def test_is_mac(self):
+        assert isMac() == True
+
+    @pytest.mark.skipif(platform.system() != 'Linux', reason = "cannot run this test on anything other than Linux")
+    def test_is_mac(self):
+        assert isLinux() == True

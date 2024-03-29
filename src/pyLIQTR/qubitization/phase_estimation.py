@@ -20,8 +20,8 @@ may violate any copyrights that exist in this work.
 
 import numpy    as  np
 import cirq     as  cirq
-import cirq_ft  as  cirq_ft
-import cirq_ft.infra.testing as cirq_test
+import qualtran as  qt
+import qualtran.cirq_interop.testing as qt_test
 
 
 from pyLIQTR.qubitization.qubitized_gates   import   QubitizedReflection, QubitizedRotation, QubitizedWalkOperator
@@ -37,7 +37,7 @@ from pyLIQTR.BlockEncodings                 import   VALID_ENCODINGS
 
 
 
-class QubitizedPhaseEstimation(cirq_ft.GateWithRegisters):
+class QubitizedPhaseEstimation(qt._infra.gate_with_registers.GateWithRegisters):
     
 
     ##
@@ -58,14 +58,14 @@ class QubitizedPhaseEstimation(cirq_ft.GateWithRegisters):
         else:
 
             self._block_encoding          =  block_encoding
-            self._block_encoding_ctl      =  getEncoding( self._block_encoding.PI,
-                                                          self._block_encoding._encoding_type, 
+            self._block_encoding_ctl      =  getEncoding( instance=self._block_encoding.PI,
+                                                          encoding=self._block_encoding._encoding_type, 
                                                           control_val=1 )
 
         alpha = self._block_encoding.alpha
 
         if (eps is not None):
-            self._prec  =  int(np.ceil( np.log( (np.sqrt(2.0)*np.pi*alpha) / (2*eps) ) ))         
+            self._prec  =  int(np.ceil( np.log2( (np.sqrt(2.0)*np.pi*alpha) / (2*eps) ) ))         
         else:
             self._prec  =  prec
 
@@ -98,17 +98,22 @@ class QubitizedPhaseEstimation(cirq_ft.GateWithRegisters):
 
     @property
     def junk_registers(self):
-        return(self._block_encoding.junk_registers)
+        other_regs = [*self.selection_registers,*self.control_registers,*self.target_registers]
+        junk_regs = ()
+        for reg in [*self._block_encoding.signature]:
+            if reg not in other_regs:
+                junk_regs += (reg,)
+        return(junk_regs)
 
 
     @property
     def all_qubits(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.all_qubits)
     
     @property
     def circuit(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.circuit)   
 
 
@@ -118,13 +123,13 @@ class QubitizedPhaseEstimation(cirq_ft.GateWithRegisters):
 
         registers = []
 
-        r_prec = cirq_ft.Register('prec',  self._prec  )
+        r_prec = qt._infra.registers.Register('prec',  self._prec + 1 )
         registers.append(r_prec)
 
         # r_phase = cirq_ft.Register('phase', self._prec-1  )
         # registers.append(r_phase)
 
-        sig    =  cirq_ft.Signature( [ *registers,  
+        sig    =  qt._infra.registers.Signature( [ *registers,  
                                        *self.selection_registers, 
                                        *self.target_registers, 
                                        *self.junk_registers] )    
@@ -144,7 +149,10 @@ class QubitizedPhaseEstimation(cirq_ft.GateWithRegisters):
         # kw_blockregs = { 'selection'  :  selection_qubits,
         #                  'target'     :  quregs['target'] }
 
-        kw_blockregs = { 'target'     :  quregs['target'] } 
+        kw_blockregs = {} 
+        
+        for reg in self.target_registers:
+            kw_blockregs[reg.name] = quregs[ reg.name ]
 
         for reg in self.selection_registers:
             selection_qubits += quregs[ reg.name ].tolist()
@@ -157,24 +165,23 @@ class QubitizedPhaseEstimation(cirq_ft.GateWithRegisters):
  #       qbs_phase  =  quregs['phase']
 
         qm = context.qubit_manager
-        reg_phase = qm.qalloc(self._prec-1)
+        reg_phase = qm.qalloc(self._prec)  
 
         yield QubitizedWalkOperator(self._block_encoding_ctl,control_val=1).\
                     on_registers(**kw_blockregs,control=qbs_prec[0])
                                                                                  
-        for n in range(1,self._prec):
+        for n in range(1,self._prec+1):
 
             # prec_idx = self._prec-n-1
 
             yield QubitizedReflection( len(selection_qubits),
                                        control_val=0,
                                        multi_control_val=self._multi_control_value).\
-                                       on_registers(controls=selection_qubits,target=qbs_prec[n])    
-
+                                       on_registers(controls=selection_qubits,target=qbs_prec[n])  
+            
             for _ in range(0,int(2**(n - 1)) ):
                 yield QubitizedWalkOperator(self._block_encoding_ctl,control_val=1).\
                         on_registers(**kw_blockregs,control=reg_phase[n-1])
-#                        on_registers(**kw_blockregs,control=qbs_phase[n-1])
                 
             yield QubitizedReflection( len(selection_qubits),
                                        control_val=0,
@@ -183,19 +190,19 @@ class QubitizedPhaseEstimation(cirq_ft.GateWithRegisters):
 
 
 
-    def _t_complexity_(self) -> cirq_ft.infra.TComplexity:
+    def _t_complexity_(self) -> qt.cirq_interop.t_complexity_protocol.TComplexity:
 
-        walk_cost        =  cirq_ft.t_complexity( QubitizedWalkOperator( self._block_encoding ))
-        walk_cost_total  =  cirq_ft.infra.TComplexity()
+        walk_cost        =  qt.cirq_interop.t_complexity_protocol.t_complexity( QubitizedWalkOperator( self._block_encoding ))
+        walk_cost_total  =  qt.cirq_interop.t_complexity_protocol.TComplexity()
 
-        for n in range(1,self._prec):
+        for n in range(1,self._prec+1):
             walk_cost_total  +=  walk_cost*int(2**(n - 1))
 
         walk_cost_total  +=  walk_cost
 
-        reflection_cost   =  cirq_ft.t_complexity( QubitizedReflection( self._n_selection,control_val=0 ))
+        reflection_cost   =  qt.cirq_interop.t_complexity_protocol.t_complexity( QubitizedReflection( self._n_selection,control_val=0 ))
 
-        return ( walk_cost_total + 2*(self._prec-1)*reflection_cost)
+        return ( walk_cost_total + 2*(self._prec)*reflection_cost)
 
 
 

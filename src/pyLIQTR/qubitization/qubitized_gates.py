@@ -27,15 +27,15 @@ may violate any copyrights that exist in this work.
 
 import  numpy                  as  np
 import  cirq                   as  cirq 
-import  cirq_ft                as  cirq_ft
-import  cirq_ft.infra.testing  as  cirq_test
+import  qualtran               as  qt
+import  qualtran.cirq_interop.testing  as  qt_test
 
 
 
 
 
 
-class QubitizedReflection(cirq_ft.GateWithRegisters):
+class QubitizedReflection(qt._infra.gate_with_registers.GateWithRegisters):
 
     def __init__(self,n_controls,target_gate=cirq.Z,multi_control_val=1,control_val=1):
 
@@ -49,19 +49,19 @@ class QubitizedReflection(cirq_ft.GateWithRegisters):
 
     @property
     def all_qubits(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.all_qubits)
 
 
     @property
     def circuit(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.circuit)   
 
 
     @property
     def signature(self):
-        return cirq_ft.Signature.build( controls=self._n_controls,
+        return qt._infra.registers.Signature.build( controls=self._n_controls,
                                         target=1 )
     
 
@@ -79,7 +79,7 @@ class QubitizedReflection(cirq_ft.GateWithRegisters):
             yield cirq.X.on(target[0])
 
 
-        yield cirq_ft.algos.MultiControlPauli( [1] * len(controls), 
+        yield qt.bloqs.multi_control_multi_target_pauli.MultiControlPauli( [1] * len(controls), 
                                                target_gate=self._target_gate).\
                                                 on_registers(controls=controls, target=target)
         
@@ -92,14 +92,14 @@ class QubitizedReflection(cirq_ft.GateWithRegisters):
 
 
 
-    def _t_complexity_(self) -> cirq_ft.infra.TComplexity:
-        multi_cost =  cirq_ft.t_complexity( cirq_ft.algos.MultiControlPauli([0] * self._n_controls, 
+    def _t_complexity_(self) -> qt.cirq_interop.t_complexity_protocol.TComplexity:
+        multi_cost =  qt.cirq_interop.t_complexity_protocol.t_complexity( qt.bloqs.multi_control_multi_target_pauli.MultiControlPauli([0] * self._n_controls, 
                                             target_gate=self._target_gate))
     
         if (not self._control_val):
-            clifford_cost = cirq_ft.infra.TComplexity(clifford=self._n_controls)
+            clifford_cost = qt.cirq_interop.t_complexity_protocol.TComplexity(clifford=self._n_controls)
         else:
-            clifford_cost = cirq_ft.infra.TComplexity()
+            clifford_cost = qt.cirq_interop.t_complexity_protocol.TComplexity()
         
         return (multi_cost + 2*clifford_cost)
 
@@ -127,7 +127,7 @@ class QubitizedReflection(cirq_ft.GateWithRegisters):
 
 
 
-class QubitizedRotation(cirq_ft.GateWithRegisters):
+class QubitizedRotation(qt._infra.gate_with_registers.GateWithRegisters):
     
 
     def __init__(self, n_controls, 
@@ -161,13 +161,13 @@ class QubitizedRotation(cirq_ft.GateWithRegisters):
 
     @property
     def all_qubits(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.all_qubits)
 
 
     @property
     def circuit(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.circuit)  
 
 
@@ -175,10 +175,10 @@ class QubitizedRotation(cirq_ft.GateWithRegisters):
     def signature(self):
 
         if self._controlled:
-            return cirq_ft.Signature.build( control=self._n_controls,
+            return qt._infra.registers.Signature.build( control=self._n_controls,
                                             target=1, rotation_control=1 )
         else:
-            return cirq_ft.Signature.build( control=self._n_controls,
+            return qt._infra.registers.Signature.build( control=self._n_controls,
                                             target=1 )
     
 
@@ -233,19 +233,19 @@ class QubitizedRotation(cirq_ft.GateWithRegisters):
                 
                 
                 
-    def _t_complexity_(self) -> cirq_ft.infra.TComplexity:
+    def _t_complexity_(self) -> qt.cirq_interop.t_complexity_protocol.TComplexity:
 
-        multi_cost =  cirq_ft.t_complexity( QubitizedReflection(self._n_controls) )
-        rotation_cost = cirq_ft.infra.TComplexity(rotations=1)
+        multi_cost =  qt.cirq_interop.t_complexity_protocol.t_complexity( QubitizedReflection(self._n_controls) )
+        rotation_cost = qt.cirq_interop.t_complexity_protocol.TComplexity(rotations=1)
 
         ##
         ##  Fix this to properly handle controlled rotation
         ##
 
         if (not self._multi_control_val):
-            clifford_cost = cirq_ft.infra.TComplexity(clifford=self._n_controls)
+            clifford_cost = qt.cirq_interop.t_complexity_protocol.TComplexity(clifford=self._n_controls)
         else:
-            clifford_cost = cirq_ft.infra.TComplexity()
+            clifford_cost = qt.cirq_interop.t_complexity_protocol.TComplexity()
         
         return (2*multi_cost + rotation_cost + 2*clifford_cost)
     
@@ -279,7 +279,7 @@ class QubitizedRotation(cirq_ft.GateWithRegisters):
 
 
 
-class QubitizedWalkOperator(cirq_ft.GateWithRegisters):
+class QubitizedWalkOperator(qt._infra.gate_with_registers.GateWithRegisters):
     
     def __init__( self, block_encoding, multi_control_val=1, control_val=1, instance=None  ):
 
@@ -317,13 +317,13 @@ class QubitizedWalkOperator(cirq_ft.GateWithRegisters):
 
     @property
     def all_qubits(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.all_qubits)
 
 
     @property
     def circuit(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.circuit)  
     
 
@@ -344,18 +344,23 @@ class QubitizedWalkOperator(cirq_ft.GateWithRegisters):
 
     @property
     def junk_registers(self):
-        return(self._block_encoding.junk_registers)
+        other_regs = [*self.selection_registers,*self.control_registers,*self.target_registers]
+        junk_regs = ()
+        for reg in [*self._block_encoding.signature]:
+            if reg not in other_regs:
+                junk_regs += (reg,)
+        return(junk_regs)
 
 
     @property
     def signature(self):
 
         if not self._controlled_encoding:
-            ctl_reg =  (cirq_ft.Register('control',1),)
+            ctl_reg =  (qt._infra.registers.Register('control',1),)
         else:
             ctl_reg = self.control_registers
 
-        return cirq_ft.Signature(
+        return qt._infra.registers.Signature(
             [ *ctl_reg, *self.selection_registers, 
               *self.target_registers, *self.junk_registers] )
 
@@ -364,7 +369,10 @@ class QubitizedWalkOperator(cirq_ft.GateWithRegisters):
 
         selection_qubits = []
 
-        kw_blockregs = { 'target'     :  quregs['target'] } 
+        kw_blockregs = {} 
+
+        for reg in self.target_registers:
+            kw_blockregs[reg.name] = quregs[ reg.name ]
 
         for reg in self.selection_registers:
             selection_qubits += quregs[ reg.name ].tolist()
@@ -395,10 +403,10 @@ class QubitizedWalkOperator(cirq_ft.GateWithRegisters):
 
 
 
-    def _t_complexity_(self) -> cirq_ft.infra.TComplexity:
+    def _t_complexity_(self) -> qt.cirq_interop.t_complexity_protocol.TComplexity:
 
-        encoding_cost  =  cirq_ft.t_complexity(self._block_encoding)
-        reflect_cost   =  cirq_ft.t_complexity( QubitizedReflection( self._n_selection ))
+        encoding_cost  =  qt.cirq_interop.t_complexity_protocol.t_complexity(self._block_encoding)
+        reflect_cost   =  qt.cirq_interop.t_complexity_protocol.t_complexity( QubitizedReflection( self._n_selection ))
         
         return (reflect_cost + encoding_cost)
 

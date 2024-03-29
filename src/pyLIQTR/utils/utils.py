@@ -17,6 +17,7 @@ rights in this work are defined by DFARS 252.227-7013 or DFARS 252.227-7014 as d
 above. Use of this work other than as specifically authorized by the U.S. Government
 may violate any copyrights that exist in this work.
 """
+import platform
 import numpy       as np
 from typing import List, Tuple
 from cirq   import LineQubit
@@ -167,3 +168,30 @@ def getQubitFromMap(tuple_in:tuple, ctl_q:List[LineQubit], tgt_q:List[LineQubit]
         return anc_q[tuple_in[0]]
     else:
         raise RuntimeError('Function getQubitFromMap malfunctioning...')
+    
+def isWindows() -> bool:
+    """will determine if the OS we are running on is Windows or not.
+    
+    Return:
+        True if OS is Windows
+        False otherwise
+    """
+    return platform.system() == 'Windows'
+
+def isMac() -> bool:
+    """will determine if the OS we are running on is Mac or not.
+    
+    Return:
+        True if OS is Mac
+        False otherwise
+    """
+    return platform.platform().startswith('mac')
+
+def isLinux() -> bool:
+    """will determine if the OS we are running on is Linux or not.
+    
+    Return:
+        True if OS is Linux
+        False otherwise
+    """
+    return platform.system() == 'Linux'

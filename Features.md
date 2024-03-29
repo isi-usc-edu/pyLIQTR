@@ -8,9 +8,11 @@ Included below are the exhaustive list of features contained within pyLIQTR. Thi
 4. [Dual Plane Wave](#dpw)
 5. [Gaussian Orbitals](#gto)
 6. [Arbitrary Spin](#arbitrary-spin-lattice)
-8. [Ground State Estimation](#gse)
-9. [Quantum Signal Processing](#qsp)
-10. [Quantum Singular Value Transformation](#qsvt)
+7. [Ground State Estimation](#gse)
+8. [Quantum Signal Processing](#qsp)
+9. [Quantum Singular Value Transformation](#qsvt)
+10. [Double Factorized Block Encoding](#df)
+11. [Tutorials](#tutorials)
 
 ## I. Quantum Signal Processing
 
@@ -41,7 +43,7 @@ Phase-Factor Generation Algorithms:
   - Classes:
     - Parent class for QSVT: `QSVT_Abstract()`
     - QET/QSVT with real polynomials: `QSVT_real_polynomial(QSVT_abstract)`
-    - QET/QSVT with "sum" of real polynomials: `QSVT_real_polynomial_sum(cirq_ft.GateWithRegisters)`
+    - QET/QSVT with "sum" of real polynomials: `QSVT_real_polynomial_sum(qualtran.GateWithRegisters)`
     - Legacy Fourier-response sequence: `QSP_fourier_response(QSVT_abstract)`
 
 - Quantum dynamics via QET/QSVT <a id="qsvt_dynamics"></a>
@@ -60,7 +62,7 @@ Phase-Factor Generation Algorithms:
   - Description: Implementation of phase estimation / ground-state energy estimation via methods from Phys. Rev. X <b>8</b>, 041015.
   - Source: [phase_estimation.py](src/pyLIQTR/qubitization/phase_estimation.py)
   - Classes:
-    - Phase-estimation circuit: `QubitizedPhaseEstimation(cirq_ft.GateWithRegisters)`
+    - Phase-estimation circuit: `QubitizedPhaseEstimation(qualtran.GateWithRegisters)`
 
 ## III. Qubitized Components
 
@@ -69,15 +71,15 @@ Phase-Factor Generation Algorithms:
 - Qubitized Reflection / Projection Operator
   - Source: [qubitized_gates.py](src/pyLIQTR/qubitization/qubitized_gates.py)
   - Classes:
-    - `QubitizedReflection(cirq_ft.GateWithRegisters)`
+    - `QubitizedReflection(qualtran.GateWithRegisters)`
 - Qubitized Rotation Operator
   - Source: [qubitized_gates.py](src/pyLIQTR/qubitization/qubitized_gates.py)
   - Classes:
-    - `QubitizedRotation(cirq_ft.GateWithRegisters)`
+    - `QubitizedRotation(qualtran.GateWithRegisters)`
 - Qubitized Walk Operator
   - Source: [qubitized_gates.py](src/pyLIQTR/qubitization/qubitized_gates.py)
   - Classes:
-    - `QubitizedWalkOperator(cirq_ft.GateWithRegisters)`
+    - `QubitizedWalkOperator(qualtran.GateWithRegisters)`
 
 ### Select & Prepare Oracles
 
@@ -97,15 +99,15 @@ Oracles:
   - Description: Select oracle for molecular electronic structure Hamiltonians expressed in a basis that diagonalizes the Coulomb potential.
   - Source: [select_LinearT](src/pyLIQTR/circuits/operators/select_LinearT.py)
   - Classes:
-    - `FermionicSelect_LinearT(cirq_ft.GateWithRegisters)`
+    - `FermionicSelect_LinearT(qualtran.GateWithRegisters)`
     - Select from [Linear T paper](https://arxiv.org/abs/1805.03662) Section IV.A, Fig. 14
 - Fermionic Encoding: Prepare
   - Description: Prepare oracle for molecular electronic structure Hamiltonians expressed in a basis that diagonalizes the Coulomb potential.
   - Source: [prepare_LinearT](src/pyLIQTR/circuits/operators/prepare_LinearT.py)
   - Classes:
-    - `FermionicPrepare_LinearT(cirq_ft.GateWithRegisters)`
+    - `FermionicPrepare_LinearT(qualtran.GateWithRegisters)`
     - Prepare from [Linear T paper](https://arxiv.org/abs/1805.03662) Section IV.B, Fig. 16
-    - `Subprepare_LinearT(cirq_ft.GateWithRegisters)`
+    - `Subprepare_LinearT(qualtran.GateWithRegisters)`
     - Subprepare from [Linear T paper](https://arxiv.org/abs/1805.03662) Section IV.B, Fig. 15
 
 ### Block Encodings
@@ -116,7 +118,7 @@ Abstract Encoding Classes:
   - Description: Abstrct template for block encodings.
   - Source: [BlockEncoding.py](src/pyLIQTR/BlockEncodings/BlockEncoding.py)
   - Classes:
-    - `BlockEncoding(cirq_ft.GateWithRegisters)`
+    - `BlockEncoding(qualtran.GateWithRegisters)`
 - Abstract Select-Prepare Encodings
   - Description: Abstract class for block encodings via Select and Prepare oracles
   - Source: [BlockEncoding.py](src/pyLIQTR/BlockEncodings/BlockEncoding.py)
@@ -140,6 +142,11 @@ Specialized Encodings:
   - Source: [PauliStringLCU.py](src/pyLIQTR/BlockEncodings/PauliStringLCU.py)
   - Classes:
     - `PauliStringLCU(BlockEncoding_select_prepare)`
+- Block encoding: DoubleFactorized <a id="df"></a>
+  - Description: Implements encoding for a double factorized hamiltonian from Appendix C of the [tensor hypercontraction paper](https://arxiv.org/pdf/2011.03494.pdf)
+  - Source: [DoubleFactorized.py](src/pyLIQTR/BlockEncodings/DoubleFactorized.py)
+  - Classes:
+    - `DoubleFactorized(BlockEncoding)`
 
 Helper Functions:
 
@@ -194,7 +201,7 @@ Application Problems:
   - Classes:
     - `ElectronicStructure(ProblemInstance)`
 
-## VI. Tutorials
+## VI. Tutorials <a id="tutorials"></a>
 
 Application Problems:
 
@@ -213,6 +220,9 @@ Application Problems:
 - Heisenberg Model <a id="heisenberg"></a>
   - Description: Resource estimation for the Heisenberg model.  Includes demonstrations with isolated block encodings, qubitized quantum dynamics, and qubitized phase estimation.
   - Notebooks: [Heisenberg](Examples/ApplicationInstances/Heisenberg/)
+- Homogeneous Catalysis
+  - Description: Resource estimation for qubitized phase estimation using the double factorized block encoding for a homogeneous catalyst.
+  - Notebooks: [Homogeneous Catalysis](Examples/ApplicationInstances/HomogeneousCatalysis/)
 
 General Infrastructure:
 

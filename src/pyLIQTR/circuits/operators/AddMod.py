@@ -17,11 +17,12 @@ rights in this work are defined by DFARS 252.227-7013 or DFARS 252.227-7014 as d
 above. Use of this work other than as specifically authorized by the U.S. Government
 may violate any copyrights that exist in this work.
 """
-import cirq_ft
 import cirq
 import numpy as np
-from cirq_ft import infra,algos
-from cirq_ft.algos import and_gate
+from qualtran.bloqs.arithmetic.addition import Add as qtAdd
+from qualtran.bloqs.arithmetic.addition import AddConstantMod as qtAddConstantMod
+from qualtran import bloqs
+from qualtran.bloqs import and_bloq
 from cirq._compat import cached_property
 from typing import List, Tuple, Sequence, Optional
 from numpy.typing import NDArray
@@ -47,7 +48,7 @@ def debugPrint(name,circuit,initial_state=None):
     print(cirq.Simulator().simulate(circuit,qubit_order=qord,initial_state=initial_state))
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
-class Add(algos.AdditionGate):
+class Add(qtAdd):
     def _decompose_with_context_(
         self, qubits: Sequence[cirq.Qid], context: Optional[cirq.DecompositionContext] = None
     ) -> cirq.OP_TREE:
@@ -63,19 +64,19 @@ class Add(algos.AdditionGate):
         else:
             ancillas = context.qubit_manager.qalloc(self.bitsize - 1)[::-1]
             # Start off the addition by anding into the ancilla
-            yield and_gate.And().on(input_bits[0], output_bits[0], ancillas[0])
+            yield and_bloq.And().on(input_bits[0], output_bits[0], ancillas[0])
             # Left part of Fig.2
             yield from self._left_building_block(input_bits, output_bits, ancillas, 1)
             yield cirq.CX(ancillas[-1], output_bits[-1])
             yield cirq.CX(input_bits[-1], output_bits[-1])
             # right part of Fig.2
             yield from self._right_building_block(input_bits, output_bits, ancillas, self.bitsize - 2)
-            yield and_gate.And(adjoint=True).on(input_bits[0], output_bits[0], ancillas[0])
+            yield and_bloq.And(uncompute=True).on(input_bits[0], output_bits[0], ancillas[0])
             yield cirq.CX(input_bits[0], output_bits[0])
             context.qubit_manager.qfree(ancillas)
+        
 
-
-class AddMod(algos.AddMod):
+class AddMod(qtAddConstantMod):
     def _decompose_with_context_(
         self, qubits: Sequence[cirq.Qid], context: Optional[cirq.DecompositionContext] = None
     ) -> cirq.OP_TREE:
@@ -86,11 +87,11 @@ class AddMod(algos.AddMod):
         if context is None:
             context = cirq.DecompositionContext(cirq.ops.SimpleQubitManager())
 
-        isControlled =  len(self.cv)>0
+        isControlled =  len(self.cvs)>0
         if isControlled:
-            ctlQubits = list(qubits[0:len(self.cv)])
+            ctlQubits = list(qubits[0:len(self.cvs)])
             targetQubit = context.qubit_manager.qalloc(1)
-            yield cirq_ft.MultiControlPauli(self.cv).on(*(ctlQubits+targetQubit))
+            yield bloqs.multi_control_multi_target_pauli.MultiControlPauli(self.cvs).on(*(ctlQubits+targetQubit))
         
         #MSB is first qubit
         #if the input register is A, with size a
@@ -127,8 +128,8 @@ class AddMod(algos.AddMod):
         
         #Input qubits (qubits) should be of the correct size. We make no guarantee about 
         #overflow though...
-        assert(len(qubits)-len(self.cv)==self.bitsize)
-        A = list(qubits[len(self.cv)::])
+        assert(len(qubits)-len(self.cvs)==self.bitsize)
+        A = list(qubits[len(self.cvs)::])
         #SWITCH IN ORDER TO DO INPLACE
         tmpB = A
         A = B
@@ -199,8 +200,8 @@ class AddMod(algos.AddMod):
 
         #debugPrint("Reorder",tmpG)
         if isControlled:
-            ctlQubits = list(qubits[0:len(self.cv)])
-            yield cirq_ft.MultiControlPauli(self.cv).on(*(ctlQubits+targetQubit))
+            ctlQubits = list(qubits[0:len(self.cvs)])
+            yield bloqs.multi_control_multi_target_pauli.MultiControlPauli(self.cvs).on(*(ctlQubits+targetQubit))
         
 
         context.qubit_manager.qfree(A)

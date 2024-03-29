@@ -21,12 +21,15 @@ import pandas as pd
 import numpy as np
 import math
 from openfermion.chem import MolecularData
-from openfermionpyscf import run_pyscf
+
+from pyLIQTR.utils.utils import isWindows
+if not isWindows():
+    from openfermionpyscf import run_pyscf
 from openfermion import jordan_wigner
 import cirq
 
-def get_hdf5(target_mol_no):
-    chem_data = pd.read_csv("chemistry_instances.csv")
+def get_hdf5(target_mol_no,filename='chemistry_instances.csv'):
+    chem_data = pd.read_csv(filename)
     mol_name = chem_data['molecule']
     mol_basis = chem_data['basis']
     mol_geom = chem_data['geometry']

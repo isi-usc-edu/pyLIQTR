@@ -22,6 +22,7 @@ from pyLIQTR.BlockEncodings import VALID_ENCODINGS
 from pyLIQTR.BlockEncodings.PauliStringLCU import PauliStringLCU
 from pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding import fermi_hubbard_square_encoding
 from pyLIQTR.BlockEncodings.LinearT import Fermionic_LinearT
+from pyLIQTR.BlockEncodings.DoubleFactorized import DoubleFactorized
 
 validEncodings = []
 
@@ -44,5 +45,10 @@ def getEncoding(encoding : VALID_ENCODINGS, instance =  None,  **kwargs):
             return Fermionic_LinearT(ProblemInstance=instance,**kwargs)
         else:
             return Fermionic_LinearT
+    elif encoding == VALID_ENCODINGS.DoubleFactorized:
+        if instantiate:
+            return DoubleFactorized(ProblemInstance=instance,**kwargs)
+        else:
+            return DoubleFactorized
     else:
         raise NotImplementedError("Sorry :'(")

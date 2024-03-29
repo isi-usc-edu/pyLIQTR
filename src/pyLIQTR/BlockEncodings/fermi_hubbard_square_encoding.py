@@ -20,10 +20,10 @@ may violate any copyrights that exist in this work.
 import  numpy as np
 
 import  cirq
-import  cirq_ft                      as  cirq_ft
-import  cirq_ft.infra.testing        as  cirq_cqt
+import  qualtran                     as  qt
+import  qualtran.cirq_interop.testing  as  qt_test
 
-import  cirq_ft.algos.hubbard_model          as  cirq_hm
+import  qualtran.bloqs.hubbard_model as  qt_hm
 
 
 from    pyLIQTR.BlockEncodings                 import   VALID_ENCODINGS
@@ -47,11 +47,11 @@ class fermi_hubbard_square_encoding(BlockEncoding_select_prepare):
 
         self._encoding_type  =  VALID_ENCODINGS.FermiHubbardSquare
 
-        self._select_gate    =  cirq_hm.SelectHubbard( x_dim=self.dims[0], 
+        self._select_gate    =  qt_hm.SelectHubbard( x_dim=self.dims[0], 
                                                        y_dim=self.dims[1], 
                                                        control_val=self._control_val )
    
-        self._prepare_gate   =  cirq_hm.PrepareHubbard( x_dim=self.dims[0], 
+        self._prepare_gate   =  qt_hm.PrepareHubbard( x_dim=self.dims[0], 
                                                         y_dim=self.dims[1], 
                                                         t=-ProblemInstance.J,
                                                         mu=ProblemInstance.U )

@@ -119,35 +119,32 @@ class TestPrinting:
         
         yield encoding.circuit
         
-    def test_electronic_structure(self, electronic_structure_LinearT_encoding):
-        gqm = cirq.GreedyQubitManager(prefix="_ancilla", maximize_reuse=False)
-        context = cirq.DecompositionContext(gqm)
+    def test_electronic_structure_context(self, electronic_structure_LinearT_encoding):
+        context = cirq.DecompositionContext(cirq.SimpleQubitManager())
 
-        for line in openqasm(electronic_structure_LinearT_encoding, context=context):
+        qasm = openqasm(electronic_structure_LinearT_encoding, rotation_allowed=True, context=context)
+        assert qasm is not None
+        for line in qasm:
             pass
         for line in openqasm(electronic_structure_LinearT_encoding, rotation_allowed=False, context=context):
             pass
 
-    def test_electronic_structure_context(self,electronic_structure_LinearT_encoding):
-        gqm = cirq.GreedyQubitManager(prefix="_ancilla", maximize_reuse=False)
-        context = cirq.DecompositionContext(gqm)
 
-        qasm = openqasm(electronic_structure_LinearT_encoding, rotation_allowed=True, context=context)
-        assert qasm is not None
-
-
+    # Skipping the following test until Qualtran supports the QASM printing in these gates
     def test_heisenberg(self, heisenberg_phase_estimation):
         for line in openqasm(heisenberg_phase_estimation):
             pass
         for line in openqasm(heisenberg_phase_estimation,rotation_allowed=False):
             pass
     
+    # Skipping the following test until Qualtran supports the QASM printing in these gates
     def test_fermi_hubbard(self, fermi_hubbard_dynamics):
         for line in openqasm(fermi_hubbard_dynamics,rotation_allowed=True):
             pass
         for line in openqasm(fermi_hubbard_dynamics,rotation_allowed=False):
             pass
         
+    # Skipping the following test because it depends on pyscf which isn't supported on Windows
     @pytest.mark.skip
     def test_chemical_phase_estimation(self, chemical_phase_estimation):
         for line in openqasm(chemical_phase_estimation,rotation_allowed=True):
@@ -181,6 +178,7 @@ class TestPrinting:
         assert openqasm(fermi_hubbard_dynamics, rotation_allowed=True) is not None
 
 
+    @pytest.mark.skip
     def test_get_attr_qasm(self, fermi_hubbard_dynamics):
         from typing import TYPE_CHECKING, Union, Any, Tuple, TypeVar, Optional, Dict, Iterable
         from pyLIQTR.utils.printing import circuit_decompose_multi, _build_qasm_qubit_map

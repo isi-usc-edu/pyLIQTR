@@ -1,4 +1,8 @@
 # High-level changelog (not all inclusive of all changes)
+## v1.1.1
+* Double Factorization
+* Assorted Bug Fixes
+
 ## v1.0.0
 * Beginning mass deprecation of legacy code (primarily QSP and PhaseEstimation related, sim_methods, angle generation). Some old code may break!
 * Beginning to leverage cirq-ft for faster resource estimation

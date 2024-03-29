@@ -6,3 +6,4 @@ class VALID_ENCODINGS(Enum):
     LinearT = 2
     Fermionic=3
     FermiHubbardSquare=4
+    DoubleFactorized = 5

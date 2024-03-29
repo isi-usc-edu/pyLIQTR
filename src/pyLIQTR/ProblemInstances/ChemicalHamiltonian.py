@@ -20,13 +20,16 @@ may violate any copyrights that exist in this work.
 import  numpy  as  np
 import  cirq   as  cirq
 
-from    pyLIQTR.clam.operator_strings              import  op_strings
-from    pyLIQTR.ProblemInstances.ProblemInstance   import  ProblemInstance
-from    openfermion.chem                           import  MolecularData
-from    openfermion                                import  jordan_wigner
-from    openfermion                                import  InteractionOperator
+from pyLIQTR.clam.operator_strings import  op_strings
+from pyLIQTR.ProblemInstances.ProblemInstance import  ProblemInstance
+from openfermion.chem import  MolecularData
+from openfermion import  jordan_wigner, get_interaction_operator
+from openfermion import  InteractionOperator
+from openfermion import  FermionOperator
 
-from    functools   import   cache
+from    functools   import   cache, cached_property
+
+import juliapkg
 
 class ChemicalHamiltonian(ProblemInstance):
     
@@ -43,6 +46,12 @@ class ChemicalHamiltonian(ProblemInstance):
     """
 
     def __init__(self, mol_ham: InteractionOperator, mol_name=None, **kwargs):
+        # We need to setup Julia if this hasn't happened yet, hopefully this only runs once!
+        juliapkg.require_julia("~1.8,~1.9")
+        juliapkg.resolve()
+        import juliacall
+        from juliacall import Main as jl
+        # Now start the real initialization
         self._mol_ham   =  mol_ham
         self._mol_name  =  mol_name
 
@@ -103,16 +112,66 @@ class ChemicalHamiltonian(ProblemInstance):
             coeff  =  self._terms_jw[term]
             lam   +=  abs(coeff)
         return lam
+
+    @cached_property
+    def hamiltonian_tensors(self):
+        from pyLIQTR.utils.df_utils import to_tensors
+        H = 0
+        for term in self._mol_ham:
+            H += FermionOperator(term, self._mol_ham[term])
+
+        h0, one_body_tensor, two_body_tensor = to_tensors(H)
+
+        return {'h0':h0, 'one_body_tensor':one_body_tensor, 'two_body_tensor':two_body_tensor}
+
+    def DF_fragments(self,sf_error_threshold):
+        from pyLIQTR.utils.df_utils import DF_decomposition
+        h0, one_body_tensor, two_body_tensor = self.hamiltonian_tensors.values()            
+        return DF_decomposition(h0, one_body_tensor, two_body_tensor,tol=sf_error_threshold)
     
-    def get_alpha(self):
-        return(self._ops.get_alpha())
+    def get_alpha(self,encoding:str='PauliLCU',df_error_threshold=None,sf_error_threshold=None):
+        if encoding == 'PauliLCU':
+            return(self._ops.get_alpha())
+        elif encoding == 'DF':
+            from pyLIQTR.utils.df_utils import to_OBF
+            jl.seval('import Pkg')
+            jl.seval('Pkg.add("QuantumMAMBO")')
+            jl.seval("using QuantumMAMBO")
+            mambo = jl.QuantumMAMBO
+            _, one_body_tensor, two_body_tensor = self.hamiltonian_tensors.values()            
+            DF_frags = self.DF_fragments(sf_error_threshold)
+            one_body_correction = 2*sum([two_body_tensor[:,:,r,r] for r in range(two_body_tensor.shape[0])])
+            one_body_fragment = to_OBF(one_body_tensor + one_body_correction)
+            lambdaTprime = mambo.OBF_L1(one_body_fragment)
+            lambdaDF = 0.0
+            for frag in DF_frags:
+                lambdaDF += mambo.DF_L1(frag)
+            # TODO: lambdaDF should exclude terms based on error threshold
+            return lambdaTprime + lambdaDF
 
-
-    # def isPowerOfTwo(self,n):
-    #     return (np.ceil(np.log2(n)) == math.floor(np.log2(n)));
-
-
-
+        
+    def optimize(self, method='BLISS'):
+        if method == 'BLISS':
+            jl.seval('import Pkg')
+            jl.seval('Pkg.add("QuantumMAMBO")')
+            jl.seval("using QuantumMAMBO")
+            mambo = jl.QuantumMAMBO
+            def BLISS(H:FermionOperator, num_elecs, do_T = True, ret_mambo = False, verbose=True, do_save=False, **kwargs):
+                Hmambo = mambo.OF_to_F_OP(H)
+                H_new, _ = mambo.bliss_linprog(Hmambo, num_elecs)
+                return mambo.to_OF(H_new)
+            n = self.n_qubits() / 2
+            ham_f = 0
+            for term in self._mol_ham:
+                ham_f += FermionOperator(term, self._mol_ham[term])
+            bliss_ham_f = BLISS(H=ham_f, num_elecs=n)
+            bliss_mol_ham = get_interaction_operator(bliss_ham_f)
+            bliss_mol_instance    =   ChemicalHamiltonian(mol_ham=bliss_mol_ham,mol_name="H2 w/ BLISS")
+            new_lam = bliss_mol_instance.lam
+            norm_percent = (1 - (new_lam / self.lam)) * 100
+            print(f"New encoding normalization: {new_lam}. Normalization reduced by {norm_percent}%.")
+            return bliss_mol_instance
+    
     def yield_PauliLCU_Info(self,return_as='arrays',do_pad=0,pad_value=1.0):
         if (return_as == 'arrays'):
             terms = self._ops.terms(do_pad=do_pad,pad_value=pad_value)
@@ -122,3 +181,72 @@ class ChemicalHamiltonian(ProblemInstance):
         for term in terms:
             yield term
 
+    
+
+    
+    
+    def yield_DF_Info(self, df_error_threshold: float,sf_error_threshold:float=1e-10):
+        from pyLIQTR.utils.df_utils import to_OBF, U_to_Givens, calc_xi
+
+        _, obt, tbt = self.hamiltonian_tensors.values()   
+
+        DF_frags = self.DF_fragments(sf_error_threshold)
+
+        num_frags = len(DF_frags)
+        num_orbs = np.size(obt, 0)
+        mus_mat = np.zeros(shape = (num_frags + 1, num_orbs))
+        thetas_tsr = np.zeros(shape = (num_frags + 1, num_orbs, num_orbs - 1))
+        
+        obt_frag = to_OBF(obt)
+        for i in range(len(obt_frag.C.λ)):
+            mus_mat[0][i] = obt_frag.C.λ[i]
+    
+        for k in range(0, num_orbs):
+            U_to_G = U_to_Givens(obt_frag.U[0], k)
+            for i in range(len(U_to_G)):
+                thetas_tsr[0][k][i] = U_to_G[i]    
+
+        for l in range(num_frags):
+            for i in range(len(DF_frags[l].C.λ)):
+                mus_mat[l+1][i] = DF_frags[l].C.λ[i]
+
+            for k in range(num_orbs):
+                U_to_G = U_to_Givens(DF_frags[l].U[0], k)
+                for g in range(len(U_to_G)):
+                    thetas_tsr[l+1, k, g] = U_to_G[g]
+
+        T_prime = mus_mat[0]
+        f_p = []
+        for i in range(1, np.size(mus_mat, 0)):
+            f_p.append(mus_mat[i])
+    
+        T_prime_signs = []
+        T_prime_vals = []
+        for i in T_prime:
+            sign = (1-np.sign(i))/2 if np.sign(i) else 0
+            T_prime_signs.append(int(sign))
+            T_prime_vals.append(abs(i))
+        T_prime_full = [T_prime_signs, T_prime_vals]
+
+        f_p_abs = []
+        for i in f_p:
+            f_p_abs.append(abs(i))
+    
+        f_p_full = []
+        for i in f_p:
+            f_p_signs = []
+            f_p_vals = []
+            for k in i:
+                sign = (1-np.sign(k))/2 if np.sign(k) else 0
+                f_p_signs.append(int(sign))
+                f_p_vals.append(abs(k))
+            f_p_full.append([f_p_signs, f_p_vals])
+
+        xi = calc_xi(f_p_abs, df_error_threshold)
+
+        return T_prime_full, f_p_full, xi, thetas_tsr
+    
+    
+        
+
+        

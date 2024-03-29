@@ -18,8 +18,6 @@ above. Use of this work other than as specifically authorized by the U.S. Govern
 may violate any copyrights that exist in this work.
 """
 
-from typing_extensions import deprecated
-from warnings import warn
 import cirq
 from collections import defaultdict
 from pyLIQTR.gate_decomp.rotation_gates import decomp_mixin
@@ -28,20 +26,33 @@ from typing import FrozenSet, Iterable, List, Tuple, Union
 from cirq.type_workarounds import NotImplementedType
 from pyLIQTR.gate_decomp.cirq_transforms import clifford_plus_t_direct_transform
 
+from warnings import warn
+
 
 from pyLIQTR.circuits.operators.AddMod import AddMod as pyLAM
+import qualtran
+
+import pyLIQTR.utils.global_ancilla_manager as gam
 
 def test_for_bad_gate_op(gate_op:cirq.GateOperation) -> str:
-    if (str(gate_op) in ["X","Y","Z","S","H","T", \
-                            "reset","cirq.Measure","cirq.MeasurementGate"]) or \
-        (str(gate_op).startswith(('reset','Rx','Ry','Rz',\
+    gate_op_str = str(gate_op)
+    if hasattr(gate_op, '_gate'):
+        gate_op_str = str(gate_op._gate)
+
+    gates2check = ["reset","cirq.Measure","cirq.MeasurementGate"]
+    gates2check += ["X","Y","Z","S","H","T"]
+    gates2check += ["X**-1.0","Y**-1.0","Z**-1.0","S**-1.0","H**-1.0","T**-1.0"]
+    gates2check += ["X**-1","Y**-1","Z**-1","S**-1","H**-1","T**-1"]
+    if (gate_op_str in gates2check) or \
+        (gate_op_str.startswith(('reset','Rx','Ry','Rz',\
             'CX','CZ','CCZ','CCX',\
             'TOFFOLI', 'CCXi', 'ccxi', 'cirq.Measure', 'CNOT'))):
-            if "**-1.0" in str(gate_op) and \
-                (("TOFFOLI" in str(gate_op)) \
-                    or ("CNOT" in str(gate_op)) \
-                    or ("CZ" in str(gate_op))\
-                    or ("CX" in str(gate_op))
+            if ("**-1.0" in gate_op_str or "**-1" in gate_op_str) and \
+                (("TOFFOLI" in gate_op_str) \
+                    or ("CNOT" in gate_op_str) \
+                    or ("CZ" in gate_op_str)\
+                    or ("CX" in gate_op_str)
+                    or (gate_op_str.startswith("S**-1"))
                 ):
                 return cirq.inverse(gate_op)
             else:
@@ -90,14 +101,12 @@ def openqasm(circuit: cirq.AbstractCircuit,
              use_random_decomp: bool = True) -> str:
     #This function always will decompose to 1-3Q gates
     if context is None:
-        gqm = cirq.GreedyQubitManager(prefix="_ancilla", maximize_reuse=True)
-        context = cirq.DecompositionContext(gqm)
+        context = cirq.DecompositionContext(gam.gam)
     
     circuit = cirq.Circuit(cirq.decompose(circuit,\
                                             keep=keep,\
                                             on_stuck_raise=on_stuck_raise,\
                                             context = context))
-    
     if not rotation_allowed:
         if circuit_precision is not None:
             circuit = clifford_plus_t_direct_transform(circuit,
@@ -121,12 +130,21 @@ def openqasm(circuit: cirq.AbstractCircuit,
         str_out += tmp
     else:
         qasm_args, qubit_map, tmp = _build_qasm_qubit_map(circuit)
+    qubit_map_str2key = {str(k):k for k in qubit_map.keys()}
 
 
     yield str_out
     for moment in circuit:
         for op in moment:
             try:
+                try:
+                    if "qualtran.bloqs.basic_gates" in op._gate.__module__:
+                        op = op._gate.cirq_gate.on(*op.qubits)
+                        #raise ValueError('do something here')
+                except:
+                    pass
+                if isinstance(op._gate,cirq.GlobalPhaseGate):
+                    continue
                 test_op = test_for_bad_gate_op(op)
                 if test_op is None:
                     #does not handle XPowGates properly if rotation_allowed=False...
@@ -142,7 +160,7 @@ def openqasm(circuit: cirq.AbstractCircuit,
                     
                     yield "measure {} -> b[{}]".format(qubit_map[op.qubits[0]],\
                                                      qubit_map[op.qubits[0]]).strip()
-                elif isinstance(op,cirq.ClassicallyControlledOperation):
+                elif isinstance(op,cirq.ClassicallyControlledOperation) or isinstance(op,cirq.ops.controlled_operation.ControlledOperation):
                     #This is an op that is classically controlled
                     if len(op.classical_controls)>1:
                         print("Cant handle more than one classical control")
@@ -151,28 +169,24 @@ def openqasm(circuit: cirq.AbstractCircuit,
                     newstr = ""
                     for cc in op.classical_controls:
                         tmp = str(cc)
-                        tmp = tmp.replace(context.qubit_manager._prefix+"_","")
-                        qnum = int(tmp)
-                        prefix = context.qubit_manager._prefix
-
-                        thistmpqb = cirq.NamedQubit(name="{}_{}".format(prefix,str(qnum)))
+                        thistmpqb = qubit_map_str2key[str(tmp)]
                         newstr+="if (b[{}]==1) ".format(\
                             qubit_map[thistmpqb])
-                    
                     newstr+=cirq.qasm(op._sub_operation,args=qasm_args)
                     yield newstr.strip()
-                elif (str(op).startswith("cirq_ft.AddMod")):
+                elif (str(op).startswith("AddConstantMod")):
                     #this is an op that needs to be casted to 
                     qbs = op.qubits
                     top = pyLAM(bitsize=op.gate.bitsize, add_val=op.gate.add_val, \
-                               mod=op.gate.mod,cv=op.gate.cv).\
+                               mod=op.gate.mod,cvs=op.gate.cvs).\
                             on(*qbs)
                     yield from openqasm(cirq.Circuit(top),skip_header=True,context=context,rotation_allowed=rotation_allowed)
                 else:
+                    print('Issue with either decomposing or generating qasm with {} ()'.format(str(op),type(op)))
                     raise e
     
 
-@deprecated("Use openqasm() instead.")
+
 def to_openqasm(circuit_in,use_rotation_decomp_gates=False) -> str:
     warn('\n\n\n*********************************************************************************************\nThis function is deprecated -- Recommend switching to pyLIQTR.utils.printing.openqasm\n*********************************************************************************************\n\n\n', DeprecationWarning, 2)
     str_out =  '// Generated from Cirq, Openfermion, and MIT LL\n\n'

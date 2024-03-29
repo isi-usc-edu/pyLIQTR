@@ -20,8 +20,8 @@ may violate any copyrights that exist in this work.
 import  numpy as np
 
 import  cirq
-import  cirq_ft                as  cirq_ft
-import  cirq_ft.infra.testing  as  cirq_cqt
+import  qualtran               as  qt
+import  qualtran.cirq_interop.testing  as  qt_test
 
 # from  functools import cached_property 
 
@@ -36,7 +36,7 @@ from pyLIQTR.utils.resource_analysis         import   legacy_resource_profile
 
 
 from pyLIQTR.circuits.operators.select_prepare_pauli  import  prepare_pauli_lcu
-
+from qualtran.bloqs.select_pauli_lcu import SelectPauliLCU
 
 
 
@@ -63,7 +63,7 @@ class PauliStringLCU(BlockEncoding_select_prepare):
 
         selection_bitsize = int(np.ceil(np.log2(self.n_tot)))
 
-        self._select_gate          =  cirq_ft.GenericSelect( selection_bitsize=selection_bitsize,
+        self._select_gate          =  SelectPauliLCU( selection_bitsize=selection_bitsize,
                                                              target_bitsize=self.PI.n_qubits(),
                                                              select_unitaries=self.getTerms,
                                                              control_val=self._control_val )

@@ -92,6 +92,7 @@ def qsvt_dynamics( encoding,
                    sequence="qsvt",
                    phase_algorithm="optimization",
                    phase_sets=None,
+                   time_rescale=True,
                    **kwargs ):
 
     is_array           =  True
@@ -107,13 +108,21 @@ def qsvt_dynamics( encoding,
         times = np.array(times)
 
     if instance is not None:
-        alpha = instance.alpha
+        alpha = encoding(instance).alpha        
     else:
         alpha = encoding.alpha
 
+
+
+
     if (phase_sets is None):
 
-        phase_sets  =  simulation_phases( times*alpha,
+        if time_rescale:
+            time_set = times*alpha
+        else:
+            time_set = times
+
+        phase_sets  =  simulation_phases( time_set,
                                           sequence=sequence,
                                           phase_algorithm=phase_algorithm,
                                           eps=eps ) 

@@ -47,10 +47,10 @@ DESCRIPTION = (
 THIS_DIRECTORY = Path(__file__).parent
 LONG_DESCRIPTION = (THIS_DIRECTORY / "README.md").read_text()
 
-REQUIREMENTS = (THIS_DIRECTORY / "requirements.txt").read_text().splitlines()
+REQUIREMENTS = open(THIS_DIRECTORY / "requirements.txt").readlines()
 REQUIREMENTS = [r.strip() for r in REQUIREMENTS]
 
-REQUIREMENTS_DEV = (THIS_DIRECTORY / "requirements-dev.txt").read_text().splitlines()
+REQUIREMENTS_DEV = open(THIS_DIRECTORY / "requirements-dev.txt").readlines()
 REQUIREMENTS_DEV = [r.strip() for r in REQUIREMENTS_DEV]
 
 __version__ = ""
@@ -67,7 +67,7 @@ setup(
     author_email=AUTHOR_EMAIL,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    python_requires=">=3.8",
+    python_requires=">=3.8,<=3.12",
     install_requires=REQUIREMENTS,
     extras_require={"dev": REQUIREMENTS_DEV},
 )

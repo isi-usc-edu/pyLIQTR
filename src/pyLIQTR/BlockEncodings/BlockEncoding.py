@@ -19,8 +19,8 @@ may violate any copyrights that exist in this work.
 """
 import  numpy                  as  np
 import  cirq                   as  cirq
-import  cirq_ft                as  cirq_ft
-import  cirq_ft.infra.testing  as  cirq_test
+import  qualtran               as  qt
+import  qualtran.cirq_interop.testing  as  qt_test
  
 from    pyLIQTR.utils.pauli_string_manip  import  convert_to_dense_pauli_string
 
@@ -30,7 +30,7 @@ from   typing import Tuple
 
 
 
-class BlockEncoding(cirq_ft.GateWithRegisters):
+class BlockEncoding(qt._infra.gate_with_registers.GateWithRegisters):
     
     def __init__(self,ProblemInstance,control_val=None,**kwargs):
 
@@ -47,23 +47,23 @@ class BlockEncoding(cirq_ft.GateWithRegisters):
 
     @property
     @abc.abstractmethod
-    def control_registers(self) -> Tuple[cirq_ft.infra.Register, ...]:
+    def control_registers(self) -> Tuple[qt._infra.registers.Register, ...]:
         ...
 
     @property
     @abc.abstractmethod
-    def selection_registers(self) -> Tuple[cirq_ft.infra.SelectionRegister, ...]:
+    def selection_registers(self) -> Tuple[qt._infra.registers.SelectionRegister, ...]:
         ...
 
     @property
     @abc.abstractmethod
-    def target_registers(self) -> Tuple[cirq_ft.infra.Register, ...]:
+    def target_registers(self) -> Tuple[qt._infra.registers.Register, ...]:
         ...
 
 
     @property
     @abc.abstractmethod
-    def signature(self) -> cirq_ft.infra.Signature:
+    def signature(self) -> qt._infra.registers.Signature:
         ...
 
 
@@ -74,13 +74,13 @@ class BlockEncoding(cirq_ft.GateWithRegisters):
 
     @property
     def all_qubits(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.all_qubits)
 
 
     @property
     def circuit(self):
-        helper = cirq_test.GateHelper(self)
+        helper = qt_test.GateHelper(self)
         return(helper.circuit)  
 
 
@@ -129,17 +129,17 @@ class BlockEncoding_select_prepare(BlockEncoding):
 
     @property
     def signature(self):
-        return cirq_ft.Signature(
+        return qt._infra.registers.Signature(
             [*self.control_registers, *self.selection_registers, 
              *self.target_registers, *self.junk_registers] )
  #       return( self._get_common_signature( [self._select_gate,self._prepare_gate] ) )
 
 
 
-    def _t_complexity_(self) -> cirq_ft.infra.TComplexity:
+    def _t_complexity_(self) -> qt.cirq_interop.t_complexity_protocol.TComplexity:
 
-        prepare_cost  =  cirq_ft.t_complexity(self._prepare_gate)
-        select_cost   =  cirq_ft.t_complexity(self._select_gate)
+        prepare_cost  =  qt.cirq_interop.t_complexity_protocol.t_complexity(self._prepare_gate)
+        select_cost   =  qt.cirq_interop.t_complexity_protocol.t_complexity(self._select_gate)
 
         if (self._do_prepare and self._do_prepare_inverse):
             total_cost = 2*prepare_cost + select_cost
