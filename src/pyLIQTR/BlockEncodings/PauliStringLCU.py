@@ -21,7 +21,6 @@ import  numpy as np
 
 import  cirq
 import  qualtran               as  qt
-import  qualtran.cirq_interop.testing  as  qt_test
 
 # from  functools import cached_property 
 

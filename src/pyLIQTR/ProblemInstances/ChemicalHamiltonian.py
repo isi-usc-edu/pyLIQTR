@@ -49,8 +49,6 @@ class ChemicalHamiltonian(ProblemInstance):
         # We need to setup Julia if this hasn't happened yet, hopefully this only runs once!
         juliapkg.require_julia("~1.8,~1.9")
         juliapkg.resolve()
-        import juliacall
-        from juliacall import Main as jl
         # Now start the real initialization
         self._mol_ham   =  mol_ham
         self._mol_name  =  mol_name
@@ -134,6 +132,7 @@ class ChemicalHamiltonian(ProblemInstance):
             return(self._ops.get_alpha())
         elif encoding == 'DF':
             from pyLIQTR.utils.df_utils import to_OBF
+            from juliacall import Main as jl
             jl.seval('import Pkg')
             jl.seval('Pkg.add("QuantumMAMBO")')
             jl.seval("using QuantumMAMBO")
@@ -153,6 +152,7 @@ class ChemicalHamiltonian(ProblemInstance):
     def optimize(self, method='BLISS'):
         if method == 'BLISS':
             jl.seval('import Pkg')
+            from juliacall import Main as jl
             jl.seval('Pkg.add("QuantumMAMBO")')
             jl.seval("using QuantumMAMBO")
             mambo = jl.QuantumMAMBO

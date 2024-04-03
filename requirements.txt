@@ -11,7 +11,7 @@ qualtran==0.2.0
 ipykernel
 numpy
 pandas
-scipy
+scipy<1.13.0
 matplotlib
 tqdm
 openfermion
