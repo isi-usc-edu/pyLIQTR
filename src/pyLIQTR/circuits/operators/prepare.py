@@ -95,6 +95,8 @@ class Prepare(pyLOperator):
         return self.disentangle_recursive(alt=False, flip=True, pp_tgt=self.pp_exp, pp_com=self.pp_com, pp_ctl=self.pp_ctl)
 
     def __eq__(self,other):
+        if not hasattr(other,'total_decomp'):
+            return False
         return (self.total_decomp == other.total_decomp) and (self.__class__ == other.__class__)
 
     def alpha_prep(self, flip: bool, alpha_pair:Tuple[float, float]):
