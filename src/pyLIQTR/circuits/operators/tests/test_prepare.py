@@ -13,7 +13,7 @@ def get_common_gate_ops() -> List[cirq.GateOperation]:
     ops = []
     for gate_name in gate_names:
         # Gate class and gate's required num of qubits
-        clss = getattr(cirq,gate)
+        clss = getattr(cirq,gate_name)
         num_q = clss.num_qubits()
 
         # Create gate operation and store in list of ops
