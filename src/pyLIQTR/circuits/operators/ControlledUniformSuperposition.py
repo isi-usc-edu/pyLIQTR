@@ -79,7 +79,7 @@ class ControlledPrepareUniformSuperposition(GateWithRegisters):
         phase_gradient_state, rot_data = quregs['phi'], quregs['rot_data']
         
         # i. n_Xi-1 Toffolis (and Clifford gates) to match binary rep of Xi. This effectively rounds up to the next power of 2 so we can create a uniform superposition using only Hadamards.
-        yield BinaryToUnaryBits.make_on(selection=Xi_reg, target=unary_ancilla_reg)
+        yield BinaryToUnaryBits.make_on(binary=Xi_reg, unary=unary_ancilla_reg)
 
         # ii. n_Xi Hadamards on index reg controlled by unary register generated above
         ## TODO: catalytically controlled Hadamard (Fig 17 of ref)
@@ -139,6 +139,4 @@ class ControlledPrepareUniformSuperposition(GateWithRegisters):
         )
 
         ## Invert binary to unary conversion with Cliffords
-        ## See App C Fig. 10 of https://arxiv.org/pdf/1902.02134.pdf
-        # NOTE: Currently just inverting using inverted operation, not optimal as in ref
-        yield BinaryToUnaryBits.make_on(selection=Xi_reg, target=unary_ancilla_reg)**(-1)
+        yield BinaryToUnaryBits.make_on(binary=Xi_reg, unary=unary_ancilla_reg)**(-1)

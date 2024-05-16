@@ -91,6 +91,39 @@ class TestRotationsQROM:
             assert_circuit_inp_out_cirqsim(circuit,qubit_order=[*selection,*data_reg],inputs=input_state,outputs=input_state)
 
     @pytest.mark.parametrize("n_select,n_data",[(4,4),(5,3),(4,10)])
+    def test_RotationsQROM_measurement_uncompute(self,n_select,n_data):
+        '''
+        Tests the method measurement_uncompute correctly uncomputes by checking all qubits return to initial state.
+        '''
+        # create registers
+        num_coeffs = 2**n_select
+        selection = cirq.NamedQubit.range(n_select,prefix='select')
+        data_reg = cirq.NamedQubit.range(n_data,prefix='data')
+        # create random data array
+        givens_angles = np.random.randint(low=0,high=2,size=(num_coeffs,n_data)) #each entry is randomly set to 0 or 1
+        # initialilze oeprator
+        qrom_rotations = RotationsQROM(
+            data = [givens_angles],
+            selection_bitsizes=(n_select,),
+            target_bitsizes=(n_data,)
+        )
+        operation = qrom_rotations.on_registers(selection0=selection,target0_=data_reg)
+        # circuit
+        circuit = cirq.Circuit(operation)
+        ## measurement uncompute
+        circuit.append([
+            qrom_rotations.measurement_uncompute(selection=selection,data=data_reg)
+        ])
+        # loop over selection indices
+        for index in range(num_coeffs):
+            binary_index = list(iter_bits(index,width=n_select))
+            # input state
+            input_state = binary_index + [0]*n_data + [0]
+            # output state equals input
+            # verify simulated results
+            assert_circuit_inp_out_cirqsim(circuit,qubit_order=[*selection,*data_reg,cirq.ops.CleanQubit(0, prefix='gancilla')],inputs=input_state,outputs=input_state)
+
+    @pytest.mark.parametrize("n_select,n_data",[(4,4),(5,3),(4,10)])
     def test_RotationsQROM_decomposes(self,n_select,n_data):
         '''
         Tests gate decomposition existence.

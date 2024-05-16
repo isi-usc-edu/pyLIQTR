@@ -21,10 +21,11 @@ import cirq
 from cirq._compat import cached_property
 from typing import Tuple, Callable
 from numpy.typing import NDArray
-from qualtran.bloqs.qrom import QROM
 from qualtran._infra.gate_with_registers import total_bits
 
-class RotationsQROM(QROM):
+from pyLIQTR.circuits.operators.QROMwithMeasurementUncompute import QROMwithMeasurementUncompute
+
+class RotationsQROM(QROMwithMeasurementUncompute):
     '''
     Modify QROM for case when data[l] is an array of length N with elements 0 or 1. When the selection register stores index l, data[l] is output on the target register (which has N qubits).
     '''

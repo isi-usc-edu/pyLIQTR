@@ -27,7 +27,7 @@ from pyLIQTR.circuits.pyLOperator import pyLOperator
 from pyLIQTR.utils.circuit_decomposition import decompose_op
 from pyLIQTR.gate_decomp.cirq_transforms import clifford_plus_t_direct_transform
 from pyLIQTR.gate_decomp.rotation_gates import decomp_mixin, T_COUNT_CONST, T_COUNT_SLOPE, T_COUNT_STD_DEV
-from pyLIQTR.utils.printing import to_openqasm
+from pyLIQTR.utils.printing import openqasm
 
 from qualtran import _infra, bloqs
 import qualtran.cirq_interop.testing as qt_test

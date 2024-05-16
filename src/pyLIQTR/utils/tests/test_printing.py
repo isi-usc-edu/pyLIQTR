@@ -34,6 +34,10 @@ from    pyLIQTR.qubitization.qsvt_dynamics           import   qsvt_dynamics, sim
 from    pyLIQTR.qubitization.qubitized_gates         import   QubitizedWalkOperator
 from    pyLIQTR.qubitization.phase_estimation        import   QubitizedPhaseEstimation
 
+from pyLIQTR.circuits.operators.QROMwithMeasurementUncompute import QROMwithMeasurementUncompute
+from pyLIQTR.circuits.operators.RotationsQROM import RotationsQROM
+
+
 from    pyLIQTR.utils.printing                       import   openqasm
 from    openfermion.chem                             import  MolecularData
 import os
@@ -99,7 +103,111 @@ class TestPrinting:
                                 control_val=1)
         
         yield encoding.circuit
-        
+    
+    @pytest.fixture(scope="class")
+    def build_circuit_single(self):
+        # builds circuit with one qrom followed by the measurement based uncomputation
+        test_data = [2,3,8,4,6]
+        nData = (max(test_data)).bit_length()
+        sel_bitsize = (len(test_data)).bit_length()
+        sel_reg = cirq.NamedQubit.range(sel_bitsize,prefix='sel')
+        new_sel = sel_reg[:-1]
+        q_bit = sel_reg[-1]
+        u_bit = cirq.NamedQubit.range(1,prefix='u')
+        data_reg = cirq.NamedQubit.range(nData,prefix='data')
+
+        circuit = cirq.Circuit()
+
+        # prepare select in superposition
+        circuit.append(cirq.H.on_each(*sel_reg))
+
+        # qrom writing data
+        qrom_gate = QROMwithMeasurementUncompute(data=[np.array(test_data)],selection_bitsizes=(sel_bitsize,),target_bitsizes=(nData,))
+        circuit.append([
+            qrom_gate.on_registers(selection=sel_reg,target0_=data_reg)
+        ])
+
+        # measurement uncompute
+        circuit.append([
+            qrom_gate.measurement_uncompute(selection=sel_reg,data=data_reg)
+        ])
+
+        yield circuit
+
+
+    @pytest.fixture(scope="class")
+    def build_circuit_repeat_different_key(self):
+        # builds circuit with one qrom followed by the measurement based uncomputation, and then a second qrom followed by the measurement based uncomputation using two different measurement keys
+        test_data1 = [2,3,8,4,6]
+        test_data2 = [6,5,3,7,1]
+        nData = (max(test_data1)).bit_length()
+        sel_bitsize = (len(test_data1)).bit_length()
+        sel_reg = cirq.NamedQubit.range(sel_bitsize,prefix='sel')
+        new_sel = sel_reg[:-1]
+        q_bit = sel_reg[-1]
+        u_bit = cirq.NamedQubit.range(1,prefix='u')
+        data_reg = cirq.NamedQubit.range(nData,prefix='data')
+
+        circuit = cirq.Circuit()
+
+        # prepare select in superposition
+        circuit.append(cirq.H.on_each(*sel_reg))
+
+        # qrom writing data
+        qrom_gate = QROMwithMeasurementUncompute(data=[np.array(test_data1)],selection_bitsizes=(sel_bitsize,),target_bitsizes=(nData,))
+        circuit.append([
+            qrom_gate.on_registers(selection=sel_reg,target0_=data_reg)
+        ])
+
+        # measurement uncompute
+        circuit.append([
+            qrom_gate.measurement_uncompute(selection=sel_reg,data=data_reg)
+        ])
+
+        # repeat
+        # qrom writing data
+        qrom_gate = QROMwithMeasurementUncompute(data=[np.array(test_data2)],selection_bitsizes=(sel_bitsize,),target_bitsizes=(nData,))
+        circuit.append([
+            qrom_gate.on_registers(selection=sel_reg,target0_=data_reg)
+        ])
+
+        # measurement uncompute
+        circuit.append([
+            qrom_gate.measurement_uncompute(measurement_key='second_qrom_data_measurement',selection=sel_reg,data=data_reg)
+        ])
+
+        yield circuit
+
+
+    @pytest.fixture(scope="class")
+    def build_circuit_rotations_qrom(self):
+        nData = 4
+        sel_bitsize = 3
+        test_data = np.random.randint(0,2,size=(2**sel_bitsize,nData))
+        sel_reg = cirq.NamedQubit.range(sel_bitsize,prefix='sel')
+        new_sel = sel_reg[:-1]
+        q_bit = sel_reg[-1]
+        u_bit = cirq.NamedQubit.range(1,prefix='u')
+        data_reg = cirq.NamedQubit.range(nData,prefix='data')
+
+        circuit = cirq.Circuit()
+
+        # prepare select in superposition
+        circuit.append(cirq.H.on_each(*sel_reg))
+
+        # qrom writing data
+        qrom_gate = RotationsQROM(data=[test_data],selection_bitsizes=(sel_bitsize,),target_bitsizes=(nData,))
+        circuit.append([
+            qrom_gate.on_registers(selection0=sel_reg,target0_=data_reg)
+        ])
+
+        # measurement uncompute
+        circuit.append([
+            qrom_gate.measurement_uncompute(selection=sel_reg,data=data_reg)
+        ])
+
+        yield circuit
+
     # Marking these as skipped until we figure out how to protect the Windows users
     @pytest.mark.skip
     @pytest.fixture(scope="class")
@@ -166,6 +274,14 @@ class TestPrinting:
         qasm = openqasm(fermi_hubbard_dynamics, rotation_allowed=True, context=context)
         assert qasm is not None
         
+
+    def test_classical_control_examples(self,build_circuit_single,build_circuit_repeat_different_key,build_circuit_rotations_qrom):
+        for circuit in [build_circuit_single, build_circuit_repeat_different_key, build_circuit_rotations_qrom]:
+            context = cirq.DecompositionContext(cirq.SimpleQubitManager())
+            for line in openqasm(circuit,context=context,rotation_allowed=True):
+                pass
+
+
     @pytest.mark.skip
     def test_chemical_phase_estimation_context(self, chemical_phase_estimation):
         gqm = cirq.GreedyQubitManager(prefix="_ancilla", maximize_reuse=True)

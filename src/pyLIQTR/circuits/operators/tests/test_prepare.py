@@ -28,7 +28,6 @@ class TestPrepare:
     @pytest.mark.parametrize("op", get_common_gate_ops())
     def test_prepare_comparison_to_common_ops(self, op):
         """Should be False when comparing the prepare operation to common cirq operations.
-
         Tests issue #9.
         """
         # Create arbitrary prepare operation

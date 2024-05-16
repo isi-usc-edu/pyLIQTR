@@ -59,7 +59,7 @@ class fermi_hubbard_square_encoding(BlockEncoding_select_prepare):
 
     @property
     def alpha(self):
-        N  =  np.prod(self.PI.shape)
+        N  =  2*np.prod(self.PI.shape)
         J  =  np.abs(self.PI.J)
         U  =  np.abs(self.PI.U)
         alpha = 2*N*J + U*N/2

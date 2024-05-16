@@ -1,6 +1,6 @@
 # pyLIQTR
 
-_Kevin Obenland, Justin Elenewski, Kaitlyn Morrell, Rylee Stuart Neumann, Arthur Kurlej, Robert Rood, John Blue, Joe Belarge & Parker Kuklinski_
+_Kevin Obenland, Justin Elenewski, Kaitlyn Morrell, Rylee Stuart Neumann, Arthur Kurlej, Robert Rood, John Blue, Joe Belarge, Benjamin Rempfer & Parker Kuklinski_
 
 ---
 
@@ -53,7 +53,15 @@ The features of this package are described in detail in [FEATURES.md](Features.m
 
 ## Installation and Environment Setup
 
-It is recommended that conda be used to manage the environment. A setup.py file is included to facilitate this.
+- You can install the latest public tagged release from [PYPI](https://pypi.org/project/pyLIQTR/) using pip:
+
+        pip install pyLIQTR
+
+- You can install the latest state of the main branch:
+
+        pip install git+https://github.com/isi-usc-edu/pyLIQTR.git
+
+If you are going to be activelty developing the pyLIQTR source code, it is recommended that conda be used to manage the environment. A setup.py file is included to facilitate this.
 Change directory to the location of setup.py, then perform the following commands.
 
 - Create and activate the environment:
@@ -81,7 +89,6 @@ Change directory to the location of setup.py, then perform the following command
 
 - Install openfermionpyscf, which is used for the DoubleFactorized block encoding.
     pip install openfermionpyscf
-- Install MPSolve polynomial solver, which is used in the angle generation algorithm. Instructions for installation can be found here: <https://numpi.dm.unipi.it/software/mpsolve>
 - If not installed, then scipy will be used to calculate valid angles. Angle generation using scipy will generally take longer than angle generation using mpsolve.
 Effort is underway to deprecate the existing angle generation in favor of a more portable and efficient method.
 - Install pyscf.
@@ -107,9 +114,9 @@ Notebooks showcasing features are organized as follows in the /Examples director
 
 ## Citation
 
-To be populated once code is posted. Cannot create DOI on zenodo without link to repo.
+Please use this DOI number reference, published on [Zenodo](https://zenodo.org), when citing the software:
 
-Should generally also include citations of cirq.
+![DOI](image.png)
 
 ---
 
@@ -117,7 +124,7 @@ Should generally also include citations of cirq.
 
 DISTRIBUTION STATEMENT A. Approved for public release: distribution unlimited.
 
-© 2024 MASSACHUSETTS INSTITUTE OF TECHNOLOGY
+© 2023 MASSACHUSETTS INSTITUTE OF TECHNOLOGY
 
     Subject to FAR 52.227-11 – Patent Rights – Ownership by the Contractor (May 2014)
     SPDX-License-Identifier: BSD-2-Clause

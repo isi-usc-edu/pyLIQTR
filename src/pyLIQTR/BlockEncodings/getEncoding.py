@@ -26,13 +26,13 @@ from pyLIQTR.BlockEncodings.DoubleFactorized import DoubleFactorized
 
 validEncodings = []
 
-def getEncoding(encoding : VALID_ENCODINGS, instance =  None,  **kwargs):
+def getEncoding(encoding : VALID_ENCODINGS, instance =  None, prepare_type = None, **kwargs):
 
     instantiate = True if (instance is not None) else False
 
     if (encoding == VALID_ENCODINGS.PauliLCU):
         if instantiate:
-            return PauliStringLCU(ProblemInstance=instance,**kwargs)
+            return PauliStringLCU(ProblemInstance=instance, prepare_type=prepare_type, **kwargs)
         else:
             return PauliStringLCU
     elif (encoding == VALID_ENCODINGS.FermiHubbardSquare):

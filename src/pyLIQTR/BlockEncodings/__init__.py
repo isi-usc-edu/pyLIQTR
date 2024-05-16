@@ -7,3 +7,4 @@ class VALID_ENCODINGS(Enum):
     Fermionic=3
     FermiHubbardSquare=4
     DoubleFactorized = 5
+    CarlemanLinearization = 6

@@ -26,7 +26,7 @@ from pyLIQTR.utils.Hamiltonian import Hamiltonian
 from pyLIQTR.circuits.operators.selectV import ChildsSelectV,QROMSelectV
 from pyLIQTR.utils.printing import _build_qasm_qubit_map
 
-from pyLIQTR.utils.qsp_helpers import circuit_decompose_once, print_to_openqasm
+from pyLIQTR.utils.qsp_helpers import circuit_decompose_once
 
 class TestSelectV:
     @pytest.fixture(scope="class")

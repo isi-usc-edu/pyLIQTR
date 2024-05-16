@@ -36,6 +36,7 @@ from pyLIQTR.utils.resource_analysis         import   legacy_resource_profile
 
 from pyLIQTR.circuits.operators.select_prepare_pauli  import  prepare_pauli_lcu
 from qualtran.bloqs.select_pauli_lcu import SelectPauliLCU
+from qualtran.bloqs.state_preparation import StatePreparationAliasSampling
 
 
 
@@ -43,7 +44,7 @@ from qualtran.bloqs.select_pauli_lcu import SelectPauliLCU
 class PauliStringLCU(BlockEncoding_select_prepare):
 
 
-    def __init__(self,ProblemInstance, **kwargs):
+    def __init__(self,ProblemInstance, prepare_type=None, probability_eps=0.002, **kwargs):
 
         super().__init__(ProblemInstance,**kwargs)
 
@@ -57,7 +58,6 @@ class PauliStringLCU(BlockEncoding_select_prepare):
         self.n_pad    =  2**(int(np.ceil(np.log2(self.n_terms)))) - self.n_terms
         self.n_tot    =  self.n_terms + self.n_pad
 
-
         alphas        =  [np.sqrt(np.abs(t.coefficient)) for t in self.getTerms]
 
         selection_bitsize = int(np.ceil(np.log2(self.n_tot)))
@@ -67,9 +67,18 @@ class PauliStringLCU(BlockEncoding_select_prepare):
                                                              select_unitaries=self.getTerms,
                                                              control_val=self._control_val )
 
-
-        self._prepare_gate         =  prepare_pauli_lcu(selection_bitsize=selection_bitsize,
+        if prepare_type is None:
+            self._prepare_gate         =  prepare_pauli_lcu(selection_bitsize=selection_bitsize,
                                                          alphas=alphas)
+        elif prepare_type=='AS':
+            for t in self.getTerms:
+                coeff = np.real(t.coefficient)
+                if coeff < 0:
+                    raise ValueError("Negative coefficients are not supported yet.")
+            
+            self._prepare_gate         =  StatePreparationAliasSampling.from_lcu_probs(
+                                                lcu_probabilities=[np.real(t.coefficient) for t in self.getTerms]
+                                                    , probability_epsilon=probability_eps)
 
 
     @property

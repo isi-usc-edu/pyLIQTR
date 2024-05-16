@@ -17,22 +17,24 @@ rights in this work are defined by DFARS 252.227-7013 or DFARS 252.227-7014 as d
 above. Use of this work other than as specifically authorized by the U.S. Government
 may violate any copyrights that exist in this work.
 """
-import qualtran as qt
 import cirq
 import attr
 import warnings
 import numpy as np
-from qualtran import linalg,_infra
-from qualtran.linalg.lcu_util import preprocess_lcu_coefficients_for_reversible_sampling
-from qualtran.bloqs.qrom import QROM
+import qualtran as qt
 from functools import cached_property
 from typing import List, Tuple, Sequence
 from numpy.typing import NDArray
+from qualtran import _infra
+from qualtran.linalg.lcu_util import preprocess_lcu_coefficients_for_reversible_sampling
+from qualtran.bloqs.qrom import QROM
+from qualtran.bloqs.multi_control_multi_target_pauli import MultiControlPauli
+
 from pyLIQTR.circuits.operators.AddMod import Add
 
 class FermionicPrepare_LinearT(_infra.gate_with_registers.GateWithRegisters):
     '''
-    Implements circuit from Fig. 16 of https://arxiv.org/pdf/1805.03662.pdf using cirq_ft gates.
+    Implements circuit from Fig. 16 of https://arxiv.org/pdf/1805.03662.pdf using qualtran gates.
 
     Initializes the sate 
         $$
@@ -47,13 +49,13 @@ class FermionicPrepare_LinearT(_infra.gate_with_registers.GateWithRegisters):
         U_array: The (Z) operator coefficients, equivalent to tilde(U)**2 in the reference. Formatted the same as T_array.
         V_array: The (ZZ) operator coefficients, equivalent to tilde(V)**2 in the reference. Formatted the same as T_array.
         M_vals: Number of grid points (orbitals) along each spatial dimension.
-        approx_error: The desired accuracy to represent each coefficient which sets mu size and keep/alt integers). See `cirq_ft.linalg.lcu_util.preprocess_lcu_coefficients_for_reversible_sampling` for more information.
+        approx_error: The desired accuracy to represent each coefficient which sets mu size and keep/alt integers). See `qualtran.linalg.lcu_util.preprocess_lcu_coefficients_for_reversible_sampling` for more information.
     '''
 
     def __init__(self, T_array: List[Tuple[int,float]], U_array: List[Tuple[int,float]], V_array: List[Tuple[int,float]], M_vals: NDArray[np.int_], approx_error: float):
 
         if any(M_vals <= 2):
-            # cirq_ft AdditionGate doesn't decompose properly for bitsize (logM) of 1 so need this warning for now
+            # qualtran AdditionGate doesn't decompose properly for bitsize (logM) of 1 so need this warning for now
             warnings.warn(f"All M_vals must be greater than 2 for full circuit decomposition to work, currently M_vals={M_vals}", stacklevel=2)
 
         self.__T_array = T_array
@@ -151,8 +153,8 @@ class FermionicPrepare_LinearT(_infra.gate_with_registers.GateWithRegisters):
         yield cirq.H.on(*a)
 
         yield cirq.H.on(*b).controlled_by(*V)
-        yield cirq.H.on(*b).controlled_by(*V,*p,control_values=(1,)+(0,)*self.__Np_bits)
-        yield cirq.X.on(*b).controlled_by(*V,*p,control_values=(1,)+(0,)*self.__Np_bits)
+        yield MultiControlPauli(cvs=(1,)+(0,)*self.__Np_bits,target_gate=cirq.H).on_registers(controls=list(V)+list(p),target=b)
+        yield MultiControlPauli(cvs=(1,)+(0,)*self.__Np_bits,target_gate=cirq.X).on_registers(controls=list(V)+list(p),target=b)
 
         yield cirq.CNOT(*a,*b)
 
@@ -167,7 +169,7 @@ class FermionicPrepare_LinearT(_infra.gate_with_registers.GateWithRegisters):
 class Subprepare_LinearT(_infra.gate_with_registers.GateWithRegisters):
 
     '''
-    Implements circuit from Fig. 15 of https://arxiv.org/pdf/1805.03662.pdf using cirq_ft gates. Code structure based on cirq_ft.StatePreparationAliasSampling. 
+    Implements circuit from Fig. 15 of https://arxiv.org/pdf/1805.03662.pdf using qualtran gates. Code structure based on qualtran.StatePreparationAliasSampling. 
 
     Initializes the sate 
         $$
@@ -199,7 +201,7 @@ class Subprepare_LinearT(_infra.gate_with_registers.GateWithRegisters):
             M_vals: Number of grid points (spin orbitals) along each spatial dimension.
             approx_error: The desired accuracy to represent each coefficient
                 (which sets mu size and keep/alt integers).
-                See `cirq_ft.linalg.lcu_util.preprocess_lcu_coefficients_for_reversible_sampling`
+                See `qualtran.linalg.lcu_util.preprocess_lcu_coefficients_for_reversible_sampling`
                 for more information.
         """
 
@@ -288,7 +290,7 @@ class Subprepare_LinearT(_infra.gate_with_registers.GateWithRegisters):
         )
 
     def _value_equality_values_(self):
-        # NOTE: needed to make cirq_ft.t_complexity() work. Returns values used to determine when two objects are equal. See https://github.com/quantumlib/Cirq/blob/v1.2.0/cirq-core/cirq/value/value_equality_attr.py#L26 for more info
+        # NOTE: needed to make qualtran.t_complexity() work. Returns values used to determine when two objects are equal. See https://github.com/quantumlib/Cirq/blob/v1.2.0/cirq-core/cirq/value/value_equality_attr.py#L26 for more info
         return (
             tuple(self.M_vals),
             tuple(self.logM_vals),

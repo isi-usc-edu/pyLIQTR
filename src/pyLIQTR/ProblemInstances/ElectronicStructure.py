@@ -17,9 +17,10 @@ rights in this work are defined by DFARS 252.227-7013 or DFARS 252.227-7014 as d
 above. Use of this work other than as specifically authorized by the U.S. Government
 may violate any copyrights that exist in this work.
 """
-import numpy       as np
+import numpy as np
 import pyLIQTR.pest_interface.pest_python as pp
-
+from functools import cached_property
+from pyLIQTR.clam.operator_strings import op_strings
 from pyLIQTR.ProblemInstances.ProblemInstance import ProblemInstance
 
 class ElectronicStructure(ProblemInstance):
@@ -60,6 +61,50 @@ class ElectronicStructure(ProblemInstance):
         # equal to number of basis functions including spin
         return int(2*self._N)
 
+    @cached_property
+    def _ops(self):
+        _ops = op_strings(N_qb=2*self._N)
+        spin_offset = self._N
+
+        for p in range(self._N):
+
+            # loop over q>p and include a factor of 2 since coeffs only depend on abs(p-q)
+            for q in range(p+1,self._N):
+
+                xx_str = 'X' + ('Z'*abs(p-q)) + 'X'
+                yy_str = 'Y' + ('Z'*abs(p-q)) + 'Y'
+                idx_set_up = tuple(np.arange(p,p+abs(p-q)+2,1))
+                idx_set_down = tuple(np.arange(p+spin_offset,p+spin_offset+abs(p-q)+2,1))
+                
+                # NOTE: returns only non zero coefficients
+                if self._H.c_xzx(p,q) != 0.0:
+                    # spin up
+                    _ops.append_tuple((idx_set_up, xx_str, 2*self._H.c_xzx(p,q))) # factor of 2 for q<p case
+                    _ops.append_tuple((idx_set_up, yy_str, 2*self._H.c_xzx(p,q)))
+                    # spin down
+                    _ops.append_tuple((idx_set_down, xx_str, 2*self._H.c_xzx(p,q))) # factor of 2 for q<p case
+                    _ops.append_tuple((idx_set_down, yy_str, 2*self._H.c_xzx(p,q)))
+                if self._H.c_zz(p,q) != 0.0:
+                    # alpha = beta = up, p \neq q
+                    _ops.append_tuple(((p,q), 'ZZ', 2*self._H.c_zz(p,q))) # factor of 2 for q<p case
+                    # alpha = beta = down, p \neq q
+                    _ops.append_tuple(((p+spin_offset,q+spin_offset), 'ZZ', 2*self._H.c_zz(p,q)))
+                    # alpha=up, beta=down, p \neq q
+                    _ops.append_tuple(((p,q+spin_offset), 'ZZ', 2*self._H.c_zz(p,q)))
+                    # alpha=down, beta=up, p \neq q
+                    _ops.append_tuple(((p+spin_offset,q), 'ZZ', 2*self._H.c_zz(p,q)))
+
+            if self._H.c_zz(p,p) != 0.0:
+                # alpha=up, beta=down, p = q
+                _ops.append_tuple(((p,p+spin_offset), 'ZZ', self._H.c_zz(p,p)))
+                # alpha=down, beta=up, p = q
+                _ops.append_tuple(((p+spin_offset,p), 'ZZ', self._H.c_zz(p,p)))
+
+            if self._H.c_z(p) != 0.0:
+                _ops.append_tuple(((p,),'Z',self._H.c_z(p)))
+
+        return _ops
+
     def get_alpha(self,encoding:str='LinearT'):
         # sum of the absolute value of the hamiltonian coefficients
         # TODO: can this be more efficient
@@ -75,35 +120,15 @@ class ElectronicStructure(ProblemInstance):
                         V_pq_mag_sum += abs(self._H.V(p,q))    
             return T_pq_mag_sum + U_p_mag_sum + V_pq_mag_sum
 
-    def yield_PauliLCU_Info(self, do_pad=0,return_as='arrays'):
+    def yield_PauliLCU_Info(self,return_as='arrays',do_pad=0,pad_value=1.0):
 
-        if return_as=='arrays':
+        if (return_as == 'arrays'):
+            terms = self._ops.terms(do_pad=do_pad,pad_value=pad_value)
+        elif (return_as == 'strings'):
+            terms = self._ops.strings(do_pad=do_pad,pad_value=pad_value)
 
-            if do_pad:
-                for __ in range(int(np.floor(do_pad/2))):
-                    yield ((),'I',0)
-
-            for p in range(self._N):
-
-                for q in range(p+1,self._N):
-
-                    xx_str = 'X' + ('Z'*abs(p-q)) + 'X'
-                    yy_str = 'Y' + ('Z'*abs(p-q)) + 'Y'
-                    idx_set = tuple(np.arange(p,p+abs(p-q)+2,1))
-                    
-                    # NOTE: return only non zero coefficients?
-                    yield (idx_set, xx_str, self._H.c_xzx(p,q))
-                    yield (idx_set, yy_str, self._H.c_xzx(p,q))
-                    yield ((p,q), 'ZZ', self._H.c_zz(p,q))
-
-                yield ((p,),'Z',self._H.c_z(p))
-
-            if do_pad:
-                for __ in range(int(np.ceil(do_pad/2))):
-                    yield ((),'I',0)
-        else:
-            # TODO
-            raise NotImplementedError()
+        for term in terms:
+            yield term
 
     def yield_LinearT_Info(self,termSelect:str):
         

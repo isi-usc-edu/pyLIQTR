@@ -22,7 +22,6 @@ import  cirq   as  cirq
 
 from pyLIQTR.clam.operator_strings import  op_strings
 from pyLIQTR.ProblemInstances.ProblemInstance import  ProblemInstance
-from openfermion.chem import  MolecularData
 from openfermion import  jordan_wigner, get_interaction_operator
 from openfermion import  InteractionOperator
 from openfermion import  FermionOperator
@@ -49,39 +48,12 @@ class ChemicalHamiltonian(ProblemInstance):
         # We need to setup Julia if this hasn't happened yet, hopefully this only runs once!
         juliapkg.require_julia("~1.8,~1.9")
         juliapkg.resolve()
+        
         # Now start the real initialization
         self._mol_ham   =  mol_ham
         self._mol_name  =  mol_name
 
         super(ProblemInstance, self).__init__(**kwargs)
-
-        self._terms_jw  =  jordan_wigner(self._mol_ham).terms
-        self._ops       =  op_strings( N_qb=self.n_qubits() )
-                
-
-        ct = 0
-        for term in self._terms_jw:
-
-            bits    =  []
-            ops     =  []
-            coeff   =  self._terms_jw[term]
-
-            for p in term:
-                op = p[1]
-                qubit = p[0]
-                bits.append(qubit)
-                ops.append(op)
-
-            bits = tuple(bits)
-
-            op_str = ''
-            for op in ops:
-                op_str += op
-
-            if (ct >= 1):
-                self._ops.append_tuple( (bits,op_str,coeff) )
-            ct += 1
-
 
 
     def __str__(self):
@@ -100,14 +72,44 @@ class ChemicalHamiltonian(ProblemInstance):
 #     def n_terms(self,**kwargs):
 #         return len(list(self._terms_jw))
 
+    @cached_property
+    def terms_jw(self):
+        return jordan_wigner(self._mol_ham).terms
 
+    @cached_property
+    def _ops(self):
+        _ops = op_strings( N_qb=self.n_qubits() )
+
+        ct = 0
+        for term in self.terms_jw:
+
+            bits    =  []
+            ops     =  []
+            coeff   =  self.terms_jw[term]
+
+            for p in term:
+                op = p[1]
+                qubit = p[0]
+                bits.append(qubit)
+                ops.append(op)
+
+            bits = tuple(bits)
+
+            op_str = ''
+            for op in ops:
+                op_str += op
+
+            if (ct >= 1):
+                _ops.append_tuple( (bits,op_str,coeff) )
+            ct += 1
+        return _ops
 
     @property
     @cache
     def lam(self):
         lam = 0
-        for term in self._terms_jw:
-            coeff  =  self._terms_jw[term]
+        for term in self.terms_jw:
+            coeff  =  self.terms_jw[term]
             lam   +=  abs(coeff)
         return lam
 
@@ -151,8 +153,8 @@ class ChemicalHamiltonian(ProblemInstance):
         
     def optimize(self, method='BLISS'):
         if method == 'BLISS':
-            jl.seval('import Pkg')
             from juliacall import Main as jl
+            jl.seval('import Pkg')
             jl.seval('Pkg.add("QuantumMAMBO")')
             jl.seval("using QuantumMAMBO")
             mambo = jl.QuantumMAMBO
@@ -173,6 +175,7 @@ class ChemicalHamiltonian(ProblemInstance):
             return bliss_mol_instance
     
     def yield_PauliLCU_Info(self,return_as='arrays',do_pad=0,pad_value=1.0):
+
         if (return_as == 'arrays'):
             terms = self._ops.terms(do_pad=do_pad,pad_value=pad_value)
         elif (return_as == 'strings'):
@@ -180,10 +183,7 @@ class ChemicalHamiltonian(ProblemInstance):
 
         for term in terms:
             yield term
-
-    
-
-    
+            
     
     def yield_DF_Info(self, df_error_threshold: float,sf_error_threshold:float=1e-10):
         from pyLIQTR.utils.df_utils import to_OBF, U_to_Givens, calc_xi
@@ -216,9 +216,6 @@ class ChemicalHamiltonian(ProblemInstance):
                     thetas_tsr[l+1, k, g] = U_to_G[g]
 
         T_prime = mus_mat[0]
-        f_p = []
-        for i in range(1, np.size(mus_mat, 0)):
-            f_p.append(mus_mat[i])
     
         T_prime_signs = []
         T_prime_vals = []
@@ -227,16 +224,15 @@ class ChemicalHamiltonian(ProblemInstance):
             T_prime_signs.append(int(sign))
             T_prime_vals.append(abs(i))
         T_prime_full = [T_prime_signs, T_prime_vals]
-
-        f_p_abs = []
-        for i in f_p:
-            f_p_abs.append(abs(i))
     
+        f_p_abs = []
         f_p_full = []
-        for i in f_p:
+        for i in range(1, np.size(mus_mat, 0)):
+            f_p_i = mus_mat[i]
+            f_p_abs.append(abs(f_p_i))
             f_p_signs = []
             f_p_vals = []
-            for k in i:
+            for k in f_p_i:
                 sign = (1-np.sign(k))/2 if np.sign(k) else 0
                 f_p_signs.append(int(sign))
                 f_p_vals.append(abs(k))

@@ -18,28 +18,27 @@ above. Use of this work other than as specifically authorized by the U.S. Govern
 may violate any copyrights that exist in this work.
 """
 import pytest
+import platform
 import cirq
 import numpy as np
 from pyLIQTR.ProblemInstances.getInstance import *
 from pyLIQTR.utils.get_hdf5 import  get_hdf5 
 from pyLIQTR.BlockEncodings.getEncoding import *
-from  pyLIQTR.utils.global_ancilla_manager import gam as gam
 from  pyLIQTR.utils.printing import openqasm
-# from openfermionpyscf import run_pyscf
 from openfermion.chem import MolecularData
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason = "cannot run this test on Windows")
 class TestDoubleFactorizedEncoding:
 
-    @pytest.mark.skip
     @pytest.fixture(scope="class")
     def h2_instance(self):
+        from openfermionpyscf import run_pyscf
         mol_data = MolecularData([('H', (0.0, 0.0, 0.63164)), ('H', (0.0, 0.0, 1.76836))],\
                                  'sto-3g', 1.0, 0, 'H2')
         mol = run_pyscf(mol_data, run_scf=1, run_mp2=0, run_cisd=0, run_ccsd=0, run_fci=0, verbose=0)
         mol_instance = getInstance('ChemicalHamiltonian',mol_ham=mol.get_molecular_hamiltonian(),mol_name='H2')
         return mol_instance
 
-    @pytest.mark.skip
     def test_DoubleFactorized_decomposes(self, h2_instance):
         '''
         Tests gate decomposition existence.
@@ -56,12 +55,11 @@ class TestDoubleFactorizedEncoding:
         decomposed = cirq.decompose(operation)
         assert([operation] != decomposed)
 
-    @pytest.mark.skip
     def test_DoubleFactorized_qasm(self,h2_instance):
         '''
         Tests qasm printing functionality.
         '''
-        context = cirq.DecompositionContext(gam)
+        context = cirq.DecompositionContext(cirq.SimpleQubitManager())
         # create registers
         df_encoding = getEncoding(instance=h2_instance, encoding=VALID_ENCODINGS.DoubleFactorized,df_error_threshold=1e-2,br=4,step_error=1e-1)
         num_qubits = cirq.num_qubits(df_encoding.circuit)
@@ -71,3 +69,5 @@ class TestDoubleFactorizedEncoding:
 
         qasm = openqasm(operation,rotation_allowed=True,context=context)
         assert qasm is not None
+        for line in qasm:
+            pass

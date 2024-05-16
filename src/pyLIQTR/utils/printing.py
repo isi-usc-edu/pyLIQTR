@@ -67,8 +67,6 @@ def intercept_decompose(gate_op):
     
 def keep(gate_op):
     return test_for_bad_gate_op(gate_op) is not None
-    
-    
 
 def _build_qasm_qubit_map(circuit_in) -> Tuple[cirq.QasmArgs, dict, str]:
     str_out = f'// Qubits: ['
@@ -89,7 +87,80 @@ def _build_qasm_qubit_map(circuit_in) -> Tuple[cirq.QasmArgs, dict, str]:
     qubit_map = (dict(qubit_map))
     qasm_args = cirq.QasmArgs(qubit_id_map=qubit_map)
     return qasm_args,qubit_map,str_out
+    
+class QASMInfo:
+    def __init__(self, circuit_in, header=""):
 
+        str_out = f'// Qubits: ['
+        qubits_ = list(circuit_in.all_qubits())
+        qubits_.sort()
+        qubit_map = defaultdict(None)
+        self.maxq = 0
+        for idx, qubit_ in enumerate(qubits_):
+            
+            qubit_map[(qubit_)] = f'q[{idx}]'
+            
+            if idx==0:
+                str_out += f'{str(qubit_)}'
+            else:
+                str_out += f', {str(qubit_)}'
+        self.maxq = len(qubits_)
+        str_out += f']\n'
+        str_out += f'qreg q[{len(qubits_)}];\n\n'
+
+        qubit_map = (dict(qubit_map))
+        qasm_args = cirq.QasmArgs(qubit_id_map=qubit_map)
+        self.qasm_args = qasm_args
+        self.qubit_map = qubit_map
+        self.str_out = header+str_out
+        self.measurement_result = {}
+
+    def update_info(self, circuit):
+        qubits = list(circuit.all_qubits())
+        qubits.sort()
+        didAdd = False
+        for idx, qubit_ in enumerate(qubits):
+            if qubit_ not in self.qubit_map:
+                didAdd = True
+                self.qubit_map[qubit_] = f'q[{idx+self.maxq}]'
+        
+        if didAdd:
+            self.qasm_args = cirq.QasmArgs(qubit_id_map=self.qubit_map)
+        #no need to modify str_out
+
+    def add_measurement_result(self,result,bits,doClear=False,single_op=False):
+        bit_name = "{}[{}]".format(result,bits)
+        if single_op:
+            result = bit_name
+            doClear = True
+        if (result not in self.measurement_result) or doClear:
+            self.measurement_result[result] = [bit_name]
+        else:
+            self.measurement_result[result].append(bit_name)
+        return bit_name
+
+    def get_measurement_result(self,result,doClear=False):
+        if result not in self.measurement_result:
+            raise ValueError("Did not find {} in {}".format(result,self.measurement_result))
+        
+        return self.measurement_result[result]
+
+    def sanitize_meas_name(self,measname):
+        keys_as_strings = [str(k) for k in self.qubit_map.keys()]
+        if (measname not in self.measurement_result \
+                and (measname in self.qubit_map.keys() or measname in keys_as_strings)) \
+            or measname == "":
+            if isinstance(measname,str):
+                qn = {str(a):b for a,b in self.qubit_map.items()}
+                return "b[{}]".format(qn[measname])
+            else:
+                return "b[{}]".format(self.qubit_map[measname])
+        return measname
+        
+    
+            
+myQASMInfo = None
+myOp = None
 def openqasm(circuit: cirq.AbstractCircuit,
              basis: str = 'rotations',
              gate_precision: Union[int, float, None] = 10,
@@ -100,6 +171,7 @@ def openqasm(circuit: cirq.AbstractCircuit,
              on_stuck_raise: Union[Exception, None] = None,
              use_random_decomp: bool = True) -> str:
     #This function always will decompose to 1-3Q gates
+    global myQASMInfo
     if context is None:
         context = cirq.DecompositionContext(gam.gam)
     
@@ -107,6 +179,7 @@ def openqasm(circuit: cirq.AbstractCircuit,
                                             keep=keep,\
                                             on_stuck_raise=on_stuck_raise,\
                                             context = context))
+    #print(circuit)
     if not rotation_allowed:
         if circuit_precision is not None:
             circuit = clifford_plus_t_direct_transform(circuit,
@@ -126,14 +199,15 @@ def openqasm(circuit: cirq.AbstractCircuit,
         str_out += 'include \"qelib1.inc\";\n\n'
         
         
-        qasm_args, qubit_map, tmp = _build_qasm_qubit_map(circuit)
-        str_out += tmp
+        #qasm_args, qubit_map, tmp = _build_qasm_qubit_map(circuit)
+        myQASMInfo = QASMInfo(circuit,str_out)
     else:
-        qasm_args, qubit_map, tmp = _build_qasm_qubit_map(circuit)
-    qubit_map_str2key = {str(k):k for k in qubit_map.keys()}
+        #qasm_args, qubit_map, tmp = _build_qasm_qubit_map(circuit)
+        myQASMInfo.update_info(circuit)
+    qubit_map_str2key = {str(k):k for k in myQASMInfo.qubit_map.keys()}
 
 
-    yield str_out
+    yield myQASMInfo.str_out
     for moment in circuit:
         for op in moment:
             try:
@@ -148,18 +222,24 @@ def openqasm(circuit: cirq.AbstractCircuit,
                 test_op = test_for_bad_gate_op(op)
                 if test_op is None:
                     #does not handle XPowGates properly if rotation_allowed=False...
-                    yield cirq.qasm(op,args=qasm_args).strip()
+                    yield cirq.qasm(op,args=myQASMInfo.qasm_args).strip()
                 else:
-                    yield cirq.qasm(test_op, args=qasm_args).strip()
+                    yield cirq.qasm(test_op, args=myQASMInfo.qasm_args).strip()
             except Exception as e:
                 if str(op).startswith("cirq.MeasurementGate"):
-                    #This measurement result is being stored as a bit
-                    if len(op.qubits) > 1:
-                        print("Cant handle more than one measurement")
-                        raise(e)
                     
-                    yield "measure {} -> b[{}]".format(qubit_map[op.qubits[0]],\
-                                                     qubit_map[op.qubits[0]]).strip()
+                    for q in op.qubits:
+                        meas_name = op._measurement_key_name_()
+                        if meas_name == "":
+                            meas_name = 'b'
+                        elif meas_name == str(q):
+                            meas_name = 'b'
+                        meas_result = myQASMInfo.add_measurement_result(meas_name,str(myQASMInfo.qubit_map[q]),\
+                                                                        single_op=(len(op.qubits)==1))
+
+                        yield 'measure {} -> {}'.format(myQASMInfo.qubit_map[q],meas_result).strip()
+                    #yield "measure {} -> b[{}]".format(myQASMInfo.qubit_map[op.qubits[0]],\
+                                                     #myQASMInfo.qubit_map[op.qubits[0]]).strip()
                 elif isinstance(op,cirq.ClassicallyControlledOperation) or isinstance(op,cirq.ops.controlled_operation.ControlledOperation):
                     #This is an op that is classically controlled
                     if len(op.classical_controls)>1:
@@ -168,11 +248,28 @@ def openqasm(circuit: cirq.AbstractCircuit,
                     
                     newstr = ""
                     for cc in op.classical_controls:
-                        tmp = str(cc)
-                        thistmpqb = qubit_map_str2key[str(tmp)]
-                        newstr+="if (b[{}]==1) ".format(\
-                            qubit_map[thistmpqb])
-                    newstr+=cirq.qasm(op._sub_operation,args=qasm_args)
+                        if type(cc) != cirq.value.condition.KeyCondition:
+                            #This works with the type that we implement
+                            #We require a "get_condition_format_string" be provided...
+                            keys = cc.keys
+                            if len(keys)!=1:
+                                raise NotImplementedError("Need to update to support additional keys")
+                            sanitized_keys = []
+                            for key in keys:
+                                key = myQASMInfo.sanitize_meas_name(key)
+                                meas_result = myQASMInfo.get_measurement_result(key)
+                                meas_result = ",".join(meas_result)
+                            newstr+="if ({}) ".format(cc.get_condition_format_string().format(meas_result))
+                        else:
+                            #This works with default cirq.value.condition.KeyCondition
+                            tmp = myQASMInfo.sanitize_meas_name(str(cc))
+                            #thistmpqb = qubit_map_str2key[str(tmp)]
+                            meas_result = myQASMInfo.get_measurement_result(tmp)
+                            
+                            checkVal = ','.join(len(meas_result)*['1'])
+                            checkResult = ','.join(meas_result)
+                            newstr+="if ({}=={}) ".format(checkResult,checkVal)
+                    newstr+=cirq.qasm(op._sub_operation,args=myQASMInfo.qasm_args)
                     yield newstr.strip()
                 elif (str(op).startswith("AddConstantMod")):
                     #this is an op that needs to be casted to 
@@ -184,67 +281,3 @@ def openqasm(circuit: cirq.AbstractCircuit,
                 else:
                     print('Issue with either decomposing or generating qasm with {} ()'.format(str(op),type(op)))
                     raise e
-    
-
-
-def to_openqasm(circuit_in,use_rotation_decomp_gates=False) -> str:
-    warn('\n\n\n*********************************************************************************************\nThis function is deprecated -- Recommend switching to pyLIQTR.utils.printing.openqasm\n*********************************************************************************************\n\n\n', DeprecationWarning, 2)
-    str_out =  '// Generated from Cirq, Openfermion, and MIT LL\n\n'
-    str_out += 'OPENQASM 2.0;\n'
-    str_out += 'include \"qelib1.inc\";\n\n'
-    
-    
-    qasm_args, qubit_map, tmp = _build_qasm_qubit_map(circuit_in)
-    str_out += tmp
-    try:
-        yield str_out
-        for moment in circuit_in:
-            for gate_op in moment:
-                if not use_rotation_decomp_gates:
-                    try:
-                        if isinstance(gate_op._gate,decomp_mixin):
-                            for gop in decompose_op(gate_op)[1]:
-                                out = cirq.qasm(gop, args=qasm_args)
-                                for line in out.split("\n"):
-                                    if line.strip() == "":
-                                        continue
-                                    yield "{}\n".format(line.strip())
-                                continue
-                    except GeneratorExit:
-                        return
-
-                try:
-                    out = cirq.qasm(gate_op, args=qasm_args)  
-                    for line in out.split('\n'):
-                        if line.strip() == "":
-                            continue
-                        yield ("{}\n".format(line.strip()))
-                except GeneratorExit:
-                    return
-                except:
-                    try: 
-                        out = cirq.qasm(test_for_bad_gate_op(gate_op), args=qasm_args)  
-                        for line in out.split('\n'):
-                            if line.strip() == "":
-                                continue
-                            yield ("{}\n".format(line.strip()))
-                    except GeneratorExit:
-                        return
-                    except:
-                    
-                        str_out          = f'\n// Gate: {(gate_op)}\n'
-                        decomposed_gates = cirq.decompose(gate_op, preserve_structure=True)
-                    
-                        for d_gate_op in decomposed_gates:
-                            try:
-                                str_out += cirq.qasm(d_gate_op, args=qasm_args)
-                            except GeneratorExit:
-                                return
-                            except:
-                                str_out += cirq.qasm(test_for_bad_gate_op(d_gate_op), args=qasm_args)
-                        for line in str_out.split('\n'):
-                            if line.strip() == "":
-                                continue
-                            yield ("{}\n".format(line.strip()))
-    except GeneratorExit:
-        return

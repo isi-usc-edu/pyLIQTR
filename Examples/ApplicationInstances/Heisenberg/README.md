@@ -1,5 +1,5 @@
 # Heisenberg Model
-The Jupyter notebooks in this directory walk through several resource analysis tasks for the Heisenberg model.  Target algorithms include qubitized quantum dynamics (via QSP/QET/QSVT) and qubitized ground-state energy estimation (GSEE).
+The Jupyter notebooks in this directory walk through several resource analysis tasks for the Heisenberg model. Target algorithms include qubitized quantum dynamics (via QSP/QET/QSVT) and qubitized ground-state energy estimation (GSEE) using the generic `PauliLCU` block encoding and the `Heisenberg` ProblemInstance.
 
 
 ## Notebook Summaries

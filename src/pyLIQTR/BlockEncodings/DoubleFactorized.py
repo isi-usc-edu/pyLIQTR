@@ -219,6 +219,7 @@ class DoubleFactorized(BlockEncoding):
 
 
     def decompose_from_registers(self, context, **quregs):
+        control = quregs.get('control', ())
         succ_l, l_reg = quregs['succ_l'], quregs['l']
         l_neq_0, Xi_l, offset, rot = quregs['l_neq_0'], quregs['Xi_l'], quregs['offset'], quregs['rot_data']
         succ_p, p_reg = quregs['succ_p'], quregs['p']
@@ -276,22 +277,30 @@ class DoubleFactorized(BlockEncoding):
         controlled_rotations = RotationsBlock(num_data_bits=len(rotations),num_target_bits=len(target_down),precision_bits=self.bits_rot_givens,phase_gradient_bits=self.bits_rot_givens)
         yield controlled_rotations.on_registers(angle_data=rotations,target=target_down,phi=phase_gradient_state)
 
-        # controlled Z1 
         Z1 = cirq.ZPowGate(exponent=-1,global_shift=-1/2)
-        controlled_Z1 = MultiControlPauli(cvs=(1,1),target_gate=Z1)
-        yield controlled_Z1.on_registers(controls=list(succ_l)+list(succ_p),target=target_down[0])
+        if not self._controlled:
+            # controlled Z1 
+            controlled_Z1 = MultiControlPauli(cvs=(1,1),target_gate=Z1)
+            yield controlled_Z1.on_registers(controls=[*succ_l,*succ_p],target=target_down[0])
 
-        # controlled Z for sign qubit
-        sign_controlled_Z = MultiControlPauli(cvs=(1,1),target_gate=cirq.Z)
-        yield sign_controlled_Z.on_registers(controls=list(succ_l)+list(succ_p),target=sign_qb)
+            # controlled Z for sign qubit
+            sign_controlled_Z = MultiControlPauli(cvs=(1,1),target_gate=cirq.Z)
+            yield sign_controlled_Z.on_registers(controls=[*succ_l,*succ_p],target=sign_qb)
+        else:
+            # controlled Z1
+            controlled_Z1 = MultiControlPauli(cvs=(self._control_val,1,1),target_gate=Z1)
+            yield controlled_Z1.on_registers(controls=[*control,*succ_l,*succ_p],target=target_down[0])
 
+            # controlled Z for sign qubit
+            sign_controlled_Z = MultiControlPauli(cvs=(self._control_val,1,1),target_gate=cirq.Z)
+            yield sign_controlled_Z.on_registers(controls=[*control,*succ_l,*succ_p],target=sign_qb)
         #################################### partial uncompute ####################################
 
         ## undo controlled rotations
         yield controlled_rotations.on_registers(angle_data=rotations,target=target_down,phi=phase_gradient_state)
 
-        ## undo givens qrom
-        yield qrom_rotations.on_registers(selection0=list(zero_padding)+list(p_reg),target0_=rotations)
+        ## undo givens qrom using measurement based uncompute
+        yield qrom_rotations.measurement_uncompute(selection=list(zero_padding)+list(p_reg),data=rotations,measurement_key='first_qrom_data_measurement')
 
         ## undo prepare system registers
         yield qt.bloqs.basic_gates.swap.CSwap.make_on(ctrl=spin_select, x=target_down, y=target_up)
@@ -304,8 +313,12 @@ class DoubleFactorized(BlockEncoding):
         yield cirq.inverse(In_prep_l.on_registers(**quregs))
 
         #################################### reflect ####################################
-        reflect = MultiControlPauli(cvs=(1,1,)+(0,)*(self.nXi+1+self.keep_bitsize),target_gate=cirq.Z)
-        yield reflect.on_registers(controls=list(succ_l)+list(l_neq_0)+list(p_reg)+list(rot_aa_ancilla)+list(sigma),target=spin_select)
+        if not self._controlled:
+            reflect = MultiControlPauli(cvs=(1,1,)+(0,)*(self.nXi+1+self.keep_bitsize),target_gate=cirq.Z)
+            yield reflect.on_registers(controls=[*succ_l,*l_neq_0,*p_reg,*rot_aa_ancilla,*sigma],target=spin_select)
+        else:
+            reflect = MultiControlPauli(cvs=(self._control_val,1,1,)+(0,)*(self.nXi+1+self.keep_bitsize),target_gate=cirq.Z)
+            yield reflect.on_registers(controls=[*control,*succ_l,*l_neq_0,*p_reg,*rot_aa_ancilla,*sigma],target=spin_select)
 
         #################################### redo steps BUT for two-body term only ####################################
 
@@ -329,19 +342,30 @@ class DoubleFactorized(BlockEncoding):
         yield controlled_rotations.on_registers(angle_data=rotations,target=target_down,phi=phase_gradient_state)
 
         # controlled Z1 
-        more_controlled_Z1 = MultiControlPauli(cvs=(1,1,1),target_gate=Z1)
-        yield more_controlled_Z1.on_registers(controls=list(succ_l)+list(succ_p)+list(l_neq_0),target=target_down[0])
+        if not self._controlled:
+            # controlled Z1 
+            more_controlled_Z1 = MultiControlPauli(cvs=(1,1,1),target_gate=Z1)
+            yield more_controlled_Z1.on_registers(controls=[*succ_l,*succ_p,*l_neq_0],target=target_down[0])
 
-        # controlled Z for sign qubit
-        yield sign_controlled_Z.on_registers(controls=list(succ_l)+list(succ_p),target=sign_qb)
+            # controlled Z for sign qubit
+            sign_more_controlled_Z = MultiControlPauli(cvs=(1,1,1),target_gate=cirq.Z)
+            yield sign_more_controlled_Z.on_registers(controls=[*succ_l,*succ_p,*l_neq_0],target=sign_qb)
+        else:
+            # controlled Z1
+            more_controlled_Z1 = MultiControlPauli(cvs=(self._control_val,1,1,1),target_gate=Z1)
+            yield more_controlled_Z1.on_registers(controls=[*control,*succ_l,*succ_p,*l_neq_0],target=target_down[0])
+
+            # controlled Z for sign qubit
+            sign_more_controlled_Z = MultiControlPauli(cvs=(self._control_val,1,1,1),target_gate=cirq.Z)
+            yield sign_more_controlled_Z.on_registers(controls=[*control,*succ_l,*succ_p,*l_neq_0],target=sign_qb)
 
         #################################### full uncompute ####################################
 
         ## undo controlled rotations
         yield controlled_rotations.on_registers(angle_data=rotations,target=target_down,phi=phase_gradient_state)
 
-        ## undo givens qrom
-        yield qrom_rotations.on_registers(selection0=list(zero_padding)+list(p_reg),target0_=rotations)
+        ## undo givens qrom using measurement based uncompute
+        yield qrom_rotations.measurement_uncompute(selection=list(zero_padding)+list(p_reg),data=rotations,measurement_key='second_qrom_data_measurement') 
 
         ## undo prepare system registers
         yield qt.bloqs.basic_gates.swap.CSwap.make_on(ctrl=spin_select, x=target_down, y=target_up)

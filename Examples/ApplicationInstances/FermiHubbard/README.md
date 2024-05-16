@@ -1,6 +1,5 @@
 # Fermi-Hubbard Model
-The Jupyter notebooks in this directory walk through several resource analysis tasks for the Fermi-Hubbard model.  Target algorithms include qubitized quantum dynamics (via QSP/QET/QSVT) and qubitized ground-state energy estimation (GSEE).
-
+The Jupyter notebooks in this directory walk through several resource analysis tasks for the Fermi-Hubbard model using the `FermiHubbard` ProblemInstance. Target algorithms include qubitized quantum dynamics (via QSP/QET/QSVT) and qubitized ground-state energy estimation (GSEE). The block encodings used include the generic `PauliLCU` and the efficient Fermi-Hubbard specific model, `FermiHubbardSquare`, from Section V of ["Encoding Electronic Spectra in Quantum Circuits with Linear T Complexity"](https://arxiv.org/abs/1805.03662).
 
 ## Notebook Summaries
 ### fermi_hubbard-introduction_and_encoding.ipynb
