@@ -22,7 +22,7 @@ import numpy as np
 
 from openfermion.circuits             import trotterize_exp_qubop_to_qasm
 
-from openfermion                      import jordan_wigner
+from openfermion                      import jordan_wigner, QubitOperator
 from cirq.contrib                     import qasm_import
 from pyLIQTR.utils.utils              import open_fermion_to_qasm
 
@@ -96,7 +96,10 @@ class Trotter_Unitary(cirq.Gate):
             self.trot_ord = self.trotter_args['trot_ord']
 
         # apply jordan-wigner transform
-        self.jw_ham = jordan_wigner(self.trotter_args['mol_ham'])
+        if isinstance(self.trotter_args['mol_ham'], QubitOperator):
+            self.jw_ham = self.trotter_args['mol_ham']
+        else:
+            self.jw_ham = jordan_wigner(self.trotter_args['mol_ham'])
 
         # Else:
         self.operator_power = operator_power
