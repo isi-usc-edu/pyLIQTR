@@ -1,0 +1,6 @@
+
+Hamiltonians were generated using PEST as follows (demonstrated for E_cut = 5.0):
+
+pest_commander --coords ../../geometries/magnesium-4x4x2-orthorhombic.xyz --e_cut 5.0 --scale 1.0 --lengths 12.83708 11.11724 15.631000 --output_pfx magnesium-4x4x2-Ecut_5.0_scale_1.0
+
+The cell dimensions correspond to a periodic, orthorhombic system. The normal direction has a vacuum padding equal two twice the slab thickness.

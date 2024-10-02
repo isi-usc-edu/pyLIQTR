@@ -1,0 +1,6 @@
+SPDXVersion: SPDX-2.1
+PackageName: pyQSP
+PackageOriginator: MIT Lincoln Laboratory
+PackageHomePage: https://github.com/isi-usc-edu/qb/pyQSP
+PackageCopyrightText: 2022 Massachusetts Institute of Technology
+PackageLicenseDeclared: BSD-2-Clause

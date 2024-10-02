@@ -1,0 +1,34 @@
+../PEST/bin/pest_commander --coords ../data/geometries/c60-o3-opt.xyz --e_cut 20.0 --scale 1.0 --pad 7.5 7.5 7.5 --output_pfx C60-o3-opt-pad_7.5_Ecut_20.0_scale_1.0
+
+
+PEST COMMANDER    ( Threads = 8 )
+
+###  Requested a DPW Hamiltonian.
+
+	Energy Cutoff  =  20.0 Ry
+	Grid Spacing   =  1.404963 Bohr   (scaling = 1.0)
+	Grid           =  20 x 20 x 20  ( 8000 basis functions ).
+
+###  Loaded geometry for 63 atoms.
+
+	Lattice Dimensons  =  27.241 x 27.862 x 27.919 (Bohr)
+	Actual Spacing     =  1.362 x 1.393 x 1.396 (Bohr)
+
+###  Building grid and mesh.
+
+	Building grid distance permutations:
+	Applying symmetry operations:
+Progress: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:00:14
+	Generated a minimal set of 29660 displacement vectors.
+	Generated a minimal set of 649 distances.
+
+###  Calculating the Hamiltonian.
+
+	Calculating Kinetic & E-E Interaction Terms:
+Progress: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:00:05
+	Calculating E-Ion Terms:
+Progress: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:11:01
+
+###  Writing hamiltonian and grid in HDF5 format.
+
+DONE!!

@@ -1,0 +1,33 @@
+../bin/pest_commander --coords magnesium-4x4x2-orthorhombic.xyz --e_cut 30.0 --scale 1.0 --lengths 12.83708 11.11724 15.631000 --output_pfx magnesium-4x4x2-Ecut_30.0_scale_1.0
+
+PEST COMMANDER    ( Threads = 8 )
+
+###  Requested a DPW Hamiltonian.
+
+	Cutoff Equiv.  =  30.0 Ry
+	Grid Spacing   =  1.147147 Bohr   (scaling = 1.0)
+	Grid           =  22 x 19 x 26  ( 10868 basis functions ).
+
+###  Loaded geometry for 64 atoms.
+
+	Lattice Dimensons  =  24.261 x 21.011 x 29.542 (Bohr)
+	Actual Spacing     =  1.103 x 1.106 x 1.136 (Bohr)
+
+###  Building grid and mesh.
+
+	Building grid distance permutations:
+	Applying symmetry operations:
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:02:26
+	Generated a minimal set of 61402 displacement vectors.
+	Generated a minimal set of 993 distances.
+
+###  Calculating the Hamiltonian.
+
+	Calculating Kinetic & E-E Interaction Terms:
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:00:16
+	Calculating E-Ion Terms:
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:32:32
+
+###  Writing hamiltonian and grid in HDF5 format.
+
+DONE!!

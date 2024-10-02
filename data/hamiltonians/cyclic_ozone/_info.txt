@@ -1,0 +1,7 @@
+Based on C60-o3-opt.xyz  -  Cyclic ozone encapsulated in a 60 fullerene cage.
+
+Hamiltonians were generated using PEST as follows (demonstrated for E_cut = 20.0):
+
+pest_commander --coords ../../geometries/c60-o3-opt.xyz --e_cut 20.0 --scale 1.0 --pad 7.5 7.5 7.5 --output_pfx C60-o3-opt-pad_7.5_Ecut_20.0_scale_1.0
+
+The cell dimensions correspond to a periodic, orthorhombic supercell.  A vacuum padding of 7.5 angstroms is added on all sides of the system.  Range cutoffs were not used when calculating this Hamiltonian.
