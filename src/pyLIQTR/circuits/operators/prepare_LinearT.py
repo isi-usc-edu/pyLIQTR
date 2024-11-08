@@ -14,27 +14,28 @@ from qualtran import GateWithRegisters, Register, Signature, BoundedQUInt, QBit,
 from qualtran.linalg.lcu_util import preprocess_lcu_coefficients_for_reversible_sampling
 from qualtran.bloqs.data_loading.qrom import QROM
 from qualtran.bloqs.mcmt import MultiControlPauli
+from qualtran.bloqs.state_preparation import PrepareUniformSuperposition
 
 from pyLIQTR.circuits.operators.AddMod import Add
 
 class FermionicPrepare_LinearT(GateWithRegisters):
     '''
-    Implements circuit from Fig. 16 of https://arxiv.org/pdf/1805.03662.pdf using qualtran gates.
+    Implements circuit from Fig. 16 of https://arxiv.org/pdf/1805.03662.pdf.
 
-    Initializes the sate 
-        $$
-        (\sum_{p,sigma} U(p) |theta_p> |1>_U |0>_V |p, sigma, p, sigma>  
-        + \sum_{p!=q, sigma} T(p-q) |theta_{p-q}^0> |0>_U |0>_V |p, sigma, q, sigma> 
-        + \sum_{(p,alpha)!=(q,beta)} V(p-q) |theta_{p-q}^1> |0>_U |1>_V  |p,alpha,q,beta>) |temp>
-        $$
-    where the coefficients U(d), T(d), and V(d) are mu-bit binary approximations to the true values. mu is set according to the condition approx_error <= 1/(2**mu N) where N is the total number of T,U, and V coefficients.
+    Initializes the state 
+        
+    .. math::
+        (\\sum_{p,\\sigma} U(p) |\\theta_p\\rangle |1\\rangle_U |0\\rangle_V |p, \\sigma, p, \\sigma\\rangle  
+        + \\sum_{p!=q, \\sigma} T(p-q) |\\theta_{p-q}^0\\rangle |0\\rangle_U |0\\rangle_V |p, \\sigma, q, \\sigma\\rangle 
+        + \\sum_{(p,\\alpha)!=(q,\\beta)} V(p-q) |\\theta_{p-q}^1\\rangle |0\\rangle_U |1\\rangle_V  |p,\\alpha,q,\\beta\\rangle) |temp\\rangle
+        
+    where the coefficients :math:`U(d)`, :math:`T(d)`, and :math:`V(d)` are :math:`\\mu`-bit binary approximations to the true values. :math:`\\mu` is set according to the condition approx_error :math:`<= 1/(2^\\mu N)` where N is the total number of T,U, and V coefficients.
 
-    Args:
-        T_array: The (XZX + YZY) operator coefficients, equivalent to tilde(T)**2 in the reference. Formatted such that the ith coefficient, Ti, is given by T_array[i] = ((1-sign(Ti))/2,abs(Ti)).
-        U_array: The (Z) operator coefficients, equivalent to tilde(U)**2 in the reference. Formatted the same as T_array.
-        V_array: The (ZZ) operator coefficients, equivalent to tilde(V)**2 in the reference. Formatted the same as T_array.
-        M_vals: Number of grid points (orbitals) along each spatial dimension.
-        approx_error: The desired accuracy to represent each coefficient which sets mu size and keep/alt integers). See `qualtran.linalg.lcu_util.preprocess_lcu_coefficients_for_reversible_sampling` for more information.
+    :param List[Tuple[int,float]] T_array: The (XZX + YZY) operator coefficients, equivalent to :math:`\\tilde{T}^2` in the reference. Formatted such that the ith coefficient, Ti, is given by T_array[i] = ((1-sign(Ti))/2,abs(Ti)).
+    :param List[Tuple[int,float]] U_array: The (Z) operator coefficients, equivalent to :math:`\\tilde{U}^2` in the reference. Formatted the same as T_array.
+    :param List[Tuple[int,float]] V_array: The (ZZ) operator coefficients, equivalent to :math:`\\tilde{V}^2` in the reference. Formatted the same as T_array.
+    :param NDArray[int] M_vals: Number of grid points (orbitals) along each spatial dimension.
+    :param float approx_error: The desired accuracy to represent each coefficient which sets :math:`\\mu` size and keep/alt integers. See `qualtran.linalg.lcu_util.preprocess_lcu_coefficients_for_reversible_sampling` for more information.
     '''
 
     def __init__(self, T_array: List[Tuple[int,float]], U_array: List[Tuple[int,float]], V_array: List[Tuple[int,float]], M_vals: NDArray[np.int_], approx_error: float):
@@ -134,7 +135,7 @@ class FermionicPrepare_LinearT(GateWithRegisters):
 
         # prepare a uniform superposition over M for each dimension on the q register, zero-controlled on U
         for qi, q_reg in enumerate(q_regs):
-            yield qt.bloqs.state_preparation.prepare_uniform_superposition.PrepareUniformSuperposition(int(self.__M_vals[qi]),cvs=(0,)).on_registers(ctrl=U,target=q_reg)
+            yield PrepareUniformSuperposition(int(self.__M_vals[qi]),cvs=(0,)).on_registers(ctrl=U,target=q_reg)
 
         yield cirq.H.on(*a)
 
@@ -156,13 +157,14 @@ class FermionicPrepare_LinearT(GateWithRegisters):
 class Subprepare_LinearT(GateWithRegisters):
 
     '''
-    Implements circuit from Fig. 15 of https://arxiv.org/pdf/1805.03662.pdf using qualtran gates. Code structure based on qualtran.StatePreparationAliasSampling. 
+    Implements circuit from Fig. 15 of https://arxiv.org/pdf/1805.03662.pdf. Code structure based on qualtran.StatePreparationAliasSampling. 
 
     Initializes the sate 
-        $$
-        \sum_{d=0}^{N-1} ( U(d) |theta_d> |1>_U |0>_V  + T(d) |theta_d^0> |0>_U |0>_V  + V(d) |theta_d^1> |0>_U |1>_V ) |d> |temp_d>
-        $$
-    where the coefficients U(d), T(d), and V(d) are mu-bit binary approximations to the true values. The preparation involves classical alias sampling.
+    
+    .. math::
+        \\sum_{d=0}^{N-1} ( U(d) |\\theta_d\\rangle |1\\rangle_U |0\\rangle_V  + T(d) |\\theta_d^0\\rangle |0\\rangle_U |0\\rangle_V  + V(d) |\\theta_d^1\\rangle |0\\rangle_U |1\\rangle_V ) |d\\rangle |temp_d\\rangle
+        
+    where the coefficients :math:`U(d)`, :math:`T(d)`, and :math:`V(d)` are :math:`\\mu`-bit binary approximations to the true values. The preparation involves classical alias sampling.
     '''
 
     M_vals: List[int] # number of p index values per dimension
@@ -306,10 +308,10 @@ class Subprepare_LinearT(GateWithRegisters):
             i += logM
 
         # prepare a uniform superposition on the UV bits to produce |00>_UV -> (|00>_UV + |01>_UV + |10>_UV)/sqrt(3)
-        yield qt.bloqs.state_preparation.prepare_uniform_superposition.PrepareUniformSuperposition(3).on_registers(target=[*quregs['U'],*quregs['V']],controls=[])
+        yield PrepareUniformSuperposition(3).on_registers(target=[*quregs['U'],*quregs['V']],controls=[])
         # prepare a uniform superposition over M for each dimension on the d register
         for di, d_reg in enumerate(d_regs):
-            yield qt.bloqs.state_preparation.prepare_uniform_superposition.PrepareUniformSuperposition(self.M_vals[di]).on(*d_reg)
+            yield PrepareUniformSuperposition(self.M_vals[di]).on(*d_reg)
         # prepare uniform superposition on sigma_mu register for comparing to keep during alias sampling procedure
         yield cirq.H.on_each(*sigma_mu)
         # use QROM to iterate over combined UV-d registers to load theta, alt and keep data

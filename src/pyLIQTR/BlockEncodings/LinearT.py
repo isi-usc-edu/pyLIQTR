@@ -52,3 +52,7 @@ class Fermionic_LinearT(BlockEncoding_select_prepare):
     def getV_array(self):
         return [coeff for coeff in self.PI.yield_LinearT_Info('V')]
 
+    @property
+    def alpha(self):
+        return (self.PI.get_alpha('LinearT'))
+
