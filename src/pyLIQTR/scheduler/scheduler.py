@@ -18,7 +18,7 @@ from pyLIQTR.gate_decomp.cirq_transforms import _perop_clifford_plus_t_direct_tr
 from pyLIQTR.gate_decomp.cirq_transforms import determine_gate_precision
 import copy
 
-from qualtran.cirq_interop.t_complexity_protocol import t_complexity
+from pyLIQTR.utils.resource_analysis import pylqt_t_complexity as t_complexity
     
 class Scheduler:
     """

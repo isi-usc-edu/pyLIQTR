@@ -5,6 +5,7 @@ SPDX-License-Identifier: BSD-2-Clause
 import  numpy as np
 
 import  cirq
+import warnings
 import  qualtran               as  qt
 
 # from  functools import cached_property 
@@ -59,10 +60,10 @@ class PauliStringLCU(BlockEncoding_select_prepare):
             for t in self.getTerms:
                 coeff = np.real(t.coefficient)
                 if coeff < 0:
-                    raise ValueError("Negative coefficients are not supported yet.")
+                    warnings.warn("Alias sampling preparation with negative coefficients is not supported yet. Circuits and estimates will assume positive coefficients.",stacklevel=2)
             
             self._prepare_gate         =  StatePreparationAliasSampling.from_lcu_probs(
-                                                lcu_probabilities=[np.real(t.coefficient) for t in self.getTerms]
+                                                lcu_probabilities=[np.abs(np.real(t.coefficient)) for t in self.getTerms]
                                                     , probability_epsilon=probability_eps)
 
 

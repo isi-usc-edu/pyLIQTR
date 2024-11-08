@@ -4,13 +4,13 @@ SPDX-License-Identifier: BSD-2-Clause
 """
 from pyLIQTR.ProblemInstances.ProblemInstance      import  ProblemInstance,VALID_ENCODINGS
 from pyLIQTR.ProblemInstances.LatticeInstance      import  LatticeInstance
-from pyLIQTR.ProblemInstances.fermionic_models     import  FermiHubbard
+from pyLIQTR.ProblemInstances.fermionic_models     import  FermiHubbard, FermiHubbardNNN
 from pyLIQTR.ProblemInstances.spin_models          import  Heisenberg, Transverse_Field_Ising
 from pyLIQTR.ProblemInstances.ChemicalHamiltonian  import  ChemicalHamiltonian
 from pyLIQTR.ProblemInstances.ElectronicStructure  import  ElectronicStructure
 from pyLIQTR.ProblemInstances.MoleculeParameters   import  MoleculeParameters
 
-validProblemInstances = ["Lattice","FermiHubbard","Heisenberg","ElectronicStructure",\
+validProblemInstances = ["Lattice","FermiHubbard","FermiHubbardNNN","Heisenberg","ElectronicStructure",\
                          "TransverseFieldIsing",\
                          "ChemicalHamiltonian","MoleculeParameters"]
 
@@ -27,6 +27,11 @@ def getInstance(instance : str, instantiate = True, **kwargs):
                 return FermiHubbard(**kwargs)
             else:
                 return FermiHubbard
+        elif instance == "FermiHubbardNNN":
+            if instantiate:
+                return FermiHubbardNNN(**kwargs)
+            else:
+                return FermiHubbardNNN
         elif instance == "Heisenberg":
             if instantiate:
                 return Heisenberg(**kwargs)

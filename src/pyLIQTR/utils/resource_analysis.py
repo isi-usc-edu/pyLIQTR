@@ -15,7 +15,6 @@ from warnings import warn
 from   pyLIQTR.utils.circuit_decomposition import decompose_once, circuit_decompose_multi
 from   pyLIQTR.gate_decomp.cirq_transforms import clifford_plus_t_direct_transform
 from pyLIQTR.gate_decomp.rotation_gates import T_COUNT_CONST, T_COUNT_SLOPE, T_COUNT_STD_DEV
-from pyLIQTR.scheduler.scheduler import schedule_circuit
 
 from qualtran.cirq_interop.t_complexity_protocol import TComplexity, _get_hash,_t_complexity_from_strategies, \
          _t_complexity_for_gate_or_op,\
