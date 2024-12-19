@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: "Citation
+
+Please use this DOI number reference, published on https://zenodo.org. when citing the software: https://doi.org/10.5281/zenodo.7221272
+
+DISTRIBUTION STATEMENT A. Approved for public release: distribution unlimited.
+
+© 2024 MASSACHUSETTS INSTITUTE OF TECHNOLOGY
+
+    Subject to FAR 52.227-11 – Patent Rights – Ownership by the Contractor (May 2014)
+    SPDX-License-Identifier: BSD-2-Clause
+
+This material is based upon work supported by the Under Secretary of Defense for Research and Engineering under Air Force Contract No. FA8702-15-D-0001. Any opinions, findings, conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the Under Secretary of Defense for Research and Engineering.
+
+A portion of this research was sponsored by the United States Air Force Research Laboratory and the United States Air Force Artificial Intelligence Accelerator and was accomplished under Cooperative Agreement Number FA8750-19-2-1000. The views and conclusions contained in this document are those of the authors and should not be interpreted as representing the official policies, either expressed or implied, of the United States Air Force or the U.S. Government. The U.S. Government is authorized to reproduce and distribute reprints for Government purposes notwithstanding any copyright notation herein.
+
+The software/firmware is provided to you on an As-Is basis"
+authors:
+  - given-names: "Kevin"
+    family-names: "Obenland"
+  - given-names: "Justin"
+    family-names: "Elenewski"
+  - given-names: "Kaitlyn"
+    family-names: "Morrell"
+  - given-names: "Benjamin"
+    family-names: "Rempfer"
+  - given-names: "Parker"
+    family-names: "Kuklinski"
+  - given-names: "Rylee Stuart"
+    family-names: "Neumann"
+  - given-names: "Arthur"
+    family-names: "Kurlej"
+  - given-names: "Robert"
+    family-names: "Rood"
+  - given-names: "John"
+    family-names: "Blue"
+  - given-names: "Joe"
+    family-names: "Belarge"
+    
+title: "pyLIQTR"
+abstract: "(LIncoln Laboratory Quantum algorithm Test and Research), is a python library for building quantum circuits derived from quantum algorithms and generating Clifford+T resource estimates."
+license: MIT
+doi: 10.5281/zenodo.7221272
+repository-code: "https://github.com/isi-usc-edu/pyLIQTR"
