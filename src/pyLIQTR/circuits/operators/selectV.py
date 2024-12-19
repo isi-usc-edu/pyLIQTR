@@ -79,16 +79,6 @@ class ChildsSelectV(pyLO.pyLOperator):
         yield applyCircuit
         yield upCircuit
 
-    def __eq__(self, other):
-        if self.__class__ != other.__class__:
-            return False
-        else:
-            return ((self.__hamiltonian == other.__hamiltonian) and \
-                (self.__phs_q == other.__phs_q) and \
-                (self.__ctl_q == other.__ctl_q)and \
-                (self.__tgt_q == other.__tgt_q) and \
-                (self.__anc_q == other.__anc_q) )
-
     def _get_as_circuit(self):
         allQ = [*self.__phs_q, *self.__anc_q, *self.__ctl_q, *self.__tgt_q]
         return cirq.Circuit(self.on(*allQ))
@@ -144,16 +134,6 @@ class QROMSelectV(pyLO.pyLOperator):
         ham_as_ops = convert_hamiltonian_terms_to_operators(self.__hamiltonian.terms)
         circuit = applyAndWalk(ham_as_ops, pos1, pos2, self.__ctl_q, *self.__phs_q, self.__anc_q, self.__tgt_q)
         yield circuit
-    
-    def __eq__(self, other):
-        if self.__class__ != other.__class__:
-            return False
-        else:
-            return ((self.__hamiltonian == other.__hamiltonian) and \
-                (self.__phs_q == other.__phs_q) and \
-                (self.__ctl_q == other.__ctl_q)and \
-                (self.__tgt_q == other.__tgt_q) and \
-                (self.__anc_q == other.__anc_q) )
     
     def __str__(self) -> str:
         allQ = [*self.__phs_q, *self.__anc_q, *self.__ctl_q, *self.__tgt_q]

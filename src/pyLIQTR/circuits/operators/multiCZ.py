@@ -95,19 +95,6 @@ class MultiCZ(pyLOperator.pyLOperator):
                     tgt_q_1 = getQubitFromMap(tgt_list[0], self.__ctl_q, self.__tgt_q, self.__anc_q)
                     yield(CCZ(ctl_q_1, ctl_q_2, tgt_q_1))
 
-    def __eq__(self, other):
-        """
-        Checks to see if another pyLOperator is equal to this instantiation.
-        """
-        if self.__class__ != other.__class__:
-            return False
-        else:
-            return (
-                (self.__ctl_q == other.__ctl_q) and \
-                (self.__tgt_q == other.__tgt_q) and \
-                (self.__anc_q == other.__anc_q) 
-            )
-            
     def _get_as_circuit(self):
         #Get the operator as a circuit.
         return cirq.Circuit(self.on(*self.allQ))

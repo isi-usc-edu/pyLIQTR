@@ -22,6 +22,7 @@ and then implement that when cirq.decompose() is called.
 """
 
 import math
+import copy
 import random
 from functools import lru_cache
 from typing import Dict, List, Optional, Tuple, Union
@@ -46,7 +47,7 @@ T_COUNT_STD_DEV = 2.06
 
 clifford_plus_T_ops = [cirq.S, cirq.S**-1, cirq.H, cirq.X, cirq.Y, cirq.Z, cirq.T]
 
-clifford_gates = [
+CLIFFORD_GATES = [
     [],
     [cirq.S],
     [cirq.Z],
@@ -180,11 +181,13 @@ class decomp_mixin(cirq.Gate):
             if self.leading_T:
                 self.sequence_length -= 1
             self.gate_sequence = random.getrandbits(self.sequence_length)
-            self.clifford_part = clifford_gates[random.randint(0, 23)]
+            self.clifford_part = copy.copy(CLIFFORD_GATES[random.randint(0, 23)])
 
-        self.num_T_gates = self.sequence_length
-        if self.leading_T:
-            self.num_T_gates += 1
+
+        self.num_T_gates = int(self.leading_T) + self.sequence_length
+        self.num_Clifford_gates = len(self.clifford_part) + \
+                                    self.sequence_length + \
+                                    self.gate_sequence.bit_count()
         super().__init__(*args, **kwargs)
 
     def _decompose_(self, qubits) -> List[cirq.Operation]:
@@ -204,10 +207,13 @@ class decomp_mixin(cirq.Gate):
         return ops
 
     def get_resouces(self) -> Dict:
-        return {"T count": self.num_T_gates}
+        return {"T count": self.num_T_gates, "Clifford count":self.num_Clifford_gates}
 
     def get_T_count(self) -> int:
         return self.num_T_gates
+
+    def get_Clifford_count(self) -> int:
+        return self.num_Clifford_gates
 
     def num_qubits(self) -> int:
         return 1

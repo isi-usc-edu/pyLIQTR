@@ -67,16 +67,7 @@ class pyLOperator(cirq.Gate):
         #However, somtimes its nice to order the qubits in a certain order
         #qasm str = str(self)+",".join([args.format(str(x)) for x in qubits])
         raise NotImplementedError
-
-    @abstractmethod
-    def __eq__(self, other):
-        """
-        The equality operator is required to be implemented in order to satisfy the resource analysis/caching functionality
-        
-        This method is just used to test for equivalence between two qubits
-        """
-        raise NotImplementedError
-
+    
     @abstractmethod
     def _get_as_circuit(self):
         #Get the operator as a circuit.
