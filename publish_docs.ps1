@@ -4,8 +4,8 @@
 # to update after running this script
 
 git init
-git config --local user.email 'robert.rood@ll.mit.edu'
-git config --local user.name 'rroodll'
+git config --local user.email ''
+git config --local user.name ''
 git config --local --add safe.directory '*'
 git add .
 git commit -m "Deploy docs to GitHub Pages"
