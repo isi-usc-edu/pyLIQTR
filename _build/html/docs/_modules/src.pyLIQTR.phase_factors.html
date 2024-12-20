@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.phase_factors package &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/pyliqtr_logo.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.phase_factors package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/_modules/src.pyLIQTR.phase_factors.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-pyliqtr-phase-factors-package">
+<h1>src.pyLIQTR.phase_factors package<a class="headerlink" href="#src-pyliqtr-phase-factors-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="src.pyLIQTR.phase_factors.fourier_response.html">src.pyLIQTR.phase_factors.fourier_response package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.phase_factors.fourier_response.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.phase_factors.fourier_response.html#module-src.pyLIQTR.phase_factors.fourier_response.fourier_response">src.pyLIQTR.phase_factors.fourier_response.fourier_response module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.fourier_response.html#src.pyLIQTR.phase_factors.fourier_response.fourier_response.Angler_fourier_response"><code class="docutils literal notranslate"><span class="pre">Angler_fourier_response</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.fourier_response.html#src.pyLIQTR.phase_factors.fourier_response.fourier_response.Angler_fourier_response.generate"><code class="docutils literal notranslate"><span class="pre">Angler_fourier_response.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.fourier_response.html#src.pyLIQTR.phase_factors.fourier_response.fourier_response.diffphis"><code class="docutils literal notranslate"><span class="pre">diffphis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.fourier_response.html#src.pyLIQTR.phase_factors.fourier_response.fourier_response.get_steps_from_logeps"><code class="docutils literal notranslate"><span class="pre">get_steps_from_logeps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.fourier_response.html#src.pyLIQTR.phase_factors.fourier_response.fourier_response.getlogepsilon"><code class="docutils literal notranslate"><span class="pre">getlogepsilon()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.phase_factors.fourier_response.html#module-src.pyLIQTR.phase_factors.fourier_response">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html">src.pyLIQTR.phase_factors.optimization package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#module-src.pyLIQTR.phase_factors.optimization.ChebyshevPoly">src.pyLIQTR.phase_factors.optimization.ChebyshevPoly module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.coeffs"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly.coeffs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.eval"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly.eval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.evens"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly.evens()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.odds"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly.odds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.read_poly"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly.read_poly()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_coeffs"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly.set_coeffs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_evens"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly.set_evens()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_odds"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly.set_odds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_parity"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly.set_parity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_type"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly.set_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.write_poly"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly.write_poly()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.zero_poly"><code class="docutils literal notranslate"><span class="pre">ChebyshevPoly.zero_poly()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.eval_chebyshev"><code class="docutils literal notranslate"><span class="pre">eval_chebyshev()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.eval_chebyshev_strict"><code class="docutils literal notranslate"><span class="pre">eval_chebyshev_strict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#module-src.pyLIQTR.phase_factors.optimization.angler_optimization">src.pyLIQTR.phase_factors.optimization.angler_optimization module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt"><code class="docutils literal notranslate"><span class="pre">Angler_opt</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt.generate"><code class="docutils literal notranslate"><span class="pre">Angler_opt.generate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt.gradient_optimization"><code class="docutils literal notranslate"><span class="pre">Angler_opt.gradient_optimization()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt.set_poly"><code class="docutils literal notranslate"><span class="pre">Angler_opt.set_poly()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.angler_optimization.handle_scalar"><code class="docutils literal notranslate"><span class="pre">handle_scalar()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#module-src.pyLIQTR.phase_factors.optimization.expander">src.pyLIQTR.phase_factors.optimization.expander module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander"><code class="docutils literal notranslate"><span class="pre">Expander</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.erf"><code class="docutils literal notranslate"><span class="pre">Expander.erf()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.erf_shifted"><code class="docutils literal notranslate"><span class="pre">Expander.erf_shifted()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.exponential_decay_even"><code class="docutils literal notranslate"><span class="pre">Expander.exponential_decay_even()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.exponential_decay_odd"><code class="docutils literal notranslate"><span class="pre">Expander.exponential_decay_odd()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.gaussian"><code class="docutils literal notranslate"><span class="pre">Expander.gaussian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.inverse"><code class="docutils literal notranslate"><span class="pre">Expander.inverse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.ja_cos"><code class="docutils literal notranslate"><span class="pre">Expander.ja_cos()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.ja_sin"><code class="docutils literal notranslate"><span class="pre">Expander.ja_sin()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.binomsum"><code class="docutils literal notranslate"><span class="pre">binomsum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.eval_chebyshev"><code class="docutils literal notranslate"><span class="pre">eval_chebyshev()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.eval_chebyshev_strict"><code class="docutils literal notranslate"><span class="pre">eval_chebyshev_strict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.handle_scalar"><code class="docutils literal notranslate"><span class="pre">handle_scalar()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#module-src.pyLIQTR.phase_factors.optimization.fitter">src.pyLIQTR.phase_factors.optimization.fitter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.fitter.Fitter"><code class="docutils literal notranslate"><span class="pre">Fitter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.eval_approx"><code class="docutils literal notranslate"><span class="pre">Fitter.eval_approx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.eval_func"><code class="docutils literal notranslate"><span class="pre">Fitter.eval_func()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.get_chebyshev_domain"><code class="docutils literal notranslate"><span class="pre">Fitter.get_chebyshev_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.get_pts"><code class="docutils literal notranslate"><span class="pre">Fitter.get_pts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.get_pts_m"><code class="docutils literal notranslate"><span class="pre">Fitter.get_pts_m()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.remez"><code class="docutils literal notranslate"><span class="pre">Fitter.remez()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.set_precision"><code class="docutils literal notranslate"><span class="pre">Fitter.set_precision()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.set_root_solver"><code class="docutils literal notranslate"><span class="pre">Fitter.set_root_solver()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.fitter.chebyshev_func_m"><code class="docutils literal notranslate"><span class="pre">chebyshev_func_m()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.fitter.chebyshev_m"><code class="docutils literal notranslate"><span class="pre">chebyshev_m()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.fitter.m_to_np"><code class="docutils literal notranslate"><span class="pre">m_to_np()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.phase_factors.optimization.html#module-src.pyLIQTR.phase_factors.optimization">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.phase_factors.angler">
+<span id="src-pyliqtr-phase-factors-angler-module"></span><h2>src.pyLIQTR.phase_factors.angler module<a class="headerlink" href="#module-src.pyLIQTR.phase_factors.angler" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.angler.Angler_abstract">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.angler.</span></span><span class="sig-name descname"><span class="pre">Angler_abstract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/angler.html#Angler_abstract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.angler.Angler_abstract" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.angler.Angler_abstract.generate">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/angler.html#Angler_abstract.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.angler.Angler_abstract.generate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.angler.Angler_random">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.angler.</span></span><span class="sig-name descname"><span class="pre">Angler_random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cheb_poly</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/angler.html#Angler_random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.angler.Angler_random" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.pyLIQTR.phase_factors.angler.Angler_abstract" title="src.pyLIQTR.phase_factors.angler.Angler_abstract"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angler_abstract</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.angler.Angler_random.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/angler.html#Angler_random.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.angler.Angler_random.generate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.phase_factors.conversions">
+<span id="src-pyliqtr-phase-factors-conversions-module"></span><h2>src.pyLIQTR.phase_factors.conversions module<a class="headerlink" href="#module-src.pyLIQTR.phase_factors.conversions" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.conversions.phases_Wx_to_R">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.conversions.</span></span><span class="sig-name descname"><span class="pre">phases_Wx_to_R</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/conversions.html#phases_Wx_to_R"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.conversions.phases_Wx_to_R" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.phase_factors.named_factors">
+<span id="src-pyliqtr-phase-factors-named-factors-module"></span><h2>src.pyLIQTR.phase_factors.named_factors module<a class="headerlink" href="#module-src.pyLIQTR.phase_factors.named_factors" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.named_factors.f_cosine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.named_factors.</span></span><span class="sig-name descname"><span class="pre">f_cosine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expansion_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'analytical'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Optimization'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/named_factors.html#f_cosine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.named_factors.f_cosine" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PhaseFactors</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.named_factors.f_cosine.expansion">
+<span class="sig-name descname"><span class="pre">expansion</span></span><a class="headerlink" href="#src.pyLIQTR.phase_factors.named_factors.f_cosine.expansion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.named_factors.f_cosine.func">
+<span class="sig-name descname"><span class="pre">func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/named_factors.html#f_cosine.func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.named_factors.f_cosine.func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.named_factors.f_exp_fourier_response">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.named_factors.</span></span><span class="sig-name descname"><span class="pre">f_exp_fourier_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expansion_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'analytical'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/named_factors.html#f_exp_fourier_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.named_factors.f_exp_fourier_response" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PhaseFactors</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.named_factors.f_exp_fourier_response.expansion">
+<span class="sig-name descname"><span class="pre">expansion</span></span><a class="headerlink" href="#src.pyLIQTR.phase_factors.named_factors.f_exp_fourier_response.expansion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.named_factors.f_exp_fourier_response.func">
+<span class="sig-name descname"><span class="pre">func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/named_factors.html#f_exp_fourier_response.func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.named_factors.f_exp_fourier_response.func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.named_factors.f_sine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.named_factors.</span></span><span class="sig-name descname"><span class="pre">f_sine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expansion_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'analytical'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Optimization'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/named_factors.html#f_sine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.named_factors.f_sine" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PhaseFactors</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.named_factors.f_sine.expansion">
+<span class="sig-name descname"><span class="pre">expansion</span></span><a class="headerlink" href="#src.pyLIQTR.phase_factors.named_factors.f_sine.expansion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.named_factors.f_sine.func">
+<span class="sig-name descname"><span class="pre">func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/named_factors.html#f_sine.func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.named_factors.f_sine.func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.phase_factors.phase_factors">
+<span id="src-pyliqtr-phase-factors-phase-factors-module"></span><h2>src.pyLIQTR.phase_factors.phase_factors module<a class="headerlink" href="#module-src.pyLIQTR.phase_factors.phase_factors" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.phase_factors.PhaseFactors">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.phase_factors.</span></span><span class="sig-name descname"><span class="pre">PhaseFactors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">precompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angler_max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angler_bfgs_conv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpm_prec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">512</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/phase_factors.html#PhaseFactors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.expansion">
+<span class="sig-name descname"><span class="pre">expansion</span></span><a class="headerlink" href="#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.expansion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.expansion_coeffs">
+<span class="sig-name descname"><span class="pre">expansion_coeffs</span></span><a class="headerlink" href="#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.expansion_coeffs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.expansion_degree">
+<span class="sig-name descname"><span class="pre">expansion_degree</span></span><a class="headerlink" href="#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.expansion_degree" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.expansion_error">
+<span class="sig-name descname"><span class="pre">expansion_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/phase_factors.html#PhaseFactors.expansion_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.expansion_error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.expansion_eval">
+<span class="sig-name descname"><span class="pre">expansion_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/phase_factors.html#PhaseFactors.expansion_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.expansion_eval" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.f">
+<span class="sig-name descname"><span class="pre">f</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/phase_factors.html#PhaseFactors.f"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.f" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><a class="headerlink" href="#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.fit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.num_phases">
+<span class="sig-name descname"><span class="pre">num_phases</span></span><a class="headerlink" href="#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.num_phases" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.phase_generator">
+<span class="sig-name descname"><span class="pre">phase_generator</span></span><a class="headerlink" href="#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.phase_generator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.phis">
+<span class="sig-name descname"><span class="pre">phis</span></span><a class="headerlink" href="#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.phis" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.plot_expansion_error">
+<span class="sig-name descname"><span class="pre">plot_expansion_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_pts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/phase_factors.html#PhaseFactors.plot_expansion_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.plot_expansion_error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.phase_factors.simulation">
+<span id="src-pyliqtr-phase-factors-simulation-module"></span><h2>src.pyLIQTR.phase_factors.simulation module<a class="headerlink" href="#module-src.pyLIQTR.phase_factors.simulation" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.simulation.simulation_phases">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.simulation.</span></span><span class="sig-name descname"><span class="pre">simulation_phases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qsvt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'r'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/simulation.html#simulation_phases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.simulation.simulation_phases" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.phase_factors">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.pyLIQTR.phase_factors" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

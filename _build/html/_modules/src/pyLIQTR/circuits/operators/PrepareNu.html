@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.operators.PrepareNu &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.operators.PrepareNu</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.circuits.operators.PrepareNu</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span> <span class="nn">attrs</span> <span class="kn">import</span> <span class="n">evolve</span><span class="p">,</span> <span class="n">frozen</span>
+
+<span class="kn">from</span> <span class="nn">qualtran</span> <span class="kn">import</span> <span class="n">Bloq</span><span class="p">,</span> <span class="n">BloqBuilder</span><span class="p">,</span> <span class="n">QAny</span><span class="p">,</span> <span class="n">QBit</span><span class="p">,</span> <span class="n">Register</span><span class="p">,</span> <span class="n">Side</span><span class="p">,</span> <span class="n">Signature</span><span class="p">,</span> <span class="n">SoquetT</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.arithmetic</span> <span class="kn">import</span> <span class="n">GreaterThan</span><span class="p">,</span> <span class="n">Product</span><span class="p">,</span> <span class="n">SumOfSquares</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.basic_gates</span> <span class="kn">import</span> <span class="n">Toffoli</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.state_preparation.prepare_uniform_superposition</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PrepareUniformSuperposition</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.chemistry.pbc.first_quantization.prepare_nu</span> <span class="kn">import</span> <span class="n">TestNuLessThanMu</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.PrepareMuUnaryEncoded</span> <span class="kn">import</span> <span class="n">PrepareMuUnaryEncoded</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.PrepareNuSuperposition</span> <span class="kn">import</span> <span class="n">PrepareNuSuperposition</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.FlagZeroAsFailure</span> <span class="kn">import</span> <span class="n">FlagZeroAsFailure</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">qualtran.resource_counting</span> <span class="kn">import</span> <span class="n">BloqCountT</span><span class="p">,</span> <span class="n">SympySymbolAllocator</span>
+
+
+<div class="viewcode-block" id="TestNuInequality">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.TestNuInequality">[docs]</a>
+<span class="nd">@frozen</span>
+<span class="k">class</span> <span class="nc">TestNuInequality</span><span class="p">(</span><span class="n">Bloq</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bloq to flag if all components of :math:`$\\nu$` are smaller in absolute value than :math:`2^{\\mu-2}`.</span>
+
+<span class="sd">    Tests the inequality</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        (2^{\\mu-2})^2 \\mathcal{M} &gt; m (\\nu_x^2 + \\nu_y^2 + \\nu_z^2)</span>
+
+<span class="sd">     where $m \in [0, \mathcal{M}-1]$ and is stored in an ancilla register. This is done by computing :math:`(2^{\\mu-2})^2 \\mathcal{M}` and :math:`m (\\nu_x^2 + \\nu_y^2 + \\nu_z^2)` separately in two ancilla registers, which involves sum of squares and multiplication subcomponents.</span>
+
+<span class="sd">    Registers:</span>
+<span class="sd">        mu: the one-hot unary superposition register.</span>
+<span class="sd">        nu: the momentum transfer register.</span>
+<span class="sd">        m: the ancilla register in uniform superposition.</span>
+<span class="sd">        flag_minus_zero: A flag for occurence of negative zero.</span>
+<span class="sd">        flag_ineq: A flag from checking $\nu \lt 2^{\mu -2}$.</span>
+<span class="sd">        succ: a flag bit for failure of the state nu preparation.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        `Fault-Tolerant Quantum Simulations of Chemistry in First Quantization &lt;https://arxiv.org/abs/2105.12767&gt;`_</span>
+<span class="sd">        Eq 89, pg 22-23</span>
+
+<span class="sd">    :param int num_bits_p: The number of bits to represent each dimension of the nu register.</span>
+<span class="sd">    :param int num_bits_m: The number of bits for :math:`$\\mathcal{M}$`. Eq 86.</span>
+<span class="sd">    :param bool is_adjoint: Whether to do the bloq adjoint or not.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_bits_p</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">num_bits_m</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">is_adjoint</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Signature</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Signature</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="n">QAny</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">)),</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;nu&quot;</span><span class="p">,</span> <span class="n">QAny</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,)),</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">QAny</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_m</span><span class="p">)),</span>
+                <span class="n">Register</span><span class="p">(</span>
+                    <span class="s2">&quot;flag_minus_zero&quot;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">(),</span>
+                <span class="p">),</span>
+                <span class="n">Register</span><span class="p">(</span>
+                    <span class="s2">&quot;flag_ineq&quot;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">(),</span> <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">LEFT</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_adjoint</span> <span class="k">else</span> <span class="n">Side</span><span class="o">.</span><span class="n">RIGHT</span>
+                <span class="p">),</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;succ&quot;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">()),</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="TestNuInequality.pretty_name">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.TestNuInequality.pretty_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">pretty_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s1">&#39;(2^(μ-2))^2 M &gt; m ν^2&#39;</span></div>
+
+
+<div class="viewcode-block" id="TestNuInequality.adjoint">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.TestNuInequality.adjoint">[docs]</a>
+    <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Bloq&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_adjoint</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_adjoint</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestNuInequality.build_call_graph">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.TestNuInequality.build_call_graph">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_call_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ssa</span><span class="p">:</span> <span class="s1">&#39;SympySymbolAllocator&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="s1">&#39;BloqCountT&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_adjoint</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{(</span><span class="n">Toffoli</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># 1. Compute $\nu_x^2 + \nu_y^2 + \nu_z^2$</span>
+            <span class="n">cost_1</span> <span class="o">=</span> <span class="p">(</span><span class="n">SumOfSquares</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># 2. Compute $m (\nu_x^2 + \nu_y^2 + \nu_z^2)$</span>
+            <span class="n">cost_2</span> <span class="o">=</span> <span class="p">(</span><span class="n">Product</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits_m</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># 3. Inequality test</span>
+            <span class="n">cost_3</span> <span class="o">=</span> <span class="p">(</span><span class="n">GreaterThan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_m</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># 4. 3 Toffoli for overall success</span>
+            <span class="n">cost_4</span> <span class="o">=</span> <span class="p">(</span><span class="n">Toffoli</span><span class="p">(),</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">cost_1</span><span class="p">,</span> <span class="n">cost_2</span><span class="p">,</span> <span class="n">cost_3</span><span class="p">,</span> <span class="n">cost_4</span><span class="p">}</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PrepareNuState">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.PrepareNuState">[docs]</a>
+<span class="nd">@frozen</span>
+<span class="k">class</span> <span class="nc">PrepareNuState</span><span class="p">(</span><span class="n">Bloq</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prepares a state of the form</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\frac{1}{\\sqrt{\\mathcal{M}2^{n_p + 2}}}</span>
+<span class="sd">        \\sum_{\\mu=2}^{n_p+1}\\sum_{\\nu \\in B_\\mu}</span>
+<span class="sd">        \\sum_{m=0}^{\\lceil \\mathcal M(2^{\mu-2}/\\lVert\\nu\\rVert)^2\\rceil-1}</span>
+<span class="sd">        \\frac{1}{2^\mu}|\\mu\\rangle|\\nu_x\\rangle|\\nu_y\\rangle|\\nu_z\\rangle|m\\rangle|0\\rangle    </span>
+
+<span class="sd">    This is a subcomponent of the PREPARE for the :math:`U` and :math:`V` components of the Hamiltonian. </span>
+
+<span class="sd">    Registers:</span>
+<span class="sd">        mu: The state controlling the nested boxes procedure.</span>
+<span class="sd">        nu: The momentum transfer register.</span>
+<span class="sd">        flag_dim: Qubits flagging occurence of minus zero for each dimension of :math:`\\nu`.</span>
+<span class="sd">        flag_minus_zero: Qubit flagging occurence of minus zero overall.</span>
+<span class="sd">        and_ancilla: Ancilla used for the And ladder.</span>
+<span class="sd">        flag_ancilla: Ancilla used for OR to mark flag_minus_zero.</span>
+<span class="sd">        m: an ancilla register in a uniform superposition.</span>
+<span class="sd">        flag_nu: Flag for success of the state preparation.</span>
+<span class="sd">        catalytic: The catalytic state for controlled Hadamards.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        `Fault-Tolerant Quantum Simulations of Chemistry in First Quantization &lt;https://arxiv.org/abs/2105.12767&gt;`_</span>
+<span class="sd">        page 21, section C</span>
+
+<span class="sd">    :param int num_bits_p: The number of bits to represent each dimension of the momentum register :math:`|\\nu\\rangle`.</span>
+<span class="sd">    :param int m_param: :math:`$\\mathcal{M}$` in the reference. Should be a power of two chosen to be sufficiently large to obtain an accurate block-encoding.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_bits_p</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">m_param</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Signature</span><span class="p">:</span>
+        <span class="n">n_m</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_param</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Signature</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="n">QAny</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">)),</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;nu&quot;</span><span class="p">,</span> <span class="n">QAny</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,)),</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;flag_dim&quot;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">(),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,),</span> <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">),</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;flag_minus_zero&quot;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">(),</span> <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">),</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;and_ancilla&quot;</span><span class="p">,</span> <span class="n">QAny</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,),</span> <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">),</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;flag_ancilla&quot;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">(),</span> <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">),</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">QAny</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">n_m</span><span class="p">)),</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;flag_nu&quot;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">()),</span>
+                <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;catalytic&quot;</span><span class="p">,</span><span class="n">QBit</span><span class="p">())</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="PrepareNuState.pretty_name">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.PrepareNuState.pretty_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">pretty_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;PREP 1/‖ν‖ ∣ν⟩&quot;</span></div>
+
+
+<div class="viewcode-block" id="PrepareNuState.build_composite_bloq">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.PrepareNuState.build_composite_bloq">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_composite_bloq</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">bb</span><span class="p">:</span> <span class="n">BloqBuilder</span><span class="p">,</span> <span class="n">mu</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span> <span class="n">flag_nu</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span> <span class="n">catalytic</span><span class="p">:</span> <span class="n">SoquetT</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;SoquetT&#39;</span><span class="p">]:</span>
+        <span class="n">mu</span><span class="p">,</span> <span class="n">catalytic</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">PrepareMuUnaryEncoded</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">),</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">catalytic</span><span class="o">=</span><span class="n">catalytic</span><span class="p">)</span>
+        <span class="n">mu</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">catalytic</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">PrepareNuSuperposition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">),</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span> <span class="n">catalytic</span><span class="o">=</span><span class="n">catalytic</span><span class="p">)</span>
+        <span class="n">nu</span><span class="p">,</span> <span class="n">flag_dim</span><span class="p">,</span> <span class="n">flag_minus_zero</span><span class="p">,</span> <span class="n">and_ancilla</span><span class="p">,</span> <span class="n">flag_ancilla</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">FlagZeroAsFailure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">),</span> <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">)</span>
+        <span class="n">mu</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">flag_nu_lt_mu</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">TestNuLessThanMu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">),</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">)</span>
+        <span class="n">n_m</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_param</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">PrepareUniformSuperposition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_param</span><span class="p">),</span> <span class="n">target</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="n">mu</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">flag_minus_zero</span><span class="p">,</span> <span class="n">flag_nu</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">TestNuInequality</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">,</span> <span class="n">n_m</span><span class="p">),</span>
+            <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span>
+            <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+            <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
+            <span class="n">flag_minus_zero</span><span class="o">=</span><span class="n">flag_minus_zero</span><span class="p">,</span>
+            <span class="n">flag_ineq</span><span class="o">=</span><span class="n">flag_nu_lt_mu</span><span class="p">,</span>
+            <span class="n">succ</span><span class="o">=</span><span class="n">flag_nu</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;mu&#39;</span><span class="p">:</span> <span class="n">mu</span><span class="p">,</span> <span class="s1">&#39;nu&#39;</span><span class="p">:</span> <span class="n">nu</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">:</span> <span class="n">m</span><span class="p">,</span> <span class="s1">&#39;flag_nu&#39;</span><span class="p">:</span> <span class="n">flag_nu</span><span class="p">,</span> <span class="s1">&#39;catalytic&#39;</span><span class="p">:</span><span class="n">catalytic</span><span class="p">,</span> <span class="s1">&#39;flag_dim&#39;</span><span class="p">:</span> <span class="n">flag_dim</span><span class="p">,</span> <span class="s1">&#39;flag_minus_zero&#39;</span><span class="p">:</span> <span class="n">flag_minus_zero</span><span class="p">,</span> <span class="s1">&#39;and_ancilla&#39;</span><span class="p">:</span> <span class="n">and_ancilla</span><span class="p">,</span> <span class="s1">&#39;flag_ancilla&#39;</span><span class="p">:</span> <span class="n">flag_ancilla</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="PrepareNuState.build_call_graph">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.PrepareNuState.build_call_graph">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_call_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ssa</span><span class="p">:</span> <span class="s1">&#39;SympySymbolAllocator&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="s1">&#39;BloqCountT&#39;</span><span class="p">]:</span>
+        <span class="c1"># 1. Prepare unary encoded superposition state (Eq 77)</span>
+        <span class="n">cost_1</span> <span class="o">=</span> <span class="p">(</span><span class="n">PrepareMuUnaryEncoded</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">n_m</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_param</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="c1"># 2. Prepare mu-nu superposition (Eq 78)</span>
+        <span class="n">cost_2</span> <span class="o">=</span> <span class="p">(</span><span class="n">PrepareNuSuperposition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># 3. Remove minus zero</span>
+        <span class="n">cost_3</span> <span class="o">=</span> <span class="p">(</span><span class="n">FlagZeroAsFailure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># 4. Test $\nu &lt; 2^{\mu-2}$</span>
+        <span class="n">cost_4</span> <span class="o">=</span> <span class="p">(</span><span class="n">TestNuLessThanMu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># 5. Prepare superposition over $m$ which is a power of two so only clifford.</span>
+        <span class="n">cost_5</span> <span class="o">=</span> <span class="p">(</span><span class="n">PrepareUniformSuperposition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_param</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># 6. Test that $(2^{\mu-2})^2\mathcal{M} &gt; m (\nu_x^2 + \nu_y^2 + \nu_z^2)$</span>
+        <span class="n">cost_6</span> <span class="o">=</span> <span class="p">(</span><span class="n">TestNuInequality</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">,</span> <span class="n">n_m</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">cost_1</span><span class="p">,</span> <span class="n">cost_2</span><span class="p">,</span> <span class="n">cost_3</span><span class="p">,</span> <span class="n">cost_4</span><span class="p">,</span> <span class="n">cost_5</span><span class="p">,</span> <span class="n">cost_6</span><span class="p">}</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

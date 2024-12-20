@@ -1,0 +1,210 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debugger &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="_static/pyliqtr_logo.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e358f374"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Best Practices" href="best_practice.html" />
+    <link rel="prev" title="Contributing to pyliqtr" href="contribute.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Debugger</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuring-pyliqtr-to-be-debugged">Configuring pyliqtr to be debugged</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuring-specific-tests-to-be-debugged">Configuring specific tests to be debugged</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-debugger">Running the debugger</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Debugger</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/debugger.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="debugger">
+<h1>Debugger<a class="headerlink" href="#debugger" title="Link to this heading"></a></h1>
+<p>The debugger is the most important tool to have to expediate testing and development of code.
+It allows the coder to quickly find and resolve bugs in the code.</p>
+<section id="configuring-pyliqtr-to-be-debugged">
+<h2>Configuring pyliqtr to be debugged<a class="headerlink" href="#configuring-pyliqtr-to-be-debugged" title="Link to this heading"></a></h2>
+<p>Visual Code Studio (VCS) has a built in debugging tool, but it must be turned on in order to be utilized.
+To do setup the debugger do the following:</p>
+<ol class="arabic simple">
+<li><p>Click the “Run and Debug” icon on the far left vertical toolbar list (it looks like a triangle with a ladybug)</p></li>
+<li><p>On the nex GUI click the “launch.json” file link.</p></li>
+<li><p>Paste the following into the launch.json file (this file lives at the root project directory)</p></li>
+</ol>
+<p>{
+// Use IntelliSense to learn about possible attributes.
+// Hover to view descriptions of existing attributes.
+// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+“version”: “0.2.0”,
+“configurations”: [
+{
+“name”: “Python: Current File”,
+“type”: “python”,
+“request”: “launch”,
+“console”: “integratedTerminal”,
+“module”: “pytest”,
+“args”: [
+“-s”,
+“-m run_this_test”
+],
+“justMyCode”: false,
+“env”: {
+“PYTHONPATH”: “${workspaceRoot}”
+}
+}
+]
+}</p>
+<ol class="arabic simple" start="4">
+<li><p>Save the launch.json file.</p></li>
+<li><p>The GUI to the left will change and at the top, next to the “Run” triangle, there will be a dropdown with “Python: Current File (pyliqtr)” visible.</p></li>
+</ol>
+<p>If it was configured correctly you’ll see the env for your main conda environment started and the Terminal session will automatically change to wherever pyliqtr lives.</p>
+</section>
+<section id="configuring-specific-tests-to-be-debugged">
+<h2>Configuring specific tests to be debugged<a class="headerlink" href="#configuring-specific-tests-to-be-debugged" title="Link to this heading"></a></h2>
+<p>In the launch.json file you copied there was a parameter:
+“args”: [
+“-s”,
+“-m run_this_test”
+],
+the -m part of this parameter tells the debugger to only run tests that have been tagged with the tag “run_this_test”.
+You can tag 1 or more tests with this tag. One of the features that makes a debugger so powerful is the ability to run 1 single test.
+This allows for debugging without having to wade through logs and/or errors from potentianlly dozens or hundreds of other tests.</p>
+<p>In order to tag a test to be run this way, you must add the following annotation before it:
+&#64;pytest.mark.run_this_test
+Note: you can change the tag “run_this_test” to be whatever you want, but the tag in the test file must match the tag in the launch.json file.</p>
+<p>an example of a marked test is below:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@pytest.mark.run_this_test
+def test_default_settings(self, settings_obj):
+    assert settings_obj.bias_list[0] == &quot;qubit-01_Z&quot;
+    assert settings_obj.bias_list[1] == &quot;qubit-01_X&quot;
+
+    assert len(settings_obj.points) == len(settings_obj.bias_list)
+    assert all([settings_obj.points[n] == 100 for n in range(2)])
+
+    assert len(settings_obj.amplitude_list) == len(settings_obj.bias_list)
+    assert all([settings_obj.amplitude_list[n] == 1.5 for n in range(2)])
+</pre></div>
+</div>
+</section>
+<section id="running-the-debugger">
+<h2>Running the debugger<a class="headerlink" href="#running-the-debugger" title="Link to this heading"></a></h2>
+<p>Once the launch.json file is updated and your tests are tagged, you are ready to debug.
+Now you can run the debugger by clicking the green triangle in the Debugger pane, and you’ll see the session running in the Terminal.
+You can now set breakpoints wherever you need them in the various files you are testing.
+To set a breakpoint simply click the space to the left of the line number in the file you’d like to break at, on the line you’d
+like to stop program execution at. You can then use the “Variables” frame in the Debugger pane to inspect all the various objects
+that are being utilized by code you are testing.
+You can also see the execution stack, in reverse order from top to bottom, in the “Call Stack” frame.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="contribute.html" class="btn btn-neutral float-left" title="Contributing to pyliqtr" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="best_practice.html" class="btn btn-neutral float-right" title="Best Practices" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

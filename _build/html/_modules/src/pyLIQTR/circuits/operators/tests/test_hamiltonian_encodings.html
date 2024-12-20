@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.printing</span> <span class="kn">import</span> <span class="n">_build_qasm_qubit_map</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.circuit_decomposition</span> <span class="kn">import</span> <span class="n">decompose_once</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.Hamiltonian</span> <span class="kn">import</span> <span class="n">Hamiltonian</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.selectV</span> \
+    <span class="kn">import</span> <span class="nn">ChildsSelectV</span><span class="o">,</span><span class="nn">QROMSelectV</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.prepare</span> <span class="kn">import</span> <span class="n">Prepare</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.hamiltonian_encodings</span> \
+    <span class="kn">import</span> <span class="nn">UnitaryBlockEncode</span><span class="o">,</span> <span class="nn">SzegedyWalkOperator</span>
+
+<div class="viewcode-block" id="TestEncodings">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings">[docs]</a>
+<span class="k">class</span> <span class="nc">TestEncodings</span><span class="p">:</span>
+<div class="viewcode-block" id="TestEncodings.getHamiltonianAndQubits">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.getHamiltonianAndQubits">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">getHamiltonianAndQubits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">terms</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;XXXX&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">),(</span><span class="s2">&quot;YYYY&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">),(</span><span class="s2">&quot;ZZZZ&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+                 <span class="p">(</span><span class="s2">&quot;XIIY&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),(</span><span class="s2">&quot;IXYI&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">),(</span><span class="s2">&quot;IZIZ&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">)]</span>
+        <span class="n">ham</span> <span class="o">=</span> <span class="n">Hamiltonian</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span>
+        <span class="n">ham</span><span class="o">.</span><span class="n">adjust_hamiltonian</span><span class="p">()</span>
+        <span class="n">allqubits</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">LineQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">4</span><span class="o">+</span><span class="n">ham</span><span class="o">.</span><span class="n">loglen</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">trgt</span> <span class="o">=</span> <span class="n">allqubits</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">ctl</span> <span class="o">=</span> <span class="n">allqubits</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span>
+        <span class="n">phs</span> <span class="o">=</span> <span class="p">[</span><span class="n">allqubits</span><span class="p">[</span><span class="mi">7</span><span class="p">]]</span>
+        <span class="n">anc</span> <span class="o">=</span> <span class="n">allqubits</span><span class="p">[</span><span class="mi">8</span><span class="p">:]</span>
+
+        <span class="k">yield</span> <span class="p">(</span><span class="n">ham</span><span class="p">,</span><span class="n">trgt</span><span class="p">,</span><span class="n">ctl</span><span class="p">,</span><span class="n">phs</span><span class="p">,</span><span class="n">anc</span><span class="p">)</span>
+        <span class="k">del</span> <span class="p">(</span><span class="n">ham</span><span class="p">,</span><span class="n">trgt</span><span class="p">,</span><span class="n">ctl</span><span class="p">,</span><span class="n">phs</span><span class="p">,</span><span class="n">anc</span><span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="TestEncodings.getHamiltonianAndQubits2">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.getHamiltonianAndQubits2">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">getHamiltonianAndQubits2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">terms</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;XXXX&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),(</span><span class="s2">&quot;YYYY&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),(</span><span class="s2">&quot;ZZZZ&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                 <span class="p">(</span><span class="s2">&quot;XIIY&quot;</span><span class="p">,</span><span class="o">+</span><span class="mi">1</span><span class="p">),(</span><span class="s2">&quot;IXYI&quot;</span><span class="p">,</span><span class="o">+</span><span class="mi">2</span><span class="p">),(</span><span class="s2">&quot;IZIZ&quot;</span><span class="p">,</span><span class="o">+</span><span class="mi">3</span><span class="p">)]</span>
+        <span class="n">ham</span> <span class="o">=</span> <span class="n">Hamiltonian</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span>
+        <span class="n">ham</span><span class="o">.</span><span class="n">adjust_hamiltonian</span><span class="p">()</span>
+        <span class="n">allqubits</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">LineQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">4</span><span class="o">+</span><span class="n">ham</span><span class="o">.</span><span class="n">loglen</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">trgt</span> <span class="o">=</span> <span class="n">allqubits</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">ctl</span> <span class="o">=</span> <span class="n">allqubits</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span>
+        <span class="n">phs</span> <span class="o">=</span> <span class="p">[</span><span class="n">allqubits</span><span class="p">[</span><span class="mi">7</span><span class="p">]]</span>
+        <span class="n">anc</span> <span class="o">=</span> <span class="n">allqubits</span><span class="p">[</span><span class="mi">8</span><span class="p">:]</span>
+
+        <span class="k">yield</span> <span class="p">(</span><span class="n">ham</span><span class="p">,</span><span class="n">trgt</span><span class="p">,</span><span class="n">ctl</span><span class="p">,</span><span class="n">phs</span><span class="p">,</span><span class="n">anc</span><span class="p">)</span>
+        <span class="k">del</span> <span class="p">(</span><span class="n">ham</span><span class="p">,</span><span class="n">trgt</span><span class="p">,</span><span class="n">ctl</span><span class="p">,</span><span class="n">phs</span><span class="p">,</span><span class="n">anc</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestEncodings.getOperator">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.getOperator">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">getOperator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">getHamiltonianAndQubits</span><span class="p">):</span>
+        <span class="n">ham</span> <span class="o">=</span> <span class="n">getHamiltonianAndQubits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">trgtQ</span> <span class="o">=</span> <span class="n">getHamiltonianAndQubits</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">ctlQ</span> <span class="o">=</span> <span class="n">getHamiltonianAndQubits</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">phsQ</span> <span class="o">=</span> <span class="n">getHamiltonianAndQubits</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">ancillaQ</span> <span class="o">=</span> <span class="n">getHamiltonianAndQubits</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">allQ</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">trgtQ</span><span class="p">,</span><span class="o">*</span><span class="n">ctlQ</span><span class="p">,</span><span class="o">*</span><span class="n">phsQ</span><span class="p">,</span><span class="o">*</span><span class="n">ancillaQ</span><span class="p">]</span>
+        
+        <span class="c1">#A hamiltonian encoding only generates the action of a </span>
+        <span class="c1">#prepare and select, no other guarantees</span>
+        <span class="n">selVO</span> <span class="o">=</span> <span class="n">ChildsSelectV</span><span class="p">(</span><span class="n">hamiltonian</span> <span class="o">=</span> <span class="n">ham</span><span class="p">,</span>
+                            <span class="n">phase_qubit</span> <span class="o">=</span> <span class="n">phsQ</span><span class="p">,</span>
+                            <span class="n">target_qubits</span> <span class="o">=</span> <span class="n">trgtQ</span><span class="p">,</span>
+                            <span class="n">control_qubits</span> <span class="o">=</span> <span class="n">ctlQ</span><span class="p">,</span>
+                            <span class="n">ancilla_qubits</span> <span class="o">=</span> <span class="n">ancillaQ</span><span class="p">)</span>
+        <span class="n">prepO</span> <span class="o">=</span> <span class="n">Prepare</span><span class="p">(</span><span class="n">qubit_reg</span> <span class="o">=</span> <span class="n">ctlQ</span><span class="p">,</span> <span class="n">alphas</span> <span class="o">=</span> <span class="n">ham</span><span class="o">.</span><span class="n">alphas</span><span class="p">)</span>
+        <span class="n">operator</span> <span class="o">=</span> <span class="n">UnitaryBlockEncode</span><span class="p">(</span><span class="n">hamiltonian</span><span class="o">=</span><span class="n">ham</span><span class="p">,</span>
+                            <span class="n">selectOracle</span><span class="o">=</span><span class="n">selVO</span><span class="p">,</span> <span class="n">prepareOracle</span><span class="o">=</span><span class="n">prepO</span><span class="p">,</span>
+                            <span class="n">phase_qubit</span> <span class="o">=</span> <span class="n">phsQ</span><span class="p">,</span>
+                            <span class="n">target_qubits</span> <span class="o">=</span> <span class="n">trgtQ</span><span class="p">,</span>
+                            <span class="n">control_qubits</span> <span class="o">=</span> <span class="n">ctlQ</span><span class="p">,</span>
+                            <span class="n">ancilla_qubits</span> <span class="o">=</span> <span class="n">ancillaQ</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">operator</span><span class="p">,</span> <span class="n">selVO</span><span class="p">,</span> <span class="n">prepO</span><span class="p">,</span> <span class="n">allQ</span></div>
+
+    
+<div class="viewcode-block" id="TestEncodings.test_unitary_basic">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.test_unitary_basic">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_unitary_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">getOperator</span><span class="p">):</span>
+        <span class="n">operator</span> <span class="o">=</span> <span class="n">getOperator</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">selVO</span> <span class="o">=</span> <span class="n">getOperator</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">prepO</span> <span class="o">=</span> <span class="n">getOperator</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">allQ</span> <span class="o">=</span> <span class="n">getOperator</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">allQ</span><span class="p">))</span>
+        <span class="n">opStr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">operator</span><span class="p">)</span>
+        <span class="c1">#Check printing</span>
+        <span class="k">assert</span><span class="p">(</span><span class="s2">&quot;UnitaryBE q(7),q(8),q(9),q(10),q(4),q(5),q(6),q(0),q(1),q(2),q(3)&quot;</span> <span class="o">==</span> \
+                <span class="n">opStr</span><span class="p">)</span>
+
+        <span class="c1">#check qasm print</span>
+        <span class="n">qasm_args</span><span class="p">,</span><span class="n">__</span><span class="p">,</span><span class="n">__</span> <span class="o">=</span> <span class="n">_build_qasm_qubit_map</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+        <span class="n">trueQasmStr</span> <span class="o">=</span> <span class="s2">&quot;UnitaryBE(q(7),q(8),q(9),q(10),q(4),q(5),q(6),q(0),q(1),q(2),q(3))</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">circuit</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">opQasmStr</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">qasm</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">qasm_args</span><span class="p">)</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">opQasmStr</span> <span class="o">==</span> <span class="n">trueQasmStr</span><span class="p">)</span>
+        <span class="c1">#Check number of qubits</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">()</span> <span class="o">==</span> <span class="mi">11</span><span class="p">)</span>
+
+        <span class="c1">#We wrap these two operators, therefore, we should add one level of decomposition</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">total_decomp</span> <span class="o">==</span> <span class="n">selVO</span><span class="o">.</span><span class="n">total_decomp</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestEncodings.test_unitary_decomp">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.test_unitary_decomp">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_unitary_decomp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">getOperator</span><span class="p">):</span>
+        <span class="n">operator</span> <span class="o">=</span> <span class="n">getOperator</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">selVO</span> <span class="o">=</span> <span class="n">getOperator</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">prepO</span> <span class="o">=</span> <span class="n">getOperator</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">allQ</span> <span class="o">=</span> <span class="n">getOperator</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">allQ</span><span class="p">))</span>
+        <span class="n">decomposed_circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">align_left</span><span class="p">(</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">circuit</span><span class="p">))</span>
+        <span class="n">true_qasm_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">OPENQASM 2.0;</span>
+<span class="s2">include &quot;qelib1.inc&quot;;</span>
+
+
+<span class="s2">// Qubits: [q(0), q(1), q(2), q(3), q(4), q(5), q(6), q(7), q(8), q(9), q(10)]</span>
+<span class="s2">qreg q[11];</span>
+
+
+<span class="s2">Prepare(q(4),q(5),q(6))</span>
+<span class="s2">ChildsSelectV(q(7),q(8),q(9),q(10),q(4),q(5),q(6),q(0),q(1),q(2),q(3))</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="n">cq_qasm</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">qasm</span><span class="p">(</span><span class="n">decomposed_circuit</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">cq_qasm</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">true_qasm_str</span><span class="p">))</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

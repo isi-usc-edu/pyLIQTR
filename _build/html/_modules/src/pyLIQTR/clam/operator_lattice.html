@@ -1,0 +1,822 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.clam.operator_lattice &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.clam.operator_lattice</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.clam.operator_lattice</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###    Operator Lattice - Routines to manipulate operator-tagged lattices    ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+
+
+<span class="kn">import</span>  <span class="nn">numpy</span>                    <span class="k">as</span>      <span class="nn">np</span>
+<span class="kn">import</span>  <span class="nn">networkx</span>                 <span class="k">as</span>      <span class="nn">netx</span>
+
+<span class="kn">from</span>    <span class="nn">copy</span>                             <span class="kn">import</span>  <span class="n">deepcopy</span>
+<span class="kn">from</span>    <span class="nn">pyLIQTR.clam.operator_strings</span>    <span class="kn">import</span>  <span class="n">op_strings</span>
+
+<span class="kn">from</span>    <span class="nn">pyLIQTR.clam.cell_complex</span>        <span class="kn">import</span>  <span class="n">OperatorCell</span>
+<span class="kn">from</span>    <span class="nn">pyLIQTR.clam.operator_complex</span>    <span class="kn">import</span>  <span class="n">Site</span><span class="p">,</span> <span class="n">Edge</span><span class="p">,</span> <span class="n">Plaquette</span>
+
+<span class="kn">from</span>    <span class="nn">pyLIQTR.clam.utilities</span>           <span class="kn">import</span>  <span class="n">tupleize_sites</span>
+
+<span class="kn">from</span>    <span class="nn">pyLIQTR.clam.lattice</span>             <span class="kn">import</span>  <span class="n">Lattice</span><span class="p">,</span> <span class="n">UnitCell</span>
+
+
+
+
+<span class="c1">##  OperatorUnitCell()                             (UnitCell)           </span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">##  UnitCell decorated with operators and coefficients.  </span>
+<span class="c1">## </span>
+<span class="c1">##  Arguments:</span>
+<span class="c1">##</span>
+<span class="c1">##      td         -      Term dictionary for on-site and bond</span>
+<span class="c1">##                        operators (keys are site type labels)</span>
+<span class="c1">##</span>
+<span class="c1">##                          td  =  {}</span>
+<span class="c1">##                          td[&#39;A&#39;]  =  [ [ &#39;X&#39;, &#39;Z&#39; ], [ 1.0, 0.5 ]]</span>
+<span class="c1">##                          td[&#39;AA&#39;] =  [ [ &#39;ZZ&#39; ], [ -1.0 ] ]</span>
+<span class="c1">##</span>
+<span class="c1">##                        The &#39;_&#39; keyword will apppy the associated terms </span>
+<span class="c1">##                        to all sites and edges without a td entry.</span>
+<span class="c1">##                         </span>
+<span class="c1">##      sites      -      List of Sites in unit cell</span>
+<span class="c1">##      edges      -      List of Edges in unit cell</span>
+<span class="c1">##      dummy_sites  -    Dummy sites used to identify terms outside</span>
+<span class="c1">##                        of the unit cell in the periodic system.</span>
+<span class="c1">##      asymmetric_ops -  Whether term keys are treated as symmetric.  For</span>
+<span class="c1">##                        instance, &#39;AB&#39; and &#39;BA&#39; have the same term by</span>
+<span class="c1">##                        by default (i.e., only one term must appear in the</span>
+<span class="c1">##                        dictionary &lt;td&gt;).  The asymmetric case requires </span>
+<span class="c1">##                        different entries for &#39;AB&#39; and &#39;BA&#39;.</span>
+<span class="c1">##      double         -  Creates bipartite lattice by duplicating all sites</span>
+<span class="c1">##                        and edges in the input.  The lattices are linked</span>
+<span class="c1">##                        by edge terms specified in the &lt;onsite=&gt; dict. </span>
+<span class="c1">##      vectors        -  Array of cell vectors (for building repeats in an</span>
+<span class="c1">##                        OperatorLattice).</span>
+<span class="c1">##      </span>
+
+<div class="viewcode-block" id="OperatorUnitCell">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.OperatorUnitCell">[docs]</a>
+<span class="k">class</span> <span class="nc">OperatorUnitCell</span><span class="p">(</span><span class="n">UnitCell</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">td</span><span class="p">,</span> 
+                        <span class="n">sites</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                        <span class="n">dummy_sites</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                        <span class="n">edges</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                        <span class="n">asymmetric_ops</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                        <span class="n">double</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">onsite</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">vectors</span><span class="o">=</span><span class="kc">None</span>   <span class="p">):</span>
+
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">site_set</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge_set</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">plaquettes</span>  <span class="o">=</span>  <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_asymmetric_ops</span> <span class="o">=</span> <span class="n">asymmetric_ops</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">td</span>             <span class="o">=</span>  <span class="n">td</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">td_onsite</span>      <span class="o">=</span>  <span class="n">onsite</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sites</span>        <span class="o">=</span>  <span class="n">sites</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__edges</span>        <span class="o">=</span>  <span class="n">edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dummy_sites</span>  <span class="o">=</span>  <span class="n">dummy_sites</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vectors</span>        <span class="o">=</span>  <span class="n">vectors</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">double</span>         <span class="o">=</span>  <span class="n">double</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">build_cell</span><span class="p">()</span>
+
+        <span class="n">include_sites</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_set</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_set</span>
+
+        <span class="n">UnitCell</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sites</span><span class="o">=</span><span class="n">include_sites</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">td_onsite</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">double</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">double</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__double</span><span class="p">()</span>
+
+
+
+    <span class="c1">## Get the term dictionary entry associated</span>
+    <span class="c1">## with label &lt;label&gt;.</span>
+    <span class="c1">##</span>
+<div class="viewcode-block" id="OperatorUnitCell.get_term">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.OperatorUnitCell.get_term">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">label</span><span class="p">,</span><span class="n">term_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">term_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">term_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">td</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asymmetric_ops</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">term_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">term_label</span>  <span class="o">=</span>  <span class="n">label</span>
+            <span class="k">elif</span> <span class="n">label</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">term_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">term_label</span>  <span class="o">=</span>  <span class="n">label</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;_&#39;</span> <span class="ow">in</span> <span class="n">term_dict</span><span class="p">):</span>
+                <span class="n">term_label</span>  <span class="o">=</span>  <span class="s1">&#39;_&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Term &quot;</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="s2">&quot; not found in term dictionary.&quot;</span><span class="p">)</span>
+                <span class="c1"># should just set this to zero in actuality        </span>
+
+ <span class="c1">#       return(term_dict[term_label])</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">term_label</span><span class="p">)</span></div>
+
+
+
+    <span class="c1">## Populate the unit cell using the input</span>
+    <span class="c1">##</span>
+<div class="viewcode-block" id="OperatorUnitCell.build_cell">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.OperatorUnitCell.build_cell">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sites</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_site</span><span class="p">(</span><span class="n">site</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__sites</span><span class="p">[</span><span class="n">site</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__edges</span><span class="p">:</span>
+
+            <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">edge</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">site</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sites</span><span class="p">):</span>
+                    <span class="n">label</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">site</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dummy_sites</span><span class="p">):</span>
+                    <span class="n">label</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dummy_sites</span><span class="p">[</span><span class="n">site</span><span class="p">]</span>
+
+            <span class="n">term_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_term</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+            <span class="c1"># if not self._asymmetric_ops:</span>
+            <span class="c1">#     if label in self.td.keys():</span>
+            <span class="c1">#         pass</span>
+            <span class="c1">#     elif label[::-1] in self.td.keys():</span>
+            <span class="c1">#         label = label[::-1]</span>
+            <span class="c1">#     else:</span>
+            <span class="c1">#         raise Exception(&quot;Term &quot;, label, &quot; not found in term dictionary.&quot;)</span>
+            <span class="c1">#         # should just set this to zero in actuality</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">term_label</span><span class="p">)</span></div>
+
+        
+
+
+    <span class="c1">## Wrapper to add a site &lt;s&gt; to the cell, with operators / coefficients</span>
+    <span class="c1">## extrated using label &lt;label&gt; from the term dictionary.</span>
+    <span class="c1">##</span>
+<div class="viewcode-block" id="OperatorUnitCell.add_site">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.OperatorUnitCell.add_site">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_site</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ops</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">td</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">cons</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">td</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> 
+                      <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">site_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">site</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+
+
+    <span class="c1">## Wrapper to add a edge &lt;s0&gt;, &lt;s1&gt; to the cell, with operators / coefficients</span>
+    <span class="c1">## extrated using label &lt;label&gt; from the term dictionary.</span>
+    <span class="c1">##</span>
+<div class="viewcode-block" id="OperatorUnitCell.add_edge">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.OperatorUnitCell.add_edge">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="n">edge</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">ops</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">td</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">cons</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">td</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                      <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+
+
+
+    <span class="c1">## Double the unit cell into bipartitie sublattices, and couple these </span>
+    <span class="c1">## lattices with the terms specified from &lt;self.td_onsite&gt;</span>
+    <span class="c1">##</span>
+    <span class="k">def</span> <span class="nf">__double</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">__sites</span>  <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">__edges</span>  <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        
+        <span class="n">n_sites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">__sites</span><span class="p">)</span>
+
+        <span class="c1"># if (len(onsite_terms) &lt; n_sites):</span>
+        <span class="c1">#     onsite_terms = [onsite_terms[0]]*n_sites</span>
+
+        <span class="n">sites_new</span>   <span class="o">=</span>  <span class="p">[]</span>
+        <span class="n">edges_new</span>   <span class="o">=</span>  <span class="p">[]</span>
+        <span class="n">edges_bond</span>  <span class="o">=</span>  <span class="p">[]</span>
+
+        <span class="n">vectors_new</span> <span class="o">=</span>  <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">__sites</span><span class="p">:</span>
+
+            <span class="n">b_even</span><span class="p">,</span><span class="n">b_odd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__double_basis</span><span class="p">(</span><span class="n">site</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="n">s_even</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">b_even</span><span class="p">,</span> <span class="n">ops</span><span class="o">=</span><span class="n">site</span><span class="o">.</span><span class="n">ops</span><span class="p">(),</span> <span class="n">cons</span><span class="o">=</span><span class="n">site</span><span class="o">.</span><span class="n">cons</span><span class="p">(),</span>
+                            <span class="n">label</span><span class="o">=</span><span class="n">site</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+            <span class="n">s_odd</span>  <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">b_odd</span><span class="p">,</span>  <span class="n">ops</span><span class="o">=</span><span class="n">site</span><span class="o">.</span><span class="n">ops</span><span class="p">(),</span> <span class="n">cons</span><span class="o">=</span><span class="n">site</span><span class="o">.</span><span class="n">cons</span><span class="p">(),</span> 
+                            <span class="n">label</span><span class="o">=</span><span class="n">site</span><span class="o">.</span><span class="n">label</span><span class="o">+</span><span class="s2">&quot;_d&quot;</span><span class="p">)</span>
+
+            <span class="n">sites_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s_even</span><span class="p">)</span>
+            <span class="n">sites_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s_odd</span><span class="p">)</span>
+
+            <span class="n">term</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_term</span><span class="p">(</span><span class="n">site</span><span class="o">.</span><span class="n">label</span><span class="p">,</span><span class="n">term_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">td_onsite</span><span class="p">)</span>
+
+
+            <span class="n">e_double</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="n">b_even</span><span class="p">,</span><span class="n">b_odd</span><span class="p">,</span> <span class="n">ops</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">td_onsite</span><span class="p">[</span><span class="n">term</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> 
+                            <span class="n">cons</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">td_onsite</span><span class="p">[</span><span class="n">term</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="n">site</span><span class="o">.</span><span class="n">label</span><span class="o">+</span><span class="s2">&quot;_d&quot;</span><span class="p">)</span>
+
+            <span class="n">edges_bond</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e_double</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">__edges</span><span class="p">:</span>
+
+            <span class="n">b0_even</span><span class="p">,</span><span class="n">b0_odd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__double_basis</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">b1_even</span><span class="p">,</span><span class="n">b1_odd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__double_basis</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="n">e_even</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="n">b0_even</span><span class="p">,</span><span class="n">b1_even</span><span class="p">,</span> <span class="n">ops</span><span class="o">=</span><span class="n">edge</span><span class="o">.</span><span class="n">ops</span><span class="p">(),</span> <span class="n">cons</span><span class="o">=</span><span class="n">edge</span><span class="o">.</span><span class="n">cons</span><span class="p">(),</span> 
+                            <span class="n">label</span><span class="o">=</span><span class="n">edge</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+            <span class="n">e_odd</span>  <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="n">b0_odd</span><span class="p">,</span><span class="n">b1_odd</span><span class="p">,</span> <span class="n">ops</span><span class="o">=</span><span class="n">edge</span><span class="o">.</span><span class="n">ops</span><span class="p">(),</span> <span class="n">cons</span><span class="o">=</span><span class="n">edge</span><span class="o">.</span><span class="n">cons</span><span class="p">(),</span> 
+                            <span class="n">label</span><span class="o">=</span><span class="n">edge</span><span class="o">.</span><span class="n">label</span><span class="o">+</span><span class="s2">&quot;_d&quot;</span><span class="p">)</span>
+
+            <span class="n">edges_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e_even</span><span class="p">)</span>
+            <span class="n">edges_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e_odd</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">vec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectors</span><span class="p">:</span>
+            <span class="n">vec_new</span>  <span class="o">=</span>  <span class="n">deepcopy</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+            <span class="n">vec_new</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">vec_new</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">vectors_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec_new</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_doubled</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">sites_new</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">site</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="p">(</span><span class="n">edges_new</span> <span class="o">+</span> <span class="n">edges_bond</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vectors</span> <span class="o">=</span> <span class="n">vectors_new</span>    
+
+
+
+    <span class="c1">## Double a given basis index into sites on even</span>
+    <span class="c1">## and odd index sublattices.</span>
+    <span class="c1">##</span>
+    <span class="k">def</span> <span class="nf">__double_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">basis</span><span class="p">):</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+
+        <span class="n">basis_even</span>  <span class="o">=</span>  <span class="p">[]</span>
+        <span class="n">basis_odd</span>   <span class="o">=</span>  <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+
+            <span class="n">basis_even</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basis</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+            <span class="n">basis_odd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basis</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+
+        <span class="n">basis_even</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="mi">2</span><span class="o">*</span><span class="n">basis</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">basis_odd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>  <span class="mi">2</span><span class="o">*</span><span class="n">basis</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">basis_even</span><span class="p">,</span><span class="n">basis_odd</span><span class="p">)</span></div>
+
+
+
+
+
+
+
+
+<span class="c1">##  OperatorLattice()                             (Lattice)           </span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">##  Lattice built up from an OperatorUnitCell object.</span>
+<span class="c1">## </span>
+<span class="c1">##  Arguments:</span>
+<span class="c1">##</span>
+<span class="c1">##      size       -      Tuple specifying lattice dimensions in </span>
+<span class="c1">##                        terms of unit cell repeats.</span>
+<span class="c1">##      unit       -      Unit cell to be repeated in lattice</span>
+<span class="c1">##                        (of type OperatorUnitCell)</span>
+<span class="c1">##      vectors    -      Lattice vectors, if not supplied via entry</span>
+<span class="c1">##                        in OperatorUnitCell.</span>
+<span class="c1">##      periodic   -      Tuple indicating if the lattice is periodic </span>
+<span class="c1">##                        in each dimension.</span>
+<span class="c1">##      type       -      Type of indexing scheme:</span>
+<span class="c1">##</span>
+<span class="c1">##                          &#39;op-lattice&#39;    -    indexing with native site indicies</span>
+<span class="c1">##                          &#39;op-qubit&#39;      -    indexing via qubit labeling strategy</span>
+<span class="c1">##</span>
+<span class="c1">##      strategy   -      Indexing strategy when mapping latice sites to qubits</span>
+<span class="c1">##                        (for type=&#39;op-qubit&#39;).  Arguments</span>
+<span class="c1">##</span>
+<span class="c1">##                          &#39;zigzag&#39;        -    Zigzag path through lattice</span>
+<span class="c1">##                          &#39;armchair&#39;      -    Armchair path through lattice</span>
+<span class="c1">##                          &#39;custom&#39;        -    Custom index function passed as </span>
+<span class="c1">##                                               &lt; custom_index_function = &gt;</span>
+<span class="c1">##</span>
+<span class="c1">##      overhang   -      Rule for handling edges that dangle outside the target</span>
+<span class="c1">##                        lattice:</span>
+<span class="c1">##</span>
+<span class="c1">##                          &#39;ignore&#39;        -   retain hanging terms even if no lattice</span>
+<span class="c1">##                                              site is present.</span>
+<span class="c1">##                          &#39;drop&#39;          -   drop hanging terms</span>
+<span class="c1">##                          &#39;fill&#39;          -   add in sites that would be linked by these</span>
+<span class="c1">##                                              edges by referencing back to the unit cell.</span>
+<span class="c1">##                                              ( *** not implemented *** )</span>
+<span class="c1">##            </span>
+<span class="c1">##      vectors        -  Array of cell vectors (for building repeats in an</span>
+<span class="c1">##                        OperatorLattice).</span>
+<span class="c1">##  </span>
+
+<div class="viewcode-block" id="OperatorLattice">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.OperatorLattice">[docs]</a>
+<span class="k">class</span> <span class="nc">OperatorLattice</span><span class="p">(</span><span class="n">Lattice</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">vectors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  
+                        <span class="n">periodic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;op-qubit&#39;</span><span class="p">,</span> 
+                        <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;zigzag&#39;</span><span class="p">,</span>
+                        <span class="n">overhang</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span><span class="p">,</span>
+                        <span class="n">custom_index_function</span><span class="o">=</span><span class="kc">None</span>   <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span>      <span class="o">=</span>  <span class="nb">type</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">op_set</span>    <span class="o">=</span>  <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span>  <span class="o">=</span>  <span class="n">strategy</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_index_function</span> <span class="o">=</span> <span class="n">custom_index_function</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">vectors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">vectors</span> <span class="o">=</span> <span class="n">unit</span><span class="o">.</span><span class="n">vectors</span>
+
+        <span class="n">Lattice</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vectors</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">,</span><span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">size</span><span class="p">,</span><span class="n">overhang</span><span class="o">=</span><span class="n">overhang</span><span class="p">)</span>
+
+
+    <span class="c1">## Return operator strings corresponding to lattice, with indexing given</span>
+    <span class="c1">## by &lt;type&gt; {&#39;op-lattice&#39;, &#39;op-qubit&#39;}.  Indexing strategy &lt;strategy&gt;</span>
+    <span class="c1">## may be supplied when &lt;type=&#39;op-qubit&#39;&gt;</span>
+    <span class="c1">##</span>
+<div class="viewcode-block" id="OperatorLattice.op_strings">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.OperatorLattice.op_strings">[docs]</a>
+    <span class="k">def</span> <span class="nf">op_strings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">strategy</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">strategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span>
+
+        <span class="n">op_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lattice_to_ops</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">strategy</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span>
+                                    <span class="n">return_as</span><span class="o">=</span><span class="s1">&#39;op_strings&#39;</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">op_str</span><span class="p">)</span></div>
+
+    
+
+
+    <span class="c1">## Return list of operators from lattice.  See op_strings() for</span>
+    <span class="c1">## arguments.</span>
+    <span class="c1">##</span>
+<div class="viewcode-block" id="OperatorLattice.operator_list">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.OperatorLattice.operator_list">[docs]</a>
+    <span class="k">def</span> <span class="nf">operator_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">strategy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">with_label</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">strategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span>
+
+        <span class="n">op_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lattice_to_ops</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">strategy</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span>
+                                        <span class="n">return_as</span><span class="o">=</span><span class="s1">&#39;list&#39;</span><span class="p">,</span><span class="n">with_label</span><span class="o">=</span><span class="n">with_label</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">op_list</span><span class="p">)</span></div>
+
+
+
+
+    <span class="c1">## Handles conversion of lattice terms into formats that can be ingested </span>
+    <span class="c1">## by other routines.</span>
+    <span class="c1">##</span>
+<div class="viewcode-block" id="OperatorLattice.lattice_to_ops">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.OperatorLattice.lattice_to_ops">[docs]</a>
+    <span class="k">def</span> <span class="nf">lattice_to_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                             <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                             <span class="n">custom_index_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                             <span class="n">return_as</span><span class="o">=</span><span class="s1">&#39;list&#39;</span><span class="p">,</span> 
+                             <span class="n">with_label</span><span class="o">=</span><span class="kc">False</span>  <span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">strategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="nb">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">return_as</span> <span class="o">==</span> <span class="s1">&#39;list&#39;</span><span class="p">):</span>
+            <span class="n">op_set</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">return_as</span> <span class="o">==</span> <span class="s1">&#39;op_strings&#39;</span><span class="p">):</span>
+            <span class="n">op_set</span> <span class="o">=</span> <span class="n">op_strings</span><span class="p">()</span>
+            <span class="n">op_set</span><span class="o">.</span><span class="n">set_num_qb</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>  <span class="c1"># set number of qubits</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">return_as</span> <span class="o">==</span> <span class="s1">&#39;tensor_product&#39;</span><span class="p">):</span>
+            <span class="n">op_set</span> <span class="o">=</span> <span class="n">TensorOperator</span><span class="p">()</span>
+
+        <span class="n">lindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__handle_index_set</span><span class="p">(</span><span class="n">strategy</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">)):</span>
+            
+            <span class="k">for</span> <span class="n">basis</span><span class="p">,</span><span class="n">props</span><span class="p">,</span><span class="n">labels</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="n">n</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">n</span><span class="p">]):</span>
+
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">props</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;op-qubit&#39;</span><span class="p">):</span>
+
+                        <span class="n">sites</span>        <span class="o">=</span>  <span class="p">[]</span>
+                        <span class="n">reject_flag</span>  <span class="o">=</span>  <span class="kc">False</span>
+
+                        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">tupleize_sites</span><span class="p">(</span><span class="n">basis</span><span class="p">):</span> 
+                            <span class="k">if</span> <span class="p">(</span><span class="n">item</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lindex</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+
+                                <span class="n">reject_flag</span> <span class="o">=</span> <span class="kc">True</span>
+                                <span class="k">continue</span>
+                            
+                            <span class="n">sites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lindex</span><span class="p">[</span><span class="n">item</span><span class="p">])</span>
+
+
+                    <span class="k">elif</span> <span class="p">(</span><span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;op-lattice&#39;</span><span class="p">):</span>
+                        <span class="n">reject_flag</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="n">sites</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">tupleize_sites</span><span class="p">(</span><span class="n">basis</span><span class="p">)])</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">reject_flag</span><span class="p">):</span>
+                        <span class="k">continue</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">return_as</span> <span class="o">==</span> <span class="s1">&#39;list&#39;</span><span class="p">):</span>
+                        
+                        <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">props</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="nb">str</span><span class="p">)):</span>
+                            <span class="n">op_entry</span> <span class="o">=</span> <span class="n">op_tuple_to_string</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">props</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">op_entry</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+                        <span class="k">if</span> <span class="p">(</span><span class="n">with_label</span><span class="p">):</span>
+                            <span class="n">pack</span> <span class="o">=</span> <span class="p">[</span><span class="n">sites</span><span class="p">,</span> <span class="n">op_entry</span><span class="p">,</span> <span class="n">props</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">labels</span><span class="p">]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">pack</span> <span class="o">=</span> <span class="p">[</span><span class="n">sites</span><span class="p">,</span> <span class="n">op_entry</span><span class="p">,</span> <span class="n">props</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+
+                        <span class="n">op_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pack</span><span class="p">)</span>
+                        
+                    <span class="k">elif</span> <span class="p">(</span><span class="n">return_as</span> <span class="o">==</span> <span class="s1">&#39;op_strings&#39;</span><span class="p">):</span>
+                        <span class="n">op_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sites</span><span class="p">,</span> <span class="n">op_tuple_to_string</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">props</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">])),</span> 
+                                        <span class="n">props</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">op_set</span><span class="p">)</span></div>
+
+
+
+
+
+    <span class="k">def</span> <span class="nf">__handle_index_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">strategy</span><span class="p">):</span>
+
+        <span class="k">if</span>   <span class="p">(</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s1">&#39;zigzag&#39;</span> <span class="p">):</span>
+            <span class="n">lindex</span> <span class="o">=</span> <span class="n">get_index_set_zigzag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="p">(</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s1">&#39;snake&#39;</span> <span class="p">):</span>
+            <span class="n">lindex</span> <span class="o">=</span> <span class="n">get_index_set_snake</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">strategy</span> <span class="o">==</span> <span class="s1">&#39;custom&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_index_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">lindex</span> <span class="o">=</span> <span class="n">get_index_set_snake</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Custom lattice-to-qubit indexing function not supplied &quot;</span><span class="o">+</span>
+                                <span class="s2">&quot;(use keyword custom_index_function= ).&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unsupported index strategy: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">strategy</span><span class="p">))</span>
+        
+
+        <span class="k">return</span><span class="p">(</span><span class="n">lindex</span><span class="p">)</span></div>
+
+        
+
+
+
+
+
+
+
+<span class="c1">##  get_index_set_zigzag()                                     </span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">##  Index path that zigzags through lattice based on sites in</span>
+<span class="c1">##  list &lt;sites&gt;.  Assumes (row, col, z) order.</span>
+<span class="c1">##  </span>
+
+<div class="viewcode-block" id="get_index_set_zigzag">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.get_index_set_zigzag">[docs]</a>
+<span class="k">def</span> <span class="nf">get_index_set_zigzag</span><span class="p">(</span><span class="n">sites</span><span class="p">):</span>
+  
+    <span class="c1"># assumes row, col, z order</span>
+
+    <span class="n">N</span>    <span class="o">=</span>  <span class="nb">len</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span>
+    <span class="n">dim</span>  <span class="o">=</span>  <span class="nb">len</span><span class="p">(</span><span class="n">sites</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">idx_dict</span> <span class="o">=</span> <span class="p">{}</span>
+ 
+    <span class="n">site_array</span> <span class="o">=</span> <span class="n">sites_to_array</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">site_array</span> <span class="o">=</span> <span class="n">site_array</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">lexsort</span><span class="p">((</span><span class="n">site_array</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> 
+                                    <span class="n">site_array</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))]</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">dim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="n">site_array</span> <span class="o">=</span> <span class="n">site_array</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">lexsort</span><span class="p">((</span><span class="n">site_array</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span><span class="n">site_array</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> 
+                                    <span class="n">site_array</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))]</span>
+
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">site_array</span><span class="p">)):</span>
+        <span class="n">idx_dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">site_array</span><span class="p">[</span><span class="n">n</span><span class="p">])]</span> <span class="o">=</span> <span class="n">n</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">idx_dict</span><span class="p">)</span></div>
+
+
+
+
+
+
+
+<span class="c1">##  sites_to_array()                                     </span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">##  Builds an array of coordinate tuples from Site array &lt;sites&gt;</span>
+<span class="c1">##  </span>
+
+
+<div class="viewcode-block" id="sites_to_array">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.sites_to_array">[docs]</a>
+<span class="k">def</span> <span class="nf">sites_to_array</span><span class="p">(</span><span class="n">sites</span><span class="p">):</span>
+    
+    <span class="n">n_sites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span>
+    <span class="n">d_site</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sites</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">site_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_sites</span><span class="p">,</span><span class="n">d_site</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sites</span><span class="p">):</span>
+        <span class="n">site_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">sites</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">site_array</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">##  op_tuple_to_string()                                     </span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">##  Concatenates a tuple of operator labels into a string</span>
+<span class="c1">##  </span>
+
+<div class="viewcode-block" id="op_tuple_to_string">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.op_tuple_to_string">[docs]</a>
+<span class="k">def</span> <span class="nf">op_tuple_to_string</span><span class="p">(</span><span class="n">ops</span><span class="p">):</span>
+    <span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">ops</span><span class="p">:</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="n">op</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">##  draw_lattice_2d()                                     </span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">##  Draw a 2d projection of the OperatorLattice object &lt;LT&gt;.  </span>
+<span class="c1">##</span>
+<span class="c1">##  Arguments:</span>
+<span class="c1">##</span>
+<span class="c1">##      LT               -      OperatorLattice object</span>
+<span class="c1">##      single_spin      -      Plot only a single sublattice</span>
+<span class="c1">##                              of a doubled lattice</span>
+<span class="c1">##      doubled          -      Use custom color scheme for doubled</span>
+<span class="c1">##                              lattice (buggy, not recommended)</span>
+<span class="c1">##      layout           -      Strategy for drawing lattice:</span>
+<span class="c1">##</span>
+<span class="c1">##                                  &#39;spring&#39;</span>
+<span class="c1">##                                  &#39;kamada_kawai&#39;</span>
+<span class="c1">##</span>
+<span class="c1">##      node_size        -      Relative size of drawn nodes</span>
+<span class="c1">##      with_labels      -      Option to print node labels on graph</span>
+<span class="c1">##      font_weight      -      Font weight for node labels</span>
+<span class="c1">##      label_type       -      Type of labels to use</span>
+<span class="c1">##  </span>
+
+<div class="viewcode-block" id="draw_lattice_2d">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_lattice.draw_lattice_2d">[docs]</a>
+<span class="k">def</span> <span class="nf">draw_lattice_2d</span><span class="p">(</span> <span class="n">LT</span><span class="p">,</span>
+                     <span class="n">color_nodes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">node_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                     <span class="n">font_weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span>
+                     <span class="n">with_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">label_type</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span>
+                     <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;kamada_kawai&#39;</span><span class="p">,</span>
+                     <span class="n">doubled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">single_spin</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
+
+    <span class="n">labels</span>     <span class="o">=</span>  <span class="p">{}</span>
+
+    <span class="n">finished</span>   <span class="o">=</span>  <span class="p">[]</span>
+    <span class="n">edge_set</span>   <span class="o">=</span>  <span class="p">[]</span>
+
+    <span class="n">op_strings</span> <span class="o">=</span> <span class="n">LT</span><span class="o">.</span><span class="n">op_strings</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">LT</span><span class="o">.</span><span class="n">operator_list</span><span class="p">(</span><span class="n">with_label</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">term</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="n">term</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">finished</span> <span class="p">):</span>
+                    <span class="n">labels</span><span class="p">[</span><span class="n">term</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span>  <span class="n">term</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">term</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">single_spin</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">term</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">!=</span> <span class="s2">&quot;_d&quot;</span><span class="p">)</span> <span class="p">):</span>
+                    <span class="n">edge_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">term</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">edge_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">term</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">G</span> <span class="o">=</span> <span class="n">netx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">edge_set</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;kamada_kawai&#39;</span><span class="p">):</span>
+        <span class="n">layout_manager</span> <span class="o">=</span> <span class="n">netx</span><span class="o">.</span><span class="n">kamada_kawai_layout</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;spring&#39;</span><span class="p">):</span>
+        <span class="n">layout_manager</span> <span class="o">=</span> <span class="n">netx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">color_nodes</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">doubled</span><span class="p">:</span>
+            <span class="n">node_pallete</span>  <span class="o">=</span> <span class="p">{</span>   <span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;cornflowerblue&#39;</span><span class="p">,</span>  
+                                <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> 
+                                <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;salmon&#39;</span><span class="p">,</span> 
+                                <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> 
+                                <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;yellowgreen&#39;</span><span class="p">,</span>  
+                                <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;green&#39;</span>             <span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">node_pallete</span>  <span class="o">=</span> <span class="p">{</span>   <span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;cornflowerblue&#39;</span><span class="p">,</span> 
+                                <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;salmon&#39;</span><span class="p">,</span> 
+                                <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;yellowgreen&#39;</span><span class="p">,</span> 
+                                <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> 
+                                <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> 
+                                <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;green&#39;</span>              <span class="p">}</span>
+
+        <span class="n">color_map</span>     <span class="o">=</span>  <span class="p">[]</span>
+        <span class="n">unique_nodes</span>  <span class="o">=</span>  <span class="p">{}</span>
+
+        <span class="n">nidx</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">G</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">doubled</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">labels</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">unique_nodes</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">node</span><span class="p">]]</span> <span class="o">=</span> <span class="n">nidx</span>
+                    <span class="n">nidx</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">color_map</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_pallete</span><span class="p">[</span><span class="n">unique_nodes</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">node</span><span class="p">]]])</span>
+
+            <span class="k">if</span> <span class="n">doubled</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">!=</span> <span class="s2">&quot;_d&quot;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">labels</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+
+                        <span class="n">unique_nodes</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">node</span><span class="p">]]</span> <span class="o">=</span> <span class="n">nidx</span>
+                        <span class="n">nidx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                        <span class="n">unique_nodes</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;_d&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nidx</span>
+                        <span class="n">nidx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="n">color_map</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_pallete</span><span class="p">[</span><span class="n">unique_nodes</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">node</span><span class="p">]]])</span>
+                    <span class="n">color_map</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_pallete</span><span class="p">[</span><span class="n">unique_nodes</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;_d&quot;</span><span class="p">]])</span>
+
+        <span class="n">netx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span> <span class="n">G</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="n">with_labels</span><span class="p">,</span> <span class="n">font_weight</span><span class="o">=</span><span class="n">font_weight</span><span class="p">,</span> 
+                      <span class="n">pos</span><span class="o">=</span><span class="n">layout_manager</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> 
+                      <span class="n">node_size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> 
+                      <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;--&#39;</span>  <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">netx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span> <span class="n">G</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="n">with_labels</span><span class="p">,</span> <span class="n">font_weight</span><span class="o">=</span><span class="n">font_weight</span><span class="p">,</span> 
+                      <span class="n">pos</span><span class="o">=</span><span class="n">layout_manager</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> 
+                      <span class="n">width</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;--&#39;</span>  <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.ProblemInstances.ElectronicStructure &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.ProblemInstances.ElectronicStructure</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.ProblemInstances.ElectronicStructure</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pyLIQTR.pest_interface.pest_python</span> <span class="k">as</span> <span class="nn">pp</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.clam.operator_strings</span> <span class="kn">import</span> <span class="n">op_strings</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.ProblemInstances.ProblemInstance</span> <span class="kn">import</span> <span class="n">ProblemInstance</span>
+
+<div class="viewcode-block" id="ElectronicStructure">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure">[docs]</a>
+<span class="k">class</span> <span class="nc">ElectronicStructure</span><span class="p">(</span><span class="n">ProblemInstance</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This ProblemInstance represents periodic electronic structure Hamiltonians generated using PEST. The Hamiltonians generally take on the form </span>
+<span class="sd">    </span>
+<span class="sd">    .. math::</span>
+
+<span class="sd">        H = \\sum_{p,q,\\sigma} T(p-q) a^\\dagger_{p,\\sigma}a_{q,\\sigma} + \\sum_{p,\\sigma} U(p) n_{p,\\sigma} + \\sum_{(p,\\alpha)\\neq(q,\\beta)} V(p-q)n_{p,\\alpha}n_{q,\\beta}</span>
+<span class="sd">    </span>
+<span class="sd">    where :math:`a^\dagger_{p,\sigma}` and :math:`a_{p,\sigma}` are fermionic creation and annihilation operators on spatial orbital :math:`p` with spin :math:`\sigma` in {up,down}, and :math:`n_{p,\sigma} = a^\dagger_{p,\sigma}a_{p,\sigma}` is the number operator.</span>
+
+<span class="sd">    Given the PEST files, this ProblemInstance can yield the information needed to encode the Hamiltonian using the LinearT, PauliLCU or FirstQuantized block encoding. It also provides descriptions of the electronic structure system size with M_vals, the number of grid points along each spatial dimension, and N, the total number of orbitals.</span>
+
+<span class="sd">    :param str filenameH: filename for PEST generated ham.hdf5 file containing the Hamiltonian coefficients</span>
+<span class="sd">    :param str filenameG: filename for PEST generated grid.hdf5 file containing the basis grid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameH</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">filenameG</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filenameH</span> <span class="o">=</span> <span class="n">filenameH</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filenameG</span> <span class="o">=</span><span class="n">filenameG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_H</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">HamiltonianCoefficients</span><span class="p">()</span>  
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">open_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenameG</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">open_hamiltonian</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenameH</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unable to open </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenameH</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenameG</span><span class="si">}</span><span class="s2">. Check filename and path. To generate new hdf5 files see &#39;pest-intro.ipynb&#39; &quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_M_vals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">n_points</span><span class="p">()</span> <span class="c1"># Number of grid points (orbitals) along each spatial dimension.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_M_vals</span><span class="p">)</span> <span class="c1"># doesn&#39;t include spin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="s2">&quot;ElectronicStructure&quot;</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">ProblemInstance</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="si">}</span><span class="se">\r\n\t</span><span class="s2">Hamiltonian filename:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenameH</span><span class="si">}</span><span class="se">\t</span><span class="s2">Grid filename:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenameG</span><span class="si">}</span><span class="se">\n\r\t</span><span class="s2">N:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="si">}</span><span class="se">\t</span><span class="s2">M_vals:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_M_vals</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<div class="viewcode-block" id="ElectronicStructure.n_qubits">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.n_qubits">[docs]</a>
+    <span class="k">def</span> <span class="nf">n_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># equal to number of basis functions including spin</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">)</span></div>
+
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_ops</span> <span class="o">=</span> <span class="n">op_strings</span><span class="p">(</span><span class="n">N_qb</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">)</span>
+        <span class="n">spin_offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_N</span>
+
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">):</span>
+
+            <span class="c1"># loop over q&gt;p and include a factor of 2 since coeffs only depend on abs(p-q)</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">):</span>
+
+                <span class="n">xx_str</span> <span class="o">=</span> <span class="s1">&#39;X&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;X&#39;</span>
+                <span class="n">yy_str</span> <span class="o">=</span> <span class="s1">&#39;Y&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;Y&#39;</span>
+                <span class="n">idx_set_up</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">idx_set_down</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="p">,</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+                
+                <span class="c1"># NOTE: returns only non zero coefficients</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_xzx</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="c1"># spin up</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_xzx</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)))</span> <span class="c1"># factor of 2 for q&lt;p case</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_xzx</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)))</span>
+                    <span class="c1"># spin down</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_xzx</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)))</span> <span class="c1"># factor of 2 for q&lt;p case</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_xzx</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_zz</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="c1"># alpha = beta = up, p \neq q</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">(((</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">),</span> <span class="s1">&#39;ZZ&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_zz</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)))</span> <span class="c1"># factor of 2 for q&lt;p case</span>
+                    <span class="c1"># alpha = beta = down, p \neq q</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">(((</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="p">,</span><span class="n">q</span><span class="o">+</span><span class="n">spin_offset</span><span class="p">),</span> <span class="s1">&#39;ZZ&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_zz</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)))</span>
+                    <span class="c1"># alpha=up, beta=down, p \neq q</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">(((</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="o">+</span><span class="n">spin_offset</span><span class="p">),</span> <span class="s1">&#39;ZZ&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_zz</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)))</span>
+                    <span class="c1"># alpha=down, beta=up, p \neq q</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">(((</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="p">,</span><span class="n">q</span><span class="p">),</span> <span class="s1">&#39;ZZ&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_zz</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)))</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_zz</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="c1"># alpha=up, beta=down, p = q</span>
+                <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">(((</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="p">),</span> <span class="s1">&#39;ZZ&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_zz</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">)))</span>
+                <span class="c1"># alpha=down, beta=up, p = q</span>
+                <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">(((</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="p">,</span><span class="n">p</span><span class="p">),</span> <span class="s1">&#39;ZZ&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_zz</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">)))</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_z</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">(((</span><span class="n">p</span><span class="p">,),</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_z</span><span class="p">(</span><span class="n">p</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">_ops</span>
+
+<div class="viewcode-block" id="ElectronicStructure.get_alpha">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.get_alpha">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">encoding</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;LinearT&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns sum of the absolute value of the hamiltonian coefficients.&quot;&quot;&quot;</span>
+        <span class="c1"># TODO: can this be more efficient</span>
+        <span class="k">if</span> <span class="n">encoding</span> <span class="o">==</span> <span class="s1">&#39;LinearT&#39;</span><span class="p">:</span>
+            <span class="n">T_pq_mag_sum</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">V_pq_mag_sum</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">U_p_mag_sum</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">):</span>
+                <span class="n">U_p_mag_sum</span> <span class="o">+=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">U</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">):</span>
+                    <span class="n">T_pq_mag_sum</span> <span class="o">+=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">p</span> <span class="o">!=</span> <span class="n">q</span><span class="p">:</span> <span class="c1"># exclude p=q for V</span>
+                        <span class="n">V_pq_mag_sum</span> <span class="o">+=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">V</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">))</span>    
+            <span class="k">return</span> <span class="n">T_pq_mag_sum</span> <span class="o">+</span> <span class="n">U_p_mag_sum</span> <span class="o">+</span> <span class="n">V_pq_mag_sum</span></div>
+
+
+<div class="viewcode-block" id="ElectronicStructure.yield_PauliLCU_Info">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.yield_PauliLCU_Info">[docs]</a>
+    <span class="k">def</span> <span class="nf">yield_PauliLCU_Info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">return_as</span><span class="o">=</span><span class="s1">&#39;arrays&#39;</span><span class="p">,</span><span class="n">do_pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">pad_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;yields parameters used for the PauliLCU block encoding.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">return_as</span> <span class="o">==</span> <span class="s1">&#39;arrays&#39;</span><span class="p">):</span>
+            <span class="n">terms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ops</span><span class="o">.</span><span class="n">terms</span><span class="p">(</span><span class="n">do_pad</span><span class="o">=</span><span class="n">do_pad</span><span class="p">,</span><span class="n">pad_value</span><span class="o">=</span><span class="n">pad_value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">return_as</span> <span class="o">==</span> <span class="s1">&#39;strings&#39;</span><span class="p">):</span>
+            <span class="n">terms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ops</span><span class="o">.</span><span class="n">strings</span><span class="p">(</span><span class="n">do_pad</span><span class="o">=</span><span class="n">do_pad</span><span class="p">,</span><span class="n">pad_value</span><span class="o">=</span><span class="n">pad_value</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">term</span></div>
+
+
+<div class="viewcode-block" id="ElectronicStructure.yield_LinearT_Info">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.yield_LinearT_Info">[docs]</a>
+    <span class="k">def</span> <span class="nf">yield_LinearT_Info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">termSelect</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;yields parameters used for the LinearT block encoding.&quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">termSelect</span> <span class="o">==</span> <span class="s1">&#39;T&#39;</span><span class="p">:</span>
+            <span class="c1"># this corresponds to tilde(T)**2 in https://arxiv.org/pdf/1805.03662.pdf</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">):</span>
+                <span class="n">term</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_xzx</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># factor of 2 since coefficients occur for each xzx/yzy term only once depending on p&lt;q or p&gt;q</span>
+                <span class="n">sign</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">term</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">term</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="k">yield</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">sign</span><span class="p">),</span><span class="nb">abs</span><span class="p">(</span><span class="n">term</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">termSelect</span> <span class="o">==</span> <span class="s1">&#39;U&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">):</span>
+                <span class="n">term</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_z</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                <span class="n">sign</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">term</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">term</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="k">yield</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">sign</span><span class="p">),</span><span class="nb">abs</span><span class="p">(</span><span class="n">term</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">termSelect</span> <span class="o">==</span> <span class="s1">&#39;V&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">):</span>
+                <span class="n">term</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">c_zz</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">sign</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">term</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">term</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="k">yield</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">sign</span><span class="p">),</span><span class="nb">abs</span><span class="p">(</span><span class="n">term</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ElectronicStructure.yield_FirstQuantized_Info">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.yield_FirstQuantized_Info">[docs]</a>
+    <span class="k">def</span> <span class="nf">yield_FirstQuantized_Info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">geometry_file</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;yields parameters used for the FirstQuantized block encoding.&quot;&quot;&quot;</span>
+
+        <span class="n">molecule</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">geometry_file</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;atom&#39;</span><span class="p">],</span><span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># number of plane waves (N)</span>
+        <span class="k">yield</span> <span class="s1">&#39;num_plane_waves&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_N</span>
+
+        <span class="c1"># computational cell volume (Omega)</span>
+        <span class="k">yield</span> <span class="s1">&#39;cell_volume&#39;</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="o">.</span><span class="n">vecs</span><span class="p">))</span>
+
+        <span class="c1"># number of atoms (L)</span>
+        <span class="k">yield</span> <span class="s1">&#39;num_atoms&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">molecule</span><span class="p">)</span>
+
+        <span class="c1"># number of electrons (eta)</span>
+        <span class="n">eta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">molecule</span><span class="p">[</span><span class="s1">&#39;atom&#39;</span><span class="p">]:</span>
+            <span class="n">eta</span> <span class="o">+=</span> <span class="n">pp</span><span class="o">.</span><span class="n">dt_atomic_numbers</span><span class="p">[</span><span class="n">atom</span><span class="p">]</span>
+        <span class="k">yield</span> <span class="s1">&#39;num_electrons&#39;</span><span class="p">,</span> <span class="n">eta</span>
+
+        <span class="c1"># sum of atomic numbers (lambda_zeta)</span>
+        <span class="k">yield</span> <span class="s1">&#39;sum_atomic_num&#39;</span><span class="p">,</span> <span class="n">eta</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

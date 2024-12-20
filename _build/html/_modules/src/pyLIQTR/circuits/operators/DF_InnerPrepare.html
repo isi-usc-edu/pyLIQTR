@@ -1,0 +1,311 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.operators.DF_InnerPrepare &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.operators.DF_InnerPrepare</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.circuits.operators.DF_InnerPrepare</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
+
+<span class="kn">import</span> <span class="nn">attr</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">qualtran</span> <span class="k">as</span> <span class="nn">qt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
+<span class="kn">from</span> <span class="nn">qualtran.linalg.lcu_util</span> <span class="kn">import</span> <span class="n">preprocess_lcu_coefficients_for_reversible_sampling</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.data_loading</span> <span class="kn">import</span> <span class="n">QROM</span>
+<span class="kn">from</span> <span class="nn">qualtran._infra.data_types</span> <span class="kn">import</span> <span class="n">BoundedQUInt</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.ControlledUniformSuperposition</span> <span class="kn">import</span> <span class="n">ControlledPrepareUniformSuperposition</span>
+<span class="kn">from</span> <span class="nn">qualtran</span> <span class="kn">import</span> <span class="n">Side</span>
+
+<div class="viewcode-block" id="InnerPrepare">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare">[docs]</a>
+<span class="nd">@cirq</span><span class="o">.</span><span class="n">value_equality</span><span class="p">()</span>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">frozen</span>
+<span class="k">class</span> <span class="nc">InnerPrepare</span><span class="p">(</span><span class="n">qt</span><span class="o">.</span><span class="n">GateWithRegisters</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Implements [In-prep_l] block from Fig 16 of https://arxiv.org/abs/2011.03494. Outlined in step 3 pgs 52-53</span>
+
+<span class="sd">    Prepares sum_p sqrt(T_pq&#39;) |p&gt;|0&gt; + sum_{l=1}^L (sum_{p=1}^Xi_l sqrt(f_p^l) |p&gt;|succ_p=1&gt; + sum_{p&gt;Xi_l}junk_p|succ_p=0&gt;)|l&gt;</span>
+
+<span class="sd">    where succ_p is used to flag when the condition p&lt;=Xi_l is met</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">n_Xi</span><span class="p">:</span> <span class="nb">int</span> <span class="c1"># number of Xi bits = int(np.ceil(np.log2(max(Xi_vals)))) see Eq C14</span>
+    <span class="n">n_LXi</span><span class="p">:</span> <span class="nb">int</span> <span class="c1"># int(np.ceil(np.log2(L*Xi+N/2)))</span>
+    <span class="n">alt_data</span><span class="p">:</span> <span class="n">NDArray</span>
+    <span class="n">keep_data</span><span class="p">:</span> <span class="n">NDArray</span>
+    <span class="n">signs_data</span><span class="p">:</span> <span class="n">NDArray</span>
+    <span class="n">alt_signs_data</span><span class="p">:</span> <span class="n">NDArray</span>
+    <span class="n">keep_bitsize</span><span class="p">:</span> <span class="nb">int</span> <span class="c1"># bitsize of keep data (mu from alias sampling)</span>
+    <span class="n">br</span><span class="p">:</span> <span class="nb">int</span> <span class="c1"># precision of rotation in controlled uniform superposition</span>
+    <span class="n">bphi</span><span class="p">:</span> <span class="nb">int</span> <span class="c1"># number of phase gradient bits (&gt;=br)</span>
+
+<div class="viewcode-block" id="InnerPrepare.from_Tf_arrays">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.from_Tf_arrays">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_Tf_arrays</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">T_coeffs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">T_signs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">fpl_coeffs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">fpl_signs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">Xi_vals</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">keep_bitsize</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">br</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">bphi</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">8</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;InnerPrepare&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Method to construct InnerPrepare gate for a given set of one-body and double factorization two-body coefficients.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - T_coeffs: should have N/2 elements, corresponds to absolute value of Eq A9</span>
+<span class="sd">            - T_signs: should have N/2 elements, corresponds to signs of T_coeffs -- 0 for negative, 1 for positive</span>
+<span class="sd">            - fpl_coeffs: should have LxN/2 elements, corresponds to absolute value of f_p^l in Eq C1</span>
+<span class="sd">            - fpl_signs: should have LxN/2 elements, corresponds to signs of fpl_coeffs -- 0 for negative, 1 for positive</span>
+<span class="sd">            - Xi_vals: list of cutoffs for truncating the double factorization, limit on inner sum in Eq C11</span>
+<span class="sd">            - keep_bitsize: the number of precision bits for alias sampling</span>
+<span class="sd">            - br: number of bits storing angle for aa rotation used in ControlledPrepareUniformSuperposition</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fpl_coeffs</span><span class="p">)</span>
+        <span class="n">max_Xi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">T_coeffs</span><span class="p">)</span><span class="c1">#max(Xi_vals)</span>
+        <span class="n">num_fpl</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">Xi_vals</span><span class="p">)</span>
+        <span class="n">num_one_body_coeffs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">T_coeffs</span><span class="p">)</span>
+
+        <span class="c1"># if all coeffs are 0, don&#39;t compute alt vals</span>
+        <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">T_coeffs</span><span class="p">):</span>
+            <span class="n">eps</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">keep_bitsize</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">T_coeffs</span><span class="p">)</span>
+            <span class="n">alt_data</span><span class="p">,</span> <span class="n">keep_data</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">preprocess_lcu_coefficients_for_reversible_sampling</span><span class="p">(</span><span class="n">lcu_coefficients</span><span class="o">=</span><span class="n">T_coeffs</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">eps</span><span class="p">)</span>
+            <span class="n">alt_signs</span> <span class="o">=</span> <span class="p">[</span><span class="n">T_signs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">alt_data</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">alt_data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">T_coeffs</span><span class="p">)</span>
+            <span class="n">keep_data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">T_coeffs</span><span class="p">)</span>
+            <span class="n">alt_signs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">T_signs</span><span class="p">)</span>
+
+        <span class="n">signs</span> <span class="o">=</span> <span class="n">T_signs</span><span class="p">[:]</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
+            <span class="n">Xi_l</span> <span class="o">=</span> <span class="n">Xi_vals</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+            <span class="n">f_coeffs</span> <span class="o">=</span> <span class="n">fpl_coeffs</span><span class="p">[</span><span class="n">l</span><span class="p">][:</span><span class="n">Xi_l</span><span class="p">]</span>
+            <span class="n">f_signs</span> <span class="o">=</span> <span class="n">fpl_signs</span><span class="p">[</span><span class="n">l</span><span class="p">][:</span><span class="n">Xi_l</span><span class="p">]</span>
+
+            <span class="n">eps_l</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">keep_bitsize</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">f_coeffs</span><span class="p">)</span>
+            <span class="n">alt_l</span><span class="p">,</span> <span class="n">keep_l</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">preprocess_lcu_coefficients_for_reversible_sampling</span><span class="p">(</span><span class="n">lcu_coefficients</span><span class="o">=</span><span class="n">f_coeffs</span><span class="p">,</span><span class="n">epsilon</span><span class="o">=</span><span class="n">eps_l</span><span class="p">)</span>
+            <span class="n">alt_signs_l</span> <span class="o">=</span> <span class="p">[</span><span class="n">f_signs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">alt_l</span><span class="p">]</span>
+
+            <span class="n">alt_data</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">alt_l</span><span class="p">)</span>
+            <span class="n">alt_signs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">alt_signs_l</span><span class="p">)</span>
+            <span class="n">keep_data</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">keep_l</span><span class="p">)</span>
+            <span class="n">signs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">f_signs</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">InnerPrepare</span><span class="p">(</span>
+                <span class="n">n_Xi</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">max_Xi</span><span class="p">))),</span>
+                <span class="n">n_LXi</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">num_fpl</span><span class="o">+</span><span class="n">num_one_body_coeffs</span><span class="p">))),</span>
+                <span class="n">alt_data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alt_data</span><span class="p">),</span>
+                <span class="n">keep_data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">keep_data</span><span class="p">),</span>
+                <span class="n">signs_data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">signs</span><span class="p">),</span>
+                <span class="n">alt_signs_data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alt_signs</span><span class="p">),</span>
+                <span class="n">keep_bitsize</span><span class="o">=</span><span class="n">keep_bitsize</span><span class="p">,</span>
+                <span class="n">br</span><span class="o">=</span><span class="n">br</span><span class="p">,</span>
+                <span class="n">bphi</span><span class="o">=</span><span class="n">bphi</span>
+        <span class="p">)</span></div>
+
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">extra_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Register</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">(</span> <span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Signature</span><span class="o">.</span><span class="n">build</span><span class="p">(</span>
+            <span class="n">unary_ancilla</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_Xi</span><span class="p">,</span>
+            <span class="n">zero_padding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_LXi</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_Xi</span><span class="p">,</span>
+            <span class="n">less_than_equal_ancilla</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">alt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_Xi</span><span class="p">,</span>
+            <span class="n">keep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_bitsize</span><span class="p">,</span>
+            <span class="n">alt_sign</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_bitsize</span><span class="p">,</span>
+            <span class="n">Xi_l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_Xi</span><span class="p">,</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_LXi</span><span class="p">,</span>
+            <span class="n">rot_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">br</span><span class="p">,</span> <span class="c1"># for phase gradient rotation</span>
+            <span class="n">rot_ancilla</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="c1"># target for aa rotation</span>
+            <span class="n">succ_p</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bphi</span>
+        <span class="p">)</span> <span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">selection_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Register</span><span class="p">]:</span>
+        <span class="n">contiguous_reg</span> <span class="o">=</span> <span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;contiguous_index&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_LXi</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">)</span>
+        <span class="n">p_reg</span> <span class="o">=</span> <span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;p&quot;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_Xi</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">contiguous_reg</span><span class="p">,</span> <span class="n">p_reg</span><span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Signature</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Signature</span><span class="p">([</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">extra_registers</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_value_equality_values_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># NOTE: needed to make t_complexity work. Returns values used to determine when two objects are equal. See https://github.com/quantumlib/Cirq/blob/v1.2.0/cirq-core/cirq/value/value_equality_attr.py#L26 for more info</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_Xi</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_LXi</span><span class="p">,</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alt_data</span><span class="p">),</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keep_data</span><span class="p">),</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">signs_data</span><span class="p">),</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alt_signs_data</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keep_bitsize</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">br</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bphi</span><span class="p">,</span>
+        <span class="p">)</span>
+    
+<div class="viewcode-block" id="InnerPrepare.decompose_from_registers">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.decompose_from_registers">[docs]</a>
+    <span class="k">def</span> <span class="nf">decompose_from_registers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">context</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">quregs</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">],</span>  <span class="c1"># type:ignore[type-var]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">OP_TREE</span><span class="p">:</span>
+
+        <span class="n">index_reg</span><span class="p">,</span> <span class="n">Xi_l</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">contiguous_index</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;Xi_l&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;contiguous_index&#39;</span><span class="p">]</span>
+        <span class="n">unary_ancilla</span><span class="p">,</span> <span class="n">less_than_equal_ancilla</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;unary_ancilla&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;less_than_equal_ancilla&#39;</span><span class="p">]</span>
+        <span class="n">alt</span><span class="p">,</span> <span class="n">keep</span><span class="p">,</span> <span class="n">sign_reg</span><span class="p">,</span> <span class="n">alt_sign_reg</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;alt&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;keep&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;sign&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;alt_sign&#39;</span><span class="p">]</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span>
+        <span class="n">zero_padding</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;zero_padding&#39;</span><span class="p">]</span>
+
+        <span class="c1"># prepare equal superposition over Xi_l states on |p&gt; (rounded up to the nearest power of 2, where states with p&lt;Xi_l are flagged on succ_p qubit)</span>
+        <span class="k">yield</span> <span class="n">ControlledPrepareUniformSuperposition</span><span class="p">(</span><span class="n">br</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">br</span><span class="p">,</span><span class="n">bphi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bphi</span><span class="p">,</span><span class="n">n_Xi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_Xi</span><span class="p">)</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">quregs</span><span class="p">)</span>
+
+        <span class="c1"># create contiguous index register by adding offset to Xi_l. should cost (n_L,Xi - 1) Toffolis since the contiguous index should iterate over all coefficients which corresponds to the range [0, sum(Xi_l)+N/2-1]</span>
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">arithmetic</span><span class="o">.</span><span class="n">addition</span><span class="o">.</span><span class="n">OutOfPlaceAdder</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_LXi</span><span class="p">)</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">zero_padding</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">index_reg</span><span class="p">),</span><span class="n">b</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">contiguous_index</span><span class="p">)</span>
+
+        <span class="c1"># qrom for alias sampling preparation, output is selected by contiguous index</span>
+        <span class="n">qrom_gate</span> <span class="o">=</span> <span class="n">QROM</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">alt_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">signs_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alt_signs_data</span><span class="p">],</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_LXi</span><span class="o">+</span><span class="mi">1</span><span class="p">,),</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_Xi</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">keep_bitsize</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">yield</span> <span class="n">qrom_gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">contiguous_index</span><span class="p">,</span><span class="n">target0_</span><span class="o">=</span><span class="n">alt</span><span class="p">,</span><span class="n">target1_</span><span class="o">=</span><span class="n">keep</span><span class="p">,</span><span class="n">target2_</span><span class="o">=</span><span class="n">sign_reg</span><span class="p">,</span><span class="n">target3_</span><span class="o">=</span><span class="n">alt_sign_reg</span><span class="p">)</span>
+
+        <span class="c1"># prepare uniform superposition on sigma register for comparing to keep during alias sampling procedure</span>
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">on_each</span><span class="p">(</span><span class="o">*</span><span class="n">sigma</span><span class="p">)</span>
+
+        <span class="c1"># compare keep to sigma for alias sampling</span>
+        <span class="c1"># TODO: is there a way to explicitly check less_than ancilla can be reused?</span>
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">arithmetic</span><span class="o">.</span><span class="n">comparison</span><span class="o">.</span><span class="n">LessThanEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keep_bitsize</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">keep_bitsize</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">keep</span><span class="p">,</span> <span class="o">*</span><span class="n">sigma</span><span class="p">,</span> <span class="o">*</span><span class="n">less_than_equal_ancilla</span><span class="p">)</span>
+
+        <span class="c1"># swap alt index values into register where coefficients are to be prepared (p reg and sign)</span>
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">basic_gates</span><span class="o">.</span><span class="n">swap</span><span class="o">.</span><span class="n">CSwap</span><span class="o">.</span><span class="n">make_on</span><span class="p">(</span><span class="n">ctrl</span><span class="o">=</span><span class="n">less_than_equal_ancilla</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">alt_sign_reg</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">sign_reg</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">basic_gates</span><span class="o">.</span><span class="n">swap</span><span class="o">.</span><span class="n">CSwap</span><span class="o">.</span><span class="n">make_on</span><span class="p">(</span><span class="n">ctrl</span><span class="o">=</span><span class="n">less_than_equal_ancilla</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">alt</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">index_reg</span><span class="p">)</span>
+
+        <span class="c1">#uncompute less than -- frees less_than_equal_ancilla</span>
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">arithmetic</span><span class="o">.</span><span class="n">comparison</span><span class="o">.</span><span class="n">LessThanEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keep_bitsize</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">keep_bitsize</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">keep</span><span class="p">,</span> <span class="o">*</span><span class="n">sigma</span><span class="p">,</span> <span class="o">*</span><span class="n">less_than_equal_ancilla</span><span class="p">)</span>
+
+        <span class="c1">#uncompute add -- uses only Cliffords</span>
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">arithmetic</span><span class="o">.</span><span class="n">addition</span><span class="o">.</span><span class="n">OutOfPlaceAdder</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_LXi</span><span class="p">,</span><span class="n">is_adjoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">zero_padding</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">index_reg</span><span class="p">),</span><span class="n">b</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">contiguous_index</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

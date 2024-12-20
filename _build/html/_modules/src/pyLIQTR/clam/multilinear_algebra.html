@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.clam.multilinear_algebra &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.clam.multilinear_algebra</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.clam.multilinear_algebra</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###    MULTILINEAR_ALGEBRA - Methods for dense/sparse multilinear algebra    ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+
+
+
+<span class="kn">import</span>  <span class="nn">numpy</span>              <span class="k">as</span>  <span class="nn">np</span>
+<span class="kn">import</span>  <span class="nn">scipy.sparse</span>       <span class="k">as</span>  <span class="nn">sps</span>
+
+
+
+<span class="c1">## mk(ops), mk_s(ops)</span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">## Kronecker product of operators in list &lt;ops&gt;.  Sparse matrix</span>
+<span class="c1">## version is mk_s().</span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="mk">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.multilinear_algebra.mk">[docs]</a>
+<span class="k">def</span> <span class="nf">mk</span><span class="p">(</span><span class="n">ops</span><span class="p">):</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">ops</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">op</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">A</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="mk_s">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.multilinear_algebra.mk_s">[docs]</a>
+<span class="k">def</span> <span class="nf">mk_s</span><span class="p">(</span><span class="n">ops</span><span class="p">):</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">ops</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">sps</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">op</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">A</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">## mk_n(op,N)</span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">## N-fold Kronecker product of operator /</span>
+<span class="c1">## matrix op</span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="mk_n">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.multilinear_algebra.mk_n">[docs]</a>
+<span class="k">def</span> <span class="nf">mk_n</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">mk</span><span class="p">([</span><span class="n">op</span><span class="p">]</span><span class="o">*</span><span class="n">N</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mk_n_s">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.multilinear_algebra.mk_n_s">[docs]</a>
+<span class="k">def</span> <span class="nf">mk_n_s</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">mk_s</span><span class="p">([</span><span class="n">op</span><span class="p">]</span><span class="o">*</span><span class="n">N</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">## mk_id(op,N)</span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">## N-fold Kronecker product of identity element with dimension </span>
+<span class="c1">## dim (default=2).  Sparse version is mk_id_s().</span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="mk_id">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.multilinear_algebra.mk_id">[docs]</a>
+<span class="k">def</span> <span class="nf">mk_id</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">id_op</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim</span><span class="o">**</span><span class="n">N</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">id_op</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mk_id_s">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.multilinear_algebra.mk_id_s">[docs]</a>
+<span class="k">def</span> <span class="nf">mk_id_s</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">id_op</span> <span class="o">=</span> <span class="n">sps</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim</span><span class="o">**</span><span class="n">N</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">id_op</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">## mk_ipad(op,N)</span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">## N-fold Kronecker product of operator, padded with n identity </span>
+<span class="c1">## elements of dimension dim on the left and m of the same on the </span>
+<span class="c1">## right:</span>
+<span class="c1">##</span>
+<span class="c1">## I*I*I*I*I*op*I*I*I*I*I</span>
+<span class="c1">##     |            |</span>
+<span class="c1">##  n-fold       m-fold</span>
+<span class="c1">##</span>
+<span class="c1">## Sparse matrix version is mk_ipad_s().</span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="mk_idpad">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.multilinear_algebra.mk_idpad">[docs]</a>
+<span class="k">def</span> <span class="nf">mk_idpad</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">op</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    
+    <span class="n">lid</span> <span class="o">=</span> <span class="n">mk_id</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)</span>
+    <span class="n">rid</span> <span class="o">=</span> <span class="n">mk_id</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)</span>
+    
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">mk</span><span class="p">([</span><span class="n">lid</span><span class="p">,</span><span class="n">op</span><span class="p">,</span><span class="n">rid</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">pop</span></div>
+
+
+<div class="viewcode-block" id="mk_idpad_s">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.multilinear_algebra.mk_idpad_s">[docs]</a>
+<span class="k">def</span> <span class="nf">mk_idpad_s</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">op</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    
+    <span class="n">lid</span> <span class="o">=</span> <span class="n">mk_id_s</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)</span>
+    <span class="n">rid</span> <span class="o">=</span> <span class="n">mk_id_s</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)</span>
+    
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">mk_s</span><span class="p">([</span><span class="n">lid</span><span class="p">,</span><span class="n">op</span><span class="p">,</span><span class="n">rid</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">pop</span></div>
+
+
+
+
+<span class="c1">## mk_ksum(op,N)</span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">## Sum of identity padded Kronecker product &quot;strings&quot; from</span>
+<span class="c1">## Carleman linearization.  Sparse version is mk_ksum_s().</span>
+<span class="c1">##</span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="mk_ksum">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.multilinear_algebra.mk_ksum">[docs]</a>
+<span class="k">def</span> <span class="nf">mk_ksum</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    
+    <span class="n">ks</span> <span class="o">=</span> <span class="n">mk</span><span class="p">([</span><span class="n">mk_id</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">),</span><span class="n">op</span><span class="p">,</span><span class="n">mk_id</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)])</span>
+    
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+      
+        <span class="n">ks</span> <span class="o">+=</span> <span class="n">mk</span><span class="p">([</span><span class="n">mk_id</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">),</span><span class="n">op</span><span class="p">,</span><span class="n">mk_id</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)])</span>
+    
+    <span class="k">return</span> <span class="n">ks</span></div>
+
+
+
+<div class="viewcode-block" id="mk_ksum_s">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.multilinear_algebra.mk_ksum_s">[docs]</a>
+<span class="k">def</span> <span class="nf">mk_ksum_s</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    
+    <span class="n">ks</span> <span class="o">=</span> <span class="n">mk_s</span><span class="p">([</span><span class="n">mk_id_s</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">),</span><span class="n">op</span><span class="p">,</span><span class="n">mk_id_s</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)])</span>
+    
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+      
+        <span class="n">ks</span> <span class="o">+=</span> <span class="n">mk_s</span><span class="p">([</span><span class="n">mk_id_s</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">),</span><span class="n">op</span><span class="p">,</span><span class="n">mk_id_s</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)])</span>
+    
+    <span class="k">return</span> <span class="n">ks</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

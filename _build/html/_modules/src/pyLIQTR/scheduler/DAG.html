@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.scheduler.DAG &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.scheduler.DAG</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.scheduler.DAG</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">rustworkx</span> <span class="k">as</span> <span class="nn">rx</span>
+<span class="kn">from</span> <span class="nn">rustworkx.visualization</span> <span class="kn">import</span> <span class="n">graphviz_draw</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.scheduler.Instruction</span> <span class="kn">import</span> <span class="n">Instruction</span><span class="p">,</span> <span class="n">DependencyEdge</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<div class="viewcode-block" id="DAG">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.DAG.DAG">[docs]</a>
+<span class="k">class</span> <span class="nc">DAG</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class for storing and manipulating a DAG (directional acyclic graph). Allows for instructions to be linked by dependency type to qubits or previous instructions and removed by a scheduler or other external method. This class wraps around a rustworkx.PyDAG object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">max_moments</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param int max_moments: the maximum number of allowed instructions in the DAG. If this number is exceeded, no more instructions will be added to the DAG until it has been emptied by the scheduler.</span>
+<span class="sd">        :param dict qubit_node_idx: Dictionary of the form {qX: node index, qY: node index, ...}. Since qubit nodes are not instructions and do not have an index attribute, this dict saves the relevant node index to be referenced later.</span>
+<span class="sd">        :param list free_instructions: Running list of nodes with no incoming edges. Each time a qubit node is created, it is automatically added to this list, since it has no incoming edges by definition. Once a node has been added to the Scheduler&#39;s ready queue, it will be removed from this list. The list will be repopulated each time an instruction has been removed from the DAG.</span>
+<span class="sd">        :param dict dependency_log: Dictionary of the form {qX: [(second most recent dependency type, [associated instructions]), (most recent dependency type, [associated instructions])], qY: ...}. Stores two most recent dependency types  on a particular qubit and the set of commutable operators associated with each.</span>
+<span class="sd">        :param list loop_catcher: list keeping track of the ten most recently removed DAG layers. If all of the entries are &#39;0&#39; then the instruction removal is stuck in a loop. The DAG will then initiate a search for free instructions to resolve the loop.</span>
+<span class="sd">        :param int dag_cycle: Denotes how many times the DAG has reached its max_moment count, cleared, and begun refilling.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">insts_in_dag</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_moments</span> <span class="o">=</span> <span class="n">max_moments</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dag</span> <span class="o">=</span> <span class="n">rx</span><span class="o">.</span><span class="n">PyDAG</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qubit_node_idx</span> <span class="o">=</span> <span class="p">{}</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">free_instructions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop_catcher</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dag_cycle</span> <span class="o">=</span> <span class="mi">0</span>
+        
+    
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validate whether or not two graphs are equal by checking types and isomorphism.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span><span class="n">rx</span><span class="o">.</span><span class="n">PyDAG</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">rx</span><span class="o">.</span><span class="n">is_isomorphic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rx</span><span class="o">.</span><span class="n">is_isomorphic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="p">,</span><span class="n">other</span><span class="o">.</span><span class="n">dag</span><span class="p">)</span>
+
+    
+<div class="viewcode-block" id="DAG.add_dependency">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.DAG.DAG.add_dependency">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_dependency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">inst</span><span class="p">:</span><span class="n">Instruction</span><span class="p">,</span> <span class="n">forceAdd</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Add an instruction to the DAG along with each of its dependencies.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">insts_in_dag</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">dependencies</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">get_data_dependencies</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_link</span><span class="p">(</span><span class="n">dep</span><span class="p">,</span><span class="n">dependencies</span><span class="p">[</span><span class="n">dep</span><span class="p">],</span><span class="n">inst</span><span class="p">)</span> <span class="c1">#link current inst and dependency</span></div>
+
+
+    
+    <span class="k">def</span> <span class="nf">_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dependency</span><span class="p">,</span> <span class="n">dependency_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">instruction</span><span class="p">:</span><span class="n">Instruction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        For each dependency an instruction has, follow these steps:</span>
+<span class="sd">        1.  If the instruction does not yet exist as a node, add a node to the DAG with instruction attached. </span>
+<span class="sd">            If the instruction already has a node, fetch the index of the existing node.</span>
+<span class="sd">        2.  If the qubit that the dependency is on does not yet exist in the DAG, create a node with qubit attached.</span>
+<span class="sd">            Add an edge between the qubit node and the instruction node. Initialize this qubit&#39;s entry in the dependency log as:</span>
+<span class="sd">            qX: [(current dependency_type, [instruction])].</span>
+<span class="sd">        3.  If the qubit already exists in the DAG, reference its dependency log entry. The entry will be structured as:</span>
+<span class="sd">                qX: [(second most recent dependency_type, [instructions]), (most recent dependency_type, [instructions])].</span>
+<span class="sd">            Compare the current dependency_type to the most recent dependency_type in the log. </span>
+<span class="sd">            If they match, simply append the current instruction to the list of instructions associated with the most recent dependency_type.</span>
+<span class="sd">            If they do not match:</span>
+<span class="sd">                Check the length of the qubit&#39;s dependency log entry. </span>
+<span class="sd">                    If it is 1, then:</span>
+<span class="sd">                    qX: [(most recent dependency_type, [instructions])]. </span>
+<span class="sd">                    Each instruction in this list is an &#39;initial instruction&#39;, meaning that it must stem directly from a qubit node.</span>
+<span class="sd">                    Attach each of these initial instructions to the qubit node if an edge does not already exist between them.</span>
+<span class="sd">                    Now, add a second item to the qubit&#39;s dependency log entry, such that:</span>
+<span class="sd">                    qX: [(most recent dependency_type, [instructions]), (current dependency_type, [current instruction])].</span>
+
+<span class="sd">                    If it is 2, then:</span>
+<span class="sd">                    qX: [(second most recent dependency_type, [instructions]), (most recent dependency_type, [instructions])].</span>
+<span class="sd">                    For each instruction associated with the second most recent dependency_type, attach it to each instruction associated</span>
+<span class="sd">                    with the most recent dependency_type. This is to account for the fact that since each list of instructions is commutable </span>
+<span class="sd">                    within itself and could occur in any order, each instruction in the later list will depend on each instruction in </span>
+<span class="sd">                    the first list.</span>
+<span class="sd">                    Once this interlinking is complete, modify the qubit&#39;s entry in the dependency log such that:</span>
+<span class="sd">                    qX: [(most recent dependency_type, [instructions]), (current dependency_type, [current instruction])].</span>
+<span class="sd">                </span>
+<span class="sd">                    </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">instruction</span><span class="o">.</span><span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">inst_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">instruction</span><span class="p">)</span>
+            <span class="n">instruction</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">inst_idx</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inst_idx</span> <span class="o">=</span> <span class="n">instruction</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">qubit</span> <span class="o">=</span> <span class="n">dependency</span>
+        <span class="k">if</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">dependency_type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">dependency_type</span> <span class="o">==</span> <span class="s1">&#39;All&#39;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">instruction</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">c_inst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                        <span class="n">q_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubit_node_idx</span><span class="p">[</span><span class="n">qubit</span><span class="p">]</span>
+                        <span class="n">c_idx</span> <span class="o">=</span> <span class="n">c_inst</span><span class="o">.</span><span class="n">index</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">has_edge</span><span class="p">(</span><span class="n">q_idx</span><span class="p">,</span> <span class="n">c_idx</span><span class="p">):</span> 
+                            <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">q_idx</span><span class="p">,</span> <span class="n">c_idx</span><span class="p">,</span> <span class="n">DependencyEdge</span><span class="p">(</span><span class="n">qubit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">dependency_type</span><span class="p">,</span> <span class="p">[</span><span class="n">instruction</span><span class="p">]))</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">p_inst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                        <span class="k">for</span> <span class="n">c_inst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                            <span class="n">p_idx</span> <span class="o">=</span> <span class="n">p_inst</span><span class="o">.</span><span class="n">index</span>
+                            <span class="n">c_idx</span> <span class="o">=</span> <span class="n">c_inst</span><span class="o">.</span><span class="n">index</span>
+                            <span class="c1">#if p_idx in self.dag.node_indices():</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">p_idx</span><span class="p">,</span> <span class="n">c_idx</span><span class="p">,</span> <span class="n">DependencyEdge</span><span class="p">(</span><span class="n">qubit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+                            <span class="c1">#else:</span>
+                            <span class="c1">#    if self.dag.in_degree(c_idx) == 0:</span>
+                            <span class="c1">#        self.free_instructions.append(c_inst)</span>
+                    <span class="n">new_p_insts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_p_insts</span><span class="p">,</span> <span class="p">(</span><span class="n">dependency_type</span><span class="p">,</span> <span class="p">[</span><span class="n">instruction</span><span class="p">])]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">qubit_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qubit_node_idx</span><span class="p">[</span><span class="n">qubit</span><span class="p">]</span> <span class="o">=</span> <span class="n">qubit_node</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">qubit_node</span><span class="p">,</span> <span class="n">inst_idx</span><span class="p">,</span> <span class="n">DependencyEdge</span><span class="p">(</span><span class="n">qubit</span><span class="p">,</span> <span class="n">dependency_type</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">dependency_type</span><span class="p">,</span> <span class="p">[</span><span class="n">instruction</span><span class="p">]),]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">free_instructions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">insts_in_dag</span> <span class="o">+=</span> <span class="mi">1</span>
+
+       
+
+
+    
+    <span class="k">def</span> <span class="nf">_unlink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instruction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        When an instruction is ready to be executed and removed from the DAG,</span>
+<span class="sd">        follow these steps:</span>
+<span class="sd">        1.  Note each child node of the instruction.</span>
+<span class="sd">        2.  remove each edge stemming from the instruction.</span>
+<span class="sd">        3.  remove the instruction node itself.</span>
+<span class="sd">        4.  iterate through the children nodes. If a child node now has no incoming edges, add it to the </span>
+<span class="sd">            list of free instructions. If there are still one or more incoming edges to the child node,</span>
+<span class="sd">            pass it over.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">instruction</span><span class="p">)</span> <span class="o">!=</span> <span class="n">Instruction</span><span class="p">:</span>
+            <span class="n">inst_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubit_node_idx</span><span class="p">[</span><span class="n">instruction</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inst_idx</span> <span class="o">=</span> <span class="n">instruction</span><span class="o">.</span><span class="n">index</span>
+            
+        <span class="n">children</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">successor_indices</span><span class="p">(</span><span class="n">inst_idx</span><span class="p">)</span>
+
+        <span class="n">out_edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">out_edges</span><span class="p">(</span><span class="n">inst_idx</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">out_edges</span><span class="p">:</span>
+            <span class="n">child_idx</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">inst_idx</span><span class="p">,</span> <span class="n">child_idx</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">inst_idx</span><span class="p">)</span>
+            
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+            <span class="n">in_edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">in_edges</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_edges</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">child_instruction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">get_node_data</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">free_instructions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child_instruction</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+        
+
+<div class="viewcode-block" id="DAG.get_available">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.DAG.DAG.get_available">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return current list of nodes with no incoming edges.     </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">insts_in_dag</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;End&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loop_catcher</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loop_catcher</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">free_instructions</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loop_catcher</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loop_catcher</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loop_catcher</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">free_instructions</span><span class="p">))</span> 
+
+            <span class="n">stuck</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop_catcher</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">val</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">stuck</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="k">if</span> <span class="n">stuck</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">node_indices</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="s2">&quot;End&quot;</span>
+    
+                <span class="n">search_idx</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">free_instructions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">node_indices</span><span class="p">()[</span><span class="n">search_idx</span><span class="p">]</span>
+                    <span class="n">in_degree</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">in_degree</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">in_degree</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">get_node_data</span><span class="p">(</span><span class="n">node</span><span class="p">))</span> <span class="o">==</span> <span class="n">Instruction</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">get_node_data</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="n">ready</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_remove_dependency</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">get_node_data</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">free_instructions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">get_node_data</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">free_instructions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">get_node_data</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">search_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_instructions</span></div>
+
+    
+    <span class="k">def</span> <span class="nf">_remove_dependency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inst</span><span class="p">:</span> <span class="n">Instruction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Wrap around _unlink.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">insts_in_dag</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unlink</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="DAG.remove_dependencies">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.DAG.DAG.remove_dependencies">[docs]</a>
+    <span class="k">def</span> <span class="nf">remove_dependencies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">insts</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span> 
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Remove multiple dependencies simultaneously.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">insts</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_remove_dependency</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="DAG.finish">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.DAG.DAG.finish">[docs]</a>
+    <span class="k">def</span> <span class="nf">finish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Once all instructions have been added to the DAG, link sets of commutable operations one last time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">:</span> 
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> 
+                <span class="k">for</span> <span class="n">p_inst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="k">for</span> <span class="n">c_inst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                        <span class="n">parent_idx</span> <span class="o">=</span> <span class="n">p_inst</span><span class="o">.</span><span class="n">index</span>
+                        <span class="n">child_idx</span> <span class="o">=</span> <span class="n">c_inst</span><span class="o">.</span><span class="n">index</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">parent_idx</span><span class="p">,</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">DependencyEdge</span><span class="p">(</span><span class="n">qubit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_log</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="DAG.full">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.DAG.DAG.full">[docs]</a>
+    <span class="k">def</span> <span class="nf">full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">insts_in_dag</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_moments</span></div>
+
+
+<div class="viewcode-block" id="DAG.empty">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.DAG.DAG.empty">[docs]</a>
+    <span class="k">def</span> <span class="nf">empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">insts_in_dag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="DAG.draw">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.DAG.DAG.draw">[docs]</a>
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;test.png&#39;</span><span class="p">,</span><span class="n">image_type</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">edge_attr</span><span class="p">(</span><span class="n">edge</span><span class="p">,</span> <span class="n">dag</span><span class="p">):</span>
+            <span class="n">edge_type</span> <span class="o">=</span> <span class="n">edge</span><span class="o">.</span><span class="n">type</span>
+            <span class="k">if</span> <span class="n">edge_type</span> <span class="o">==</span> <span class="s1">&#39;X&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">edge</span><span class="p">)}</span>
+            <span class="k">elif</span> <span class="n">edge_type</span> <span class="o">==</span> <span class="s1">&#39;Z&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">edge</span><span class="p">)}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">edge</span><span class="p">)}</span>
+            
+            
+        <span class="n">graphviz_draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="p">,</span> <span class="n">node_attr_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="p">)},</span> <span class="n">edge_attr_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">edge</span><span class="p">:</span> <span class="n">edge_attr</span><span class="p">(</span><span class="n">edge</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="p">),</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">image_type</span><span class="o">=</span><span class="n">image_type</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

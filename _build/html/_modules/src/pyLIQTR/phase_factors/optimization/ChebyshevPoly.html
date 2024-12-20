@@ -1,0 +1,500 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.phase_factors.optimization.ChebyshevPoly &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.phase_factors.optimization.ChebyshevPoly</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.phase_factors.optimization.ChebyshevPoly</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span>                <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.special</span>        <span class="k">as</span> <span class="nn">sfn</span>
+
+
+
+<div class="viewcode-block" id="ChebyshevPoly">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly">[docs]</a>
+<span class="k">class</span> <span class="nc">ChebyshevPoly</span><span class="p">:</span>
+
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span>                 <span class="o">=</span>  <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deg</span>               <span class="o">=</span>  <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span>            <span class="o">=</span>  <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parity</span>            <span class="o">=</span>  <span class="n">parity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span>              <span class="o">=</span>  <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">coeffs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span>           <span class="o">=</span> <span class="n">coeffs</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">N</span>                <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deg</span>              <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parity</span>           <span class="o">=</span> <span class="n">parity</span>
+
+
+
+
+
+<div class="viewcode-block" id="ChebyshevPoly.set_type">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">string</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">string</span>
+        <span class="k">return</span></div>
+
+
+
+
+
+
+<div class="viewcode-block" id="ChebyshevPoly.set_parity">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_parity">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_parity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parity</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">=</span> <span class="n">parity</span>
+        <span class="k">return</span></div>
+
+
+
+
+
+
+<div class="viewcode-block" id="ChebyshevPoly.zero_poly">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.zero_poly">[docs]</a>
+    <span class="k">def</span> <span class="nf">zero_poly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span>      <span class="o">=</span> <span class="n">N</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deg</span>    <span class="o">=</span> <span class="n">N</span><span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">parity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">=</span> <span class="n">parity</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">=</span> <span class="n">N</span> <span class="o">%</span> <span class="mi">2</span>
+
+        <span class="k">return</span></div>
+
+
+
+
+
+
+
+<div class="viewcode-block" id="ChebyshevPoly.set_coeffs">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_coeffs">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cfs_set</span><span class="p">,</span><span class="n">terms</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">terms</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">cfs_set</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">=</span> <span class="n">parity</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">N</span>      <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cfs_set</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deg</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">terms</span> <span class="o">==</span> <span class="s2">&quot;even&quot;</span><span class="p">):</span>
+            <span class="n">N_cf</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">cfs_set</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N_cf</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfs_set</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">terms</span> <span class="o">==</span> <span class="s2">&quot;odd&quot;</span><span class="p">):</span>
+            <span class="n">N_cf</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">cfs_set</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">N_cf</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfs_set</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid term specification. Must be even, odd, or all.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span></div>
+
+
+    <span class="c1"># </span>
+    <span class="c1"># def coeffs(self):</span>
+    <span class="c1">#     return(self.coeffs)</span>
+
+<div class="viewcode-block" id="ChebyshevPoly.evens">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.evens">[docs]</a>
+    <span class="k">def</span> <span class="nf">evens</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="ChebyshevPoly.odds">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.odds">[docs]</a>
+    <span class="k">def</span> <span class="nf">odds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="ChebyshevPoly.set_evens">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_evens">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_evens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cfs_set</span><span class="p">):</span>
+
+        <span class="n">N_cf</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">cfs_set</span><span class="p">)</span>
+
+        <span class="c1"># need to ultimately check and make sure coefficients will fit</span>
+        <span class="c1"># into the target array, make sure array exists, etc.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N_cf</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfs_set</span>
+        <span class="k">return</span></div>
+
+
+
+
+
+
+<div class="viewcode-block" id="ChebyshevPoly.set_odds">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_odds">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_odds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cfs_set</span><span class="p">):</span>
+
+        <span class="n">N_cf</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">cfs_set</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+
+        <span class="c1"># need to ultimately check and make sure coefficients will fit</span>
+        <span class="c1"># into the target array, make sure array exists, etc.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">N_cf</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfs_set</span>
+        <span class="k">return</span></div>
+
+
+
+
+
+
+
+<div class="viewcode-block" id="ChebyshevPoly.coeffs">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.coeffs">[docs]</a>
+    <span class="k">def</span> <span class="nf">coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="c1"># do we really want parity to be defined?  shouldn&#39;t we just assume</span>
+        <span class="c1"># it is none if the value of parity is None or or otherwise?</span>
+
+        <span class="n">cflag</span> <span class="o">=</span> <span class="p">(</span><span class="n">coeffs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">pflag</span> <span class="o">=</span> <span class="p">(</span><span class="n">parity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">cflag</span> <span class="ow">and</span> <span class="n">pflag</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">N</span>       <span class="o">=</span>  <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deg</span>     <span class="o">=</span>  <span class="n">N</span><span class="o">-</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span>  <span class="o">=</span>  <span class="n">coeffs</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parity</span>  <span class="o">=</span>  <span class="n">parity</span>
+
+        <span class="k">elif</span> <span class="p">(</span><span class="ow">not</span> <span class="p">(</span><span class="n">cflag</span> <span class="ow">and</span> <span class="n">pflag</span><span class="p">)):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Coefficients and parity are required for a ChebyshevPoly.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">exit</span><span class="p">()</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">)</span></div>
+
+
+
+
+
+
+
+<div class="viewcode-block" id="ChebyshevPoly.eval">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.eval">[docs]</a>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">terms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+
+        <span class="c1">### really should split this out into itself and its mpmath variant,</span>
+        <span class="c1">### so it is available for user manipualation - and just put a</span>
+        <span class="c1">### wrapper here for eval (can also have it evaluate for cosh terms)</span>
+
+        <span class="n">x</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_scalar</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>      <span class="c1"># Transforms scalar input to a 0-d numpy array</span>
+
+        <span class="n">fx</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>      <span class="c1"># Store evaluation of of f(x)</span>
+        <span class="n">acx</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c1"># Arccos appearing in Chebyshev terms</span>
+
+        <span class="c1">## Evaluates only even or odd terms in the expansion, assuming</span>
+        <span class="c1">## that the list of coefficients contains both even and odd parity</span>
+        <span class="c1">## terms.</span>
+        <span class="c1">##</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">terms</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])):</span>
+
+            <span class="k">if</span>   <span class="p">(</span><span class="n">terms</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+                    <span class="n">fx</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">terms</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+                    <span class="n">fx</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">):</span>
+                    <span class="n">fx</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+
+        <span class="c1">## For a Chebyshev polynomial with a defnite parity we evaluate terms</span>
+        <span class="c1">## assuming that coefficients all correspond to terms with that parity.</span>
+        <span class="c1">##</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">):</span>
+                    <span class="n">fx</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">):</span>
+                    <span class="n">fx</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">):</span>
+                    <span class="n">fx</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">fx</span><span class="p">)</span></div>
+
+
+
+
+
+    <span class="k">def</span> <span class="nf">_handle_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ChebyshevPoly.write_poly">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.write_poly">[docs]</a>
+    <span class="k">def</span> <span class="nf">write_poly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">):</span>
+
+        <span class="k">return</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="ChebyshevPoly.read_poly">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.read_poly">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_poly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">):</span>
+
+        <span class="k">return</span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DATACLASS     eval_chebyshev(x, coeffs, parity)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Evaluate the approximation to a function f(x) of parity &lt;parity&gt;</span>
+<span class="c1">###      as defined by a Chebyshev expansion with coefficients &lt;coeffs&gt;.  The</span>
+<span class="c1">###      array &lt;coeffs&gt; is assumed to contain terms for both even and odd</span>
+<span class="c1">###      parity.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      x       =   value or array of values for function evaluation</span>
+<span class="c1">###      coeffs  =   array of coefficients defining the Chebyshev expansion</span>
+<span class="c1">###      parity  =   parity of the polynomial to evaluate (i.e., nonzero</span>
+<span class="c1">###                  coefficents to include in the sum):</span>
+<span class="c1">###</span>
+<span class="c1">###                           0   -&gt;   even terms</span>
+<span class="c1">###                           1   -&gt;   odd terms</span>
+<span class="c1">###                           2   -&gt;   all terms</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      N/A</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      fx  =   value of function evaluated at point(s) x</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="eval_chebyshev">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.eval_chebyshev">[docs]</a>
+<span class="k">def</span> <span class="nf">eval_chebyshev</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">parity</span><span class="p">):</span>
+
+
+    <span class="n">x</span>     <span class="o">=</span> <span class="n">handle_scalar</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>      <span class="c1"># Transforms scalar input to a 0-d numpy array</span>
+
+    <span class="n">N_cfs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span>           <span class="c1"># Number of coefficients defining f(x)</span>
+    <span class="n">fx</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>      <span class="c1"># Store evaluation of of f(x)</span>
+    <span class="n">acx</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c1"># Arccos appearing in Chebyshev terms</span>
+
+    <span class="k">if</span>   <span class="p">(</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N_cfs</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">fx</span> <span class="o">+=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N_cfs</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">fx</span> <span class="o">+=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N_cfs</span><span class="p">):</span>
+            <span class="n">fx</span> <span class="o">+=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">fx</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DATACLASS     eval_chebyshev_strict(x, coeffs, parity)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Evaluate the approximation to a function f(x) of parity &lt;parity&gt;</span>
+<span class="c1">###      as defined by a Chebyshev expansion with coefficients &lt;coeffs&gt;.  The</span>
+<span class="c1">###      array &lt;coeffs&gt; is assumed to only contain coefficients corresponding</span>
+<span class="c1">###      to the parity &lt;parity&gt;.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      x       =   value or array of values for function evaluation</span>
+<span class="c1">###      coeffs  =   array of coefficients defining the Chebyshev expansion</span>
+<span class="c1">###      parity  =   parity of the polynomial terms to evaluate:</span>
+<span class="c1">###</span>
+<span class="c1">###                           0   -&gt;   even terms</span>
+<span class="c1">###                           1   -&gt;   odd terms</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      N/A</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      fx  =   value of function evaluated at point(s) x</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="eval_chebyshev_strict">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.eval_chebyshev_strict">[docs]</a>
+<span class="k">def</span> <span class="nf">eval_chebyshev_strict</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">parity</span><span class="p">):</span>
+
+
+    <span class="n">x</span>     <span class="o">=</span> <span class="n">handle_scalar</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>      <span class="c1"># Transforms scalar input to a 0-d numpy array</span>
+
+    <span class="n">N_cfs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span>           <span class="c1"># Number of coefficients defining f(x)</span>
+    <span class="n">fx</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>      <span class="c1"># Array to store evaluation of of f(x)</span>
+    <span class="n">acx</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c1"># Arccos appearing in Chebyshev terms</span>
+
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N_cfs</span><span class="p">):</span>
+            <span class="n">fx</span> <span class="o">+=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N_cfs</span><span class="p">):</span>
+            <span class="n">fx</span> <span class="o">+=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">fx</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

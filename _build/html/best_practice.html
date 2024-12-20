@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Best Practices &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="_static/pyliqtr_logo.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e358f374"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pyLIQTR API Reference" href="api.html" />
+    <link rel="prev" title="Debugger" href="debugger.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugger.html">Debugger</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Best Practices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#liqtr-like-resource-analysis">LIQTR Like 👍 : Resource Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#liqtr-like-circuit-decomposition">LIQTR Like 👍 : Circuit Decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#liqtr-like-export-of-circuits-to-openqasm">LIQTR Like 👍 : Export of circuits to OpenQASM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#liqtr-like-circuit-scheduling">LIQTR Like 👍 : Circuit Scheduling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clifford-t-decomposition">Clifford+T Decomposition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#arguments">Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notes-about-speed-and-usage">Notes about speed and usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openqasm-note">openqasm Note</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Best Practices</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/best_practice.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="best-practices">
+<h1>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h1>
+<p>For the most part, this is a compilation of LIQTR Likes or comments about some of the non-circuit/operator features of pyLIQTR, in terms of making it a bit more user-friendly and more speedy to use. It is recommended to take a peek through this section periodically to confirm whether anything is new. If there is something that has not been made clear in notebooks or in communication, please let us know so we can try to address it with information in this section. Thanks :)</p>
+<section id="liqtr-like-resource-analysis">
+<h2>LIQTR Like 👍 : Resource Analysis<a class="headerlink" href="#liqtr-like-resource-analysis" title="Link to this heading"></a></h2>
+<p>Resource analysis of <code class="docutils literal notranslate"><span class="pre">cirq</span></code> circuits can be done by using the <code class="docutils literal notranslate"><span class="pre">pyLIQTR.utils.resource_analysis.estimate_resources</span></code> function, which will provide T, qubit, and Clifford counts for most circuits!</p>
+<p>Note that our estimate for T-count is done via experimentally derived statistical distribution for the Clifford count of rotations at a given precision. This can be passed explicitly using the <code class="docutils literal notranslate"><span class="pre">rotation_gate_precision</span></code> (default 1e-10) keyword argument, or can be implicitly calculated by passing the <code class="docutils literal notranslate"><span class="pre">circuit_precision</span></code>. If no precision argument is provided, the default value will be used.</p>
+</section>
+<section id="liqtr-like-circuit-decomposition">
+<h2>LIQTR Like 👍 : Circuit Decomposition<a class="headerlink" href="#liqtr-like-circuit-decomposition" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">cirq</span></code> / <code class="docutils literal notranslate"><span class="pre">qualtran</span></code> provide the ability to decompose circuits/operators into their constituent parts (ie, a QSVT sequence is a cosine and then sine sequence). Different circuits will have different levels of decomposition, since they are composed of different operators.</p>
+<p>In pyLIQTR, we have introduced a set of utilities that wrap the <code class="docutils literal notranslate"><span class="pre">cirq</span></code> / <code class="docutils literal notranslate"><span class="pre">qualtran</span></code> methods and address shortcomings or tweaks. The set of utilities are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pyLIQTR.utils.circuit_decomposition.circuit_decompose_multi</span></code></p>
+<ul>
+<li><p>Given a cirq.Circuit, will decompose the circuit the specified number of times (N).</p></li>
+<li><p>Will assume a <code class="docutils literal notranslate"><span class="pre">cirq.DecompositionContext</span></code> that minimizes the ancilla usage</p></li>
+<li><p>Note that you can use the similar operator <code class="docutils literal notranslate"><span class="pre">pyLIQTR.utils.circuit_decomposition.circuit_decompose_once</span></code> (which is just this function but with N=1)</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyLIQTR.utils.circuit_decomposition.generator_decompose</span></code></p>
+<ul>
+<li><p>This is the underlying engine in the above decompose_multi, and unveils a number of arguments that enable more control over the decomposition (fallbacks, what to keep, what to do on failure, etc).</p></li>
+<li><p>This is a tweaked version of <code class="docutils literal notranslate"><span class="pre">cirq.decompose</span></code>, which modifies some under-the-hood functions and methods in <code class="docutils literal notranslate"><span class="pre">cirq</span></code></p></li>
+<li><p>In general, we do not necessarily recommend using this feature</p></li>
+</ul>
+</li>
+</ul>
+<p>In general, decompositions require operators to have decompositions defined. All <code class="docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators</span></code> will have decompositions defined, but not all <code class="docutils literal notranslate"><span class="pre">cirq</span></code> / <code class="docutils literal notranslate"><span class="pre">qualtran</span></code> operators necessarily have circuit-based decompositions defined. If this happens, you will get an error. You may also receive errors akin to <code class="docutils literal notranslate"><span class="pre">Duplicate</span> <span class="pre">QIDs</span></code>, which is an error that comes up in some <code class="docutils literal notranslate"><span class="pre">qualtran</span></code> bloqs due to an ancilla allocation issue. A temporary fix can be done by changing the context to <code class="docutils literal notranslate"><span class="pre">context=cirq.DecompositionContext(cirq.SimpleQubitManager())</span></code>, which generally resolves this issue. If you discover this issue please let us know so we can reach out to the <code class="docutils literal notranslate"><span class="pre">qualtran</span></code> developers or see if we can resolve the issues ourselves.</p>
+<p>All examples shown in <code class="docutils literal notranslate"><span class="pre">pyLIQTR</span></code> should support decomposition into “basic gates” (1-2Q gates + Toffolis. We are hoping to eventually support custom gatesets), and an easy test is feeding your circuit of choice into <code class="docutils literal notranslate"><span class="pre">pyLIQTR.utils.printing.openqasm</span></code> and verifying that you can loop through the circuit to completion.</p>
+</section>
+<section id="liqtr-like-export-of-circuits-to-openqasm">
+<h2>LIQTR Like 👍 : Export of circuits to OpenQASM<a class="headerlink" href="#liqtr-like-export-of-circuits-to-openqasm" title="Link to this heading"></a></h2>
+<p>Export of circuits can be done using a provided <code class="docutils literal notranslate"><span class="pre">pyLIQTR</span></code> utility (<code class="docutils literal notranslate"><span class="pre">pyLIQTR.utils.printing.openqasm</span></code>) that wraps <code class="docutils literal notranslate"><span class="pre">cirq</span></code>’s native openQASM export. This is introduced since some new cirq-ft operators do not yet have a decomposition in terms of gates defined, or <code class="docutils literal notranslate"><span class="pre">cirq</span></code> has begun to use features (mid-circuit measurement, classical control, etc) not supported by OpenQASM2.</p>
+<p>This utility fully decomposes circuits to either include rotation gates (<code class="docutils literal notranslate"><span class="pre">rotation_allowed=True</span></code>) or not (<code class="docutils literal notranslate"><span class="pre">rotation_allowed=False</span></code>).</p>
+<p>When use_random_decomp=True (this is the default setting) then the rotations are approximated from an experimentally derived statistical distribution for the Clifford count of rotations at a given precision. <em>When use_random_decomp=False then the execution will be orders of magnitude slower</em>.</p>
+<p>In the latter case, we make use a of a Clifford+T representation outlined in https://arxiv.org/pdf/0806.3834.pdf (and further discussed in https://arxiv.org/pdf/1312.6584.pdf and http://www.cs.umd.edu/~amchilds/qa/qa.pdf, as potentially easier to digest forms).</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">rotation_allowed=False</span></code>, we introduce the “rx_d/ry_d/rz_d gate”, followed by a line of the form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="p">(</span><span class="n">leading_T</span><span class="p">,</span> <span class="n">gate_sequence</span><span class="p">,</span> <span class="n">sequence_length</span><span class="p">,</span> <span class="n">clifford_part</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">leading_T</span></code> : A bool indicating whether or not there is a <code class="docutils literal notranslate"><span class="pre">T</span></code> gate at the start of the sequence</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gate_sequence</span></code>: An int whose binary representation encodes a sequence of <code class="docutils literal notranslate"><span class="pre">H</span></code>, <code class="docutils literal notranslate"><span class="pre">S</span></code>, and <code class="docutils literal notranslate"><span class="pre">T</span></code> gates</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sequence_length</span></code>: The number of <code class="docutils literal notranslate"><span class="pre">T</span></code> gates in the sequence (note if <code class="docutils literal notranslate"><span class="pre">leading_T</span></code> is true, the total number of gates is <code class="docutils literal notranslate"><span class="pre">sequence_length+1</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clifford_part</span></code>: A List[str] of clifford gates that come at the end of the H,S,T sequence.</p></li>
+</ul>
+<p>Note that if your circuit has rotations, you may also want to specify a level of precision by passing <code class="docutils literal notranslate"><span class="pre">gate_precision</span></code> or <code class="docutils literal notranslate"><span class="pre">circuit_precision</span></code> to <code class="docutils literal notranslate"><span class="pre">pyLIQTR.utils.printing.openqasm</span></code> (see Clifford+T decomposition notes)</p>
+</section>
+<section id="liqtr-like-circuit-scheduling">
+<h2>LIQTR Like 👍 : Circuit Scheduling<a class="headerlink" href="#liqtr-like-circuit-scheduling" title="Link to this heading"></a></h2>
+<p>Circuits can be ‘scheduled’ using the <code class="docutils literal notranslate"><span class="pre">pyLIQTR.scheduler.scheduler.schedule_circuit</span></code> function. This will provide circuit runtime, realistic qubit counts, T-depth, and more!</p>
+<p><code class="docutils literal notranslate"><span class="pre">schedule_circuit</span></code> takes a number of optional arguments depending on desired outputs. They are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">architecture_config</span></code>: a dictionary specifying timing for various gate types and restrictions on how many T gates can operate simultaneously. This dictionary must be formatted as follows:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">{'Execution</span> <span class="pre">Times':</span> <span class="pre">{('Gate</span> <span class="pre">1',):</span> <span class="pre">Time</span> <span class="pre">X,</span> <span class="pre">('Gate</span> <span class="pre">2',</span> <span class="pre">'Gate</span> <span class="pre">3'):</span> <span class="pre">Time</span> <span class="pre">Y},</span> <span class="pre">'Max</span> <span class="pre">T':</span> <span class="pre">Z</span> <span class="pre">#</span> <span class="pre">of</span> <span class="pre">simultaneous</span> <span class="pre">T-gates</span> <span class="pre">allowed}</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">full_profile</span></code>: default <code class="docutils literal notranslate"><span class="pre">False</span></code>. If set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, function output will include individual gate counts, T-widths, and parallelism distribution data. (NOTE: T-widths and parallelism data will only be available if <code class="docutils literal notranslate"><span class="pre">decomp_level</span></code> is set to <code class="docutils literal notranslate"><span class="pre">'Full'</span></code>.)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">decomp_level</span></code>: int, default 0. Levels of decomposition implemented before scheduling. If set to <code class="docutils literal notranslate"><span class="pre">0</span></code>, each operator will be decomposed to one/two-qubit gates only on its first occurance and cached for each future occurance. If set to <code class="docutils literal notranslate"><span class="pre">'Full'</span></code>, entire circuit will be decomposed to one/two-qubit gates before scheduling.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">context</span></code> : cirq.DecompositionContext, default is none which will result in the use of a context manager that tries to minimize the number of ancilla generated. At times, certain Qualtran Bloqs may have an error in their decomposition which results in ancilla not being properly cleared. If this happens, we recommend passing <code class="docutils literal notranslate"><span class="pre">context=cirq.DecompositionContext(cirq.SimpleQubitManager())</span></code> to resolve this issue, at the cost of an overzealous qubit allocation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">circuit_precision</span></code>: default 1e-3. The approximation error for each rotation gate decomposition will be bounded by this value divided by the number of rotation gates determined to be in the circuit. This can be passed explicitly using this keyword argument. If no precision argument is provided, the default value will be used. Note that higher-precision will generally increase the resource cost.</p></li>
+</ul>
+<p>For further details on scheduler capabilities, see <code class="docutils literal notranslate"><span class="pre">Algorithms_and_Infrastructure/scheduling_example.ipynb</span></code></p>
+</section>
+<section id="clifford-t-decomposition">
+<h2>Clifford+T Decomposition<a class="headerlink" href="#clifford-t-decomposition" title="Link to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">pyLIQTR.gate_decomp.cirq_transforms.clifford_plus_t_direct_transform</span></code> is a utility to convert a circuit that has been fully decomposed (into ‘simple’/’canonical’ gates as opposed to complex operators or bloqs) into circuits consisting only of Clifford+T operations by performing exact decomposition of single qubit unitary matrices with entries from the ring D[ω] over the Clifford+T gateset. Makes use of the Matsumoto-Amano normal form for single qubit Clifford+T operators described in the following references:
+[1] - arXiv:0806.3834
+[2] - arXiv:1312.6584
+[3] - https://www.cs.umd.edu/~amchilds/qa/qa.pdf Section 3</p>
+</section>
+<section id="arguments">
+<h3>Arguments<a class="headerlink" href="#arguments" title="Link to this heading"></a></h3>
+<p>The arguments for this function are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    circuit: cirq.Circuit
+        The circuit to be decomposed. Currently, the circuit can only use the following
+        gates:
+        - Multi-qubit gates. CCX and CCZ gates are decomposed into Clifford+T exactly.
+        The rest are ignored by the decomposition function.
+        - Single qubit gates from the list `pyLIQTR.gate_decomp.cirq_transforms.clifford_plus_T_gates`
+        - Rx, Ry, and Rz gates, which are decomposed into clifford+T approximations.
+    gate_precision: Union[int, float, None] (default = 10)
+        Used to determine the maximum approximation error for each gate decomposition.
+        If given an int, the decomposition returned by the function will be within a
+        distance of 10^{-precision} of the given rotation in the operator norm, whereas
+        if given a float the max error in the operator norm will simply be
+        gate_precision.
+    circuit_precision: Union[int, float, None] (default = None)
+        If not None, the approximation error for each gate will be bounded by either
+        `circuit_precision` divided by the number of rotation gates (if given a float),
+        or 10^{-circuit_precision} (if given an int). Note that this requires doing an
+        initial pass over the circuit to count the number of rotation gates, unless
+        `num_rotation_gates` is specified by the caller.
+    num_rotation_gates: Union[int, None]: (default = None)
+        The number of rotation gates in the circuit. If known, pass this in as it will cut down
+        on the amount of execution time, particularly if the number of gates is very large.
+    use_rotation_decomp_gates: bool (default = False)
+        If true, replace `cirq.r&lt;x/y/z&gt;` gates with
+        `pyLIQTR.gate_decomp.r&lt;x/y/z&gt;_decomp` gates, which can be expanded later into a
+        Clifford+T circuit. If false, return a fully expanded Clifford+T circuit.
+    use_random_decomp: bool (default = False)
+        If true, rotations will be &quot;decomposed&quot; into randomly selected Clifford+T
+        sequences, with the length of the sequence depending on the given precision.
+        For a precision of ε, the T count is sampled from a normal distribution with
+        a mean of 3.02 * log2(1/ε) + 0.77 and a standard deviation of 2.06 (these
+        numbers were obtained from decomposing 1000 random angles at varying
+        precisions).
+    warn_if_not_decomposed: bool (default = False)
+        If true, raises a warning when the circuit includes a non-clifford+T gate that
+        is not an X, Y, or Z rotation. Such gates are not decomposed.
+</pre></div>
+</div>
+</section>
+<section id="notes-about-speed-and-usage">
+<h3>Notes about speed and usage<a class="headerlink" href="#notes-about-speed-and-usage" title="Link to this heading"></a></h3>
+<p>The default arguments will result in a SLOW but TRUE decomposition of the input circuit. If one is interested in just understanding resource utilization, then it is recommended to set the <code class="docutils literal notranslate"><span class="pre">use_random_decomp</span></code> flag to be True, which will generate gates that reflect a realistic resource-count but will not implement the desired rotation. It can also be recommended to set the <code class="docutils literal notranslate"><span class="pre">use_rotation_decomp_gates</span></code> flag to be True in order to generate a smaller circuit, though one will need to interrogate it.</p>
+<p>Also note the various precision arguments. If the gate rotation is smaller than the specified the precision, they will not be decomposed and are instead replaced as an Identity gate.</p>
+</section>
+<section id="openqasm-note">
+<h3>openqasm Note<a class="headerlink" href="#openqasm-note" title="Link to this heading"></a></h3>
+<p>Note, that in order to output a clifford+T circuit into openqasm form, it is not recommended to call this function ahead of time. See the arguments for <code class="docutils literal notranslate"><span class="pre">pyLIQTR.utils.printing.openqasm</span></code> and the relevant <code class="docutils literal notranslate"><span class="pre">LIQTR</span> <span class="pre">Like</span></code> for printing.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="debugger.html" class="btn btn-neutral float-left" title="Debugger" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="pyLIQTR API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

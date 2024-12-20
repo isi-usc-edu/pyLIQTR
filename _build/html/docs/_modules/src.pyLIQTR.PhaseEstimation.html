@@ -1,0 +1,498 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.PhaseEstimation package &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/pyliqtr_logo.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.PhaseEstimation package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/_modules/src.pyLIQTR.PhaseEstimation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-pyliqtr-phaseestimation-package">
+<h1>src.pyLIQTR.PhaseEstimation package<a class="headerlink" href="#src-pyliqtr-phaseestimation-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="src.pyLIQTR.PhaseEstimation.tests.html">src.pyLIQTR.PhaseEstimation.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.PhaseEstimation.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.PhaseEstimation.tests.html#module-src.pyLIQTR.PhaseEstimation.tests.test_pe_gates">src.pyLIQTR.PhaseEstimation.tests.test_pe_gates module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.PhaseEstimation.tests.html#src.pyLIQTR.PhaseEstimation.tests.test_pe_gates.TestPEGates"><code class="docutils literal notranslate"><span class="pre">TestPEGates</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.PhaseEstimation.tests.html#src.pyLIQTR.PhaseEstimation.tests.test_pe_gates.TestPEGates.test_Trotter_Unitary_instantiates"><code class="docutils literal notranslate"><span class="pre">TestPEGates.test_Trotter_Unitary_instantiates()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.PhaseEstimation.tests.html#module-src.pyLIQTR.PhaseEstimation.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.PhaseEstimation.pe">
+<span id="src-pyliqtr-phaseestimation-pe-module"></span><h2>src.pyLIQTR.PhaseEstimation.pe module<a class="headerlink" href="#module-src.pyLIQTR.PhaseEstimation.pe" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.PhaseEstimation.pe.</span></span><span class="sig-name descname"><span class="pre">PhaseEstimation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">precision_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_classical_bits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe.html#PhaseEstimation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for doing phase estimation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.precision_order">
+<span class="sig-name descname"><span class="pre">precision_order</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.precision_order" title="Link to this definition"></a></dt>
+<dd><p>The bit-precision to which you want to do the phase estimation</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.init_state">
+<span class="sig-name descname"><span class="pre">init_state</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.init_state" title="Link to this definition"></a></dt>
+<dd><p>A python list containing the state occupancy for the initial state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.phase_estimate">
+<span class="sig-name descname"><span class="pre">phase_estimate</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.phase_estimate" title="Link to this definition"></a></dt>
+<dd><p>The calculated phase estimate.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.pe_circuit">
+<span class="sig-name descname"><span class="pre">pe_circuit</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.pe_circuit" title="Link to this definition"></a></dt>
+<dd><p>The phase estimation cirq circuit</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.phase_offset">
+<span class="sig-name descname"><span class="pre">phase_offset</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.phase_offset" title="Link to this definition"></a></dt>
+<dd><p>A float that represents a phase offset. Used for GSE, and initialized to 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.n_qubits">
+<span class="sig-name descname"><span class="pre">n_qubits</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.n_qubits" title="Link to this definition"></a></dt>
+<dd><p>(int) = len(init_state) + 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.bit_list">
+<span class="sig-name descname"><span class="pre">bit_list</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.bit_list" title="Link to this definition"></a></dt>
+<dd><p>The python list of measured bits</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.unitary_kw_args">
+<span class="sig-name descname"><span class="pre">unitary_kw_args</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.unitary_kw_args" title="Link to this definition"></a></dt>
+<dd><p>Keyword arguments in a dict that describe informatoin about the unitary</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.regsiter_qubits">
+<span class="sig-name descname"><span class="pre">regsiter_qubits</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.regsiter_qubits" title="Link to this definition"></a></dt>
+<dd><p>A python list of the register (psi state) qubits</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.precision_qubit">
+<span class="sig-name descname"><span class="pre">precision_qubit</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.precision_qubit" title="Link to this definition"></a></dt>
+<dd><p>The cirq qubit that is used for measuring bits</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.operator_power">
+<span class="sig-name descname"><span class="pre">operator_power</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.operator_power" title="Link to this definition"></a></dt>
+<dd><p>To raise the entire U**2**j to another power.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.generate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.add_trotterized_unitary">
+<span class="sig-name descname"><span class="pre">add_trotterized_unitary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">precision_order</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe.html#PhaseEstimation.add_trotterized_unitary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.add_trotterized_unitary" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">bit_list</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.estimate_phase">
+<span class="sig-name descname"><span class="pre">estimate_phase</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe.html#PhaseEstimation.estimate_phase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.estimate_phase" title="Link to this definition"></a></dt>
+<dd><p>A function to calculate the estimated phase from the measured bits
+Note: self.phase_estimate is set to 0 at the start of this function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The phase estimate, a number between 0,1</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>self.phase_estimate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.generate_circuit">
+<span class="sig-name descname"><span class="pre">generate_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe.html#PhaseEstimation.generate_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.generate_circuit" title="Link to this definition"></a></dt>
+<dd><p>A function to generate a full PE circuit. Note, uses ClassicallyControlledOperation from cirq.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.generate_qubits">
+<span class="sig-name descname"><span class="pre">generate_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe.html#PhaseEstimation.generate_qubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.generate_qubits" title="Link to this definition"></a></dt>
+<dd><p>A function to generate the qubits for the PE circuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.generate_test_unitary">
+<span class="sig-name descname"><span class="pre">generate_test_unitary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe.html#PhaseEstimation.generate_test_unitary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.generate_test_unitary" title="Link to this definition"></a></dt>
+<dd><p>A function to generate a T-gate Unitary gate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a c-T gate acting on the precision_qubit and the register_qubits[0]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>test_unitary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">operator_power</span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">precision_qubit</span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.register_qubits">
+<span class="sig-name descname"><span class="pre">register_qubits</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation.register_qubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.PhaseEstimation.pe_gates">
+<span id="src-pyliqtr-phaseestimation-pe-gates-module"></span><h2>src.pyLIQTR.PhaseEstimation.pe_gates module<a class="headerlink" href="#module-src.pyLIQTR.PhaseEstimation.pe_gates" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_gates.PhaseOffset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.PhaseEstimation.pe_gates.</span></span><span class="sig-name descname"><span class="pre">PhaseOffset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe_gates.html#PhaseOffset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_gates.PhaseOffset" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Gate</span></code></p>
+<p>A gate for adding a phase offset to the <a href="#id3"><span class="problematic" id="id4">|</span></a>1&gt; portion of a Hadamard|0&gt;’ed state. This is for
+GSE, but is implemented in PE bc of how the circuit is built</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qubit</strong> – the cirq qubit that the gate is acting on</p></li>
+<li><p><strong>phase_offset</strong> – the phase offset to be applied</p></li>
+<li><p><strong>verbose</strong> – A boolean flag. Set to True to get debug info output to screen</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Does stick the gate in the circuit where you want it.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>N/A</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_gates.PhaseOffset.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_gates.PhaseOffset.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_gates.S_k">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.PhaseEstimation.pe_gates.</span></span><span class="sig-name descname"><span class="pre">S_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_bits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe_gates.html#S_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_gates.S_k" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Gate</span></code></p>
+<p>A gate for rotating away previously measured bits in a phase that is being estimated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qubit</strong> – the cirq qubit that the gate is acting on</p></li>
+<li><p><strong>prev_bits</strong> – A list containing only 1’s or 0’s for the previously measured bits</p></li>
+<li><p><strong>verbose</strong> – A boolean flag. Set to True to get debug info output to screen</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Does stick the gate in the circuit where you want it.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>N/A</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_gates.S_k.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_gates.S_k.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_gates.Trotter_Unitary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.PhaseEstimation.pe_gates.</span></span><span class="sig-name descname"><span class="pre">Trotter_Unitary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tgt_qubit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_qubits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prec_order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operator_power</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe_gates.html#Trotter_Unitary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_gates.Trotter_Unitary" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Gate</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_gates.Trotter_Unitary.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_gates.Trotter_Unitary.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.PhaseEstimation.pe_sim">
+<span id="src-pyliqtr-phaseestimation-pe-sim-module"></span><h2>src.pyLIQTR.PhaseEstimation.pe_sim module<a class="headerlink" href="#module-src.pyLIQTR.PhaseEstimation.pe_sim" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.PhaseEstimation.pe_sim.</span></span><span class="sig-name descname"><span class="pre">PE_Simulator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_runs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_estimation_instance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation" title="src.pyLIQTR.PhaseEstimation.pe.PhaseEstimation"><span class="pre">PhaseEstimation</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe_sim.html#PE_Simulator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for performing Phase Estimate circuit simulations</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.num_runs">
+<span class="sig-name descname"><span class="pre">num_runs</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.num_runs" title="Link to this definition"></a></dt>
+<dd><p>(int) The number of simulation runs to perform.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.pe_inst">
+<span class="sig-name descname"><span class="pre">pe_inst</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.pe_inst" title="Link to this definition"></a></dt>
+<dd><p>Instance of the PhaseEstimation class</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.df_">
+<span class="sig-name descname"><span class="pre">df_</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.df_" title="Link to this definition"></a></dt>
+<dd><p>Pandas DataFrame to hold the data</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.med_phase">
+<span class="sig-name descname"><span class="pre">med_phase</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.med_phase" title="Link to this definition"></a></dt>
+<dd><p>(float) The median phase from the simulated runs</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.sim_run">
+<span class="sig-name descname"><span class="pre">sim_run</span></span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.sim_run" title="Link to this definition"></a></dt>
+<dd><p>(bool) A flag indicating whether the simulations have been run yet.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__(num_runs</span></span></dt>
+<dd><p>int, phase_estimation_instance:PhaseEstimation)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.extrac_info_from_sim">
+<span class="sig-name descname"><span class="pre">extrac_info_from_sim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.extrac_info_from_sim" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.sim_phase_estimation">
+<span class="sig-name descname"><span class="pre">sim_phase_estimation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe_sim.html#PE_Simulator.sim_phase_estimation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.sim_phase_estimation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.sim_run_analysis">
+<span class="sig-name descname"><span class="pre">sim_run_analysis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe_sim.html#PE_Simulator.sim_run_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.sim_run_analysis" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.extract_info_from_sim">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extract_info_from_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim_result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe_sim.html#PE_Simulator.extract_info_from_sim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.PhaseEstimation.pe_sim.PE_Simulator.extract_info_from_sim" title="Link to this definition"></a></dt>
+<dd><p>A static method for extracting infromation from a sim_result</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sim_result</strong> – The sim_results</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>The measurement</p>
+<p>precision_bit_state: The state of the precision bit</p>
+<p>psi_bit_state: The state of the psi bits</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>measurement</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">sim_phase_estimation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe_sim.html#PE_Simulator.sim_phase_estimation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd><p>A function to simulate the Phase Estimation circuit</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The median phase from the number of runs</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>med_phase</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">sim_run_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true_phase</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/PhaseEstimation/pe_sim.html#PE_Simulator.sim_run_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.PhaseEstimation">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.pyLIQTR.PhaseEstimation" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

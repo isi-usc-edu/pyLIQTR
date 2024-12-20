@@ -1,0 +1,219 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Releases and development &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="_static/pyliqtr_logo.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e358f374"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing to pyliqtr" href="contribute.html" />
+    <link rel="prev" title="Documentation" href="document.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document.html">Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Release strategy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#development-cycle">Development cycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#branches">Branches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#release-cycle">Release cycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#release-instructions">Release instructions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Releases and development</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/release.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="releases-and-development">
+<h1>Releases and development<a class="headerlink" href="#releases-and-development" title="Link to this heading"></a></h1>
+<p>Releases are a good way to have stable versions of code that are ‘frozen in time’ so that users can be assured their working version won’t break due to development.
+We want to have a lightweight notion of this - it won’t be as rigorous or complete as a professional software engineering project, but we do want to track progress and make sure folks won’t have a borked experiment due to a push to the main branch.</p>
+<section id="development-cycle">
+<h2>Development cycle<a class="headerlink" href="#development-cycle" title="Link to this heading"></a></h2>
+<p>We use the <a class="reference external" href="https://github.com/isi-usc-edu/pyLIQTR/issues">Issues</a> page in GitHub to track issues
+and assign them pertinent labels and priorities.
+GitHub is not as fully featured as Jira when it comes to planning and tracking, but we can make use of things like Projects later to try and work towards concrete goals.</p>
+</section>
+<section id="branches">
+<h2>Branches<a class="headerlink" href="#branches" title="Link to this heading"></a></h2>
+<p>There are myriad branching strategies out there, but we’ve settled on one that should minimally complicated
+for users and developers of <code class="docutils literal notranslate"><span class="pre">pyliqtr</span></code>, while also allowing for a solid release process.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">master</span></code></p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">master</span></code> branch can be considered the “dev” version of the next release.
+It will be under constant development with potentially breaking changes, so is definitely <em>not</em> stable.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">stable/*</span></code> branches</p></li>
+</ul>
+<p>stable/* branches are our stable releases of <code class="docutils literal notranslate"><span class="pre">pyliqtr</span></code>, and are named down to the minor version.
+Note that “stable” is a loaded term, and does not necessarily imply bug-free.
+For our purposes, they are meant to capture snapshots in time before any major new functionality
+or breaking changes are introduced to the code.
+The only changes to these branches should be bugfixes (instructions for that forthcoming),
+where the patch digit is incremented and a new tag is added.</p>
+<ul class="simple">
+<li><p>issue branches</p></li>
+</ul>
+<p>These should be made directly from an issue and have the form <code class="docutils literal notranslate"><span class="pre">type/&lt;issue-#&gt;-short-description</span></code>, where <code class="docutils literal notranslate"><span class="pre">type</span></code> can be one of <code class="docutils literal notranslate"><span class="pre">chore</span></code>, <code class="docutils literal notranslate"><span class="pre">feature</span></code>, <code class="docutils literal notranslate"><span class="pre">bugfix</span></code>, etc.
+The process is outlined <a class="reference internal" href="contribute.html#contribution-instructions"><span class="std std-ref">here</span></a>.
+When the branch is merged, it should be deleted to keep the repo clean.</p>
+</section>
+<section id="release-cycle">
+<h2>Release cycle<a class="headerlink" href="#release-cycle" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Create a stable branch for the new minor version from the current HEAD on the master branch</p></li>
+<li><p>Create a new tag with the version number on the HEAD of the new stable branch.</p></li>
+<li><p>Change the master version to the next release version, with ‘dev’ appended.</p></li>
+</ol>
+</section>
+<section id="release-instructions">
+<h2>Release instructions<a class="headerlink" href="#release-instructions" title="Link to this heading"></a></h2>
+<p>With that general philosophy in mind, let’s turn to the steps for actually cutting a release.</p>
+<ol class="arabic simple">
+<li><p>Make two issues - one to do the release prep, another to bump the master version immediately following the release.</p></li>
+<li><p>On the first issue, some tasks to be done:</p>
+<ol class="arabic simple">
+<li><p>Make sure tests pass.</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">CHANGELOG</span></code> to reflect what’s new/different in the release.</p>
+<ol class="arabic simple">
+<li><p>Create a new heading for the changes: <code class="docutils literal notranslate"><span class="pre">##</span> <span class="pre">[X.Y.Z]</span> <span class="pre">-</span> <span class="pre">YYYY-MM-DD</span></code> and make the <code class="docutils literal notranslate"><span class="pre">##</span> <span class="pre">[UNRELEASED]</span></code> section empty.</p></li>
+<li><p>At the end of the <code class="docutils literal notranslate"><span class="pre">CHANGELOG</span></code> create a link to the released version that is the git compare between the new tag and the previous release tag.
+Similarly, update the link for <code class="docutils literal notranslate"><span class="pre">[UNRELEASED]</span></code> to compare <code class="docutils literal notranslate"><span class="pre">master</span></code> and the new tag.</p></li>
+</ol>
+</li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">dev</span></code> from the version in <code class="docutils literal notranslate"><span class="pre">pyliqtr/_version.py</span></code>.</p></li>
+<li><p>Make sure tests pass locally.</p></li>
+<li><p>Make sure docs build locally.</p></li>
+</ol>
+</li>
+<li><p>Complete the Pull Request for the first issue.
+This is the last commit before releasing.</p></li>
+<li><p>Make a new branch from master (Maintainers only) called <code class="docutils literal notranslate"><span class="pre">stable/X.Y</span></code>.</p>
+<ol class="arabic simple">
+<li><p>The branch only goes to Minor number, but the tag will also have the Patch.</p></li>
+</ol>
+</li>
+<li><p>From the tags in GitHub, make a new tag <code class="docutils literal notranslate"><span class="pre">vX.Y.0</span></code> created from the new <code class="docutils literal notranslate"><span class="pre">stable/X.Y</span></code> branch.</p>
+<ol class="arabic simple">
+<li><p>The tag has full <code class="docutils literal notranslate"><span class="pre">vX.Y.Z</span></code> semantic versioning, and will always start with <code class="docutils literal notranslate"><span class="pre">Z=0</span></code>.
+Bug fixes to this branch will bump the tag.</p></li>
+<li><p>The tag Comment should read <code class="docutils literal notranslate"><span class="pre">Release</span> <span class="pre">vX.Y.Z</span> <span class="pre">(\#&lt;issue</span> <span class="pre">number&gt;)</span></code>.</p></li>
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">CHANGELOG</span></code> contents for this release in the Release Notes of this tag.</p></li>
+</ol>
+</li>
+<li><p>You now have a real, actual-factual release!</p></li>
+<li><p>Now, from <code class="docutils literal notranslate"><span class="pre">master</span></code>, create a Pull Request for the second issue, to bump the version number for the next release.</p>
+<ol class="arabic simple">
+<li><p>In <code class="docutils literal notranslate"><span class="pre">pyliqtr/_version.py</span></code>, bump the version string to the next minor version with dev appended: <code class="docutils literal notranslate"><span class="pre">0.x+1.0.dev</span></code>.</p></li>
+</ol>
+</li>
+<li><p>Merge that in, and we’re now ready to continue using <code class="docutils literal notranslate"><span class="pre">master</span></code> as our development branch.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="document.html" class="btn btn-neutral float-left" title="Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contribute.html" class="btn btn-neutral float-right" title="Contributing to pyliqtr" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

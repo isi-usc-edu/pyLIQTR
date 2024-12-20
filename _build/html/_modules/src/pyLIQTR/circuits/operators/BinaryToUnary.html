@@ -1,0 +1,323 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.operators.BinaryToUnary &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.operators.BinaryToUnary</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.circuits.operators.BinaryToUnary</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
+
+<span class="kn">import</span> <span class="nn">attr</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
+<span class="kn">from</span> <span class="nn">qualtran._infra.registers</span> <span class="kn">import</span> <span class="n">Register</span><span class="p">,</span> <span class="n">Signature</span>
+<span class="kn">from</span> <span class="nn">qualtran._infra.gate_with_registers</span> <span class="kn">import</span> <span class="n">GateWithRegisters</span><span class="p">,</span> <span class="n">total_bits</span>
+<span class="kn">from</span> <span class="nn">qualtran.cirq_interop.t_complexity_protocol</span> <span class="kn">import</span> <span class="n">TComplexity</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.multiplexers.unary_iteration_bloq</span> <span class="kn">import</span> <span class="n">UnaryIterationGate</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.mcmt.and_bloq</span> <span class="kn">import</span> <span class="n">And</span>
+<span class="kn">from</span> <span class="nn">qualtran._infra.data_types</span> <span class="kn">import</span> <span class="n">QAny</span><span class="p">,</span> <span class="n">BoundedQUInt</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.basic_gates</span> <span class="kn">import</span> <span class="n">CNOT</span><span class="p">,</span> <span class="n">XGate</span>
+
+<div class="viewcode-block" id="BinaryToUnary">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">frozen</span>
+<span class="k">class</span> <span class="nc">BinaryToUnary</span><span class="p">(</span><span class="n">UnaryIterationGate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements U s.t. U|l&gt;|Psi&gt; -&gt; |l&gt; X_{l - 1} ... X_{0} |Psi&gt;</span>
+
+<span class="sd">    where |l&gt; is the ⎡logL⎤-qubit selection register and |Psi&gt; is the L-qubit target register. </span>
+<span class="sd">    The gate is implemented using an accumulator bit in the unary iteration circuit as explained</span>
+<span class="sd">    in the reference below.</span>
+
+<span class="sd">    Example, for L = 4:</span>
+<span class="sd">        l=0: U|00&gt;|0000&gt; -&gt; |00&gt;|0000&gt;</span>
+<span class="sd">        l=1: U|01&gt;|0000&gt; -&gt; |01&gt;|1000&gt;</span>
+<span class="sd">        l=2: U|10&gt;|0000&gt; -&gt; |10&gt;|1100&gt;</span>
+<span class="sd">        l=3: U|11&gt;|0000&gt; -&gt; |11&gt;|1110&gt;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        selection_regs: Indexing `select` signature of type `Register`. It also contains</span>
+<span class="sd">            information about the iteration length of each selection register.</span>
+<span class="sd">        controlled: Set to True for controlled operation</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        See Fig 8 of https://arxiv.org/abs/1805.03662 for more details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">selection_regs</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Register</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">field</span><span class="p">(</span>
+        <span class="n">converter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="p">(</span><span class="n">v</span><span class="p">,)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Register</span><span class="p">)</span> <span class="k">else</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">controlled</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="BinaryToUnary.make_on">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.make_on">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">make_on</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">quregs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">],</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Operation</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper constructor to automatically deduce selection_regs attribute.&quot;&quot;&quot;</span>
+        <span class="n">controlled</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">quregs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;control&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">BinaryToUnary</span><span class="p">(</span>
+            <span class="n">selection_regs</span><span class="o">=</span><span class="n">Register</span><span class="p">(</span>
+                <span class="s1">&#39;selection&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;selection&#39;</span><span class="p">]),</span><span class="n">iteration_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]))</span>
+            <span class="p">),</span>
+            <span class="n">controlled</span> <span class="o">=</span> <span class="n">controlled</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">quregs</span><span class="p">)</span></div>
+
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">control_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Register</span><span class="p">]:</span>
+        <span class="n">registers</span> <span class="o">=</span> <span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlled</span> <span class="k">else</span> <span class="p">(</span><span class="n">Register</span><span class="p">(</span><span class="s1">&#39;control&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),)</span>
+        <span class="k">return</span> <span class="n">registers</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">selection_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Register</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_regs</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">target_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Register</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="n">total_iteration_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">iteration_length</span> <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">Register</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_iteration_size</span><span class="p">)),)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">extra_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Register</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">Register</span><span class="p">(</span><span class="s1">&#39;accumulator&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),)</span>
+
+<div class="viewcode-block" id="BinaryToUnary.decompose_from_registers">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.decompose_from_registers">[docs]</a>
+    <span class="k">def</span> <span class="nf">decompose_from_registers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">,</span> <span class="o">**</span><span class="n">quregs</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">OP_TREE</span><span class="p">:</span>
+        <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;accumulator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">qubit_manager</span><span class="o">.</span><span class="n">qalloc</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="n">quregs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;control&#39;</span><span class="p">,())</span>
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="o">*</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;accumulator&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">controlled_by</span><span class="p">(</span><span class="o">*</span><span class="n">control</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="nb">super</span><span class="p">(</span><span class="n">BinaryToUnary</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">decompose_from_registers</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">quregs</span>
+        <span class="p">)</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">qubit_manager</span><span class="o">.</span><span class="n">qfree</span><span class="p">(</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;accumulator&#39;</span><span class="p">])</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_circuit_diagram_info_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CircuitDiagramInfoArgs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CircuitDiagramInfo</span><span class="p">:</span>
+        <span class="n">wire_symbols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;@&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">total_bits</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">control_registers</span><span class="p">)</span>
+        <span class="n">wire_symbols</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;In&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">total_bits</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">)</span>
+        <span class="n">wire_symbols</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;X&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">total_bits</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_registers</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CircuitDiagramInfo</span><span class="p">(</span><span class="n">wire_symbols</span><span class="o">=</span><span class="n">wire_symbols</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BinaryToUnary.nth_operation">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.nth_operation">[docs]</a>
+    <span class="k">def</span> <span class="nf">nth_operation</span><span class="p">(</span> 
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">context</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">,</span>
+        <span class="n">control</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">],</span>
+        <span class="n">accumulator</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">selection_indices</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">OP_TREE</span><span class="p">:</span>
+        <span class="n">selection_shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">iteration_length</span> <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_regs</span><span class="p">)</span>
+        <span class="n">selection_idx</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">selection_indices</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_regs</span><span class="p">)</span>
+        <span class="n">target_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel_multi_index</span><span class="p">(</span><span class="n">selection_idx</span><span class="p">,</span> <span class="n">selection_shape</span><span class="p">))</span>
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">control</span><span class="p">,</span> <span class="o">*</span><span class="n">accumulator</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="o">*</span><span class="n">accumulator</span><span class="p">,</span> <span class="n">target</span><span class="p">[</span><span class="n">target_idx</span><span class="p">])</span></div>
+</div>
+
+
+<div class="viewcode-block" id="BinaryToUnaryBits">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnaryBits">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">frozen</span>
+<span class="k">class</span> <span class="nc">BinaryToUnaryBits</span><span class="p">(</span><span class="n">GateWithRegisters</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implements U s.t. </span>
+
+<span class="sd">    U|l&gt;|Psi&gt; -&gt; |l&gt; X_{k - 1} ... X_{0} |Psi&gt;</span>
+
+<span class="sd">    where |l&gt; is the L-qubit selection register, |Psi&gt; is the L-qubit target register, l is the selection index in the range [0,2**L-1], k = ⎡log2(l+1)⎤, and X_{i} indicates the Pauli X gate applied to the ith qubit.</span>
+<span class="sd">    This is step 3(a)i on page 52 of ref [1] -- &quot;produce a new L-qubit register that has zeros matching the leading zeros in the binary representation of l, and ones after that&quot;</span>
+
+<span class="sd">    NOTE: This construction assumes the unary register is initialized to the |0&gt; state and will return to the |0&gt; state when inverted.</span>
+
+<span class="sd">    Example, for L = 3:</span>
+
+<span class="sd">        l=0: U|000&gt;|000&gt; -&gt; |000&gt;|000&gt; (three leading zeros)</span>
+<span class="sd">        l=1: U|001&gt;|000&gt; -&gt; |001&gt;|001&gt; (two leading zeros)</span>
+<span class="sd">        l=2: U|010&gt;|000&gt; -&gt; |010&gt;|011&gt; (one leading zero)</span>
+<span class="sd">        l=3: U|011&gt;|000&gt; -&gt; |011&gt;|011&gt; (one leading zero)</span>
+<span class="sd">        l=4: U|100&gt;|000&gt; -&gt; |100&gt;|111&gt; (no leading zeros)</span>
+<span class="sd">        ...</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n_bits: The number of qubits in the binary and unary registers</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        [1] https://arxiv.org/abs/2011.03494 </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">n_bits</span><span class="p">:</span> <span class="nb">int</span>
+
+<div class="viewcode-block" id="BinaryToUnaryBits.make_on">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnaryBits.make_on">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">make_on</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">quregs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">],</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Operation</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper constructor to automatically deduce n_bits based on registers.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">BinaryToUnaryBits</span><span class="p">(</span>
+            <span class="n">n_bits</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;binary&#39;</span><span class="p">])</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">quregs</span><span class="p">)</span></div>
+
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Signature</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Signature</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_bits</span><span class="p">,</span><span class="n">unary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_bits</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BinaryToUnaryBits.decompose_from_registers">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnaryBits.decompose_from_registers">[docs]</a>
+    <span class="k">def</span> <span class="nf">decompose_from_registers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">,</span> <span class="o">**</span><span class="n">quregs</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">OP_TREE</span><span class="p">:</span>
+        <span class="n">binary</span><span class="p">,</span> <span class="n">unary</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;binary&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;unary&#39;</span><span class="p">]</span>
+
+        <span class="n">open_and_gate</span> <span class="o">=</span> <span class="n">And</span><span class="p">(</span><span class="n">cv1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">cv2</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># copy the msb from the binary register to the unary register</span>
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">binary</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">unary</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># do (n_bits-1) OR operations such that unary[n] = (binary[n] OR unary[n-1]) for n=[1,n_bits-1], where n=0 is the msb.</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">n_bits</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">open_and_gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">ctrl</span><span class="o">=</span><span class="p">[[</span><span class="n">binary</span><span class="p">[</span><span class="n">n</span><span class="p">]],[</span><span class="n">unary</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]]],</span> <span class="n">target</span><span class="o">=</span><span class="n">unary</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+            <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">unary</span><span class="p">[</span><span class="n">n</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="BinaryToUnaryBits.build_call_graph">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnaryBits.build_call_graph">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_call_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ssa</span><span class="p">:</span> <span class="s1">&#39;SympySymbolAllocator&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="s1">&#39;BloqCountT&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{(</span><span class="n">CNOT</span><span class="p">(),</span> <span class="mi">1</span><span class="p">),(</span><span class="n">And</span><span class="p">(</span><span class="n">cv1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">cv2</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">n_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">),(</span><span class="n">XGate</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">n_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">)}</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_t_complexity_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">adjoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TComplexity</span><span class="p">:</span>
+        <span class="n">num_ands</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_bits</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">resources_per_and</span> <span class="o">=</span> <span class="n">And</span><span class="p">(</span><span class="n">cv1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">cv2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">uncompute</span><span class="o">=</span><span class="n">adjoint</span><span class="p">)</span><span class="o">.</span><span class="n">_t_complexity_</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">TComplexity</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">resources_per_and</span><span class="o">.</span><span class="n">t</span><span class="o">*</span><span class="n">num_ands</span><span class="p">,</span><span class="n">clifford</span><span class="o">=</span><span class="n">resources_per_and</span><span class="o">.</span><span class="n">clifford</span><span class="o">*</span><span class="n">num_ands</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_bits</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

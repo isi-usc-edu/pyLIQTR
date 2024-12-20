@@ -1,0 +1,550 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyLIQTR Features &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="_static/pyliqtr_logo.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e358f374"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pyLIQTR Features</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Features.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pyliqtr-features">
+<h1>pyLIQTR Features<a class="headerlink" href="#pyliqtr-features" title="Link to this heading"></a></h1>
+<p>Included below are the exhaustive list of features contained within pyLIQTR. This Table provides quick links to some of the new features.</p>
+<ol class="arabic simple">
+<li><p><a class="reference download internal" download="" href="_downloads/eeea00603ecdf989f799cd728ae2968d/printing.py"><span class="xref download myst">OpenQASM</span></a></p></li>
+<li><p><a class="reference internal" href="#heisenberg"><span class="xref myst">Heisenberg</span></a></p></li>
+<li><p><a class="reference internal" href="#fermi-hubbard"><span class="xref myst">Fermi-Hubbard</span></a></p></li>
+<li><p><a class="reference internal" href="#dpw"><span class="xref myst">Dual Plane Wave</span></a></p></li>
+<li><p><a class="reference internal" href="#gto"><span class="xref myst">Gaussian Orbitals</span></a></p></li>
+<li><p><a class="reference internal" href="#arbitrary-spin-lattice"><span class="xref myst">Arbitrary Spin</span></a></p></li>
+<li><p><a class="reference internal" href="#gse"><span class="xref myst">Ground State Estimation</span></a></p></li>
+<li><p><a class="reference internal" href="docs/_modules/src.pyLIQTR.circuits.html#module-src.pyLIQTR.circuits.qsp" title="src.pyLIQTR.circuits.qsp"><span class="xref myst py py-mod">Quantum Signal Processing</span></a></p></li>
+<li><p><a class="reference internal" href="generated/src.pyLIQTR.qubitization.qsvt.html#module-src.pyLIQTR.qubitization.qsvt" title="src.pyLIQTR.qubitization.qsvt"><span class="xref myst py py-mod">Quantum Singular Value Transformation</span></a></p></li>
+<li><p><a class="reference internal" href="#df"><span class="xref myst">Double Factorized Block Encoding</span></a></p></li>
+<li><p><a class="reference external" href="https://matplotlib.org/stable/tutorials/index.html#tutorials" title="Matplotlib 3.10.0"><span class="xref myst">Tutorials</span></a></p></li>
+</ol>
+<section id="i-quantum-signal-processing">
+<h2>I. Quantum Signal Processing<a class="headerlink" href="#i-quantum-signal-processing" title="Link to this heading"></a></h2>
+<section id="phase-factor-generation">
+<h3>Phase Factor Generation<a class="headerlink" href="#phase-factor-generation" title="Link to this heading"></a></h3>
+<p>Phase-Factor Generation Algorithms:</p>
+<ul class="simple">
+<li><p>Integrated phase factor framework</p>
+<ul>
+<li><p>Description: Integrated framework for phase factor determination.</p></li>
+<li><p>Source: <a class="reference internal" href="#../src/pyLIQTR/phase_factors/"><span class="xref myst">phase_factors</span></a></p></li>
+<li><p>Notebooks: <span class="xref myst">qsvt_and_qsp.ipynb</span></p></li>
+</ul>
+</li>
+<li><p>Optimizer based (R-convention)</p>
+<ul>
+<li><p>Description: Optimizer-based generation of phase angles for QSP/QET/QSVT.</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/8581e016a380bd01853ee7c4e608c732/angler.py"><span class="xref download myst">angler.py</span></a></p></li>
+<li><p>Notebooks: <a class="reference internal" href="#../Examples/AngleGeneration/"><span class="xref myst">AngleGeneration</span></a></p></li>
+</ul>
+</li>
+<li><p>Function fitting / Analytical expansions (for optimizer)</p>
+<ul>
+<li><p>Description: Approximation of functions in a Chebyshev polynomial basis.</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/97557e43573a831ea245741c66ac9b23/expander.py"><span class="xref download myst">expander.py</span></a>
+<a class="reference download internal" download="" href="_downloads/15535cb4f2e13c821dbad04c6e6486cf/fitter.py"><span class="xref download myst">fitter.py</span></a></p></li>
+<li><p>Notebooks: <a class="reference internal" href="#../Examples/AngleGeneration/"><span class="xref myst">AngleGeneration</span></a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="qsp-qsvt-sequences">
+<h3>QSP/QSVT Sequences<a class="headerlink" href="#qsp-qsvt-sequences" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>QSP/QET/QSVT Circuits <a id="qsvt"></a></p>
+<ul>
+<li><p>Description: Circuits implementing Quantum Signal Processing (QSP),  Quantum Eigenvalue Transform (QET) and the Quantum Singular Value Transform (QSVT)–based algorithms.</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/beb71c15f4aa78150ba4a116a410a35b/qsvt.py"><span class="xref download myst">qsvt.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p>Parent class for QSVT: <code class="docutils literal notranslate"><span class="pre">QSVT_Abstract()</span></code></p></li>
+<li><p>QET/QSVT with real polynomials: <code class="docutils literal notranslate"><span class="pre">QSVT_real_polynomial(QSVT_abstract)</span></code></p></li>
+<li><p>QET/QSVT with “sum” of real polynomials: <code class="docutils literal notranslate"><span class="pre">QSVT_real_polynomial_sum(qualtran.GateWithRegisters)</span></code></p></li>
+<li><p>Legacy Fourier-response sequence: <code class="docutils literal notranslate"><span class="pre">QSP_fourier_response(QSVT_abstract)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Quantum dynamics via QET/QSVT <a id="qsvt_dynamics"></a></p>
+<ul>
+<li><p>Description: Functions to facilitate quantum dynamics simulations via QSP/QET/QSVT.</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/7e5be1a51065b14a42b86e448315bfc9/qsvt_dynamics.py"><span class="xref download myst">qsvt_dynamics.py</span></a></p></li>
+<li><p>Functions:</p>
+<ul>
+<li><p>Automated construction of QET/QSVT simulation circuits: <code class="docutils literal notranslate"><span class="pre">qsvt_dynamics()</span></code></p></li>
+<li><p>Convenient determination of phase angles: <code class="docutils literal notranslate"><span class="pre">simulation_phases()</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="ii-eigenvalue-estimation">
+<h2>II. Eigenvalue Estimation<a class="headerlink" href="#ii-eigenvalue-estimation" title="Link to this heading"></a></h2>
+<section id="qubitized-phase-estimation">
+<h3>Qubitized phase estimation<a class="headerlink" href="#qubitized-phase-estimation" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Qubitized Phase Estimation Circuits <a id="qsvt"></a></p>
+<ul>
+<li><p>Description: Implementation of phase estimation / ground-state energy estimation via methods from Phys. Rev. X <b>8</b>, 041015.</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/a3240ed7b07786ba9f9ad95d513ccf81/phase_estimation.py"><span class="xref download myst">phase_estimation.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p>Phase-estimation circuit: <code class="docutils literal notranslate"><span class="pre">QubitizedPhaseEstimation(qualtran.GateWithRegisters)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="iii-qubitized-components">
+<h2>III. Qubitized Components<a class="headerlink" href="#iii-qubitized-components" title="Link to this heading"></a></h2>
+<section id="qubitized-primitives">
+<h3>Qubitized primitives<a class="headerlink" href="#qubitized-primitives" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Qubitized Reflection / Projection Operator</p>
+<ul>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/167c0eaedfd090724bed7cd533363bb6/qubitized_gates.py"><span class="xref download myst">qubitized_gates.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">QubitizedReflection(qualtran.GateWithRegisters)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Qubitized Rotation Operator</p>
+<ul>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/167c0eaedfd090724bed7cd533363bb6/qubitized_gates.py"><span class="xref download myst">qubitized_gates.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">QubitizedRotation(qualtran.GateWithRegisters)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Qubitized Walk Operator</p>
+<ul>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/167c0eaedfd090724bed7cd533363bb6/qubitized_gates.py"><span class="xref download myst">qubitized_gates.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">QubitizedWalkOperator(qualtran.GateWithRegisters)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="select-prepare-oracles">
+<h3>Select &amp; Prepare Oracles<a class="headerlink" href="#select-prepare-oracles" title="Link to this heading"></a></h3>
+<p>Oracles:</p>
+<ul class="simple">
+<li><p>Pauli-String LCU (QROM-based): Select</p>
+<ul>
+<li><p>Description:</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/4cf20fc876e1192cb463d50db6e70f9e/select_oracle_pauli_lcu.py"><span class="xref download myst">select_oracle_pauli_lcu.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p>Pauli-string LCU select; QROM-implementation which can be (optionally) conditioned on a control qubit. The optional control is required for the new QSVT and block-encoding methods.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Pauli-String LCU (QROM-based): Prepare</p>
+<ul>
+<li><p>Description:</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/0794dcd34e875f7e402d545da9a6081e/prepare_oracle_pauli_lcu.py"><span class="xref download myst">prepare_oracle_pauli_lcu.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p>Pauli-string LCU prepare.</b></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Fermionic Encoding: Select</p>
+<ul>
+<li><p>Description: Select oracle for molecular electronic structure Hamiltonians expressed in a basis that diagonalizes the Coulomb potential.</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/e9302d0cb86fc4cf48c38d090c71910b/select_LinearT.py"><span class="xref download myst">select_LinearT</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">FermionicSelect_LinearT(qualtran.GateWithRegisters)</span></code></p></li>
+<li><p>Select from <a class="reference external" href="https://arxiv.org/abs/1805.03662">Linear T paper</a> Section IV.A, Fig. 14</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Fermionic Encoding: Prepare</p>
+<ul>
+<li><p>Description: Prepare oracle for molecular electronic structure Hamiltonians expressed in a basis that diagonalizes the Coulomb potential.</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/b094daa2a849c3e572a551329b8f882e/prepare_LinearT.py"><span class="xref download myst">prepare_LinearT</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">FermionicPrepare_LinearT(qualtran.GateWithRegisters)</span></code></p></li>
+<li><p>Prepare from <a class="reference external" href="https://arxiv.org/abs/1805.03662">Linear T paper</a> Section IV.B, Fig. 16</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT(qualtran.GateWithRegisters)</span></code></p></li>
+<li><p>Subprepare from <a class="reference external" href="https://arxiv.org/abs/1805.03662">Linear T paper</a> Section IV.B, Fig. 15</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="block-encodings">
+<h3>Block Encodings<a class="headerlink" href="#block-encodings" title="Link to this heading"></a></h3>
+<p>Abstract Encoding Classes:</p>
+<ul class="simple">
+<li><p>Abstract Block Encodings</p>
+<ul>
+<li><p>Description: Abstrct template for block encodings.</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/c0aa5fcb444f99eab6acce1a03f1c18a/BlockEncoding.py"><span class="xref download myst">BlockEncoding.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">BlockEncoding(qualtran.GateWithRegisters)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Abstract Select-Prepare Encodings</p>
+<ul>
+<li><p>Description: Abstract class for block encodings via Select and Prepare oracles</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/c0aa5fcb444f99eab6acce1a03f1c18a/BlockEncoding.py"><span class="xref download myst">BlockEncoding.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">BlockEncoding_select_prepare(BlockEncoding)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Specialized Encodings:</p>
+<ul class="simple">
+<li><p>Block encoding: Fermi-Hubbard</p>
+<ul>
+<li><p>Description: Optimized block encodings for the single-orbital (band) Fermi-Hubbard model on a 2d, periodic square lattice (following Phys. Rev. X <b>8</b>, 041015)</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/e05229539f6210335369003bf9c4cda6/fermi_hubbard_square_encoding.py"><span class="xref download myst">fermi_hubbard_square_encoding.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">fermi_hubbard_square_encoding(BlockEncoding_select_prepare)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Block encoding: Fermionic_LinearT</p>
+<ul>
+<li><p>Description: Implements encoding from section IV of <a class="reference external" href="https://arxiv.org/pdf/1805.03662.pdf">Linear T paper</a></p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/45ee3b77853105417dfd6d02ed0b1a1b/LinearT.py"><span class="xref download myst">LinearT.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Fermionic_LinearT(BlockEncoding)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Block encoding: Generic Linear Combination of Unitaries (LCU)</p>
+<ul>
+<li><p>Description: Generic block encoding for a linear combination of unitary operators, as expressed in terms of Pauli strings.</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/8bbe5ed68e1997e42e8ad71b6b07ef82/PauliStringLCU.py"><span class="xref download myst">PauliStringLCU.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">PauliStringLCU(BlockEncoding_select_prepare)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Block encoding: DoubleFactorized <a id="df"></a></p>
+<ul>
+<li><p>Description: Implements encoding for a double factorized hamiltonian from Appendix C of the <a class="reference external" href="https://arxiv.org/pdf/2011.03494.pdf">tensor hypercontraction paper</a></p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/97e5d0df53e93186a1d43ac4b036e41a/DoubleFactorized.py"><span class="xref download myst">DoubleFactorized.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">DoubleFactorized(BlockEncoding)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Helper Functions:</p>
+<ul class="simple">
+<li><p>Encoding Handler</p>
+<ul>
+<li><p>Description: Handler function for specalized block encodings (in terms of problem instances)</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/fca7e8732bfbea8a7f4a5761b9a6537b/getEncoding.py"><span class="xref download myst">getEncoding.py</span></a></p></li>
+<li><p>Functions:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">getEncoding()</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="iv-pest-generating-electronic-structure-hamiltonians">
+<h2>IV. PEST: Generating Electronic Structure Hamiltonians<a class="headerlink" href="#iv-pest-generating-electronic-structure-hamiltonians" title="Link to this heading"></a></h2>
+<p>Plane-wave basis (PW)
+Dual-plane wave basis (DPW)
+Tools to manipulate atomic coordinates</p>
+</section>
+<section id="v-problem-instances">
+<h2>V. Problem Instances<a class="headerlink" href="#v-problem-instances" title="Link to this heading"></a></h2>
+<p>Problem Specification:</p>
+<ul class="simple">
+<li><p>ProblemInstance Class</p>
+<ul>
+<li><p>Description: Class used to specify problem instances, for use with block encodings</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/500625bde7a24532e67562235c2d7d64/ProblemInstance.py"><span class="xref download myst">ProblemInstance.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ProblemInstance()</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Application Problems:</p>
+<ul class="simple">
+<li><p>Fermionic Model Hamiltonians</p>
+<ul>
+<li><p>Description: Model Hamiltonians for fermionic systems</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/16c33f73aadabec1d9b6b79599e379fd/fermionic_models.py"><span class="xref download myst">fermionic_models.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p>Fermi-Hubbard Model: <code class="docutils literal notranslate"><span class="pre">FermiHubbard(LatticeInstance)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Generic Lattice Hamiltonians</p>
+<ul>
+<li><p>Description: Flexible problem instance for arbitrary models on lattices (currently restricted to spin models).</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/a2b710466d7ac3765c6ab71f9349b982/LatticeInstance.py"><span class="xref download myst">LatticeInstance.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">LatticeInstance(ProblemInstance)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Spin Hamiltonians</p>
+<ul>
+<li><p>Description: Named spin models for lattice systems.</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/f06e7bb3851468d0099a9f0ae1b73db8/spin_models.py"><span class="xref download myst">spin_models.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p>Heisenberg Model: <code class="docutils literal notranslate"><span class="pre">Heisenberg(LatticeInstance)</span></code></p></li>
+<li><p>Transverse-Field Ising Model: <code class="docutils literal notranslate"><span class="pre">Transverse_Field_Ising(Heisenberg)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Chemical Hamiltonians (Local-basis electronic structure)</p>
+<ul>
+<li><p>Description: Electronic structure for Hamiltonians defined with a local basis set (Slatter/Gaussian-Type Orbitals).</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/9c78d7502e6427b3c5a1bcfd5508d0e9/ChemicalHamiltonian.py"><span class="xref download myst">ChemicalHamiltonian.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChemicalHamiltonian(ProblemInstance)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Material Hamiltonians (Nonlocal-basis electronic structure)</p>
+<ul>
+<li><p>Description: Electronic structure for Hamiltonians defined with a nonlocal basis set (Plane-wave/Dual plane-wave bases).</p></li>
+<li><p>Source: <a class="reference download internal" download="" href="_downloads/b2466a65ed127de2e852d1b113f10330/ElectronicStructure.py"><span class="xref download myst">ElectronicStructure.py</span></a></p></li>
+<li><p>Classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ElectronicStructure(ProblemInstance)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="vi-tutorials">
+<h2>VI. Tutorials <a id="tutorials"></a><a class="headerlink" href="#vi-tutorials" title="Link to this heading"></a></h2>
+<p>Application Problems:</p>
+<ul class="simple">
+<li><p>Electronic Structure: Local basis (small-molecules in a STO/GTO basis) <a id="gto"></a></p>
+<ul>
+<li><p>Description: Resource estimation for electronic structure problems that are defined in a local basis.  Applies to most calculations with isolated (i.e., non-periodic) small-molecules</p></li>
+<li><p>Notebooks: <a class="reference internal" href="#../Examples/ApplicationInstances/LocalChemistry/"><span class="xref myst">LocalChemistry</span></a></p></li>
+</ul>
+</li>
+<li><p>Electronic Structure: Nonlocal basis (materials in a periodic dual plane-wave basis) <a id="dpw"></a></p>
+<ul>
+<li><p>Description: Resource estimation for ground state energy estimation (GSEE) of periodic electronic structure systems with Hamiltonians expressed in the dual plan wave (DPW) basis. Main example used is a magnesium slab.</p></li>
+<li><p>Notebooks: <a class="reference internal" href="#../Examples/ApplicationInstances/PeriodicChemistry/"><span class="xref myst">PeriodicChemistry</span></a></p></li>
+</ul>
+</li>
+<li><p>Fermi-Hubbard Model <a id="fermi-hubbard"></a></p>
+<ul>
+<li><p>Description: Resource estimation for the Fermi-Hubbard model.  Includes demonstrations with isolated block encodings, qubitized quantum dynamics, and qubitized phase estimation.</p></li>
+<li><p>Notebooks: <a class="reference internal" href="#../Examples/ApplicationInstances/FermiHubbard/"><span class="xref myst">FermiHubbard</span></a></p></li>
+</ul>
+</li>
+<li><p>General Lattice Models <a id="arbitrary-spin-lattice"></a></p>
+<ul>
+<li><p>Description: Block encodings and circuits for general spin models on arbitrary lattices.  Demonstrated briefly in the cited notebooks.</p></li>
+<li><p>Notebooks: <a class="reference internal" href="#../Examples/Algorithms_and_Infrastructure/"><span class="xref myst">Algorithms_and_Infrastructure</span></a></p></li>
+</ul>
+</li>
+<li><p>Heisenberg Model <a id="heisenberg"></a></p>
+<ul>
+<li><p>Description: Resource estimation for the Heisenberg model.  Includes demonstrations with isolated block encodings, qubitized quantum dynamics, and qubitized phase estimation.</p></li>
+<li><p>Notebooks: <a class="reference internal" href="#../Examples/ApplicationInstances/Heisenberg/"><span class="xref myst">Heisenberg</span></a></p></li>
+</ul>
+</li>
+<li><p>Homogeneous Catalysis</p>
+<ul>
+<li><p>Description: Resource estimation for qubitized phase estimation using the double factorized block encoding for a homogeneous catalyst.</p></li>
+<li><p>Notebooks: <a class="reference internal" href="#../Examples/ApplicationInstances/HomogeneousCatalysis/"><span class="xref myst">Homogeneous Catalysis</span></a></p></li>
+</ul>
+</li>
+</ul>
+<p>General Infrastructure:</p>
+<ul class="simple">
+<li><p>Detailed Discussions (broader capabilities)  <a id="gto"></a></p>
+<ul>
+<li><p>Description: Notebooks that demonstrate pyLIQTRs general capabities for block encodings, problem instances, and qubitized circuits.  Also demonstrates how to define general spin/fermionic Hamiltonians on arbitrary lattices in any dimensionality.</p></li>
+<li><p>Notebooks: <a class="reference internal" href="#../Examples/Algorithms_and_Infrastructure/"><span class="xref myst">Algorithms_and_Infrastructure</span></a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="vii-classical-simulation-methods-pyliqtr-clam">
+<h2>VII. Classical Simulation Methods (pyLIQTR.clam)<a class="headerlink" href="#vii-classical-simulation-methods-pyliqtr-clam" title="Link to this heading"></a></h2>
+<p>Integration of classical ODE’s
+Conversion of spin / fermionic Hamiltonians for classical numerics
+Simulation of quantum dynamics
+Differential equations</p>
+<ul class="simple">
+<li><p>Description: Linearization methods (Carleman) and definition of different nonlinear differential equations.  Includes: (i) van der Pol oscillator, Lotka-Volterra system; (2) Viscous Burger’s equation; (3) Nonlinear Vlasov equation w/ scalar collision kernel</p></li>
+<li><p>Source: <a class="reference internal" href="#../src/pyLIQTR/clam/linearization_tools"><span class="xref myst">linearization_tools</span></a></p></li>
+<li><p>Notebooks: <span class="xref myst">linearization_tools.ipynb</span></p></li>
+</ul>
+</section>
+<section id="viii-general-utilities-operations-pyliqtr-clam">
+<h2>VIII. General Utilities / Operations (pyLIQTR.clam)<a class="headerlink" href="#viii-general-utilities-operations-pyliqtr-clam" title="Link to this heading"></a></h2>
+<p>Multilinear algebra
+Pauli / Fermionic operators (classical methods)
+Periodic system preparation</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

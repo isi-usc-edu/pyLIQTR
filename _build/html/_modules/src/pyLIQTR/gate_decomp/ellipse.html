@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.gate_decomp.ellipse &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.gate_decomp.ellipse</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.gate_decomp.ellipse</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">gmpy2</span>
+<span class="kn">from</span> <span class="nn">gmpy2</span> <span class="kn">import</span> <span class="n">mpfr</span>
+
+
+<div class="viewcode-block" id="Ellipse">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.ellipse.Ellipse">[docs]</a>
+<span class="k">class</span> <span class="nc">Ellipse</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing ellipses as positive definite matrices&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">a</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">,</span>
+        <span class="n">b</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">,</span>
+        <span class="n">d</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">,</span>
+        <span class="n">x</span><span class="p">:</span> <span class="n">mpfr</span> <span class="o">=</span> <span class="n">mpfr</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+        <span class="n">y</span><span class="p">:</span> <span class="n">mpfr</span> <span class="o">=</span> <span class="n">mpfr</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+        <span class="n">semi_major</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">mpfr</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">semi_minor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">mpfr</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">semi_major</span> <span class="o">=</span> <span class="n">semi_major</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">semi_minor</span> <span class="o">=</span> <span class="n">semi_minor</span>
+
+<div class="viewcode-block" id="Ellipse.from_axes">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.ellipse.Ellipse.from_axes">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_axes</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">,</span> <span class="n">semi_major</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">,</span> <span class="n">semi_minor</span><span class="p">:</span> <span class="n">mpfr</span>
+    <span class="p">):</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">exp2</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">local_context</span><span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">get_context</span><span class="p">(),</span> <span class="nb">round</span><span class="o">=</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">RoundUp</span><span class="p">):</span>
+            <span class="n">semi_major</span> <span class="o">*=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">delta</span>
+            <span class="n">semi_minor</span> <span class="o">*=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">delta</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">/</span> <span class="n">semi_minor</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">/</span> <span class="n">semi_major</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">gmpy2</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+            <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">semi_major</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">semi_minor</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">/</span> <span class="n">semi_major</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">/</span> <span class="n">semi_minor</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">semi_major</span><span class="o">=</span><span class="n">semi_major</span><span class="p">,</span> <span class="n">semi_minor</span><span class="o">=</span><span class="n">semi_minor</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_calc_z_and_e</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;For an ellipse described by the matrix [[a, b], [b, d]], find z and e such</span>
+<span class="sd">        that a = eλ^{-z}, d = eλ^z</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lmbda</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">mpfr</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">lmbda</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Ellipse.contains">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.ellipse.Ellipse.contains">[docs]</a>
+    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine if the ellipse contains the point (x, y)&quot;&quot;&quot;</span>
+        <span class="n">magnitude</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">magnitude</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Ellipse.descriminant">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.ellipse.Ellipse.descriminant">[docs]</a>
+    <span class="k">def</span> <span class="nf">descriminant</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mpfr</span><span class="p">:</span>
+        <span class="n">gmpy2</span><span class="o">.</span><span class="n">get_context</span><span class="p">()</span><span class="o">.</span><span class="n">precision</span> <span class="o">+=</span> <span class="mi">10</span>
+        <span class="n">descriminant</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">gmpy2</span><span class="o">.</span><span class="n">get_context</span><span class="p">()</span><span class="o">.</span><span class="n">precision</span> <span class="o">-=</span> <span class="mi">10</span>
+        <span class="k">return</span> <span class="o">+</span><span class="n">descriminant</span></div>
+
+
+<div class="viewcode-block" id="Ellipse.is_positive_semi_definite">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.ellipse.Ellipse.is_positive_semi_definite">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_positive_semi_definite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">descriminant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriminant</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">descriminant</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Ellipse has imaginary eigenvalues. Descriminant =&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">descriminant</span><span class="si">}</span><span class="s2"> Ellipse = </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">-</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">descriminant</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="Ellipse.determinant">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.ellipse.Ellipse.determinant">[docs]</a>
+    <span class="k">def</span> <span class="nf">determinant</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mpfr</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">**</span><span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="Ellipse.compute_y_points">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.ellipse.Ellipse.compute_y_points">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_y_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">mpfr</span><span class="p">,</span> <span class="n">mpfr</span><span class="p">]:</span>
+        <span class="n">x</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">first</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">second</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">descriminant</span> <span class="o">=</span> <span class="n">first</span> <span class="o">-</span> <span class="n">second</span>
+
+        <span class="k">if</span> <span class="n">descriminant</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;x value is outside ellipse&quot;</span><span class="p">)</span>
+        <span class="n">descriminant_sqrt</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">descriminant</span><span class="p">)</span>
+        <span class="n">y1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">x</span> <span class="o">-</span> <span class="n">descriminant_sqrt</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span>
+        <span class="n">y2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">descriminant_sqrt</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span>
+        <span class="k">return</span> <span class="n">y1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">y2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span></div>
+
+
+<div class="viewcode-block" id="Ellipse.compute_x_points">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.ellipse.Ellipse.compute_x_points">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_x_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">mpfr</span><span class="p">,</span> <span class="n">mpfr</span><span class="p">]:</span>
+        <span class="n">y</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">descriminant</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
+        <span class="k">if</span> <span class="n">descriminant</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;y value is outside ellipse&quot;</span><span class="p">)</span>
+        <span class="n">descriminant_sqrt</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">descriminant</span><span class="p">)</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">y</span> <span class="o">-</span> <span class="n">descriminant_sqrt</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">descriminant_sqrt</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
+        <span class="k">return</span> <span class="n">x1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">x2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Ellipse: a = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="si">}</span><span class="s2">, b = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="si">}</span><span class="s2">, d = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="si">}</span><span class="s2">, z = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="si">}</span><span class="s2">, e =&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="si">}</span><span class="s2">, x = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">, y = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_skew">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.ellipse.calculate_skew">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_skew</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Ellipse</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Ellipse</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">b</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">b</span><span class="o">**</span><span class="mi">2</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_bias">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.ellipse.calculate_bias">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_bias</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Ellipse</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Ellipse</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">z</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">_calc_z_and_e</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">z</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">_calc_z_and_e</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">b</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">z</span></div>
+
+
+
+<div class="viewcode-block" id="force_det_one">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.ellipse.force_det_one">[docs]</a>
+<span class="k">def</span> <span class="nf">force_det_one</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Ellipse</span><span class="p">):</span>
+    <span class="n">det</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">determinant</span><span class="p">()</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">det</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">scale</span><span class="p">,</span> <span class="n">Ellipse</span><span class="p">(</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">a</span> <span class="o">/</span> <span class="n">scale</span><span class="p">,</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">b</span> <span class="o">/</span> <span class="n">scale</span><span class="p">,</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">d</span> <span class="o">/</span> <span class="n">scale</span><span class="p">,</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+        <span class="n">semi_major</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">semi_major</span> <span class="o">/</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">scale</span><span class="p">),</span>
+        <span class="n">semi_minor</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">semi_minor</span> <span class="o">/</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">scale</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="scale_ellipse">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.ellipse.scale_ellipse">[docs]</a>
+<span class="k">def</span> <span class="nf">scale_ellipse</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Ellipse</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Ellipse</span><span class="p">(</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">d</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+        <span class="n">semi_major</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">semi_major</span> <span class="o">*</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">scale</span><span class="p">),</span>
+        <span class="n">semi_minor</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">semi_minor</span> <span class="o">*</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">scale</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

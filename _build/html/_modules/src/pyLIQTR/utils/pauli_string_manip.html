@@ -1,0 +1,213 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.utils.pauli_string_manip &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.utils.pauli_string_manip</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.utils.pauli_string_manip</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="convert_sparse_term">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.pauli_string_manip.convert_sparse_term">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_sparse_term</span><span class="p">(</span><span class="n">term</span><span class="p">,</span><span class="n">sz</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+    <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">term</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">term</span> <span class="o">==</span> <span class="p">((),</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="c1">#0 pad.</span>
+        <span class="k">return</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DensePauliString</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="o">*</span><span class="n">sz</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1">#intelligent pad</span>
+        <span class="n">pstr</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;I&#39;</span> <span class="k">for</span> <span class="n">__</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sz</span><span class="p">)]</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">term</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">term</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">q</span><span class="p">,</span><span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">term</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">term</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span><span class="s1">&#39;Z&#39;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported pauli type &quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
+            <span class="n">pstr</span><span class="p">[</span><span class="n">q</span><span class="p">]</span><span class="o">=</span><span class="n">p</span>
+        <span class="k">return</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DensePauliString</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pstr</span><span class="p">),</span><span class="n">coefficient</span><span class="o">=</span><span class="n">term</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
+
+    
+
+    
+<div class="viewcode-block" id="convert_to_dense_pauli_string">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.pauli_string_manip.convert_to_dense_pauli_string">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_to_dense_pauli_string</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DensePauliString</span><span class="p">(</span><span class="n">term</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">coefficient</span><span class="o">=</span><span class="n">term</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="convert_projector">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.pauli_string_manip.convert_projector">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_projector</span><span class="p">(</span><span class="n">pstr</span><span class="p">):</span>
+    <span class="c1">################################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   FUNCTION     convert_projector(pstr)</span>
+    <span class="c1">###</span>
+    <span class="c1">################################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   DESCRIPTION</span>
+    <span class="c1">###</span>
+    <span class="c1">###      Converts the Z-eigenstate projectors (&#39;+&#39;,&#39;-&#39;) in the string &lt;pstr&gt;</span>
+    <span class="c1">###      into their constituent Pauli operations.  Performs rescaling of</span>
+    <span class="c1">###      coefficients to match.</span>
+    <span class="c1">###</span>
+    <span class="c1">###</span>
+    <span class="c1">###</span>
+    <span class="c1">###   ARGUMENTS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      pstr   =   Target Pauli string</span>
+    <span class="c1">###</span>
+    <span class="c1">###   RETURNS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      new     =  Modified Pauli string</span>
+    <span class="c1">###</span>
+    <span class="c1">###   REQUIRES</span>
+    <span class="c1">###</span>
+    <span class="c1">###      numpy as np</span>
+    <span class="c1">###</span>
+    <span class="n">proj_set</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+
+    <span class="n">new</span>      <span class="o">=</span>  <span class="p">[]</span>
+    <span class="n">indices</span>  <span class="o">=</span>  <span class="n">pstr</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>      <span class="n">opstr</span>  <span class="o">=</span>  <span class="n">pstr</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>       <span class="n">coeff</span>  <span class="o">=</span>  <span class="n">pstr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="s1">&#39;+&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opstr</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opstr</span><span class="p">)):</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pstr</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">proj_set</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="ow">in</span> <span class="n">opstr</span><span class="p">):</span>
+
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">opstr</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+
+                <span class="n">ns_1</span> <span class="o">=</span> <span class="n">opstr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">idx</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;I&#39;</span><span class="o">+</span><span class="n">opstr</span><span class="p">[(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">):]</span>
+                <span class="n">ns_2</span> <span class="o">=</span> <span class="n">opstr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">idx</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;Z&#39;</span><span class="o">+</span><span class="n">opstr</span><span class="p">[(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">):]</span>
+                
+                <span class="n">sgn</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">proj_set</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+
+                <span class="n">nsp_1</span> <span class="o">=</span> <span class="p">((</span><span class="n">indices</span><span class="p">,</span><span class="n">ns_1</span><span class="p">,(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">coeff</span><span class="p">))</span>
+                <span class="n">nsp_2</span> <span class="o">=</span> <span class="p">((</span><span class="n">indices</span><span class="p">,</span><span class="n">ns_2</span><span class="p">,</span><span class="n">sgn</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">coeff</span><span class="p">))</span>
+
+                <span class="p">[</span><span class="n">new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">convert_projector</span><span class="p">(</span><span class="n">nsp_1</span><span class="p">)]</span>
+                <span class="p">[</span><span class="n">new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">convert_projector</span><span class="p">(</span><span class="n">nsp_2</span><span class="p">)]</span>
+
+                <span class="k">break</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">new</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,499 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.pyLCircuit &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.pyLCircuit</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.circuits.pyLCircuit</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.pyLOperator</span> <span class="kn">import</span> <span class="n">pyLOperator</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.circuit_decomposition</span> <span class="kn">import</span> <span class="n">decompose_op</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.cirq_transforms</span> <span class="kn">import</span> <span class="n">clifford_plus_t_direct_transform</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.rotation_gates</span> <span class="kn">import</span> <span class="n">decomp_mixin</span><span class="p">,</span> <span class="n">T_COUNT_CONST</span><span class="p">,</span> <span class="n">T_COUNT_SLOPE</span><span class="p">,</span> <span class="n">T_COUNT_STD_DEV</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.printing</span> <span class="kn">import</span> <span class="n">openqasm</span>
+
+<span class="kn">from</span> <span class="nn">qualtran</span> <span class="kn">import</span> <span class="n">_infra</span><span class="p">,</span> <span class="n">bloqs</span>
+<span class="kn">import</span> <span class="nn">qualtran.cirq_interop.testing</span> <span class="k">as</span> <span class="nn">qt_test</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.resource_analysis</span> <span class="kn">import</span> <span class="n">pylqt_t_complexity</span> <span class="k">as</span> <span class="n">t_complexity</span>
+
+<span class="c1"># class syntax</span>
+<div class="viewcode-block" id="RESOURCE_ANALYSIS_MODE">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.circuits.html#src.pyLIQTR.circuits.pyLCircuit.RESOURCE_ANALYSIS_MODE">[docs]</a>
+<span class="k">class</span> <span class="nc">RESOURCE_ANALYSIS_MODE</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">Exact</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<span class="n">RESOURCE_ANALYSIS_MODE</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;ResourceAnalysisMode&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Exact&#39;</span><span class="p">])</span>
+
+<span class="c1"># functional syntax</span>
+<div class="viewcode-block" id="pyLCircuit">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.circuits.html#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit">[docs]</a>
+<span class="k">class</span> <span class="nc">pyLCircuit</span> <span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;pyLCircuit encapsulates the entire algorithm, including all of it&#39;s gates and resuorces.</span>
+<span class="sd">        </span>
+<span class="sd">        :param pyLCircuit self: the instance of the circuit</span>
+<span class="sd">        :param list args: The initial list of moments and operations defining the circuit. </span>
+<span class="sd">            You can also pass in operations, lists of operations, or generally anything meeting the cirq.OP_TREE contract. </span>
+<span class="sd">            Non-moment entries will be inserted according to the specified insertion strategy.</span>
+<span class="sd">        :param dict kwargs: The initial keywords=value list for setting up the circuit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pcft_resources</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_operator_cache</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_operator_cached_results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_operator_decomp_cache</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_decomp_level</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_decomp_level</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">_mycopy_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+    
+
+<div class="viewcode-block" id="pyLCircuit.save">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.circuits.html#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;IMPLEMENT ME&quot;</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="pyLCircuit.load">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.circuits.html#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.load">[docs]</a>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;IMPLEMENT ME&quot;</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">decomp_level</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_decomp_level</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">resources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;CliffT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;BeforeCliffT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pcft_resources</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;Qubits&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">tmp</span>
+    
+<div class="viewcode-block" id="pyLCircuit.clear_resources">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.circuits.html#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.clear_resources">[docs]</a>
+    <span class="k">def</span> <span class="nf">clear_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pcft_resources</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+
+    <span class="nd">@resources</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rsrcs</span><span class="p">):</span>
+        <span class="c1">#print(&#39;in resource setter&#39;)</span>
+        <span class="c1">#print(rsrcs)</span>
+        <span class="c1">#rint(self._resources)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">rsrcs</span><span class="p">:</span>
+            <span class="n">pcft</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1">#cleanup</span>
+            <span class="n">corrected_key</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="n">corrected_key</span> <span class="o">=</span> <span class="n">corrected_key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;**-1.0&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;**-1&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;PRECLIFFT_&quot;</span> <span class="ow">in</span> <span class="n">corrected_key</span><span class="p">:</span>
+                <span class="n">corrected_key</span> <span class="o">=</span> <span class="n">corrected_key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;PRECLIFFT_&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">pcft</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">corrected_key</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;CNOT&quot;</span><span class="p">:</span>
+                <span class="n">corrected_key</span> <span class="o">=</span> <span class="s2">&quot;CX&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;Rx&quot;</span> <span class="ow">in</span> <span class="n">corrected_key</span><span class="p">:</span>
+                <span class="n">corrected_key</span> <span class="o">=</span> <span class="s2">&quot;Rx&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;Ry&quot;</span> <span class="ow">in</span> <span class="n">corrected_key</span><span class="p">:</span>
+                <span class="n">corrected_key</span> <span class="o">=</span> <span class="s2">&quot;Ry&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;Rz&quot;</span> <span class="ow">in</span> <span class="n">corrected_key</span><span class="p">:</span>
+                <span class="n">corrected_key</span> <span class="o">=</span> <span class="s2">&quot;Rz&quot;</span>
+
+            <span class="c1"># added a new sum of rotations</span>
+            <span class="k">if</span> <span class="s1">&#39;Rotations&#39;</span> <span class="ow">in</span> <span class="n">corrected_key</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;Rx&quot;</span> <span class="ow">in</span> <span class="n">rsrcs</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="s1">&#39;Rotations&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="s1">&#39;Rx&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;Ry&quot;</span> <span class="ow">in</span> <span class="n">rsrcs</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="s1">&#39;Rotations&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="s1">&#39;Ry&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;Rz&quot;</span> <span class="ow">in</span> <span class="n">rsrcs</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="s1">&#39;Rotations&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="s1">&#39;Rz&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pcft</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">corrected_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="n">corrected_key</span><span class="p">]</span> <span class="o">+=</span> <span class="n">rsrcs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="n">corrected_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">rsrcs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> 
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">corrected_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pcft_resources</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_pcft_resources</span><span class="p">[</span><span class="n">corrected_key</span><span class="p">]</span> <span class="o">+=</span> <span class="n">rsrcs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_pcft_resources</span><span class="p">[</span><span class="n">corrected_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">rsrcs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>  
+        <span class="c1"># print(self._resources)</span>
+
+
+<div class="viewcode-block" id="pyLCircuit.get_decomp_levels">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.circuits.html#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.get_decomp_levels">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_decomp_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#default decomp level is always zero (aka, were a circuit of just gates)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_decomp_level</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">moments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findall_operations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_is_pyLOperator</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">moments</span><span class="p">:</span>
+            <span class="n">moment</span> <span class="o">=</span> <span class="n">moment</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">opIdx</span><span class="p">,</span><span class="n">__</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">moment</span><span class="p">]</span><span class="o">.</span><span class="n">operations</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pyLOperator</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">moment</span><span class="p">]</span><span class="o">.</span><span class="n">operations</span><span class="p">[</span><span class="n">opIdx</span><span class="p">]):</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">moment</span><span class="p">]</span><span class="o">.</span><span class="n">operations</span><span class="p">[</span><span class="n">opIdx</span><span class="p">]</span><span class="o">.</span><span class="n">_gate</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">raw_types</span><span class="o">.</span><span class="n">_InverseCompositeGate</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="n">moment</span><span class="p">]</span><span class="o">.</span><span class="n">operations</span><span class="p">[</span><span class="n">opIdx</span><span class="p">]</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">_original</span><span class="o">.</span><span class="n">total_decomp</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_decomp_level</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_max_decomp_level</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">moment</span><span class="p">]</span><span class="o">.</span><span class="n">operations</span><span class="p">[</span><span class="n">opIdx</span><span class="p">]</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">_original</span><span class="o">.</span><span class="n">total_decomp</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="n">moment</span><span class="p">]</span><span class="o">.</span><span class="n">operations</span><span class="p">[</span><span class="n">opIdx</span><span class="p">]</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">total_decomp</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_decomp_level</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_max_decomp_level</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">moment</span><span class="p">]</span><span class="o">.</span><span class="n">operations</span><span class="p">[</span><span class="n">opIdx</span><span class="p">]</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">total_decomp</span>
+        <span class="c1">#have max level, now need to readjust all operators and update their decomp level</span>
+        <span class="c1">#need to recall the generator</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        moments = self.findall_operations(self._is_pyLOperator)</span>
+<span class="sd">        for moment in moments:</span>
+<span class="sd">            moment = moment[0]</span>
+<span class="sd">            for opIdx,__ in enumerate(self[moment].operations):</span>
+<span class="sd">                if self._is_pyLOperator(self[moment].operations[opIdx]):</span>
+<span class="sd">                    self[moment].operations[opIdx]._gate.total_decomp = self._max_decomp_level</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_decomp_level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_decomp_level</span></div>
+
+    
+<div class="viewcode-block" id="pyLCircuit.view_decomp_levels">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.circuits.html#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.view_decomp_levels">[docs]</a>
+    <span class="k">def</span> <span class="nf">view_decomp_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Circuit @ decomp level = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decomp_level</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_operations</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pyLOperator</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_gate</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">raw_types</span><span class="o">.</span><span class="n">_InverseCompositeGate</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;inverse(</span><span class="si">{}</span><span class="s2">)</span><span class="se">\n\t</span><span class="s2"> @ Level = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">_original</span><span class="p">),</span><span class="n">x</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">_original</span><span class="o">.</span><span class="n">total_decomp</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="se">\n\t</span><span class="s2"> @ Level = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">x</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">total_decomp</span><span class="p">))</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_decomp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">op</span><span class="p">):</span>
+        <span class="c1">#yield from decompose_op</span>
+        <span class="c1">#return</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operator_decomp_cache</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operator_decomp_cache</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_operator_decomp_cache</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)]</span> <span class="o">=</span> <span class="n">decompose_op</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operator_decomp_cache</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">_is_pyLOperator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">operation</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">_gate</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">raw_types</span><span class="o">.</span><span class="n">_InverseCompositeGate</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">_original</span><span class="p">,</span><span class="n">pyLOperator</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">_gate</span><span class="p">,</span><span class="n">pyLOperator</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="k">def</span> <span class="nf">_isRotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;Rx&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;Ry&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;Rz&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">else</span> <span class="kc">False</span>
+    
+    <span class="k">def</span> <span class="nf">_get_cached_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">g</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operator_cached_results</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_operator_cache</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">g</span><span class="p">)]</span>
+    
+    <span class="k">def</span> <span class="nf">_do_resource_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">operation</span><span class="p">,</span><span class="n">mode</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">RESOURCE_ANALYSIS_MODE</span><span class="o">.</span><span class="n">Exact</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">_gate</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">raw_types</span><span class="o">.</span><span class="n">_InverseCompositeGate</span><span class="p">):</span>
+                <span class="c1">#print(&quot;\tinverse&quot;)</span>
+                <span class="n">isCached</span> <span class="o">=</span>  <span class="n">operation</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">_original</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operator_cache</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">isCached</span><span class="p">:</span>
+                    <span class="c1">#print(&quot;\t\tuncached {}&quot;.format(str(operation)))</span>
+                    <span class="n">rsrcs</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">_original</span><span class="o">.</span><span class="n">count_exact</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="n">rsrcs</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_operator_cached_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rsrcs</span><span class="p">)</span>
+                    <span class="c1">#print(&quot;\t\t\t{}&quot;.format(rsrcs))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_operator_cache</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">_original</span><span class="p">)</span>
+                    <span class="c1">#print(&quot;\t\t\t{}&quot;.format(rsrcs))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1">#print(&quot;\t\tcached {}&quot;.format(str(operation)))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_cached_count</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">_original</span><span class="p">)</span>
+                    <span class="c1">#print(&quot;\t\t\t{}&quot;.format(self._get_cached_count(operation._gate._original)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1">#print(&quot;\tog&quot;)</span>
+                <span class="n">isCached</span> <span class="o">=</span>  <span class="n">operation</span><span class="o">.</span><span class="n">_gate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operator_cache</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">isCached</span><span class="p">:</span>
+                    <span class="c1">#print(&quot;\t\tuncached {}&quot;.format(str(operation)))</span>
+                    <span class="n">rsrcs</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">count_exact</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="n">rsrcs</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_operator_cached_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rsrcs</span><span class="p">)</span>
+                    <span class="c1">#print(&quot;\t\t\t{}&quot;.format(rsrcs))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_operator_cache</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">_gate</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1">#print(&quot;\t\tcached {}&quot;.format(str(operation)))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_cached_count</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">_gate</span><span class="p">)</span>
+                    <span class="c1">#print(&quot;\t\t\t{}&quot;.format(self._get_cached_count(operation._gate)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+
+<div class="viewcode-block" id="pyLCircuit.decompose">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.circuits.html#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.decompose">[docs]</a>
+    <span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">level</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="c1">#decompose up to the chosen_level, w</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="c1">#fully decompose circuit</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">level</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">decomp_level</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot &#39;recompose&#39; circuit, can only further decompose&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">level</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot decompose past base level of circuit decomposition&quot;</span><span class="p">)</span>
+        
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">decomp_level</span> <span class="o">==</span> <span class="n">level</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_current_decomp_level</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="c1">#Making use of cirqs map_operations and unroll function, </span>
+                <span class="c1">#We unfortunately need to have this function redfined each time we loop through</span>
+                <span class="c1">#since we cant seem to pass multiple arguments to it.</span>
+                <span class="k">def</span> <span class="nf">on_the_fly_decomp</span><span class="p">(</span><span class="n">op</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Operation</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">OP_TREE</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pyLOperator</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">raw_types</span><span class="o">.</span><span class="n">_InverseCompositeGate</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">_original</span><span class="o">.</span><span class="n">total_decomp</span> <span class="o">&gt;=</span> <span class="n">level</span><span class="p">:</span>
+                                <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decomp</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">yield</span> <span class="n">op</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">total_decomp</span> <span class="o">&gt;=</span> <span class="n">level</span><span class="p">:</span>
+                                <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decomp</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">yield</span> <span class="n">op</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">level</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                            <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">align_left</span><span class="p">(</span><span class="n">clifford_plus_t_direct_transform</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">op</span><span class="p">),</span><span class="n">gate_precision</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span><span class="n">use_rotation_decomp_gates</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">yield</span> <span class="n">op</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mycopy_</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">map_operations_and_unroll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">on_the_fly_decomp</span><span class="p">))</span></div>
+
+        
+        
+    
+<div class="viewcode-block" id="pyLCircuit.resourceAnalyze">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.circuits.html#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.resourceAnalyze">[docs]</a>
+    <span class="k">def</span> <span class="nf">resourceAnalyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rotation_gate_precision</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span><span class="n">circuit_precision</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="n">RESOURCE_ANALYSIS_MODE</span><span class="o">.</span><span class="n">Exact</span><span class="p">,</span><span class="n">decompose_rotations</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="c1"># NOTE: Currently only estimates resources from rotation gates based on precision, ie does not generate explicit circuits and count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_resources</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_operations</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pyLOperator</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_do_resource_analysis</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">mode</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_gate</span><span class="p">,</span> <span class="n">_infra</span><span class="o">.</span><span class="n">gate_with_registers</span><span class="o">.</span><span class="n">GateWithRegisters</span><span class="p">):</span>
+                <span class="c1"># Handle Complex (cirq-ft) Gate/Qubits operations</span>
+                <span class="c1"># Hold off on calling the cirq.decompose and simply run the cirq_ft.t_complexity</span>
+                <span class="c1"># then populate self.resources intelligently from that result</span>
+                <span class="c1"># tmp = cirq.Circuit(x)</span>
+                <span class="c1"># tmp = tmp._decompose_(self=tmp)</span>
+                <span class="n">gate_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PRECLIFFT_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">gate</span><span class="p">)):</span><span class="mi">1</span><span class="p">}</span>
+
+                <span class="n">t</span> <span class="o">=</span> <span class="n">t_complexity</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+                <span class="c1"># estimate gate counts based on number of rotations, but only if we don&#39;t want rotations</span>
+                <span class="k">if</span> <span class="n">decompose_rotations</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">circuit_precision</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">Ts_from_rotations</span> <span class="o">=</span> <span class="n">get_T_counts_from_rotations</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">rotations</span><span class="p">,</span><span class="n">circuit_precision</span><span class="o">=</span><span class="n">circuit_precision</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">Ts_from_rotations</span> <span class="o">=</span> <span class="n">get_T_counts_from_rotations</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">rotations</span><span class="p">,</span><span class="n">gate_precision</span><span class="o">=</span><span class="n">rotation_gate_precision</span><span class="p">)</span>
+                    <span class="n">gate_dict</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="n">Ts_from_rotations</span>
+                    <span class="n">gate_dict</span><span class="p">[</span><span class="s2">&quot;Clifford&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">clifford</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">Ts_from_rotations</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">gate_dict</span><span class="p">[</span><span class="s2">&quot;Rotations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">rotations</span>
+                    <span class="n">gate_dict</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">t</span>
+                    <span class="n">gate_dict</span><span class="p">[</span><span class="s2">&quot;Clifford&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">clifford</span>
+
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="n">gate_dict</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_gate</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">QuantumFourierTransformGate</span><span class="p">):</span>
+                <span class="c1"># Need to add some specific logic for this as currently cirq doesn&#39;t have a way to calculate the resources of it&#39;s own QFT</span>
+                <span class="n">gate_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PRECLIFFT_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">gate</span><span class="p">)):</span><span class="mi">1</span><span class="p">}</span>
+
+                <span class="n">t</span> <span class="o">=</span> <span class="n">t_complexity</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+                <span class="c1"># estimate gate counts based on number of rotations, but only if we don&#39;t want rotations</span>
+                <span class="k">if</span> <span class="n">decompose_rotations</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">circuit_precision</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">Ts_from_rotations</span> <span class="o">=</span> <span class="n">get_T_counts_from_rotations</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">rotations</span><span class="p">,</span><span class="n">circuit_precision</span><span class="o">=</span><span class="n">circuit_precision</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">Ts_from_rotations</span> <span class="o">=</span> <span class="n">get_T_counts_from_rotations</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">rotations</span><span class="p">,</span><span class="n">gate_precision</span><span class="o">=</span><span class="n">rotation_gate_precision</span><span class="p">)</span>
+                    <span class="n">gate_dict</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="n">Ts_from_rotations</span>
+                    <span class="n">gate_dict</span><span class="p">[</span><span class="s2">&quot;Clifford&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">clifford</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">Ts_from_rotations</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">gate_dict</span><span class="p">[</span><span class="s2">&quot;Rotations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">rotations</span>
+                    <span class="n">gate_dict</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">t</span>
+                    <span class="n">gate_dict</span><span class="p">[</span><span class="s2">&quot;Clifford&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">clifford</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="n">gate_dict</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_gate</span><span class="p">,</span><span class="n">decomp_mixin</span><span class="p">):</span>
+                <span class="c1"># case for when rotation decomp gate is passed</span>
+                <span class="n">gate_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PRECLIFFT_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">gate</span><span class="p">)):</span><span class="mi">1</span><span class="p">}</span>
+
+                <span class="n">t_count</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">num_T_gates</span>
+
+                <span class="n">gate_dict</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t_count</span>
+                <span class="n">gate_dict</span><span class="p">[</span><span class="s2">&quot;Clifford&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">t_count</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="n">gate_dict</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Handle Simple Gate/Qubit operations</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="c1"># these should be single qubit gates before going to clifford_plus_t_direct_transform()</span>
+                <span class="k">if</span> <span class="n">circuit_precision</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">clifford_plus_t_direct_transform</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span><span class="n">circuit_precision</span><span class="o">=</span><span class="n">circuit_precision</span><span class="p">,</span><span class="n">use_random_decomp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">use_rotation_decomp_gates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">clifford_plus_t_direct_transform</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span><span class="n">gate_precision</span><span class="o">=</span><span class="n">rotation_gate_precision</span><span class="p">,</span><span class="n">use_random_decomp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">use_rotation_decomp_gates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="n">gate_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PRECLIFFT_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">gate</span><span class="p">)):</span><span class="mi">1</span><span class="p">}</span>
+                <span class="k">for</span> <span class="n">xnu</span> <span class="ow">in</span> <span class="n">tmp</span><span class="o">.</span><span class="n">all_operations</span><span class="p">():</span>
+                    <span class="n">gateStr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">xnu</span><span class="o">.</span><span class="n">gate</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">gateStr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">gate_dict</span><span class="p">:</span>
+                        <span class="n">gate_dict</span><span class="p">[</span><span class="n">gateStr</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">gate_dict</span><span class="p">[</span><span class="n">gateStr</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="n">gate_dict</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span></div>
+
+
+<div class="viewcode-block" id="pyLCircuit.to_openqasm">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.circuits.html#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.to_openqasm">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_openqasm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">use_rotation_decomp_gates</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">to_openqasm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">use_rotation_decomp_gates</span><span class="o">=</span><span class="n">use_rotation_decomp_gates</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="get_T_counts_from_rotations">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.circuits.html#src.pyLIQTR.circuits.pyLCircuit.get_T_counts_from_rotations">[docs]</a>
+<span class="k">def</span> <span class="nf">get_T_counts_from_rotations</span><span class="p">(</span><span class="n">num_rotation_gates</span><span class="p">,</span><span class="n">gate_precision</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span><span class="n">circuit_precision</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    
+    <span class="k">if</span> <span class="n">circuit_precision</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="p">(</span><span class="n">circuit_precision</span> <span class="o">/</span> <span class="n">num_rotation_gates</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="n">gate_precision</span>
+
+    <span class="n">T_from_single_rotation</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span>
+                <span class="n">T_COUNT_SLOPE</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">precision</span><span class="p">)</span> <span class="o">+</span> <span class="n">T_COUNT_CONST</span><span class="p">,</span>
+                <span class="n">T_COUNT_STD_DEV</span><span class="p">,</span>
+            <span class="p">))</span>
+    <span class="k">return</span> <span class="n">T_from_single_rotation</span><span class="o">*</span><span class="n">num_rotation_gates</span></div>
+
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

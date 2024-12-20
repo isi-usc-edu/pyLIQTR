@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.clam.operators &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.clam.operators</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.clam.operators</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###    OPERATORS - Matrix-based definition and manipulation of operators     ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+
+
+
+<span class="kn">import</span>  <span class="nn">numpy</span>                <span class="k">as</span>  <span class="nn">np</span>
+<span class="kn">import</span>  <span class="nn">pyLIQTR.clam.multilinear_algebra</span>  <span class="k">as</span>  <span class="nn">mla</span>
+
+
+
+<span class="c1">######                            #############################################</span>
+<span class="c1">######  Pauli / SU(2) Operators   #############################################</span>
+<span class="c1">######                            #############################################</span>
+
+
+
+<span class="c1">## Define Pauli matrices (X/Y/Z) + identity (I)</span>
+<span class="c1">##</span>
+
+<span class="n">X</span>    <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span> <span class="p">],</span>  <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>    <span class="mi">0</span> <span class="p">]</span> <span class="p">])</span>
+<span class="n">Y</span>    <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="p">],</span>  <span class="p">[</span> <span class="mi">1</span><span class="n">j</span><span class="p">,</span>   <span class="mi">0</span> <span class="p">]</span> <span class="p">])</span>
+<span class="n">Z</span>    <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>   <span class="mi">0</span> <span class="p">],</span>  <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>   <span class="o">-</span><span class="mi">1</span> <span class="p">]</span> <span class="p">])</span>
+<span class="n">I</span>    <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>   <span class="mi">0</span> <span class="p">],</span>  <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>    <span class="mi">1</span> <span class="p">]</span> <span class="p">])</span>
+
+<span class="c1">## Define Hadamard, S-gate, and T-gate</span>
+<span class="c1">##</span>
+
+<span class="n">H</span>    <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span>    <span class="mi">1</span> <span class="p">],</span>  <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>   <span class="o">-</span><span class="mi">1</span> <span class="p">]</span> <span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">S</span>    <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span>    <span class="mi">0</span> <span class="p">],</span>  <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span><span class="n">j</span> <span class="p">]</span> <span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">T</span>    <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span>    <span class="mi">0</span> <span class="p">],</span>  <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>   <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span> <span class="p">]</span> <span class="p">])</span>
+
+<span class="c1">## Pauli ladder operators</span>
+<span class="c1">##</span>
+
+<span class="n">sig_p</span>  <span class="o">=</span>  <span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">Y</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+<span class="n">sig_m</span>  <span class="o">=</span>  <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">Y</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+
+<span class="c1">## Pauli Z-eigenvalue projectors</span>
+<span class="c1">##</span>
+
+<span class="n">przp</span> <span class="o">=</span> <span class="p">(</span><span class="n">I</span> <span class="o">+</span> <span class="n">Z</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+<span class="n">przm</span> <span class="o">=</span> <span class="p">(</span><span class="n">I</span> <span class="o">-</span> <span class="n">Z</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+
+<span class="c1">## Pauli Z eigenstates</span>
+<span class="c1">##</span>
+
+<span class="n">q_u</span>  <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">q_d</span>  <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+
+
+
+
+<span class="c1">######                            #############################################</span>
+<span class="c1">######  Fermionic Operators       #############################################</span>
+<span class="c1">######                            #############################################</span>
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     fcr(m,N)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Fermionic creation operator acting on site m in a one dimensional array</span>
+<span class="c1">###      of N qubits.  The operator is defined using the Jordan-Winger</span>
+<span class="c1">###      transformation.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      m     =  site on which creation operator is acting</span>
+<span class="c1">###      N     =  total number of qubits</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      OP = numpy array corresponding to the creation operator</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="fcr">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operators.fcr">[docs]</a>
+<span class="k">def</span> <span class="nf">fcr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+
+    <span class="n">opr</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+        <span class="n">opr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">opr</span><span class="p">,</span><span class="n">Z</span><span class="p">)</span>
+
+    <span class="n">opr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">opr</span><span class="p">,</span><span class="n">sig_p</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">opr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">opr</span><span class="p">,</span><span class="n">I</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     fan(m,N)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Fermionic annihilation operator acting on site m in a one dimensional</span>
+<span class="c1">###      array of N qubits.  The operator is defined using the Jordan-Winger</span>
+<span class="c1">###      transformation.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      m     =  site on which annihilation operator is acting</span>
+<span class="c1">###      N     =  total number of qubits</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      OP = numpy array corresponding to the annihilation operator</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="fan">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operators.fan">[docs]</a>
+<span class="k">def</span> <span class="nf">fan</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+
+    <span class="n">opr</span> <span class="o">=</span> <span class="p">(</span><span class="n">fcr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">N</span><span class="p">))</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     state_vacuum(m,N)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Defines the N-fermion vacuum state via the Joran-Wigner transformation.</span>
+<span class="c1">###      By convention, we adopt the spin-down product state as the vacuum.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      N     =  total number of qubits</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      OP = numpy array corresponding to the N-fermion vacuum state</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="state_vacuum">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operators.state_vacuum">[docs]</a>
+<span class="k">def</span> <span class="nf">state_vacuum</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+
+    <span class="c1">#vac_state = mla.mk([q_d for j in range(N)])</span>
+    <span class="n">vac_state</span>  <span class="o">=</span> <span class="n">mla</span><span class="o">.</span><span class="n">mk</span><span class="p">([</span><span class="n">q_d</span><span class="p">]</span><span class="o">*</span><span class="n">N</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">vac_state</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     state_multifermi_idx(occ_idxs,N)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Returns the state containg m fermions in the sites specified by</span>
+<span class="c1">###      the indices in occ_idxs.  This is defined by the action of creation</span>
+<span class="c1">###      operators on the N-fermion vacuum state:</span>
+<span class="c1">###</span>
+<span class="c1">###         $c^dag_{i_1} c^dag_{i_2} \dots c^dag_{i_m} |0^N\rangle$</span>
+<span class="c1">###</span>
+<span class="c1">###      The states are defined in their spin/qubit analogue via the Jordan-</span>
+<span class="c1">###      Winger transformation.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      occ_idxs     =  tuple containing indices of fermions</span>
+<span class="c1">###      N            =  total number of fermionic sites</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      OP = numpy array corresponding to the state with m fermions in N sites.</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="state_multifermi_idx">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operators.state_multifermi_idx">[docs]</a>
+<span class="k">def</span> <span class="nf">state_multifermi_idx</span><span class="p">(</span><span class="n">occ_idxs</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+
+    <span class="n">wfn</span> <span class="o">=</span> <span class="n">state_vacuum</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">occ_idxs</span><span class="p">:</span>
+        <span class="n">wfn</span> <span class="o">=</span> <span class="n">fcr</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="n">N</span><span class="p">)</span> <span class="o">@</span> <span class="n">wfn</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">wfn</span><span class="p">)</span></div>
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

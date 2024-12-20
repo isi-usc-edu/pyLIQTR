@@ -1,0 +1,455 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.clam.operator_sims &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.clam.operator_sims</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.clam.operator_sims</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###    OPERATOR_SIMS - Operator-level simulations for quantum algorithms     ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+
+
+<span class="c1">##</span>
+<span class="c1">##  TODO: UPDATE TO INCLUDE NON-SCALAR ARGUMENTSn</span>
+<span class="c1">##</span>
+
+
+<span class="kn">import</span>  <span class="nn">numpy</span>  <span class="k">as</span>  <span class="nn">np</span>
+<span class="kn">import</span>  <span class="nn">copy</span>   <span class="k">as</span>  <span class="nn">copy</span>
+
+
+
+<span class="c1">######                    #####################################################</span>
+<span class="c1">######  QSP / QET/ QSVT   #####################################################</span>
+<span class="c1">######                    #####################################################</span>
+
+
+
+<span class="c1">## phi_Wx_to_O(phiset)</span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">## Convert Wx convention phase angles &lt;phiset&gt; to O convention </span>
+<span class="c1">## for QSP.</span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="phi_Wx_to_O">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_sims.phi_Wx_to_O">[docs]</a>
+<span class="k">def</span> <span class="nf">phi_Wx_to_O</span><span class="p">(</span><span class="n">phiset</span><span class="p">):</span>
+
+    <span class="n">N</span>           <span class="o">=</span>  <span class="nb">len</span><span class="p">(</span><span class="n">phiset</span><span class="p">)</span>
+    <span class="n">phiset_new</span>  <span class="o">=</span>  <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">phiset</span><span class="p">)</span>
+
+    <span class="n">phiset_new</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>    <span class="o">-=</span>  <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span>
+    <span class="n">phiset_new</span><span class="p">[</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="o">+=</span>  <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">phiset_new</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">## phi_Wx_to_qsvt(phiset), phi_Wx_to_R(phiset)</span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">## Convert Wx convention phase angles &lt;phiset&gt; to R convention </span>
+<span class="c1">## used by quantum eigenvalue transform (QET) and the </span>
+<span class="c1">## quantum singular value transform (QSVT)</span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="phi_Wx_to_qsvt">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_sims.phi_Wx_to_qsvt">[docs]</a>
+<span class="k">def</span> <span class="nf">phi_Wx_to_qsvt</span><span class="p">(</span><span class="n">phiset</span><span class="p">):</span>
+
+    <span class="n">N</span>           <span class="o">=</span>  <span class="nb">len</span><span class="p">(</span><span class="n">phiset</span><span class="p">)</span>
+    <span class="n">phiset_new</span>  <span class="o">=</span>  <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">phiset</span><span class="p">)</span>
+
+    <span class="n">phiset_new</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>    <span class="o">+=</span>  <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span>
+    <span class="n">phiset_new</span><span class="p">[</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="o">+=</span>  <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">phiset_new</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">phiset_new</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="phi_Wx_to_R">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_sims.phi_Wx_to_R">[docs]</a>
+<span class="k">def</span> <span class="nf">phi_Wx_to_R</span><span class="p">(</span><span class="n">phiset</span><span class="p">):</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">phi_Wx_to_qsvt</span><span class="p">(</span><span class="n">phiset</span><span class="p">))</span></div>
+
+
+
+
+
+
+<span class="c1">## get_qsp_signal_op(signal_convention)</span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">## Get a function generating the signal operator for QSP/QET/QSVT</span>
+<span class="c1">## following the phase angle convention &lt;signal_convention&gt;</span>
+<span class="c1">## (valid arguments: {&quot;Wx&quot;,&quot;Wz&quot;,&quot;R&quot;})</span>
+<span class="c1">##</span>
+<span class="c1">## The returned function sig_op(a) computes the signal operator </span>
+<span class="c1">## for a scalar argument &lt;a&gt;.</span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="get_qsp_signal_op">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_sims.get_qsp_signal_op">[docs]</a>
+<span class="k">def</span> <span class="nf">get_qsp_signal_op</span><span class="p">(</span><span class="n">signal_convention</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">signal_convention</span> <span class="o">==</span> <span class="s2">&quot;Wx&quot;</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">sig_op</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[[</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="p">)],</span>
+             <span class="p">[</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span> <span class="n">a</span><span class="p">]])</span>
+        
+    <span class="k">elif</span> <span class="n">signal_convention</span> <span class="o">==</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">sig_op</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[[</span><span class="n">a</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="p">)],</span>
+             <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span> <span class="n">a</span><span class="p">]]</span> <span class="p">)</span>
+
+        <span class="c1"># def sig_op(a): return np.array(</span>
+        <span class="c1">#     [[a, np.sqrt(1 - a**2)],</span>
+        <span class="c1">#      [np.sqrt(1 - a**2), -a]])</span>
+
+    <span class="k">elif</span> <span class="n">signal_convention</span> <span class="o">==</span> <span class="s2">&quot;Wz&quot;</span><span class="p">:</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">sig_op</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> <span class="k">return</span> <span class="n">H</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[[</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="p">)],</span>
+             <span class="p">[</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span> <span class="n">a</span><span class="p">]])</span> <span class="o">@</span> <span class="n">H</span>
+
+    <span class="k">return</span> <span class="n">sig_op</span></div>
+
+
+
+
+
+
+<span class="c1">## get_qsp_signal_op(signal_convention)</span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">## Get a function generating the phase angle rotation operator</span>
+<span class="c1">## for QSP/QET/QSVT following the phase angle convention </span>
+<span class="c1">## specified by &lt;signal_convention&gt; ( arguments: {&quot;Wx&quot;,&quot;Wz&quot;,&quot;R&quot;})</span>
+<span class="c1">##</span>
+<span class="c1">## The returned function sig_op(a) computes the signal operator </span>
+<span class="c1">## for a scalar argument &lt;a&gt;.</span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="get_qsp_phase_op">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_sims.get_qsp_phase_op">[docs]</a>
+<span class="k">def</span> <span class="nf">get_qsp_phase_op</span><span class="p">(</span><span class="n">signal_convention</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">signal_convention</span> <span class="o">==</span> <span class="s2">&quot;Wx&quot;</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">qsp_op</span><span class="p">(</span><span class="n">phi</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phi</span><span class="p">),</span> <span class="mf">0.</span><span class="p">],</span>
+             <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phi</span><span class="p">)]])</span>
+        
+    <span class="k">elif</span> <span class="n">signal_convention</span> <span class="o">==</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">qsp_op</span><span class="p">(</span><span class="n">phi</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phi</span><span class="p">),</span> <span class="mf">0.</span><span class="p">],</span>
+             <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phi</span><span class="p">)]])</span>
+
+    <span class="k">elif</span> <span class="n">signal_convention</span> <span class="o">==</span> <span class="s2">&quot;Wz&quot;</span><span class="p">:</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">qsp_op</span><span class="p">(</span><span class="n">phi</span><span class="p">):</span> <span class="k">return</span> <span class="n">H</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phi</span><span class="p">),</span> <span class="mf">0.</span><span class="p">],</span>
+             <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phi</span><span class="p">)]])</span> <span class="o">@</span> <span class="n">H</span>
+
+    <span class="k">return</span> <span class="n">qsp_op</span></div>
+
+
+
+
+
+
+<span class="c1">## get_qsp_signal_op(signal_convention)</span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">## Return the signal state used to extract the target subspace</span>
+<span class="c1">## from a QSP/QET/QSVT sequence. The phase angle convention is</span>
+<span class="c1">## specified by &lt;signal_convention&gt; (arguments: {&quot;Wx&quot;,&quot;Wz&quot;,&quot;R&quot;})</span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="get_qsp_signal_state">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_sims.get_qsp_signal_state">[docs]</a>
+<span class="k">def</span> <span class="nf">get_qsp_signal_state</span><span class="p">(</span><span class="n">signal_convention</span><span class="p">):</span>
+    
+    <span class="k">if</span> <span class="n">signal_convention</span> <span class="o">==</span> <span class="s2">&quot;Wx&quot;</span><span class="p">:</span>
+        <span class="n">p_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.</span><span class="p">]])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">signal_convention</span> <span class="o">==</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span>
+        <span class="n">p_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.</span><span class="p">]])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">signal_convention</span> <span class="o">==</span> <span class="s2">&quot;Wz&quot;</span><span class="p">:</span>
+        <span class="n">p_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]])</span>
+    
+    <span class="k">return</span> <span class="n">p_state</span></div>
+
+
+
+
+
+
+<span class="c1">## get_qsp_signal_op(signal_convention)</span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">## Return the signal state used to extract the target subspace</span>
+<span class="c1">## from a QSP/QET/QSVT sequence. The phase angle convention is</span>
+<span class="c1">## specified by &lt;signal_convention&gt; (arguments: {&quot;Wx&quot;,&quot;Wz&quot;,&quot;R&quot;})</span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="qsp_response">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_sims.qsp_response">[docs]</a>
+<span class="k">def</span> <span class="nf">qsp_response</span><span class="p">(</span><span class="n">x_set</span><span class="p">,</span><span class="n">phiset</span><span class="p">,</span><span class="n">signal_convention</span><span class="p">):</span>
+
+    <span class="n">pmats</span>      <span class="o">=</span>  <span class="p">[]</span>
+    <span class="n">pdat</span>       <span class="o">=</span>  <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_set</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="ow">and</span>
+         <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_set</span><span class="p">,</span><span class="nb">list</span><span class="p">))</span>    <span class="ow">and</span>
+         <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_set</span><span class="p">,</span><span class="n">tuplelist</span><span class="p">))</span> <span class="p">):</span>
+        
+        <span class="n">x_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_set</span><span class="p">,]</span>
+
+    <span class="n">signal_op</span>  <span class="o">=</span>  <span class="n">get_qsp_signal_op</span><span class="p">(</span><span class="n">signal_convention</span><span class="p">)</span>
+    <span class="n">phase_op</span>   <span class="o">=</span>  <span class="n">get_qsp_phase_op</span><span class="p">(</span><span class="n">signal_convention</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span> <span class="n">phiset</span><span class="p">:</span>
+        <span class="n">pmats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phase_op</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">x_set</span><span class="p">:</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">signal_op</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">pmats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">pm</span> <span class="ow">in</span> <span class="n">pmats</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">@</span> <span class="n">W</span> <span class="o">@</span> <span class="n">pm</span>
+        <span class="n">pdat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">U</span> <span class="p">)</span>
+
+    <span class="n">pdat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pdat</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">pdat</span><span class="p">)</span></div>
+
+
+
+
+<span class="c1">## qsvt_response(signal_convention)</span>
+<span class="c1">## -------------------------------------------------------------</span>
+<span class="c1">##</span>
+<span class="c1">## Return the QSP/QET/QSVT response function (sequence) for a </span>
+<span class="c1">## series of signal operators parameterized by the scalar &lt;a&gt; </span>
+<span class="c1">## and the phase angle sequence &lt;phiset&gt; with signal convention</span>
+<span class="c1">## &lt;signal_convention&gt;.  A reflection is applied within the </span>
+<span class="c1">## sequence by default &lt;reflect=True&gt;. </span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="qsvt_response">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_sims.qsvt_response">[docs]</a>
+<span class="k">def</span> <span class="nf">qsvt_response</span><span class="p">(</span><span class="n">x_set</span><span class="p">,</span><span class="n">phiset</span><span class="p">,</span><span class="n">signal_convention</span><span class="p">,</span><span class="n">reflect</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+    <span class="n">pmats</span>      <span class="o">=</span>  <span class="p">[]</span>
+    <span class="n">pdat</span>       <span class="o">=</span>  <span class="p">[]</span>
+
+    <span class="n">Zpi</span>        <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">]])</span>
+
+    <span class="n">signal_op</span>  <span class="o">=</span>  <span class="n">get_qsp_signal_op</span><span class="p">(</span><span class="n">signal_convention</span><span class="p">)</span>
+    <span class="n">phase_op</span>   <span class="o">=</span>  <span class="n">get_qsp_phase_op</span><span class="p">(</span><span class="n">signal_convention</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span> <span class="n">phiset</span><span class="p">:</span>
+        <span class="n">pmats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phase_op</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span>
+
+    <span class="n">N_pm</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pmats</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">x_set</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">reflect</span><span class="p">:</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="n">signal_op</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">@</span> <span class="n">Zpi</span>          
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="n">signal_op</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>          
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">N_pm</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="n">pmats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">int</span><span class="p">((</span><span class="n">N_pm</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">@</span> <span class="n">W</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">pmats</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">@</span> <span class="n">W</span> <span class="o">@</span> <span class="n">pmats</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">]</span>
+            <span class="n">pdat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">U</span> <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="n">pmats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">@</span> <span class="n">W</span> <span class="o">@</span> <span class="n">pmats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">N_pm</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">@</span> <span class="n">W</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">pmats</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">]</span> <span class="o">@</span> <span class="n">W</span> <span class="o">@</span> <span class="n">pmats</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">pdat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">U</span> <span class="p">)</span>
+
+    <span class="n">pdat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pdat</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">pdat</span><span class="p">)</span>
+
+
+
+
+
+<span class="c1">##</span>
+<span class="c1">##  From angle_test-formal-6.ipynb  Tidy this up.</span>
+<span class="c1">## </span>
+
+<span class="c1">#def simulate_qsvt(convention=&quot;R&quot;):</span>
+    
+
+
+    <span class="n">xpts</span>       <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+
+
+    <span class="c1">##</span>
+    <span class="c1">## need to change signal state for &quot;R&quot; to &quot;Wx&quot;</span>
+
+    <span class="n">sig_state</span>  <span class="o">=</span>  <span class="n">get_qsp_signal_state</span><span class="p">(</span><span class="n">convention</span><span class="p">)</span>
+
+    <span class="c1">#sig_state  =  get_qsp_signal_state(&quot;Wx&quot;)</span>
+
+
+
+    <span class="c1">#qsp_unitaries = qsp_response(xpts,phiset_cos,signal_convention)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">convention</span> <span class="o">==</span> <span class="s1">&#39;R&#39;</span><span class="p">):</span>
+        <span class="n">qsp_unitaries</span> <span class="o">=</span> <span class="n">qsp_response</span><span class="p">(</span><span class="n">xpts</span><span class="p">,</span><span class="n">phi_Wx_to_O</span><span class="p">(</span><span class="n">phiset_cos</span><span class="p">),</span><span class="n">signal_convention</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">qsp_unitaries</span> <span class="o">=</span> <span class="n">qsp_response</span><span class="p">(</span><span class="n">xpts</span><span class="p">,</span><span class="n">phiset_cos</span><span class="p">,</span><span class="n">signal_convention</span><span class="p">)</span>
+
+
+    <span class="c1"># if (signal_convention == &#39;R&#39;):</span>
+    <span class="c1">#     qsp_unitaries = qsvt_response(xpts,phi_Wx_to_qsvt(phiset_cos),signal_convention)</span>
+    <span class="c1"># else:</span>
+    <span class="c1">#     qsp_unitaries = qsvt_response(xpts,phiset_cos,signal_convention, reflect=False)</span>
+
+
+
+    <span class="n">qsp_F</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qsp_unitaries</span><span class="p">))</span>
+
+    <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">U</span> <span class="ow">in</span> <span class="n">qsp_unitaries</span><span class="p">:</span>
+        <span class="n">qsp_F</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sig_state</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">U</span> <span class="o">@</span> <span class="n">sig_state</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">qsp_F</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+        <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

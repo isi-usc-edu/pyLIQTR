@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.ProblemInstances.fermionic_models &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.ProblemInstances.fermionic_models</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.ProblemInstances.fermionic_models</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">###</span>
+<span class="c1">### Todo: Redefine this in terms of fermionic operators from the outset</span>
+<span class="c1">###       and use JWT/BK etc. to map to spins.  Need to finish my general</span>
+<span class="c1">###       transform code, though.</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>  <span class="k">as</span>  <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">copy</span>   <span class="k">as</span>  <span class="nn">copy</span>
+
+
+<span class="kn">from</span> <span class="nn">abc</span>   <span class="kn">import</span>  <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">enum</span>  <span class="kn">import</span>  <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
+
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.clam.lattice_definitions</span>  <span class="kn">import</span>  <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.clam.operator_lattice</span>     <span class="kn">import</span>  <span class="n">OperatorUnitCell</span><span class="p">,</span> <span class="n">OperatorLattice</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.clam.operator_lattice</span>     <span class="kn">import</span>  <span class="n">draw_lattice_2d</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.clam.operator_strings</span>     <span class="kn">import</span>  <span class="n">op_strings</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.clam.utilities</span>            <span class="kn">import</span>  <span class="n">get_nonzero_match</span>
+
+<span class="c1"># class VALID_ENCODINGS(Enum):</span>
+
+<span class="c1">#     PauliLCU = 1</span>
+<span class="c1">#     DPW = 2</span>
+<span class="c1">#     Fermionic=3</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.BlockEncodings</span>                    <span class="kn">import</span>   <span class="n">VALID_ENCODINGS</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.ProblemInstances.ProblemInstance</span>  <span class="kn">import</span>   <span class="n">ProblemInstance</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.ProblemInstances.LatticeInstance</span>  <span class="kn">import</span>   <span class="n">LatticeInstance</span>
+
+<div class="viewcode-block" id="FermiHubbard">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbard">[docs]</a>
+<span class="k">class</span> <span class="nc">FermiHubbard</span><span class="p">(</span><span class="n">LatticeInstance</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> 
+                  <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> 
+                  <span class="n">J</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> 
+                  <span class="n">U</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> 
+                  <span class="n">cell</span><span class="o">=</span><span class="n">SquareLattice</span><span class="p">,</span> 
+                  <span class="n">cell_subtype</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> 
+                  <span class="n">terms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                  <span class="n">pbcs</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span><span class="kc">False</span><span class="p">),</span>
+                  <span class="n">rescale</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                  <span class="o">**</span><span class="n">kwargs</span> <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model_prefix</span> <span class="o">=</span> <span class="s2">&quot;Fermi-Hubbard Model&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">J</span>  <span class="o">=</span>  <span class="n">J</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U</span>  <span class="o">=</span>  <span class="n">U</span>
+
+        <span class="k">if</span> <span class="n">terms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_td</span>       <span class="o">=</span>  <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_td</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span>  <span class="o">=</span>  <span class="p">[</span> <span class="p">[</span> <span class="s1">&#39;Z&#39;</span> <span class="p">],</span> <span class="p">[</span> <span class="n">U</span><span class="o">/</span><span class="mi">4</span> <span class="p">]</span> <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_td</span><span class="p">[</span><span class="s1">&#39;_&#39;</span><span class="p">]</span>  <span class="o">=</span>  <span class="p">[</span> <span class="p">[</span> <span class="s1">&#39;XZX&#39;</span><span class="p">,</span><span class="s1">&#39;YZY&#39;</span> <span class="p">],</span> <span class="p">[</span> <span class="n">J</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">J</span><span class="o">/</span><span class="mi">2</span> <span class="p">]</span> <span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_td_onsite</span>       <span class="o">=</span>  <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_td_onsite</span><span class="p">[</span><span class="s1">&#39;_&#39;</span><span class="p">]</span>  <span class="o">=</span>  <span class="p">[</span> <span class="p">[</span> <span class="s1">&#39;ZZ&#39;</span> <span class="p">],</span> <span class="p">[</span> <span class="n">U</span><span class="o">/</span><span class="mi">8</span> <span class="p">]</span> <span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_td</span> <span class="o">=</span> <span class="n">terms</span>
+
+
+        <span class="n">LatticeInstance</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>   <span class="bp">self</span><span class="p">,</span> 
+                                    <span class="n">shape</span>         <span class="o">=</span>  <span class="n">shape</span><span class="p">,</span> 
+                                    <span class="n">cell</span>          <span class="o">=</span>  <span class="n">cell</span><span class="p">,</span> 
+                                    <span class="n">cell_subtype</span>  <span class="o">=</span>  <span class="n">cell_subtype</span><span class="p">,</span> 
+                                    <span class="n">td</span>            <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_td</span><span class="p">,</span> 
+                                    <span class="n">td_onsite</span>     <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_td_onsite</span><span class="p">,</span>
+                                    <span class="n">pbcs</span>          <span class="o">=</span>  <span class="n">pbcs</span><span class="p">,</span>
+                                    <span class="n">rescale</span>       <span class="o">=</span>  <span class="kc">True</span><span class="p">,</span>
+                                    <span class="n">model_prefix</span>  <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_model_prefix</span><span class="p">,</span>
+                                    <span class="o">**</span><span class="n">kwargs</span> <span class="p">)</span>
+        
+
+<div class="viewcode-block" id="FermiHubbard.n_qubits">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbard.n_qubits">[docs]</a>
+    <span class="k">def</span> <span class="nf">n_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span></div>
+</div>
+
+
+<div class="viewcode-block" id="FermiHubbardNNN">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN">[docs]</a>
+<span class="k">class</span> <span class="nc">FermiHubbardNNN</span><span class="p">(</span><span class="n">ProblemInstance</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This ProblemInstance represents the Fermi-Hubbard model including nearest and next-nearest neighbors terms. The corresponding Hamiltonian can be written as</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        -t\\sum_{\\langle p,q\\rangle,\\sigma} a^\\dagger_{p,\\sigma} a_{q,\\sigma}-t&#39;\\sum_{\\langle p,q\\rangle&#39;,\\sigma} a^\\dagger_{p,\\sigma} a_{q,\\sigma} + \\frac{u}{2}\\sum_{p,\\alpha\\neq\\beta}n_{p,\\alpha}n_{p,\\beta}</span>
+
+<span class="sd">    where the first sum is over nearest neighbors and the second over next-nearest.</span>
+
+<span class="sd">    :param Tuple[int] shape: A Tuple containing the dimensions of the lattice. Note, currently only square 2D lattices are supported.</span>
+<span class="sd">    :param float J1: The nearest neghbor hopping coefficient. Represented as :math:`t` in the above equation.</span>
+<span class="sd">    :param float J2: The next-nearest neghbor hopping coefficient. Represented as :math:`t&#39;` in the above equation.</span>
+<span class="sd">    :param float U: Onsite interaction strength. Represented as :math:`u` in the above equation.</span>
+<span class="sd">    :param Tuple[bool] pbcs: Determines if periodic boundary conditions are on (True) or off (False) for the corresponding dimension. This will affect which terms are included when using the PauliLCU block encoding. Note that the LinearT block encoding assumes periodic boundary conditions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> 
+                  <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> 
+                  <span class="n">J1</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> 
+                  <span class="n">J2</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span>
+                  <span class="n">U</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> 
+                  <span class="n">pbcs</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span><span class="kc">False</span><span class="p">),</span>
+                  <span class="o">**</span><span class="n">kwargs</span> <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model_prefix</span> <span class="o">=</span> <span class="s2">&quot;Fermi-Hubbard NNN Model&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Only 2D lattices currently supported for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_prefix</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Only square lattices currently supported for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_prefix</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_M_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">J1</span>  <span class="o">=</span>  <span class="n">J1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">J2</span>  <span class="o">=</span>  <span class="n">J2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U</span>  <span class="o">=</span>  <span class="n">U</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span> <span class="o">=</span> <span class="n">pbcs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>   
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instance of clam.operator_strings.op_strings that stores the LCU in terms of Pauli operator strings with corresponding coefficients.&quot;&quot;&quot;</span>
+
+        <span class="n">_ops</span> <span class="o">=</span> <span class="n">op_strings</span><span class="p">(</span><span class="n">N_qb</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">)</span>
+        <span class="n">spin_offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_N</span>
+        <span class="n">Nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">):</span>
+
+            <span class="c1"># ZZ term</span>
+            <span class="c1">## alpha=up, beta=down, p = q, factor of 2 for alpha=down, beta=up</span>
+            <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">(((</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="p">),</span> <span class="s1">&#39;ZZ&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">/</span><span class="mi">8</span><span class="p">))</span>
+
+            <span class="c1"># Z term</span>
+            <span class="c1">## omega = up</span>
+            <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">(((</span><span class="n">p</span><span class="p">,),</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">/</span><span class="mi">4</span><span class="p">))</span>
+            <span class="c1">## omega = down</span>
+            <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">(((</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="p">,),</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">/</span><span class="mi">4</span><span class="p">))</span>
+
+            <span class="c1"># XZX + YZY terms</span>
+            <span class="c1"># loop over q&gt;p </span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">):</span>
+
+                <span class="n">xx_str</span> <span class="o">=</span> <span class="s1">&#39;X&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;X&#39;</span>
+                <span class="n">yy_str</span> <span class="o">=</span> <span class="s1">&#39;Y&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;Y&#39;</span>
+                <span class="n">idx_set_up</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">idx_set_down</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="p">,</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+                
+                <span class="c1"># nearest neighbors</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">==</span><span class="n">Nx</span><span class="p">:</span> <span class="c1"># handles internal vertical edges </span>
+                    <span class="c1"># spin up</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="c1"># spin down</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">==</span><span class="p">(</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Nx</span><span class="p">:</span> <span class="c1"># handles vertical edges boundaries</span>
+                    <span class="c1"># spin up</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="c1"># spin down</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">p</span><span class="o">%</span><span class="n">Nx</span> <span class="o">!=</span> <span class="p">(</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="c1"># handles internal horizontal edges</span>
+                    <span class="c1"># spin up</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="c1"># spin down</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">p</span><span class="o">%</span><span class="n">Nx</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">==</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="c1"># handles horizontal pbc</span>
+                    <span class="c1"># spin up</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="c1"># spin down</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+
+                <span class="c1"># next nearest neighbors</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">==</span><span class="n">Nx</span><span class="o">+</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">p</span><span class="o">%</span><span class="n">Nx</span> <span class="o">!=</span> <span class="p">(</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span> <span class="c1"># handles internal right, down / left, up</span>
+                    <span class="c1"># spin up</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="c1"># spin down</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">==</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">p</span><span class="o">%</span><span class="n">Nx</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># handles internal left, down / right, up</span>
+                    <span class="c1"># spin up</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="c1"># spin down</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">p</span><span class="o">%</span><span class="n">Nx</span> <span class="o">==</span> <span class="p">(</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># right side boundary down (left side up)</span>
+                    <span class="c1"># spin up</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="c1"># spin down</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">p</span><span class="o">%</span><span class="n">Nx</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">==</span> <span class="mi">2</span><span class="o">*</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="c1"># left side boundary down (right side up)</span>
+                    <span class="c1"># spin up</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="c1"># spin down</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">p</span><span class="o">&lt;</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span> <span class="o">==</span> <span class="p">(</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">==</span> <span class="p">(</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Nx</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="c1"># top boundary right</span>
+                    <span class="c1"># spin up</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="c1"># spin down</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="mi">0</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&lt;=</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span> <span class="o">==</span> <span class="p">(</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">==</span> <span class="p">(</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="c1"># top boundary left</span>
+                    <span class="c1"># spin up</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="c1"># spin down</span>
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+                    <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="c1"># top right corner diagonal</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">Nx</span><span class="o">-</span><span class="mi">1</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Nx</span><span class="o">*</span><span class="p">(</span><span class="n">Nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">xx_str</span> <span class="o">=</span> <span class="s1">&#39;X&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;X&#39;</span>
+            <span class="n">yy_str</span> <span class="o">=</span> <span class="s1">&#39;Y&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;Y&#39;</span>
+            <span class="n">idx_set_up</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">idx_set_down</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="p">,</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+            <span class="c1">## spin up</span>
+            <span class="c1"># factor of 2 for q&lt;p case</span>
+            <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+            <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+            <span class="c1">## spin down</span>
+            <span class="c1"># factor of 2 for q&lt;p case</span>
+            <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+            <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>    
+
+            <span class="c1"># top left corner diagonal</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Nx</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span>
+            <span class="n">xx_str</span> <span class="o">=</span> <span class="s1">&#39;X&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;X&#39;</span>
+            <span class="n">yy_str</span> <span class="o">=</span> <span class="s1">&#39;Y&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;Y&#39;</span>
+            <span class="n">idx_set_up</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">idx_set_down</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="p">,</span><span class="n">p</span><span class="o">+</span><span class="n">spin_offset</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+            <span class="c1">## spin up</span>
+            <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+            <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_up</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+            <span class="c1">## spin down</span>
+            <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">xx_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+            <span class="n">_ops</span><span class="o">.</span><span class="n">append_tuple</span><span class="p">((</span><span class="n">idx_set_down</span><span class="p">,</span> <span class="n">yy_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>   
+
+        <span class="k">return</span> <span class="n">_ops</span> 
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_prefix</span><span class="si">}</span><span class="se">\r\n\t</span><span class="s2">N:</span><span class="se">\t</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">J1,J2,U:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="si">}</span><span class="s2">&quot;</span>    
+
+<div class="viewcode-block" id="FermiHubbardNNN.n_qubits">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN.n_qubits">[docs]</a>
+    <span class="k">def</span> <span class="nf">n_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FermiHubbardNNN.get_alpha">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN.get_alpha">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">encoding</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">encoding</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">encoding</span> <span class="o">==</span> <span class="s1">&#39;PauliLCU&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ops</span><span class="o">.</span><span class="n">get_coeff_norm</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">encoding</span> <span class="o">==</span> <span class="s1">&#39;LinearT&#39;</span><span class="p">:</span>
+            <span class="c1"># factor of 2 for spin</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="FermiHubbardNNN.yield_PauliLCU_Info">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN.yield_PauliLCU_Info">[docs]</a>
+    <span class="k">def</span> <span class="nf">yield_PauliLCU_Info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">return_as</span><span class="o">=</span><span class="s1">&#39;arrays&#39;</span><span class="p">,</span><span class="n">do_pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">pad_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;yields parameters used for the PauliLCU block encoding.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">return_as</span> <span class="o">==</span> <span class="s1">&#39;arrays&#39;</span><span class="p">):</span>
+            <span class="n">terms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ops</span><span class="o">.</span><span class="n">terms</span><span class="p">(</span><span class="n">do_pad</span><span class="o">=</span><span class="n">do_pad</span><span class="p">,</span><span class="n">pad_value</span><span class="o">=</span><span class="n">pad_value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">return_as</span> <span class="o">==</span> <span class="s1">&#39;strings&#39;</span><span class="p">):</span>
+            <span class="n">terms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ops</span><span class="o">.</span><span class="n">strings</span><span class="p">(</span><span class="n">do_pad</span><span class="o">=</span><span class="n">do_pad</span><span class="p">,</span><span class="n">pad_value</span><span class="o">=</span><span class="n">pad_value</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">term</span></div>
+
+
+<div class="viewcode-block" id="FermiHubbardNNN.yield_LinearT_Info">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN.yield_LinearT_Info">[docs]</a>
+    <span class="k">def</span> <span class="nf">yield_LinearT_Info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">termSelect</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;yields parameters used for the LinearT block encoding.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;LinearT encoding assumes periodic boundary conditions.&#39;</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">termSelect</span> <span class="o">==</span> <span class="s1">&#39;T&#39;</span><span class="p">:</span>
+            <span class="c1"># this corresponds to tilde(T)**2 in https://arxiv.org/pdf/1805.03662.pdf</span>
+            <span class="n">J1_sign</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">signbit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">J2_sign</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">signbit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">d</span><span class="o">==</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">d</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="k">yield</span> <span class="p">(</span><span class="n">J1_sign</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J1</span><span class="p">))</span><span class="c1"># factor of 2 since coefficients occur for each xzx/yzy term only once depending on p&lt;q or p&gt;q</span>
+                <span class="k">elif</span> <span class="n">d</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">d</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="p">(</span><span class="n">J2_sign</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J2</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">termSelect</span> <span class="o">==</span> <span class="s1">&#39;U&#39;</span><span class="p">:</span>
+            <span class="n">term_sign</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">signbit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="p">(</span><span class="n">term_sign</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">/</span><span class="mi">4</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">termSelect</span> <span class="o">==</span> <span class="s1">&#39;V&#39;</span><span class="p">:</span>
+            <span class="n">U_sign</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">signbit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="p">(</span><span class="n">U_sign</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">/</span><span class="mi">8</span><span class="p">))</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

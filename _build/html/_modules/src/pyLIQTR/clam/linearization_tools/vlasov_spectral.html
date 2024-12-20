@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.clam.linearization_tools.vlasov_spectral &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.clam.linearization_tools.vlasov_spectral</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.clam.linearization_tools.vlasov_spectral</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###  VLASOV_SPECTRAL - Spectral representation of the Vlasov-Poisson system  ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+
+
+
+<span class="kn">import</span>  <span class="nn">numpy</span>            <span class="k">as</span>  <span class="nn">np</span>
+<span class="kn">import</span>  <span class="nn">scipy.sparse</span>     <span class="k">as</span>  <span class="nn">sps</span>
+
+
+
+<div class="viewcode-block" id="vlasov_spectral_system">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.clam.linearization_tools.html#src.pyLIQTR.clam.linearization_tools.vlasov_spectral.vlasov_spectral_system">[docs]</a>
+<span class="k">def</span> <span class="nf">vlasov_spectral_system</span><span class="p">(</span><span class="n">N_x</span><span class="p">,</span><span class="n">N_v</span><span class="p">,</span><span class="n">L_x</span><span class="p">,</span><span class="n">epsilon</span><span class="p">,</span><span class="n">gamma</span><span class="p">,</span><span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+    <span class="c1">## there is some issue with the sparse part hanging, so</span>
+    <span class="c1">## we just convert at the end</span>
+
+    <span class="c1"># if sparse:</span>
+    <span class="c1">#     F_1     =  vlasov_coeffs_linear_1d_sparse(N_x,N_v,L_x,epsilon,gamma)</span>
+    <span class="c1">#     F_2     =  vlasov_coeffs_nonlinear_1d_sparse(N_x,N_v,L_x,epsilon,gamma)</span>
+    <span class="c1"># else:</span>
+    <span class="c1">#     F_1     =  vlasov_coeffs_linear_1d(N_x,N_v,L_x,epsilon,gamma)</span>
+    <span class="c1">#     F_2     =  vlasov_coeffs_nonlinear_1d(N_x,N_v,L_x,epsilon,gamma)</span>
+
+    <span class="n">F_1</span>     <span class="o">=</span>  <span class="n">vlasov_coeffs_linear_1d</span><span class="p">(</span><span class="n">N_x</span><span class="p">,</span><span class="n">N_v</span><span class="p">,</span><span class="n">L_x</span><span class="p">,</span><span class="n">epsilon</span><span class="p">,</span><span class="n">gamma</span><span class="p">)</span>
+    <span class="n">F_2</span>     <span class="o">=</span>  <span class="n">vlasov_coeffs_nonlinear_1d</span><span class="p">(</span><span class="n">N_x</span><span class="p">,</span><span class="n">N_v</span><span class="p">,</span><span class="n">L_x</span><span class="p">,</span><span class="n">epsilon</span><span class="p">,</span><span class="n">gamma</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
+        <span class="n">coeff_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">sps</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span><span class="n">F_1</span><span class="p">),</span> <span class="n">sps</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span><span class="n">F_2</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">coeff_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">F_1</span><span class="p">,</span> <span class="n">F_2</span><span class="p">]</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">coeff_set</span><span class="p">)</span></div>
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     vlasov_spectral_linear(k,alpha,nu,N)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Returns a matrix encoding velocity components for a dual-spectral </span>
+<span class="c1">###      (Fourier-Hermite) representation of the 1d Vlasov-Poisson system. </span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      k      =  Fourier mode wavevector</span>
+<span class="c1">###      alpha  =  Electric field parameter</span>
+<span class="c1">###      nu     =  Collisional damping parameter</span>
+<span class="c1">###      N      =  Maximal mode in the Hermite expansion.  </span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      H       =  Matrix for dual spectral representation</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="vlasov_spectral_linear">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.clam.linearization_tools.html#src.pyLIQTR.clam.linearization_tools.vlasov_spectral.vlasov_spectral_linear">[docs]</a>
+<span class="k">def</span> <span class="nf">vlasov_spectral_linear</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+
+    <span class="n">H</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+
+    <span class="c1">###  With a change of variable, the electric field has been symmetrically</span>
+    <span class="c1">###  wrapped into the coupling between the first and second modes.</span>
+    <span class="c1">###</span>
+    <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mf">1.0</span><span class="o">+</span><span class="n">alpha</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mf">1.0</span><span class="o">+</span><span class="n">alpha</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># &quot;Hopping&quot; terms</span>
+        <span class="n">H</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">j</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">H</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+
+        <span class="c1"># Collisional damping</span>
+        <span class="n">H</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>   <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">nu</span><span class="o">*</span><span class="n">j</span>
+
+    <span class="n">H</span><span class="p">[</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">H</span><span class="p">[</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">nu</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+
+    <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     vlasov_spectral_linear_sparse(k,alpha,nu,N)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Returns a matrix encoding velocity components for a dual-spectral </span>
+<span class="c1">###      (Fourier-Hermite) representation of the 1d Vlasov-Poisson system. </span>
+<span class="c1">###      Sparse matrix arithmetic variant.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      k      =  Fourier mode wavevector</span>
+<span class="c1">###      alpha  =  Electric field parameter</span>
+<span class="c1">###      nu     =  Collisional damping parameter</span>
+<span class="c1">###      N      =  Maximal mode in the Hermite expansion.  </span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      H       =  Matrix for dual spectral representation</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">### </span>
+
+<div class="viewcode-block" id="vlasov_spectral_linear_sparse">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.clam.linearization_tools.html#src.pyLIQTR.clam.linearization_tools.vlasov_spectral.vlasov_spectral_linear_sparse">[docs]</a>
+<span class="k">def</span> <span class="nf">vlasov_spectral_linear_sparse</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+
+    <span class="n">H</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">sps</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+
+    <span class="c1">###  With a change of variable, the electric field has been symmetrically</span>
+    <span class="c1">###  wrapped into the coupling between the first and second modes.</span>
+    <span class="c1">###</span>
+    <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mf">1.0</span><span class="o">+</span><span class="n">alpha</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mf">1.0</span><span class="o">+</span><span class="n">alpha</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># &quot;Hopping&quot; terms</span>
+        <span class="n">H</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">j</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">H</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+
+        <span class="c1"># Collisional damping</span>
+        <span class="n">H</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>   <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">nu</span><span class="o">*</span><span class="n">j</span>
+
+    <span class="n">H</span><span class="p">[</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">H</span><span class="p">[</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">nu</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+
+    <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span></div>
+
+
+
+
+
+
+
+
+<div class="viewcode-block" id="get_vector_I">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.clam.linearization_tools.html#src.pyLIQTR.clam.linearization_tools.vlasov_spectral.get_vector_I">[docs]</a>
+<span class="k">def</span> <span class="nf">get_vector_I</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">gamma</span><span class="p">,</span><span class="n">eps</span><span class="p">):</span>
+
+    <span class="n">N_l</span> <span class="o">=</span> <span class="n">lmax</span><span class="o">+</span><span class="mi">1</span>
+
+    <span class="c1">## Use iterative approach in lieu of exact </span>
+    <span class="c1">## expresson to avoid numerical issues</span>
+
+    <span class="n">I_0</span>   <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="n">eps</span>
+    <span class="n">sclf</span>  <span class="o">=</span>  <span class="k">lambda</span> <span class="n">l</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">gamma</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="n">I_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N_l</span><span class="p">)</span>
+
+    <span class="n">I_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="o">=</span>  <span class="n">I_0</span>
+
+    <span class="k">for</span> <span class="n">ell</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N_l</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">ell</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">):</span>
+            <span class="n">I_vec</span><span class="p">[</span><span class="n">ell</span><span class="p">]</span> <span class="o">=</span> <span class="n">sclf</span><span class="p">(</span><span class="n">ell</span><span class="p">)</span><span class="o">*</span><span class="n">I_vec</span><span class="p">[</span><span class="n">ell</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">I_vec</span><span class="p">[</span><span class="n">ell</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">I_vec</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="vlasov_coeffs_linear_1d">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.clam.linearization_tools.html#src.pyLIQTR.clam.linearization_tools.vlasov_spectral.vlasov_coeffs_linear_1d">[docs]</a>
+<span class="k">def</span> <span class="nf">vlasov_coeffs_linear_1d</span><span class="p">(</span><span class="n">N_x</span><span class="p">,</span><span class="n">N_v</span><span class="p">,</span><span class="n">L_x</span><span class="p">,</span><span class="n">eps</span><span class="p">,</span><span class="n">gamma</span><span class="p">):</span>
+
+    <span class="n">N_x_tot</span>  <span class="o">=</span>  <span class="mi">2</span><span class="o">*</span><span class="n">N_x</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">N_tot</span>    <span class="o">=</span>  <span class="n">N_x_tot</span> <span class="o">*</span> <span class="n">N_v</span>
+
+    <span class="n">coeffs</span>   <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_tot</span><span class="p">,</span><span class="n">N_tot</span><span class="p">))</span>
+
+    <span class="n">C</span>        <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span><span class="o">*</span><span class="n">eps</span><span class="o">*</span><span class="n">L_x</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_x_tot</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_v</span><span class="p">):</span>
+
+            <span class="n">gidx</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">N_v</span> <span class="o">+</span> <span class="n">l</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">N_v</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>    
+                <span class="n">coeffs</span><span class="p">[</span><span class="n">gidx</span><span class="p">,</span><span class="n">gidx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">N_x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">coeffs</span><span class="p">[</span><span class="n">gidx</span><span class="p">,</span><span class="n">gidx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">N_x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="vlasov_coeffs_linear_1d_sparse">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.clam.linearization_tools.html#src.pyLIQTR.clam.linearization_tools.vlasov_spectral.vlasov_coeffs_linear_1d_sparse">[docs]</a>
+<span class="k">def</span> <span class="nf">vlasov_coeffs_linear_1d_sparse</span><span class="p">(</span><span class="n">N_x</span><span class="p">,</span><span class="n">N_v</span><span class="p">,</span><span class="n">L_x</span><span class="p">,</span><span class="n">eps</span><span class="p">,</span><span class="n">gamma</span><span class="p">):</span>
+
+    <span class="n">N_x_tot</span>  <span class="o">=</span>  <span class="mi">2</span><span class="o">*</span><span class="n">N_x</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">N_tot</span>    <span class="o">=</span>  <span class="n">N_x_tot</span> <span class="o">*</span> <span class="n">N_v</span>
+
+    <span class="n">coeffs</span>   <span class="o">=</span>  <span class="n">sps</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">N_tot</span><span class="p">,</span><span class="n">N_tot</span><span class="p">))</span>
+
+    <span class="n">C</span>        <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span><span class="o">*</span><span class="n">eps</span><span class="o">*</span><span class="n">L_x</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_x_tot</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_v</span><span class="p">):</span>
+
+            <span class="n">gidx</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">N_v</span> <span class="o">+</span> <span class="n">l</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">N_v</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>    
+                <span class="n">coeffs</span><span class="p">[</span><span class="n">gidx</span><span class="p">,</span><span class="n">gidx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">N_x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">coeffs</span><span class="p">[</span><span class="n">gidx</span><span class="p">,</span><span class="n">gidx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">N_x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="vlasov_coeffs_nonlinear_1d">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.clam.linearization_tools.html#src.pyLIQTR.clam.linearization_tools.vlasov_spectral.vlasov_coeffs_nonlinear_1d">[docs]</a>
+<span class="k">def</span> <span class="nf">vlasov_coeffs_nonlinear_1d</span><span class="p">(</span><span class="n">N_x</span><span class="p">,</span><span class="n">N_v</span><span class="p">,</span><span class="n">L_x</span><span class="p">,</span><span class="n">eps</span><span class="p">,</span><span class="n">gamma</span><span class="p">):</span>
+
+    <span class="n">N_x_tot</span>  <span class="o">=</span>  <span class="mi">2</span><span class="o">*</span><span class="n">N_x</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">N_tot</span>    <span class="o">=</span>  <span class="n">N_x_tot</span> <span class="o">*</span> <span class="n">N_v</span>
+
+    <span class="n">coeffs</span>   <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_tot</span><span class="p">,</span><span class="n">N_tot</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="n">I_vec</span>    <span class="o">=</span>  <span class="n">get_vector_I</span><span class="p">(</span><span class="n">N_v</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">gamma</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+
+    <span class="n">C_1</span>      <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">eps</span><span class="o">/</span><span class="n">gamma</span>
+    <span class="n">C_2</span>      <span class="o">=</span>  <span class="n">C_1</span><span class="o">*</span><span class="p">(</span><span class="n">gamma</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_x_tot</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_v</span><span class="p">):</span>
+
+            <span class="n">gidx_1</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">N_v</span> <span class="o">+</span> <span class="n">l</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_x_tot</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_v</span><span class="p">):</span>
+
+                    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">N_v</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">):</span>
+
+                        <span class="n">gidx_2</span> <span class="o">=</span> <span class="n">N_tot</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="n">N_v</span> <span class="o">+</span> <span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">N_v</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">):</span>
+                            <span class="n">coeffs</span><span class="p">[</span><span class="n">gidx_1</span><span class="p">,</span><span class="n">gidx_2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">C_2</span><span class="o">*</span><span class="n">I_vec</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">*</span><span class="n">L_x</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">):</span>
+
+                        <span class="n">gidx_2</span> <span class="o">=</span> <span class="n">N_tot</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="n">N_v</span> <span class="o">+</span> <span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">N_v</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                            <span class="n">coeffs</span><span class="p">[</span><span class="n">gidx_1</span><span class="p">,</span><span class="n">gidx_2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">C_1</span><span class="o">*</span><span class="n">I_vec</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">*</span><span class="n">L_x</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">coeffs</span><span class="p">)</span></div>
+
+
+
+
+
+
+<div class="viewcode-block" id="vlasov_coeffs_nonlinear_1d_sparse">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.clam.linearization_tools.html#src.pyLIQTR.clam.linearization_tools.vlasov_spectral.vlasov_coeffs_nonlinear_1d_sparse">[docs]</a>
+<span class="k">def</span> <span class="nf">vlasov_coeffs_nonlinear_1d_sparse</span><span class="p">(</span><span class="n">N_x</span><span class="p">,</span><span class="n">N_v</span><span class="p">,</span><span class="n">L_x</span><span class="p">,</span><span class="n">eps</span><span class="p">,</span><span class="n">gamma</span><span class="p">):</span>
+
+    <span class="n">N_x_tot</span>  <span class="o">=</span>  <span class="mi">2</span><span class="o">*</span><span class="n">N_x</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">N_tot</span>    <span class="o">=</span>  <span class="n">N_x_tot</span> <span class="o">*</span> <span class="n">N_v</span>
+
+    <span class="n">coeffs</span>   <span class="o">=</span>  <span class="n">sps</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">N_tot</span><span class="p">,</span><span class="n">N_tot</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="n">I_vec</span>    <span class="o">=</span>  <span class="n">get_vector_I</span><span class="p">(</span><span class="n">N_v</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">gamma</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+
+    <span class="n">C_1</span>      <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">eps</span><span class="o">/</span><span class="n">gamma</span>
+    <span class="n">C_2</span>      <span class="o">=</span>  <span class="n">C_1</span><span class="o">*</span><span class="p">(</span><span class="n">gamma</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_x_tot</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_v</span><span class="p">):</span>
+
+            <span class="n">gidx_1</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">N_v</span> <span class="o">+</span> <span class="n">l</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_x_tot</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_v</span><span class="p">):</span>
+
+                    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">N_v</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">):</span>
+
+                        <span class="n">gidx_2</span> <span class="o">=</span> <span class="n">N_tot</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="n">N_v</span> <span class="o">+</span> <span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">N_v</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">):</span>
+                            <span class="n">coeffs</span><span class="p">[</span><span class="n">gidx_1</span><span class="p">,</span><span class="n">gidx_2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">C_2</span><span class="o">*</span><span class="n">I_vec</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">*</span><span class="n">L_x</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">):</span>
+
+                        <span class="n">gidx_2</span> <span class="o">=</span> <span class="n">N_tot</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="n">N_v</span> <span class="o">+</span> <span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">N_v</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                            <span class="n">coeffs</span><span class="p">[</span><span class="n">gidx_1</span><span class="p">,</span><span class="n">gidx_2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">C_1</span><span class="o">*</span><span class="n">I_vec</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">*</span><span class="n">L_x</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">coeffs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

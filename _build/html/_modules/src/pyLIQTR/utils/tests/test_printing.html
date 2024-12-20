@@ -1,0 +1,490 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.utils.tests.test_printing &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.utils.tests.test_printing</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.utils.tests.test_printing</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1">#lets generate some circuits</span>
+
+<span class="kn">from</span>    <span class="nn">pyLIQTR.ProblemInstances.getInstance</span>         <span class="kn">import</span>   <span class="n">getInstance</span>
+<span class="kn">from</span>    <span class="nn">pyLIQTR.clam.lattice_definitions</span>             <span class="kn">import</span>   <span class="n">CubicLattice</span><span class="p">,</span> <span class="n">SquareLattice</span><span class="p">,</span> <span class="n">TriangularLattice</span>
+<span class="kn">from</span>    <span class="nn">pyLIQTR.BlockEncodings.getEncoding</span>           <span class="kn">import</span>   <span class="n">getEncoding</span><span class="p">,</span> <span class="n">VALID_ENCODINGS</span>
+
+<span class="kn">from</span>    <span class="nn">pyLIQTR.qubitization.qsvt_dynamics</span>           <span class="kn">import</span>   <span class="n">qsvt_dynamics</span><span class="p">,</span> <span class="n">simulation_phases</span>
+<span class="kn">from</span>    <span class="nn">pyLIQTR.qubitization.qubitized_gates</span>         <span class="kn">import</span>   <span class="n">QubitizedWalkOperator</span>
+<span class="kn">from</span>    <span class="nn">pyLIQTR.qubitization.phase_estimation</span>        <span class="kn">import</span>   <span class="n">QubitizedPhaseEstimation</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.QROMwithMeasurementUncompute</span> <span class="kn">import</span> <span class="n">QROMwithMeasurementUncompute</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.RotationsQROM</span> <span class="kn">import</span> <span class="n">RotationsQROM</span>
+
+
+<span class="kn">from</span>    <span class="nn">pyLIQTR.utils.printing</span>                       <span class="kn">import</span>   <span class="n">openqasm</span>
+<span class="kn">from</span>    <span class="nn">openfermion.chem</span>                             <span class="kn">import</span>  <span class="n">MolecularData</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="c1"># from    openfermionpyscf                             import  run_pyscf - not available on windows, uncomment for other platforms</span>
+
+
+<div class="viewcode-block" id="script_loc">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.script_loc">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;module&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">script_loc</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Return the directory of the currently running test script&#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span></div>
+
+
+<div class="viewcode-block" id="TestPrinting">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting">[docs]</a>
+<span class="k">class</span> <span class="nc">TestPrinting</span><span class="p">:</span>
+
+<div class="viewcode-block" id="TestPrinting.fermi_hubbard_dynamics">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.fermi_hubbard_dynamics">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">fermi_hubbard_dynamics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">J</span>      <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">;</span>          <span class="n">N</span>      <span class="o">=</span>     <span class="mi">3</span>     
+        <span class="n">U</span>      <span class="o">=</span>  <span class="mf">4.0</span><span class="p">;</span>          <span class="n">shape</span>  <span class="o">=</span>  <span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="n">model</span>  <span class="o">=</span>  <span class="n">getInstance</span><span class="p">(</span><span class="s1">&#39;FermiHubbard&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="n">J</span><span class="p">,</span> <span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="n">SquareLattice</span><span class="p">)</span>
+
+        <span class="n">times</span>       <span class="o">=</span>  <span class="mi">1</span>
+        <span class="c1"># times       =  10 * N</span>
+        <span class="n">eps</span>         <span class="o">=</span>  <span class="mf">1e-1</span>
+        <span class="c1"># eps         =  1e-3</span>
+        <span class="n">phases</span>      <span class="o">=</span>  <span class="n">simulation_phases</span><span class="p">(</span><span class="n">times</span><span class="p">,</span><span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">)</span>
+
+        <span class="n">gate_qsvt</span>   <span class="o">=</span>   <span class="n">qsvt_dynamics</span><span class="p">(</span> <span class="n">encoding</span><span class="o">=</span><span class="n">getEncoding</span><span class="p">(</span><span class="n">VALID_ENCODINGS</span><span class="o">.</span><span class="n">FermiHubbardSquare</span><span class="p">),</span>
+                               <span class="n">instance</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                               <span class="n">phase_sets</span><span class="o">=</span><span class="n">phases</span> <span class="p">)</span>
+        <span class="k">yield</span> <span class="n">gate_qsvt</span><span class="o">.</span><span class="n">circuit</span></div>
+
+
+<div class="viewcode-block" id="TestPrinting.heisenberg_phase_estimation">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.heisenberg_phase_estimation">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">heisenberg_phase_estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">N</span><span class="o">=</span><span class="mi">3</span>
+        <span class="n">N_prec</span> <span class="o">=</span> <span class="mi">4</span>
+
+        <span class="n">J_x</span> <span class="o">=</span> <span class="n">J_y</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">;</span>                <span class="n">J_z</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+        <span class="n">h_x</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>      <span class="n">h_y</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>       <span class="n">h_z</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+        <span class="n">model</span>  <span class="o">=</span>  <span class="n">getInstance</span><span class="p">(</span> <span class="s2">&quot;Heisenberg&quot;</span><span class="p">,</span> 
+                            <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> 
+                            <span class="n">J</span><span class="o">=</span><span class="p">(</span><span class="n">J_x</span><span class="p">,</span><span class="n">J_y</span><span class="p">,</span><span class="n">J_z</span><span class="p">),</span> 
+                            <span class="n">h</span><span class="o">=</span><span class="p">(</span><span class="n">h_x</span><span class="p">,</span><span class="n">h_y</span><span class="p">,</span><span class="n">h_z</span><span class="p">),</span> 
+                            <span class="n">cell</span><span class="o">=</span><span class="n">SquareLattice</span> <span class="p">)</span>
+
+        <span class="n">gate_gsee</span> <span class="o">=</span> <span class="n">QubitizedPhaseEstimation</span><span class="p">(</span> <span class="n">getEncoding</span><span class="p">(</span><span class="n">VALID_ENCODINGS</span><span class="o">.</span><span class="n">PauliLCU</span><span class="p">),</span>
+                                      <span class="n">instance</span><span class="o">=</span><span class="n">model</span><span class="p">,</span><span class="n">prec</span><span class="o">=</span><span class="n">N_prec</span> <span class="p">)</span>
+        
+        <span class="k">yield</span> <span class="n">gate_gsee</span><span class="o">.</span><span class="n">circuit</span></div>
+
+
+<div class="viewcode-block" id="TestPrinting.electronic_structure_LinearT_encoding">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.electronic_structure_LinearT_encoding">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">electronic_structure_LinearT_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">script_loc</span><span class="p">):</span>
+        <span class="n">example_ham_filename</span> <span class="o">=</span> <span class="n">script_loc</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s1">&#39;example.ham.hdf5&#39;</span><span class="p">)</span>
+        <span class="n">example_grid_filename</span> <span class="o">=</span> <span class="n">script_loc</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s1">&#39;example.grid.hdf5&#39;</span><span class="p">)</span>
+
+        <span class="n">model</span>  <span class="o">=</span>  <span class="n">getInstance</span><span class="p">(</span><span class="s1">&#39;ElectronicStructure&#39;</span><span class="p">,</span>
+                                <span class="n">filenameH</span><span class="o">=</span><span class="n">example_ham_filename</span><span class="p">,</span>
+                                <span class="n">filenameG</span><span class="o">=</span><span class="n">example_grid_filename</span><span class="p">)</span>
+
+        <span class="n">encoding</span> <span class="o">=</span> <span class="n">getEncoding</span><span class="p">(</span><span class="n">VALID_ENCODINGS</span><span class="o">.</span><span class="n">LinearT</span><span class="p">,</span> 
+                                <span class="n">instance</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> 
+                                <span class="n">approx_error</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+                                <span class="n">control_val</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">yield</span> <span class="n">encoding</span><span class="o">.</span><span class="n">circuit</span></div>
+
+    
+<div class="viewcode-block" id="TestPrinting.build_circuit_single">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.build_circuit_single">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">build_circuit_single</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># builds circuit with one qrom followed by the measurement based uncomputation</span>
+        <span class="n">test_data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+        <span class="n">nData</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">test_data</span><span class="p">))</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">sel_bitsize</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_data</span><span class="p">))</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">sel_reg</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">sel_bitsize</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;sel&#39;</span><span class="p">)</span>
+        <span class="n">new_sel</span> <span class="o">=</span> <span class="n">sel_reg</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">q_bit</span> <span class="o">=</span> <span class="n">sel_reg</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">u_bit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
+        <span class="n">data_reg</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nData</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+
+        <span class="c1"># prepare select in superposition</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">on_each</span><span class="p">(</span><span class="o">*</span><span class="n">sel_reg</span><span class="p">))</span>
+
+        <span class="c1"># qrom writing data</span>
+        <span class="n">qrom_gate</span> <span class="o">=</span> <span class="n">QROMwithMeasurementUncompute</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">test_data</span><span class="p">)],</span><span class="n">selection_bitsizes</span><span class="o">=</span><span class="p">(</span><span class="n">sel_bitsize</span><span class="p">,),</span><span class="n">target_bitsizes</span><span class="o">=</span><span class="p">(</span><span class="n">nData</span><span class="p">,))</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
+            <span class="n">qrom_gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">sel_reg</span><span class="p">,</span><span class="n">target0_</span><span class="o">=</span><span class="n">data_reg</span><span class="p">)</span>
+        <span class="p">])</span>
+
+        <span class="c1"># measurement uncompute</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
+            <span class="n">qrom_gate</span><span class="o">.</span><span class="n">measurement_uncompute</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">sel_reg</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">data_reg</span><span class="p">)</span>
+        <span class="p">])</span>
+
+        <span class="k">yield</span> <span class="n">circuit</span></div>
+
+
+
+<div class="viewcode-block" id="TestPrinting.build_circuit_repeat_different_key">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.build_circuit_repeat_different_key">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">build_circuit_repeat_different_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># builds circuit with one qrom followed by the measurement based uncomputation, and then a second qrom followed by the measurement based uncomputation using two different measurement keys</span>
+        <span class="n">test_data1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+        <span class="n">test_data2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">nData</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">test_data1</span><span class="p">))</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">sel_bitsize</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_data1</span><span class="p">))</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">sel_reg</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">sel_bitsize</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;sel&#39;</span><span class="p">)</span>
+        <span class="n">new_sel</span> <span class="o">=</span> <span class="n">sel_reg</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">q_bit</span> <span class="o">=</span> <span class="n">sel_reg</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">u_bit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
+        <span class="n">data_reg</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nData</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+
+        <span class="c1"># prepare select in superposition</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">on_each</span><span class="p">(</span><span class="o">*</span><span class="n">sel_reg</span><span class="p">))</span>
+
+        <span class="c1"># qrom writing data</span>
+        <span class="n">qrom_gate</span> <span class="o">=</span> <span class="n">QROMwithMeasurementUncompute</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">test_data1</span><span class="p">)],</span><span class="n">selection_bitsizes</span><span class="o">=</span><span class="p">(</span><span class="n">sel_bitsize</span><span class="p">,),</span><span class="n">target_bitsizes</span><span class="o">=</span><span class="p">(</span><span class="n">nData</span><span class="p">,))</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
+            <span class="n">qrom_gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">sel_reg</span><span class="p">,</span><span class="n">target0_</span><span class="o">=</span><span class="n">data_reg</span><span class="p">)</span>
+        <span class="p">])</span>
+
+        <span class="c1"># measurement uncompute</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
+            <span class="n">qrom_gate</span><span class="o">.</span><span class="n">measurement_uncompute</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">sel_reg</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">data_reg</span><span class="p">)</span>
+        <span class="p">])</span>
+
+        <span class="c1"># repeat</span>
+        <span class="c1"># qrom writing data</span>
+        <span class="n">qrom_gate</span> <span class="o">=</span> <span class="n">QROMwithMeasurementUncompute</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">test_data2</span><span class="p">)],</span><span class="n">selection_bitsizes</span><span class="o">=</span><span class="p">(</span><span class="n">sel_bitsize</span><span class="p">,),</span><span class="n">target_bitsizes</span><span class="o">=</span><span class="p">(</span><span class="n">nData</span><span class="p">,))</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
+            <span class="n">qrom_gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">sel_reg</span><span class="p">,</span><span class="n">target0_</span><span class="o">=</span><span class="n">data_reg</span><span class="p">)</span>
+        <span class="p">])</span>
+
+        <span class="c1"># measurement uncompute</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
+            <span class="n">qrom_gate</span><span class="o">.</span><span class="n">measurement_uncompute</span><span class="p">(</span><span class="n">measurement_key</span><span class="o">=</span><span class="s1">&#39;second_qrom_data_measurement&#39;</span><span class="p">,</span><span class="n">selection</span><span class="o">=</span><span class="n">sel_reg</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">data_reg</span><span class="p">)</span>
+        <span class="p">])</span>
+
+        <span class="k">yield</span> <span class="n">circuit</span></div>
+
+
+
+<div class="viewcode-block" id="TestPrinting.build_circuit_rotations_qrom">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.build_circuit_rotations_qrom">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">build_circuit_rotations_qrom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">nData</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">sel_bitsize</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">test_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">sel_bitsize</span><span class="p">,</span><span class="n">nData</span><span class="p">))</span>
+        <span class="n">sel_reg</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">sel_bitsize</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;sel&#39;</span><span class="p">)</span>
+        <span class="n">new_sel</span> <span class="o">=</span> <span class="n">sel_reg</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">q_bit</span> <span class="o">=</span> <span class="n">sel_reg</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">u_bit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
+        <span class="n">data_reg</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nData</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+
+        <span class="c1"># prepare select in superposition</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">on_each</span><span class="p">(</span><span class="o">*</span><span class="n">sel_reg</span><span class="p">))</span>
+
+        <span class="c1"># qrom writing data</span>
+        <span class="n">qrom_gate</span> <span class="o">=</span> <span class="n">RotationsQROM</span><span class="p">([</span><span class="n">test_data</span><span class="p">],</span><span class="n">selection_bitsizes</span><span class="o">=</span><span class="p">(</span><span class="n">sel_bitsize</span><span class="p">,),</span><span class="n">target_bitsizes</span><span class="o">=</span><span class="p">(</span><span class="n">nData</span><span class="p">,))</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
+            <span class="n">qrom_gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">sel_reg</span><span class="p">,</span><span class="n">target0_</span><span class="o">=</span><span class="n">data_reg</span><span class="p">)</span>
+        <span class="p">])</span>
+
+        <span class="c1"># measurement uncompute</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
+            <span class="n">qrom_gate</span><span class="o">.</span><span class="n">measurement_uncompute</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">sel_reg</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">data_reg</span><span class="p">)</span>
+        <span class="p">])</span>
+
+        <span class="k">yield</span> <span class="n">circuit</span></div>
+
+
+    <span class="c1"># Marking these as skipped until we figure out how to protect the Windows users</span>
+<div class="viewcode-block" id="TestPrinting.chemical_phase_estimation">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.chemical_phase_estimation">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">chemical_phase_estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mol_data</span> <span class="o">=</span> <span class="n">MolecularData</span><span class="p">([(</span><span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.63164</span><span class="p">)),</span> <span class="p">(</span><span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.76836</span><span class="p">))],</span>\
+                                 <span class="s1">&#39;sto-3g&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;H2&#39;</span><span class="p">)</span>
+        <span class="n">mol</span> <span class="o">=</span> <span class="n">run_pyscf</span><span class="p">(</span><span class="n">mol_data</span><span class="p">,</span> <span class="n">run_scf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">run_mp2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">run_cisd</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">run_ccsd</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">run_fci</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">mol_ham</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">get_molecular_hamiltonian</span><span class="p">()</span>
+        
+        <span class="n">model</span> <span class="o">=</span> <span class="n">getInstance</span><span class="p">(</span><span class="s2">&quot;ChemicalHamiltonian&quot;</span><span class="p">,</span><span class="n">mol_ham</span><span class="o">=</span><span class="n">mol_ham</span><span class="p">,</span><span class="n">mol_name</span><span class="o">=</span><span class="s2">&quot;H2&quot;</span><span class="p">)</span>
+        <span class="n">lam</span>       <span class="o">=</span>   <span class="n">model</span><span class="o">.</span><span class="n">lam</span>
+        <span class="n">delta_e</span>   <span class="o">=</span>   <span class="mf">0.001</span>
+        <span class="n">m_base</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">lam</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">delta_e</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">m_base</span><span class="p">)))</span>
+        
+        <span class="n">encoding</span> <span class="o">=</span> <span class="n">getEncoding</span><span class="p">(</span><span class="n">VALID_ENCODINGS</span><span class="o">.</span><span class="n">PauliLCU</span><span class="p">,</span><span class="n">instance</span><span class="o">=</span><span class="n">model</span><span class="p">,</span><span class="n">prec</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
+        
+        <span class="k">yield</span> <span class="n">encoding</span><span class="o">.</span><span class="n">circuit</span></div>
+
+        
+<div class="viewcode-block" id="TestPrinting.test_electronic_structure_context">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_electronic_structure_context">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_electronic_structure_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">electronic_structure_LinearT_encoding</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">SimpleQubitManager</span><span class="p">())</span>
+
+        <span class="n">qasm</span> <span class="o">=</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">electronic_structure_LinearT_encoding</span><span class="p">,</span> <span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">qasm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">qasm</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">electronic_structure_LinearT_encoding</span><span class="p">,</span> <span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">):</span>
+            <span class="k">pass</span></div>
+
+
+
+    <span class="c1"># Skipping the following test until Qualtran supports the QASM printing in these gates</span>
+<div class="viewcode-block" id="TestPrinting.test_heisenberg">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_heisenberg">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_heisenberg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">heisenberg_phase_estimation</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">heisenberg_phase_estimation</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">heisenberg_phase_estimation</span><span class="p">,</span><span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">pass</span></div>
+
+    
+    <span class="c1"># Skipping the following test until Qualtran supports the QASM printing in these gates</span>
+<div class="viewcode-block" id="TestPrinting.test_fermi_hubbard">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_fermi_hubbard</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fermi_hubbard_dynamics</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">fermi_hubbard_dynamics</span><span class="p">,</span><span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">fermi_hubbard_dynamics</span><span class="p">,</span><span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">pass</span></div>
+
+        
+    <span class="c1"># Skipping the following test because it depends on pyscf which isn&#39;t supported on Windows</span>
+<div class="viewcode-block" id="TestPrinting.test_chemical_phase_estimation">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_chemical_phase_estimation">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span>
+    <span class="k">def</span> <span class="nf">test_chemical_phase_estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chemical_phase_estimation</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">chemical_phase_estimation</span><span class="p">,</span><span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">chemical_phase_estimation</span><span class="p">,</span><span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="TestPrinting.test_fermi_hubbard_context">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard_context">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_fermi_hubbard_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fermi_hubbard_dynamics</span><span class="p">):</span>
+        <span class="n">gqm</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">GreedyQubitManager</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;_ancilla&quot;</span><span class="p">,</span> <span class="n">maximize_reuse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">gqm</span><span class="p">)</span>
+
+        <span class="n">qasm</span> <span class="o">=</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">fermi_hubbard_dynamics</span><span class="p">,</span> <span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">qasm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="TestPrinting.test_fermi_hubbard_simple_context">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard_simple_context">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_fermi_hubbard_simple_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fermi_hubbard_dynamics</span><span class="p">):</span>
+        <span class="n">sqm</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">SimpleQubitManager</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;_ancilla&quot;</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">sqm</span><span class="p">)</span>
+
+        <span class="n">qasm</span> <span class="o">=</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">fermi_hubbard_dynamics</span><span class="p">,</span> <span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">qasm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+        
+
+<div class="viewcode-block" id="TestPrinting.test_classical_control_examples">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_classical_control_examples">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_classical_control_examples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">build_circuit_single</span><span class="p">,</span><span class="n">build_circuit_repeat_different_key</span><span class="p">,</span><span class="n">build_circuit_rotations_qrom</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">circuit</span> <span class="ow">in</span> <span class="p">[</span><span class="n">build_circuit_single</span><span class="p">,</span> <span class="n">build_circuit_repeat_different_key</span><span class="p">,</span> <span class="n">build_circuit_rotations_qrom</span><span class="p">]:</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">SimpleQubitManager</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span><span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="TestPrinting.test_chemical_phase_estimation_context">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_chemical_phase_estimation_context">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span>
+    <span class="k">def</span> <span class="nf">test_chemical_phase_estimation_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chemical_phase_estimation</span><span class="p">):</span>
+        <span class="n">gqm</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">GreedyQubitManager</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;_ancilla&quot;</span><span class="p">,</span> <span class="n">maximize_reuse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">gqm</span><span class="p">)</span>
+        
+        <span class="n">qasm</span> <span class="o">=</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">chemical_phase_estimation</span><span class="p">,</span> <span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">qasm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="TestPrinting.test_fermi_hubbard_context_error">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard_context_error">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_fermi_hubbard_context_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fermi_hubbard_dynamics</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">fermi_hubbard_dynamics</span><span class="p">,</span> <span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="TestPrinting.test_get_attr_qasm">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_get_attr_qasm">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span>
+    <span class="k">def</span> <span class="nf">test_get_attr_qasm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fermi_hubbard_dynamics</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span>
+        <span class="kn">from</span> <span class="nn">pyLIQTR.utils.printing</span> <span class="kn">import</span> <span class="n">circuit_decompose_multi</span><span class="p">,</span> <span class="n">_build_qasm_qubit_map</span>
+
+        <span class="n">og_circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">align_left</span><span class="p">(</span><span class="n">fermi_hubbard_dynamics</span><span class="p">)</span>
+        <span class="n">decomposed_circuit</span> <span class="o">=</span> <span class="n">circuit_decompose_multi</span><span class="p">(</span><span class="n">og_circuit</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">decomposed_circuit</span>
+        <span class="n">qasm_args</span><span class="p">,</span> <span class="n">qubit_map</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">_build_qasm_qubit_map</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+        <span class="n">RaiseTypeErrorIfNotProvided</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="p">([],)</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="n">RaiseTypeErrorIfNotProvided</span>
+        <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">circuit</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">:</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="s1">&#39;_qasm_&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="n">method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="ne">NotImplementedError</span>
+                <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="k">if</span> <span class="n">qasm_args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">qasm_args</span>
+                    <span class="c1"># if qubits is not None:</span>
+                    <span class="c1">#     kwargs[&#39;qubits&#39;] = tuple(qubits)</span>
+                    <span class="c1"># pylint: disable=not-callable</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="c1"># pylint: enable=not-callable</span>
+                <span class="k">assert</span> <span class="n">method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="ne">NotImplementedError</span>
+                <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">NotImplemented</span></div>
+</div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

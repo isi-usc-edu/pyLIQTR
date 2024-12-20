@@ -1,0 +1,518 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.clam.time_dynamics &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.clam.time_dynamics</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.clam.time_dynamics</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###    TIME DYNAMICS  - Simulating the time-evolution of quantum states      ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+
+
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+
+<span class="c1">######                            #############################################</span>
+<span class="c1">######  Time-derivatives          #############################################</span>
+<span class="c1">######                            #############################################</span>
+
+
+<div class="viewcode-block" id="cm_prop">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.time_dynamics.cm_prop">[docs]</a>
+<span class="k">def</span> <span class="nf">cm_prop</span><span class="p">(</span><span class="n">CM_p</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">H</span><span class="p">,</span><span class="n">dummy</span><span class="p">):</span>
+    
+    <span class="n">N_tot</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="n">CM</span> <span class="o">=</span>    <span class="n">CM_p</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N_tot</span><span class="p">,</span><span class="n">N_tot</span><span class="p">)[</span><span class="mi">0</span><span class="p">,:,:]</span> <span class="o">+</span> \
+         <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">CM_p</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N_tot</span><span class="p">,</span><span class="n">N_tot</span><span class="p">)[</span><span class="mi">1</span><span class="p">,:,:]</span>
+    
+    <span class="n">CM_dt</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="p">(</span><span class="n">H</span> <span class="o">@</span> <span class="n">CM</span> <span class="o">-</span> <span class="n">CM</span> <span class="o">@</span> <span class="n">H</span><span class="p">)</span>
+    
+    <span class="n">CM_dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CM_dt</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N_tot</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">,</span><span class="n">CM_dt</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N_tot</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span>
+    
+    <span class="k">return</span><span class="p">(</span><span class="n">CM_dt</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="cm_simulate">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.time_dynamics.cm_simulate">[docs]</a>
+<span class="k">def</span> <span class="nf">cm_simulate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span><span class="n">CM_0</span><span class="p">,</span><span class="n">t_max</span><span class="p">,</span><span class="n">dt</span><span class="p">,</span><span class="n">atol</span><span class="o">=</span><span class="mf">1.0e-16</span><span class="p">):</span>
+    
+    <span class="n">N_tot</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="n">tvec</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">t_max</span><span class="o">+</span><span class="n">dt</span><span class="p">,</span><span class="n">dt</span><span class="p">)</span>
+        
+    <span class="n">CM_p</span>  <span class="o">=</span> <span class="n">vectorize_cmat</span><span class="p">(</span><span class="n">CM_0</span><span class="p">)</span>
+    
+    <span class="n">traj</span> <span class="o">=</span> <span class="n">spi</span><span class="o">.</span><span class="n">odeint</span><span class="p">(</span><span class="n">prop_lvn</span><span class="p">,</span><span class="n">CM_p</span><span class="p">,</span><span class="n">tvec</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">H</span><span class="p">,),</span><span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">)</span>
+    
+    <span class="k">return</span><span class="p">(</span><span class="n">traj</span><span class="p">)</span></div>
+
+    
+
+
+
+<span class="c1">##</span>
+<span class="c1">##  Modify for non-Hermitian density matrix</span>
+<span class="c1">##</span>
+
+
+<div class="viewcode-block" id="prop_lvn">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.time_dynamics.prop_lvn">[docs]</a>
+<span class="k">def</span> <span class="nf">prop_lvn</span><span class="p">(</span><span class="n">Rv</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">H</span><span class="p">):</span>
+
+    <span class="c1"># assumes that the only non-Hermitian part comes from the diagonal entries</span>
+    <span class="c1"># which are imaginary.</span>
+
+    <span class="n">R</span> <span class="o">=</span> <span class="n">devectorize_cmat</span><span class="p">(</span><span class="n">Rv</span><span class="p">)</span>
+
+    <span class="n">R_dt</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">real</span><span class="p">,</span><span class="n">R</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="n">H</span><span class="o">.</span><span class="n">real</span><span class="p">))</span> <span class="o">+</span>
+                   <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span><span class="n">R</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="n">H</span><span class="o">.</span><span class="n">imag</span><span class="p">)))</span>
+
+    <span class="n">Rv_dt</span> <span class="o">=</span> <span class="n">vectorize_cmat</span><span class="p">(</span><span class="n">R_dt</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">Rv_dt</span><span class="p">)</span>    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION   parse_wfn_traj(ts_vec,traj_raw,op,indices=None,vectorized=True)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Extracts the observable (1+pz)/2 for each qubit / spin described by a</span>
+<span class="c1">###      time series of wavefunctions that were evolved directly with the</span>
+<span class="c1">###      Schrodinger propagator.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      ts_vec   = Vector containing timesteps from the trajectory</span>
+<span class="c1">###      traj_raw = Raw wavefunction trajectory from integrator</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      traj_proc = Processed trajectory.  The first element of each row is</span>
+<span class="c1">###                  the timestep, while subsequent entries contain the</span>
+<span class="c1">###                  expectation value (amplitude) of (1+pz)/2 for each qubit /</span>
+<span class="c1">###                  spin site.</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+<div class="viewcode-block" id="parse_wfn_traj_op">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.time_dynamics.parse_wfn_traj_op">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_wfn_traj_op</span><span class="p">(</span><span class="n">traj_raw</span><span class="p">,</span><span class="n">op</span><span class="p">,</span><span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">vectorized</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+    <span class="n">traj_proc</span> <span class="o">=</span> <span class="n">calc_traj_op_wfn</span><span class="p">(</span><span class="n">traj_raw</span><span class="p">,</span><span class="n">op</span><span class="p">,</span><span class="n">indices</span><span class="o">=</span><span class="n">indices</span><span class="p">,</span><span class="n">vectorized</span><span class="o">=</span><span class="n">vectorized</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">traj_proc</span><span class="p">)</span></div>
+
+
+<span class="c1">### Add vectorization flag</span>
+
+<div class="viewcode-block" id="calc_traj_op_wfn">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.time_dynamics.calc_traj_op_wfn">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_traj_op_wfn</span><span class="p">(</span><span class="n">traj_raw</span><span class="p">,</span><span class="n">op</span><span class="p">,</span><span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">vectorized</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+    <span class="c1">#   * D_op = N_qb  --&gt;  this is a global observable</span>
+    <span class="c1">#   * D_op = 1     --&gt;  this is a single qubit observable</span>
+    <span class="c1">#   * D_op = 2     --&gt;  this is a two-qubit observable</span>
+
+
+    <span class="c1"># Get number of qubits in trajectory</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">vectorized</span><span class="o">==</span><span class="kc">True</span> <span class="p">):</span>
+        <span class="n">N_qb</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">traj_raw</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">N_qb</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">traj_raw</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="n">D_op</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>              <span class="c1"># Number of qubits associated</span>
+                                                  <span class="c1"># with operator</span>
+
+    <span class="n">N_ts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">traj_raw</span><span class="p">)</span>
+
+    <span class="c1"># traj_proc = 1j*np.zeros((N_ops,N_ts,N+1))</span>
+
+    <span class="c1"># add code to handle evalation on select site indices</span>
+
+
+    <span class="k">if</span>  <span class="p">(</span><span class="n">D_op</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">traj_proc</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_ts</span><span class="p">,</span><span class="n">N_qb</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">D_op</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">traj_proc</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_ts</span><span class="p">,</span><span class="n">N_qb</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">D_op</span> <span class="o">==</span> <span class="n">N_qb</span><span class="p">):</span>
+        <span class="n">traj_proc</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N_ts</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; ERROR: parse_wfn_traj only handles 1, 2, and N qubit operators.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        Other operators shoudl be passed as an N-qubit operator after </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        padding with the identity using multi_qb_op.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">()</span>
+
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_ts</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">vectorized</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">TFr</span> <span class="o">=</span> <span class="n">traj_raw</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">:(</span><span class="mi">2</span><span class="o">**</span><span class="n">N_qb</span><span class="p">)]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">traj_raw</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="n">N_qb</span><span class="p">:(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">N_qb</span><span class="p">))]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">TFr</span> <span class="o">=</span> <span class="n">traj_raw</span><span class="p">[</span><span class="n">j</span><span class="p">][:]</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">D_op</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">traj_proc</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">N_qb</span><span class="p">]</span>       <span class="o">=</span> <span class="n">measure_obs_site</span><span class="p">(</span><span class="n">TFr</span><span class="p">,</span><span class="n">op</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">D_op</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">traj_proc</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">:(</span><span class="n">N_qb</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>   <span class="o">=</span> <span class="n">measure_obs_site</span><span class="p">(</span><span class="n">TFr</span><span class="p">,</span><span class="n">op</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">D_op</span> <span class="o">==</span> <span class="n">N_qb</span><span class="p">):</span>
+            <span class="n">traj_proc</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>              <span class="o">=</span> <span class="n">TFr</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">op</span> <span class="o">@</span> <span class="n">TFr</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">traj_proc</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     wfn_prop (WFv,t,H,N,dt)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Returns the Hamiltonian applied to a (multipled by -i) wavefunction,</span>
+<span class="c1">###      for use in solving the time-dependent Schrodinger equation (hbar=1).</span>
+<span class="c1">###      Time parameters are included as arguments for ease of modification</span>
+<span class="c1">###      when adding time-depedent perturbations.  Arguments follow that for</span>
+<span class="c1">###      generic numpy wrappers to ODEPACK.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      WFv = Vectorized wavefunction, with real components first and imaginary</span>
+<span class="c1">###            components second.</span>
+<span class="c1">###      t   = Current / absolute time</span>
+<span class="c1">###      H   = Hamiltonian (as a real or complex matrix)</span>
+<span class="c1">###      N   = Number of spins / qubits in Hamiltonian</span>
+<span class="c1">###      dt  = Integrator timestep</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      WFp_dt = Infintesimal time evolution generated by the Hamiltonian</span>
+<span class="c1">###               opeartor</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="prop_wfn">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.time_dynamics.prop_wfn">[docs]</a>
+<span class="k">def</span> <span class="nf">prop_wfn</span><span class="p">(</span><span class="n">WFv</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">H</span><span class="p">):</span>
+
+    <span class="n">WF</span> <span class="o">=</span> <span class="n">vs</span><span class="o">.</span><span class="n">devectorize_cvec</span><span class="p">(</span><span class="n">WFv</span><span class="p">)</span>
+
+    <span class="n">WF_dt</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">H</span><span class="p">,</span><span class="n">WF</span><span class="p">)</span>
+
+    <span class="n">WFv_dt</span> <span class="o">=</span> <span class="n">vectorize_cvec</span><span class="p">(</span><span class="n">WF_dt</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">WFv_dt</span><span class="p">)</span></div>
+
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     wfn_to_cm(wfn)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Calculates the Fermionic correlation matrix &lt;c^dagger_i c_j&gt;</span>
+<span class="c1">###      corresponding to the spin wavefunction wfn via the Jordan-Wigner</span>
+<span class="c1">###      transformation.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      wfn     =  target wavefunction expressed in a Pauli basis</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      CM      =  correlation matrix with C_{ij} = &lt;c^dagger_i c_j&gt;</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="wfn_to_cm">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.time_dynamics.wfn_to_cm">[docs]</a>
+<span class="k">def</span> <span class="nf">wfn_to_cm</span><span class="p">(</span><span class="n">wfn</span><span class="p">):</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wfn</span><span class="p">)))</span>
+
+    <span class="n">CM</span> <span class="o">=</span> <span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="n">cm_op</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">fcr</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">N</span><span class="p">),</span><span class="n">fan</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+            <span class="n">CM</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">wfn</span><span class="o">.</span><span class="n">T</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">cm_op</span><span class="p">,</span><span class="n">wfn</span><span class="p">))</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">CM</span><span class="p">)</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     wfn_product_state(states)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Returns the product state formed by taking the tensor product of the</span>
+<span class="c1">###      states in the vector &lt;states&gt;.  The state is formed as:</span>
+<span class="c1">###</span>
+<span class="c1">###        |s_0&gt; \otimes |s_1&gt; \otimes |s_2&gt; \otimes ... \otimes |s_N&gt;</span>
+<span class="c1">###</span>
+<span class="c1">###      where |s_0&gt; is the least signficant state in &lt;states&gt;.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      states = vector with entries corresponding to the matrix representation</span>
+<span class="c1">###               of states used to form the product state.</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      wnf   = statevector corresponding to the product state</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="wfn_product_state">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.time_dynamics.wfn_product_state">[docs]</a>
+<span class="k">def</span> <span class="nf">wfn_product_state</span><span class="p">(</span><span class="n">states</span><span class="p">):</span>
+
+    <span class="n">wfn</span> <span class="o">=</span> <span class="n">mla</span><span class="o">.</span><span class="n">mk</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wfn</span></div>
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     measure_obs_site(wfn,obs_op)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Calculates the expectation value of the oservable operator obs_op</span>
+<span class="c1">###      for each qubit / spin site subject as described by the wavefunction</span>
+<span class="c1">###      wfn.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      wnf      = Full wavefunction</span>
+<span class="c1">###      obs_op   = Matrix representation of observable</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      obs_val  = Vector containing expectation value of operator for</span>
+<span class="c1">###                 each qubit / spin site.</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="measure_obs_site">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.time_dynamics.measure_obs_site">[docs]</a>
+<span class="k">def</span> <span class="nf">measure_obs_site</span><span class="p">(</span><span class="n">wfn</span><span class="p">,</span><span class="n">obs_op</span><span class="p">):</span>
+
+    <span class="c1"># really inefficient. should save measurement operators.</span>
+
+    <span class="n">N</span>       <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">wfn</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">obs_val</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">mop</span>         <span class="o">=</span> <span class="n">qo</span><span class="o">.</span><span class="n">multi_qb_op</span><span class="p">([</span><span class="n">obs_op</span><span class="p">],[</span><span class="n">j</span><span class="p">],</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">obs_val</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>  <span class="o">=</span> <span class="n">wfn</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mop</span> <span class="o">@</span> <span class="n">wfn</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">obs_val</span><span class="p">)</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

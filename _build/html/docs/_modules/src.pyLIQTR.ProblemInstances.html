@@ -1,0 +1,601 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.ProblemInstances package &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/pyliqtr_logo.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.ProblemInstances package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/_modules/src.pyLIQTR.ProblemInstances.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-pyliqtr-probleminstances-package">
+<h1>src.pyLIQTR.ProblemInstances package<a class="headerlink" href="#src-pyliqtr-probleminstances-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.ProblemInstances.ChemicalHamiltonian">
+<span id="src-pyliqtr-probleminstances-chemicalhamiltonian-module"></span><h2>src.pyLIQTR.ProblemInstances.ChemicalHamiltonian module<a class="headerlink" href="#module-src.pyLIQTR.ProblemInstances.ChemicalHamiltonian" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.</span></span><span class="sig-name descname"><span class="pre">ChemicalHamiltonian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_ham</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">InteractionOperator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ChemicalHamiltonian.html#ChemicalHamiltonian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemInstance</span></code></p>
+<p>This ProblemInstance generates information for the PauliLCU encoding
+of a molecular Hamiltonian.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol_ham</strong> (<em>-</em>) – molecular Hamiltonian in the form of an openfermion
+InteractionOperator. This object can be generated by
+molecule.get_molecular_hamiltonian().</p></li>
+<li><p><strong>mol_name</strong> (<em>-</em>) – str, name or molecular formula.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.DF_fragments">
+<span class="sig-name descname"><span class="pre">DF_fragments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sf_error_threshold</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ChemicalHamiltonian.html#ChemicalHamiltonian.DF_fragments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.DF_fragments" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.get_alpha">
+<span class="sig-name descname"><span class="pre">get_alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'PauliLCU'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_error_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf_error_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ChemicalHamiltonian.html#ChemicalHamiltonian.get_alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.get_alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.hamiltonian_tensors">
+<span class="sig-name descname"><span class="pre">hamiltonian_tensors</span></span><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.hamiltonian_tensors" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.lam">
+<span class="sig-name descname"><span class="pre">lam</span></span><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.lam" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.n_qubits">
+<span class="sig-name descname"><span class="pre">n_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ChemicalHamiltonian.html#ChemicalHamiltonian.n_qubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.n_qubits" title="Link to this definition"></a></dt>
+<dd><p>Return the number of qubits that are required to implement this problem instance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.optimize">
+<span class="sig-name descname"><span class="pre">optimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'BLISS'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ChemicalHamiltonian.html#ChemicalHamiltonian.optimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.optimize" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.terms_jw">
+<span class="sig-name descname"><span class="pre">terms_jw</span></span><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.terms_jw" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.yield_DF_Info">
+<span class="sig-name descname"><span class="pre">yield_DF_Info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_error_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf_error_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ChemicalHamiltonian.html#ChemicalHamiltonian.yield_DF_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.yield_DF_Info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.yield_PauliLCU_Info">
+<span class="sig-name descname"><span class="pre">yield_PauliLCU_Info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'arrays'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ChemicalHamiltonian.html#ChemicalHamiltonian.yield_PauliLCU_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.ChemicalHamiltonian.yield_PauliLCU_Info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.ProblemInstances.ElectronicStructure">
+<span id="src-pyliqtr-probleminstances-electronicstructure-module"></span><h2>src.pyLIQTR.ProblemInstances.ElectronicStructure module<a class="headerlink" href="#module-src.pyLIQTR.ProblemInstances.ElectronicStructure" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.ProblemInstances.ElectronicStructure.</span></span><span class="sig-name descname"><span class="pre">ElectronicStructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filenameH</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filenameG</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ElectronicStructure.html#ElectronicStructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemInstance</span></code></p>
+<p>This ProblemInstance represents periodic electronic structure Hamiltonians generated using PEST. The Hamiltonians generally take on the form</p>
+<div class="math notranslate nohighlight">
+\[H = \sum_{p,q,\sigma} T(p-q) a^\dagger_{p,\sigma}a_{q,\sigma} + \sum_{p,\sigma} U(p) n_{p,\sigma} + \sum_{(p,\alpha)\neq(q,\beta)} V(p-q)n_{p,\alpha}n_{q,\beta}\]</div>
+<p>where <span class="math notranslate nohighlight">\(a^\dagger_{p,\sigma}\)</span> and <span class="math notranslate nohighlight">\(a_{p,\sigma}\)</span> are fermionic creation and annihilation operators on spatial orbital <span class="math notranslate nohighlight">\(p\)</span> with spin <span class="math notranslate nohighlight">\(\sigma\)</span> in {up,down}, and <span class="math notranslate nohighlight">\(n_{p,\sigma} = a^\dagger_{p,\sigma}a_{p,\sigma}\)</span> is the number operator.</p>
+<p>Given the PEST files, this ProblemInstance can yield the information needed to encode the Hamiltonian using the LinearT, PauliLCU or FirstQuantized block encoding. It also provides descriptions of the electronic structure system size with M_vals, the number of grid points along each spatial dimension, and N, the total number of orbitals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filenameH</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – filename for PEST generated ham.hdf5 file containing the Hamiltonian coefficients</p></li>
+<li><p><strong>filenameG</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – filename for PEST generated grid.hdf5 file containing the basis grid</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.get_alpha">
+<span class="sig-name descname"><span class="pre">get_alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'LinearT'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ElectronicStructure.html#ElectronicStructure.get_alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.get_alpha" title="Link to this definition"></a></dt>
+<dd><p>returns sum of the absolute value of the hamiltonian coefficients.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.n_qubits">
+<span class="sig-name descname"><span class="pre">n_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ElectronicStructure.html#ElectronicStructure.n_qubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.n_qubits" title="Link to this definition"></a></dt>
+<dd><p>Return the number of qubits that are required to implement this problem instance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.yield_FirstQuantized_Info">
+<span class="sig-name descname"><span class="pre">yield_FirstQuantized_Info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geometry_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ElectronicStructure.html#ElectronicStructure.yield_FirstQuantized_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.yield_FirstQuantized_Info" title="Link to this definition"></a></dt>
+<dd><p>yields parameters used for the FirstQuantized block encoding.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.yield_LinearT_Info">
+<span class="sig-name descname"><span class="pre">yield_LinearT_Info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">termSelect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ElectronicStructure.html#ElectronicStructure.yield_LinearT_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.yield_LinearT_Info" title="Link to this definition"></a></dt>
+<dd><p>yields parameters used for the LinearT block encoding.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.yield_PauliLCU_Info">
+<span class="sig-name descname"><span class="pre">yield_PauliLCU_Info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'arrays'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ElectronicStructure.html#ElectronicStructure.yield_PauliLCU_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ElectronicStructure.ElectronicStructure.yield_PauliLCU_Info" title="Link to this definition"></a></dt>
+<dd><p>yields parameters used for the PauliLCU block encoding.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.ProblemInstances.LatticeInstance">
+<span id="src-pyliqtr-probleminstances-latticeinstance-module"></span><h2>src.pyLIQTR.ProblemInstances.LatticeInstance module<a class="headerlink" href="#module-src.pyLIQTR.ProblemInstances.LatticeInstance" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.ProblemInstances.LatticeInstance.</span></span><span class="sig-name descname"><span class="pre">LatticeInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_subtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbcs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(False,</span> <span class="pre">False)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rescale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">td</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">td_onsite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/LatticeInstance.html#LatticeInstance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemInstance</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.draw_lattice">
+<span class="sig-name descname"><span class="pre">draw_lattice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_qubits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kamada_kawai'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doubled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/LatticeInstance.html#LatticeInstance.draw_lattice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.draw_lattice" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.get_alpha">
+<span class="sig-name descname"><span class="pre">get_alpha</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/LatticeInstance.html#LatticeInstance.get_alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.get_alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.matrix">
+<span class="sig-name descname"><span class="pre">matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/LatticeInstance.html#LatticeInstance.matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.matrix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.n_lcu_terms">
+<span class="sig-name descname"><span class="pre">n_lcu_terms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/LatticeInstance.html#LatticeInstance.n_lcu_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.n_lcu_terms" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.n_qubits">
+<span class="sig-name descname"><span class="pre">n_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/LatticeInstance.html#LatticeInstance.n_qubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.n_qubits" title="Link to this definition"></a></dt>
+<dd><p>Return the number of qubits that are required to implement this problem instance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.print_unit_cell">
+<span class="sig-name descname"><span class="pre">print_unit_cell</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/LatticeInstance.html#LatticeInstance.print_unit_cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.print_unit_cell" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.yield_PauliLCU_Info">
+<span class="sig-name descname"><span class="pre">yield_PauliLCU_Info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'arrays'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/LatticeInstance.html#LatticeInstance.yield_PauliLCU_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.LatticeInstance.LatticeInstance.yield_PauliLCU_Info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.ProblemInstances.MatrixInstance">
+<span id="src-pyliqtr-probleminstances-matrixinstance-module"></span><h2>src.pyLIQTR.ProblemInstances.MatrixInstance module<a class="headerlink" href="#module-src.pyLIQTR.ProblemInstances.MatrixInstance" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.ProblemInstances.MatrixInstance.</span></span><span class="sig-name descname"><span class="pre">MatrixInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Frobenius'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/MatrixInstance.html#MatrixInstance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemInstance</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.get_norm">
+<span class="sig-name descname"><span class="pre">get_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/MatrixInstance.html#MatrixInstance.get_norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.get_norm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.matrix">
+<span class="sig-name descname"><span class="pre">matrix</span></span><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.matrix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.n_qubits">
+<span class="sig-name descname"><span class="pre">n_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/MatrixInstance.html#MatrixInstance.n_qubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.n_qubits" title="Link to this definition"></a></dt>
+<dd><p>Return the number of qubits that are required to implement this problem instance</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.norm">
+<span class="sig-name descname"><span class="pre">norm</span></span><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.norm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.normalize">
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">norm_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'frobenius'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/MatrixInstance.html#MatrixInstance.normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.normalize" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.sparse_arrays">
+<span class="sig-name descname"><span class="pre">sparse_arrays</span></span><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.sparse_arrays" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.sparse_matrix">
+<span class="sig-name descname"><span class="pre">sparse_matrix</span></span><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.sparse_matrix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.sparse_tuples">
+<span class="sig-name descname"><span class="pre">sparse_tuples</span></span><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.sparse_tuples" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.yield_fable_info">
+<span class="sig-name descname"><span class="pre">yield_fable_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/MatrixInstance.html#MatrixInstance.yield_fable_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MatrixInstance.MatrixInstance.yield_fable_info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.ProblemInstances.MoleculeParameters">
+<span id="src-pyliqtr-probleminstances-moleculeparameters-module"></span><h2>src.pyLIQTR.ProblemInstances.MoleculeParameters module<a class="headerlink" href="#module-src.pyLIQTR.ProblemInstances.MoleculeParameters" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MoleculeParameters.MoleculeParameters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.ProblemInstances.MoleculeParameters.</span></span><span class="sig-name descname"><span class="pre">MoleculeParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell_volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_electrons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_atoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sum_atomic_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometry_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_plane_waves</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E_cut_off</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lengths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/MoleculeParameters.html#MoleculeParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MoleculeParameters.MoleculeParameters" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemInstance</span></code></p>
+<p>This ProblemInstance captures the information about a molecular system that is needed for the FirstQuantized block encoding. The parameters ultimately needed are <code class="docutils literal notranslate"><span class="pre">cell_volume</span></code>, <code class="docutils literal notranslate"><span class="pre">num_electrons</span></code>, <code class="docutils literal notranslate"><span class="pre">num_atoms</span></code>, <code class="docutils literal notranslate"><span class="pre">sum_atomic_num</span></code> and <code class="docutils literal notranslate"><span class="pre">num_plane_waves</span></code>. A geometry file (.xyz) for the system of interest can be optionally used to set <code class="docutils literal notranslate"><span class="pre">num_electrons</span></code>, <code class="docutils literal notranslate"><span class="pre">num_atoms</span></code>, and <code class="docutils literal notranslate"><span class="pre">sum_atomic_num</span></code>, by passing it in with <code class="docutils literal notranslate"><span class="pre">geometry_file=</span></code>. Additionally, the number of plane waves (<code class="docutils literal notranslate"><span class="pre">num_plane_waves</span></code>) can be optionally calculated from the desired <code class="docutils literal notranslate"><span class="pre">E_cut_off</span></code> and <code class="docutils literal notranslate"><span class="pre">lengths</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell_volume</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The computational cell volume needed for the physical system of interest.</p></li>
+<li><p><strong>num_electrons</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – The number of electrons in the system.</p></li>
+<li><p><strong>num_atoms</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – The number of atoms in the system.</p></li>
+<li><p><strong>sum_atomic_num</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – The sum of the atomic numbers.</p></li>
+<li><p><strong>geometry_file</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – The path to the .xyz file containing information about the atoms in the system and their coordinates. This file can be used to set <code class="docutils literal notranslate"><span class="pre">num_electrons</span></code>, <code class="docutils literal notranslate"><span class="pre">num_atoms</span></code>, and <code class="docutils literal notranslate"><span class="pre">sum_atomic_num</span></code>.</p></li>
+<li><p><strong>num_plane_waves</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – The number of plane waves the make up the system basis.</p></li>
+<li><p><strong>E_cut_off</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>]</em>) – The converged energy cut off in Rydberg units. This can be used together with <code class="docutils literal notranslate"><span class="pre">lengths</span></code> to set <code class="docutils literal notranslate"><span class="pre">num_plane_waves</span></code>.</p></li>
+<li><p><strong>lengths</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>]</em>) – A list containing the length of each dimension of the computational cell. This can be used together with <code class="docutils literal notranslate"><span class="pre">E_cut_off</span></code> to set <code class="docutils literal notranslate"><span class="pre">num_plane_waves</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MoleculeParameters.MoleculeParameters.get_alpha">
+<span class="sig-name descname"><span class="pre">get_alpha</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/MoleculeParameters.html#MoleculeParameters.get_alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MoleculeParameters.MoleculeParameters.get_alpha" title="Link to this definition"></a></dt>
+<dd><p>returns sum of the absolute value of the hamiltonian coefficients.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MoleculeParameters.MoleculeParameters.get_num_plane_waves">
+<span class="sig-name descname"><span class="pre">get_num_plane_waves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">E_cut_off</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lengths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/MoleculeParameters.html#MoleculeParameters.get_num_plane_waves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MoleculeParameters.MoleculeParameters.get_num_plane_waves" title="Link to this definition"></a></dt>
+<dd><p>returns the number of plane waves calculated from the <code class="docutils literal notranslate"><span class="pre">E_cut_off</span></code> and <code class="docutils literal notranslate"><span class="pre">lengths</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MoleculeParameters.MoleculeParameters.get_params_from_geometry_file">
+<span class="sig-name descname"><span class="pre">get_params_from_geometry_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geometry_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/MoleculeParameters.html#MoleculeParameters.get_params_from_geometry_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MoleculeParameters.MoleculeParameters.get_params_from_geometry_file" title="Link to this definition"></a></dt>
+<dd><p>returns the number of atoms, number of electrons, and sum of the atomic numbers based on the information in <code class="docutils literal notranslate"><span class="pre">geometry_file</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MoleculeParameters.MoleculeParameters.n_qubits">
+<span class="sig-name descname"><span class="pre">n_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/MoleculeParameters.html#MoleculeParameters.n_qubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MoleculeParameters.MoleculeParameters.n_qubits" title="Link to this definition"></a></dt>
+<dd><p>Return the number of qubits that are required to implement this problem instance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.MoleculeParameters.MoleculeParameters.yield_FirstQuantized_Info">
+<span class="sig-name descname"><span class="pre">yield_FirstQuantized_Info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geometry_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/MoleculeParameters.html#MoleculeParameters.yield_FirstQuantized_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.MoleculeParameters.MoleculeParameters.yield_FirstQuantized_Info" title="Link to this definition"></a></dt>
+<dd><p>yields parameters used for the FirstQuantized block encoding.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.ProblemInstances.NonlinearODE">
+<span id="src-pyliqtr-probleminstances-nonlinearode-module"></span><h2>src.pyLIQTR.ProblemInstances.NonlinearODE module<a class="headerlink" href="#module-src.pyLIQTR.ProblemInstances.NonlinearODE" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.NonlinearODE.FOperators">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.ProblemInstances.NonlinearODE.</span></span><span class="sig-name descname"><span class="pre">FOperators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">magnitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truncation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ancilla</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Tuple" title="(in Python v3.8)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(2,</span> <span class="pre">2,</span> <span class="pre">1,</span> <span class="pre">2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Tuple" title="(in Python v3.8)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(1,</span> <span class="pre">1,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Tuple" title="(in Python v3.8)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">TComplexity</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(TComplexity(t=0,</span> <span class="pre">clifford=0,</span> <span class="pre">rotations=0),</span> <span class="pre">TComplexity(t=0,</span> <span class="pre">clifford=0,</span> <span class="pre">rotations=0),</span> <span class="pre">TComplexity(t=0,</span> <span class="pre">clifford=0,</span> <span class="pre">rotations=0))</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/NonlinearODE.html#FOperators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.NonlinearODE.FOperators" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemInstance</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.NonlinearODE.FOperators.F0_oracle">
+<span class="sig-name descname"><span class="pre">F0_oracle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GateWithRegisters</span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/NonlinearODE.html#FOperators.F0_oracle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.NonlinearODE.FOperators.F0_oracle" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.NonlinearODE.FOperators.F1_oracle">
+<span class="sig-name descname"><span class="pre">F1_oracle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GateWithRegisters</span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/NonlinearODE.html#FOperators.F1_oracle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.NonlinearODE.FOperators.F1_oracle" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.NonlinearODE.FOperators.F2_oracle">
+<span class="sig-name descname"><span class="pre">F2_oracle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GateWithRegisters</span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/NonlinearODE.html#FOperators.F2_oracle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.NonlinearODE.FOperators.F2_oracle" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.NonlinearODE.FOperators.n_qubits">
+<span class="sig-name descname"><span class="pre">n_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/NonlinearODE.html#FOperators.n_qubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.NonlinearODE.FOperators.n_qubits" title="Link to this definition"></a></dt>
+<dd><p>Return the number of qubits that are required to implement this problem instance</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.NonlinearODE.FOperators.vector">
+<span class="sig-name descname"><span class="pre">vector</span></span><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.NonlinearODE.FOperators.vector" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.ProblemInstances.ProblemInstance">
+<span id="src-pyliqtr-probleminstances-probleminstance-module"></span><h2>src.pyLIQTR.ProblemInstances.ProblemInstance module<a class="headerlink" href="#module-src.pyLIQTR.ProblemInstances.ProblemInstance" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.ProblemInstances.ProblemInstance.</span></span><span class="sig-name descname"><span class="pre">ProblemInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ProblemInstance.html#ProblemInstance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.matrix">
+<span class="sig-name descname"><span class="pre">matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ProblemInstance.html#ProblemInstance.matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.matrix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.n_qubits">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ProblemInstance.html#ProblemInstance.n_qubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.n_qubits" title="Link to this definition"></a></dt>
+<dd><p>Return the number of qubits that are required to implement this problem instance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.n_terms">
+<span class="sig-name descname"><span class="pre">n_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="src.pyLIQTR.BlockEncodings.html#src.pyLIQTR.BlockEncodings.VALID_ENCODINGS" title="src.pyLIQTR.BlockEncodings.VALID_ENCODINGS"><span class="pre">VALID_ENCODINGS</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ProblemInstance.html#ProblemInstance.n_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.n_terms" title="Link to this definition"></a></dt>
+<dd><p>Return the number of terms that compose the chosen encoding</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.normalize_pauli_lcu">
+<span class="sig-name descname"><span class="pre">normalize_pauli_lcu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ProblemInstance.html#ProblemInstance.normalize_pauli_lcu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.normalize_pauli_lcu" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.pauli_terms">
+<span class="sig-name descname"><span class="pre">pauli_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'arrays'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ProblemInstance.html#ProblemInstance.pauli_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.pauli_terms" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.yield_Fermionic_Info">
+<span class="sig-name descname"><span class="pre">yield_Fermionic_Info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ProblemInstance.html#ProblemInstance.yield_Fermionic_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.yield_Fermionic_Info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.yield_Operator_Info">
+<span class="sig-name descname"><span class="pre">yield_Operator_Info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ProblemInstance.html#ProblemInstance.yield_Operator_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.yield_Operator_Info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.yield_Operator_Matrix">
+<span class="sig-name descname"><span class="pre">yield_Operator_Matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ProblemInstance.html#ProblemInstance.yield_Operator_Matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.yield_Operator_Matrix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.yield_PauliLCU_Info">
+<span class="sig-name descname"><span class="pre">yield_PauliLCU_Info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doPad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/ProblemInstance.html#ProblemInstance.yield_PauliLCU_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance.yield_PauliLCU_Info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.ProblemInstances.fermionic_models">
+<span id="src-pyliqtr-probleminstances-fermionic-models-module"></span><h2>src.pyLIQTR.ProblemInstances.fermionic_models module<a class="headerlink" href="#module-src.pyLIQTR.ProblemInstances.fermionic_models" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbard">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.ProblemInstances.fermionic_models.</span></span><span class="sig-name descname"><span class="pre">FermiHubbard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape=(4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">J=-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U=4.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell=&lt;class</span> <span class="pre">'pyLIQTR.clam.lattice_definitions.SquareLattice'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_subtype='default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terms=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbcs=(False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">False)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rescale=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/fermionic_models.html#FermiHubbard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbard" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LatticeInstance</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbard.n_qubits">
+<span class="sig-name descname"><span class="pre">n_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/fermionic_models.html#FermiHubbard.n_qubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbard.n_qubits" title="Link to this definition"></a></dt>
+<dd><p>Return the number of qubits that are required to implement this problem instance</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.ProblemInstances.fermionic_models.</span></span><span class="sig-name descname"><span class="pre">FermiHubbardNNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(4,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">J1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">J2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbcs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(False,</span> <span class="pre">False)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/fermionic_models.html#FermiHubbardNNN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemInstance</span></code></p>
+<p>This ProblemInstance represents the Fermi-Hubbard model including nearest and next-nearest neighbors terms. The corresponding Hamiltonian can be written as</p>
+<div class="math notranslate nohighlight">
+\[-t\sum_{\langle p,q\rangle,\sigma} a^\dagger_{p,\sigma} a_{q,\sigma}-t'\sum_{\langle p,q\rangle',\sigma} a^\dagger_{p,\sigma} a_{q,\sigma} + \frac{u}{2}\sum_{p,\alpha\neq\beta}n_{p,\alpha}n_{p,\beta}\]</div>
+<p>where the first sum is over nearest neighbors and the second over next-nearest.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – A Tuple containing the dimensions of the lattice. Note, currently only square 2D lattices are supported.</p></li>
+<li><p><strong>J1</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The nearest neghbor hopping coefficient. Represented as <span class="math notranslate nohighlight">\(t\)</span> in the above equation.</p></li>
+<li><p><strong>J2</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The next-nearest neghbor hopping coefficient. Represented as <span class="math notranslate nohighlight">\(t'\)</span> in the above equation.</p></li>
+<li><p><strong>U</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Onsite interaction strength. Represented as <span class="math notranslate nohighlight">\(u\)</span> in the above equation.</p></li>
+<li><p><strong>pbcs</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>]</em>) – Determines if periodic boundary conditions are on (True) or off (False) for the corresponding dimension. This will affect which terms are included when using the PauliLCU block encoding. Note that the LinearT block encoding assumes periodic boundary conditions.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN.get_alpha">
+<span class="sig-name descname"><span class="pre">get_alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/fermionic_models.html#FermiHubbardNNN.get_alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN.get_alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN.n_qubits">
+<span class="sig-name descname"><span class="pre">n_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/fermionic_models.html#FermiHubbardNNN.n_qubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN.n_qubits" title="Link to this definition"></a></dt>
+<dd><p>Return the number of qubits that are required to implement this problem instance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN.yield_LinearT_Info">
+<span class="sig-name descname"><span class="pre">yield_LinearT_Info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">termSelect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/fermionic_models.html#FermiHubbardNNN.yield_LinearT_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN.yield_LinearT_Info" title="Link to this definition"></a></dt>
+<dd><p>yields parameters used for the LinearT block encoding.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN.yield_PauliLCU_Info">
+<span class="sig-name descname"><span class="pre">yield_PauliLCU_Info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'arrays'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/fermionic_models.html#FermiHubbardNNN.yield_PauliLCU_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.fermionic_models.FermiHubbardNNN.yield_PauliLCU_Info" title="Link to this definition"></a></dt>
+<dd><p>yields parameters used for the PauliLCU block encoding.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.ProblemInstances.getInstance">
+<span id="src-pyliqtr-probleminstances-getinstance-module"></span><h2>src.pyLIQTR.ProblemInstances.getInstance module<a class="headerlink" href="#module-src.pyLIQTR.ProblemInstances.getInstance" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.getInstance.getInstance">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.ProblemInstances.getInstance.</span></span><span class="sig-name descname"><span class="pre">getInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">instantiate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/getInstance.html#getInstance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.getInstance.getInstance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.ProblemInstances.spin_models">
+<span id="src-pyliqtr-probleminstances-spin-models-module"></span><h2>src.pyLIQTR.ProblemInstances.spin_models module<a class="headerlink" href="#module-src.pyLIQTR.ProblemInstances.spin_models" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.spin_models.Heisenberg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.ProblemInstances.spin_models.</span></span><span class="sig-name descname"><span class="pre">Heisenberg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape=(4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">J=(1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h=(0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0.5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell=&lt;class</span> <span class="pre">'pyLIQTR.clam.lattice_definitions.SquareLattice'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_subtype='default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terms=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbcs=(False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">False)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rescale=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/spin_models.html#Heisenberg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.spin_models.Heisenberg" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LatticeInstance</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.ProblemInstances.spin_models.Transverse_Field_Ising">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.ProblemInstances.spin_models.</span></span><span class="sig-name descname"><span class="pre">Transverse_Field_Ising</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">J</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/ProblemInstances/spin_models.html#Transverse_Field_Ising"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.ProblemInstances.spin_models.Transverse_Field_Ising" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.pyLIQTR.ProblemInstances.spin_models.Heisenberg" title="src.pyLIQTR.ProblemInstances.spin_models.Heisenberg"><code class="xref py py-class docutils literal notranslate"><span class="pre">Heisenberg</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.ProblemInstances">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.pyLIQTR.ProblemInstances" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

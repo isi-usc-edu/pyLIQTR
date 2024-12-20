@@ -1,0 +1,674 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.clam.simqsp &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.clam.simqsp</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.clam.simqsp</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###     SIMQSP   -  Operator-level simulation of QSP and QSVT sequences      ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   REVISION: 11/08/2022</span>
+<span class="c1">###</span>
+<span class="c1">###   Justin E. Elenewski  -  MIT Lincoln Laboratory</span>
+<span class="c1">###   justin dot elenewski at ll dot mit dot edu</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.linalg</span> <span class="k">as</span> <span class="nn">nla</span>
+<span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="k">as</span> <span class="nn">sla</span>
+
+<span class="kn">import</span> <span class="nn">copy</span> <span class="k">as</span> <span class="nn">copy</span>
+
+
+
+
+<span class="n">phaseCos1x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">1.0581133639991933</span><span class="p">,</span>   <span class="mf">1.2902712911926397</span><span class="p">,</span>
+                     <span class="o">-</span><span class="mf">1.6134301463553664</span><span class="p">,</span>   <span class="mf">1.885759506325913</span><span class="p">,</span>
+                      <span class="mf">0.11498675081270293</span><span class="p">,</span>  <span class="mf">0.028050239885164863</span><span class="p">,</span>
+                     <span class="o">-</span><span class="mf">1.5686290787690873</span><span class="p">,</span>   <span class="mf">0.02805705226015076</span><span class="p">,</span>
+                      <span class="mf">0.11498632474914527</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.2558329722816595</span><span class="p">,</span>
+                      <span class="mf">1.5281625862365371</span><span class="p">,</span>   <span class="mf">1.2902711077871194</span><span class="p">,</span>
+                      <span class="mf">0.5126831388077006</span><span class="p">])</span>
+
+<span class="n">phaseSin1x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">1.5663579737320141</span><span class="p">,</span>   <span class="mf">0.14642516681236195</span><span class="p">,</span>
+                      <span class="mf">0.9379254522708784</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.1124341088383054</span><span class="p">,</span>
+                      <span class="mf">1.2436680317523916</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.3673408068686088</span><span class="p">,</span>
+                      <span class="mf">1.5009814747039762</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.6406113169860843</span><span class="p">,</span>
+                      <span class="mf">1.7742530638362226</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.8979240580933907</span><span class="p">,</span>
+                      <span class="mf">2.029157689146285</span><span class="p">,</span>   <span class="o">-</span><span class="mf">2.20366713461016</span><span class="p">,</span>
+                      <span class="mf">3.2880178895951366</span><span class="p">,</span>   <span class="mf">0.004438370041942363</span><span class="p">])</span>
+
+
+<span class="n">phaseCos10x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.002127788787492645</span><span class="p">,</span>  <span class="mf">0.006302451130460167</span><span class="p">,</span>
+                     <span class="mf">0.21136694814834175</span><span class="p">,</span>   <span class="mf">0.3745704822002565</span><span class="p">,</span>
+                    <span class="o">-</span><span class="mf">1.7204430010141678</span><span class="p">,</span>    <span class="mf">0.2723044432588041</span><span class="p">,</span>
+                     <span class="mf">0.18572346544623897</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.0161928459786882</span><span class="p">,</span>
+                     <span class="mf">2.1928317039520717</span><span class="p">,</span>   <span class="o">-</span><span class="mf">0.30862948132234713</span><span class="p">,</span>
+                     <span class="mf">0.4683689148383794</span><span class="p">,</span>   <span class="o">-</span><span class="mf">1.7551711309773226</span><span class="p">,</span>
+                     <span class="mf">0.44826336868077865</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.32041686174347583</span><span class="p">,</span>
+                    <span class="o">-</span><span class="mf">0.9620153563017281</span><span class="p">,</span>    <span class="mf">2.1319242002907135</span><span class="p">,</span>
+                     <span class="mf">0.1625353474112953</span><span class="p">,</span>    <span class="mf">0.127329360404154</span><span class="p">,</span>
+                    <span class="o">-</span><span class="mf">1.7319795442979662</span><span class="p">,</span>    <span class="mf">0.514576286749358</span><span class="p">,</span>
+                     <span class="mf">0.2628407256022773</span><span class="p">,</span>    <span class="mf">0.01743230768435816</span><span class="p">,</span>
+                    <span class="o">-</span><span class="mf">1.5663307459083777</span><span class="p">])</span>
+
+<span class="n">phaseSin10x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">1.5787542446478682</span><span class="p">,</span>    <span class="mf">0.09699742681436718</span><span class="p">,</span>
+                     <span class="o">-</span><span class="mf">0.36567245697125994</span><span class="p">,</span>   <span class="mf">0.07528526959342408</span><span class="p">,</span>
+                      <span class="mf">0.9511869994558226</span><span class="p">,</span>    <span class="mf">0.6180171327242592</span><span class="p">,</span>
+                     <span class="o">-</span><span class="mf">0.3397535290266367</span><span class="p">,</span>   <span class="o">-</span><span class="mf">1.0078069798441975</span><span class="p">,</span>
+                      <span class="mf">1.7676074821226415</span><span class="p">,</span>   <span class="o">-</span><span class="mf">2.4258756316580943</span><span class="p">,</span>
+                      <span class="mf">1.4061849664449775</span><span class="p">,</span>   <span class="o">-</span><span class="mf">0.8917813143330419</span><span class="p">,</span>
+                      <span class="mf">2.1968507173794722</span><span class="p">,</span>   <span class="o">-</span><span class="mf">1.7428948030893476</span><span class="p">,</span>
+                      <span class="mf">0.7556844879185471</span><span class="p">,</span>   <span class="o">-</span><span class="mf">1.3805889252158077</span><span class="p">,</span>
+                      <span class="mf">2.1345406343139617</span><span class="p">,</span>   <span class="o">-</span><span class="mf">0.34134998251303306</span><span class="p">,</span>
+                      <span class="mf">0.6120040045739557</span><span class="p">,</span>   <span class="o">-</span><span class="mf">2.1885307997380314</span><span class="p">,</span>
+                      <span class="mf">0.08075298698840316</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.3659934826908926</span><span class="p">,</span>
+                      <span class="mf">0.09571275522892675</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.007585343107922249</span><span class="p">])</span>
+
+
+
+
+<div class="viewcode-block" id="phase_w_to_r">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.simqsp.phase_w_to_r">[docs]</a>
+<span class="k">def</span> <span class="nf">phase_w_to_r</span><span class="p">(</span><span class="n">phasesW</span><span class="p">):</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phasesW</span><span class="p">)</span>
+
+    <span class="n">phasesR</span>      <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="n">phasesW</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.0</span><span class="p">))</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+
+    <span class="n">phasesR</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>   <span class="o">=</span> <span class="n">phasesW</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">((</span><span class="mf">2.0</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span>
+    <span class="n">phasesR</span><span class="p">[</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">phasesW</span><span class="p">[</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">phasesR</span><span class="p">)</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="SimQSP">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.simqsp.SimQSP">[docs]</a>
+<span class="k">class</span> <span class="nc">SimQSP</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">phases</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">M_op</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">angler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">phases</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phases</span> <span class="o">=</span> <span class="n">phases</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">parity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">=</span> <span class="n">parity</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ERROR: Parity not specified for phase sequence.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">angler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phases</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">angler</span><span class="o">.</span><span class="n">phases</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">angler</span><span class="o">.</span><span class="n">parity</span><span class="p">)</span>
+
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">M_op</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">M_op</span> <span class="o">=</span> <span class="n">M_op</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">qsp_seq</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">IdM</span>     <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ua</span>      <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ZPi</span>     <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Rot</span>     <span class="o">=</span> <span class="kc">None</span>
+
+
+
+
+    <span class="c1">################################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   FUNCTION     get_qsp_operators (M_op)</span>
+    <span class="c1">###</span>
+    <span class="c1">################################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   DESCRIPTION</span>
+    <span class="c1">###</span>
+    <span class="c1">###      Returns the rotation and reflection constitutuents of a QSP sequence</span>
+    <span class="c1">###      (in the Z-representation) when given the matrix representation of a</span>
+    <span class="c1">###      normal operator Mop.  This method performs the qubitization using</span>
+    <span class="c1">###      a single ancilary qubit (i.e., without the use of explicit select</span>
+    <span class="c1">###      and prepare oracles).</span>
+    <span class="c1">###</span>
+    <span class="c1">###   ARGUMENTS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      M_op = Normal operator to be qubitized</span>
+    <span class="c1">###</span>
+    <span class="c1">###   RETURNS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      Ua  = Block encoding unitary for the operator Mop</span>
+    <span class="c1">###      ZPi = Reflection operator in the qubitized space</span>
+    <span class="c1">###      IdM = Identity operator in the qubitized space</span>
+    <span class="c1">###</span>
+    <span class="c1">###   REQUIRES</span>
+    <span class="c1">###</span>
+    <span class="c1">###      numpy          as np</span>
+    <span class="c1">###      scipy.linalg   as sla</span>
+    <span class="c1">###</span>
+
+<div class="viewcode-block" id="SimQSP.get_qsp_operators">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.simqsp.SimQSP.get_qsp_operators">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_qsp_operators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M_op</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">conv</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">):</span>
+
+
+        <span class="k">if</span> <span class="p">((</span><span class="n">M_op</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_op</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="n">M_op</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">M_op</span>
+        <span class="k">elif</span> <span class="p">((</span><span class="n">M_op</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_op</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">ERROR:   No operator specified for block encoding.</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">M_op</span> <span class="o">=</span> <span class="n">M_op</span>
+
+        <span class="c1"># Rank of the operator Mop</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">M_op</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Number of qubits corresponding to the operator</span>
+        <span class="n">Nqb</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+
+        <span class="c1"># Identity and projection operators for a two-dimensional Hilbert space</span>
+        <span class="n">Id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]])</span>
+        <span class="n">PO</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
+
+
+        <span class="c1"># Generate the identity operator on the space formed between the eigenspace</span>
+        <span class="c1"># of Mop and a single ancilary qubit</span>
+        <span class="n">IdM</span> <span class="o">=</span> <span class="n">Id</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Nqb</span><span class="p">):</span>
+            <span class="n">IdM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">IdM</span><span class="p">,</span><span class="n">Id</span><span class="p">)</span>
+
+        <span class="n">ZPi</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">PO</span><span class="p">,</span><span class="n">IdM</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">Id</span><span class="p">,</span><span class="n">IdM</span><span class="p">)</span>
+
+
+        <span class="c1"># Calculate defect terms for off-diagonal using an explicit matrix root.</span>
+        <span class="c1"># Note that this can become costly for large matrices and numerically</span>
+        <span class="c1"># unstable depending on the condition number of Mop.</span>
+        <span class="n">MopDef</span> <span class="o">=</span> <span class="n">sla</span><span class="o">.</span><span class="n">sqrtm</span><span class="p">(</span><span class="n">IdM</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_op</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">M_op</span><span class="p">))</span>
+
+        <span class="c1"># Build the minimal block encoding of Mop</span>
+        <span class="n">Ua</span> <span class="o">=</span>  <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">conv</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">):</span>
+            <span class="n">Ua</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span>   <span class="mi">0</span><span class="p">:</span><span class="n">N</span>  <span class="p">]</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">M_op</span>
+            <span class="n">Ua</span><span class="p">[</span><span class="n">N</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">N</span>  <span class="p">]</span> <span class="o">=</span>  <span class="n">MopDef</span>
+            <span class="n">Ua</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span>   <span class="n">N</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span>  <span class="n">MopDef</span>
+            <span class="n">Ua</span><span class="p">[</span><span class="n">N</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">M_op</span>
+            <span class="n">Rot</span>              <span class="o">=</span> <span class="n">Ua</span> <span class="o">@</span> <span class="n">ZPi</span>
+
+        <span class="k">elif</span> <span class="p">(</span><span class="n">conv</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;w&quot;</span><span class="p">):</span>
+            <span class="n">Ua</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span>   <span class="mi">0</span><span class="p">:</span><span class="n">N</span>  <span class="p">]</span> <span class="o">=</span>  <span class="n">Mop</span>
+            <span class="n">Ua</span><span class="p">[</span><span class="n">N</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">N</span>  <span class="p">]</span> <span class="o">=</span>  <span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">MopDef</span>
+            <span class="n">Ua</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span>   <span class="n">N</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">MopDef</span>
+            <span class="n">Ua</span><span class="p">[</span><span class="n">N</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="n">Mop</span>
+            <span class="n">Rot</span>              <span class="o">=</span> <span class="n">Ua</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">ERROR:   Unsupported QSP covention &lt;&quot;</span><span class="p">,</span><span class="n">conv</span><span class="p">,</span><span class="s2">&quot;&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Build the reflection operator on the qubitized space</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ua</span>  <span class="o">=</span> <span class="n">Ua</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ZPi</span> <span class="o">=</span> <span class="n">ZPi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">IdM</span> <span class="o">=</span> <span class="n">IdM</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Rot</span> <span class="o">=</span> <span class="n">Rot</span></div>
+
+
+
+<div class="viewcode-block" id="SimQSP.get_qsp_operators_lcu_r">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.simqsp.SimQSP.get_qsp_operators_lcu_r">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_qsp_operators_lcu_r</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M_ops</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">return</span></div>
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     qsp_sequence(Rot,Refl,phaseSeq)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Return one iteration of the QSP sequence defined by the SU(2) rotation</span>
+<span class="c1">###      operator Rot, the reflection operator Refl, and the phases specified</span>
+<span class="c1">###      in the array phaseSeq.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      Rot      = qubitized rotation operator</span>
+<span class="c1">###      Relf     = reflection operator acting on the qubitized Hilbert space</span>
+<span class="c1">###      phaseSeq = array containing QSP phases (i.e., for z-rotations), with</span>
+<span class="c1">###                 the lowest-degree phase component (\phi_0) first and the</span>
+<span class="c1">###                 highest degree component last (\phi_d)</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      theSeq   = matrix representation of the QSP sequence</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy          as np</span>
+<span class="c1">###      scipy.linalg   as sla</span>
+<span class="c1">###</span>
+
+<span class="c1">#    def qsp_sequence(self,Rot,Refl,phaseSeq):</span>
+<div class="viewcode-block" id="SimQSP.qsvt_sequence">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.simqsp.SimQSP.qsvt_sequence">[docs]</a>
+    <span class="k">def</span> <span class="nf">qsvt_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">phases</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">phases</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phases</span> <span class="o">=</span> <span class="n">phases</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">parity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">=</span> <span class="n">parity</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ERROR: Parity not specified for phase sequence.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="c1"># Number of phases in QSP sequence / degree of approximated polynomial</span>
+        <span class="c1"># transformation.</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">)</span>
+
+        <span class="n">phase_hold</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">)</span>
+
+        <span class="c1"># Symmetric convention - decided not to go this route, since it</span>
+        <span class="c1"># requires change elsewhere.  Recorded for posterity nonetheless.</span>
+        <span class="c1">#</span>
+        <span class="c1"># self.phases[0]     = phase_hold[0]   + np.pi/4</span>
+        <span class="c1"># self.phases[N-1]   = phase_hold[N-1] + np.pi/4</span>
+        <span class="c1">#</span>
+        <span class="c1"># for j in range(1,N-1):</span>
+        <span class="c1">#     self.phases[j] = phase_hold[j]   + np.pi/2</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>     <span class="o">=</span> <span class="n">phase_hold</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">phase_hold</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>  <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+
+        <span class="c1"># Define 0-th z-reflection</span>
+        <span class="n">Zphi0</span> <span class="o">=</span> <span class="n">sla</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ZPi</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="n">Zphi1p</span> <span class="o">=</span> <span class="n">sla</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span> <span class="mi">1</span> <span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ZPi</span><span class="p">)</span>
+
+
+            <span class="n">Nmx</span>    <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">theSeq</span> <span class="o">=</span> <span class="n">Zphi0</span> <span class="o">@</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ua</span> <span class="o">@</span> <span class="n">Zphi1p</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Nmx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+
+                <span class="n">Zphi1</span>  <span class="o">=</span> <span class="n">sla</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="p">)</span>   <span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ZPi</span><span class="p">)</span>
+                <span class="n">Zphi2</span>  <span class="o">=</span> <span class="n">sla</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span> <span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ZPi</span><span class="p">)</span>
+
+                <span class="n">theSeq</span> <span class="o">=</span> <span class="n">theSeq</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ua</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Zphi1</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ua</span> <span class="o">@</span> <span class="n">Zphi2</span>
+
+
+        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+
+
+            <span class="c1"># here we use symmetric qsp with alternating phase signs</span>
+            <span class="c1"># to eliminate need for conjugate (need separate routine with</span>
+            <span class="c1"># conjugate as well</span>
+
+            <span class="n">Nmx</span>    <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">theSeq</span> <span class="o">=</span> <span class="n">Zphi0</span>
+
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Nmx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+
+                <span class="n">Zphi1</span>  <span class="o">=</span> <span class="n">sla</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>   <span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ZPi</span><span class="p">)</span>
+                <span class="n">Zphi2</span>  <span class="o">=</span> <span class="n">sla</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="p">)</span>     <span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ZPi</span><span class="p">)</span>
+
+                <span class="n">theSeq</span> <span class="o">=</span> <span class="n">theSeq</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ua</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Zphi1</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ua</span> <span class="o">@</span> <span class="n">Zphi2</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">qsp_seq</span> <span class="o">=</span> <span class="p">((</span><span class="o">-</span><span class="mf">1.0</span><span class="n">j</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">theSeq</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phases</span> <span class="o">=</span> <span class="n">phase_hold</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qsp_seq</span><span class="p">)</span></div>
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     qsp_sequence(Rot,Refl,phaseSeq)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Return one iteration of the QSP sequence defined by the SU(2) rotation</span>
+<span class="c1">###      operator Rot, the reflection operator Refl, and the phases specified</span>
+<span class="c1">###      in the array phaseSeq.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      Rot      = qubitized rotation operator</span>
+<span class="c1">###      Relf     = reflection operator acting on the qubitized Hilbert space</span>
+<span class="c1">###      phaseSeq = array containing QSP phases (i.e., for z-rotations), with</span>
+<span class="c1">###                 the lowest-degree phase component (\phi_0) first and the</span>
+<span class="c1">###                 highest degree component last (\phi_d)</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      theSeq   = matrix representation of the QSP sequence</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy          as np</span>
+<span class="c1">###      scipy.linalg   as sla</span>
+<span class="c1">###</span>
+
+<span class="c1">#    def qsp_sequence(self,Rot,Refl,phaseSeq):</span>
+<div class="viewcode-block" id="SimQSP.qsp_sequence">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.simqsp.SimQSP.qsp_sequence">[docs]</a>
+    <span class="k">def</span> <span class="nf">qsp_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">phases</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">phases</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phases</span> <span class="o">=</span> <span class="n">phases</span>
+
+        <span class="c1"># Number of phases in QSP sequence / degree of approximated polynomial</span>
+        <span class="c1"># transformation.</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">)</span>
+
+        <span class="c1"># Define 0-th z-reflection</span>
+        <span class="n">Zphi</span> <span class="o">=</span> <span class="n">sla</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ZPi</span><span class="p">)</span>
+
+        <span class="c1"># Starting point for the QSP operator product</span>
+        <span class="n">theSeq</span> <span class="o">=</span> <span class="n">Zphi</span>
+
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+
+            <span class="c1"># Define m-th z-reflection operator</span>
+            <span class="n">Zphi</span> <span class="o">=</span> <span class="n">sla</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ZPi</span><span class="p">)</span>
+
+            <span class="c1"># Multiply into operator product defining QSP sequence</span>
+            <span class="c1"># theSeq = np.matmul(theSeq, (self.Rot @ Zphi) )</span>
+            <span class="n">theSeq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">theSeq</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Rot</span><span class="p">,</span> <span class="n">Zphi</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">qsp_seq</span> <span class="o">=</span> <span class="n">theSeq</span>
+
+
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qsp_seq</span> <span class="p">)</span></div>
+
+
+
+
+
+    <span class="c1"># assumes we already loaded in some phases</span>
+<div class="viewcode-block" id="SimQSP.eval_sequence">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.simqsp.SimQSP.eval_sequence">[docs]</a>
+    <span class="k">def</span> <span class="nf">eval_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">xpts</span><span class="p">,</span><span class="n">conv</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">):</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xpts</span><span class="p">)</span>
+
+        <span class="n">qvals</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="n">F</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="n">x</span><span class="p">]])</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+
+            <span class="n">M_op</span> <span class="o">=</span> <span class="n">F</span><span class="p">(</span><span class="n">xpts</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_qsp_operators</span><span class="p">(</span><span class="n">M_op</span><span class="p">,</span><span class="n">conv</span><span class="o">=</span><span class="n">conv</span><span class="p">)</span>
+            <span class="n">op_ite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qsp_sequence</span><span class="p">()</span>
+
+            <span class="n">qvals</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qsp_seq</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">qvals</span><span class="p">))</span></div>
+
+
+
+
+<div class="viewcode-block" id="SimQSP.eval_sequence_qsvt">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.simqsp.SimQSP.eval_sequence_qsvt">[docs]</a>
+    <span class="k">def</span> <span class="nf">eval_sequence_qsvt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">xpts</span><span class="p">,</span><span class="n">conv</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">):</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xpts</span><span class="p">)</span>
+
+        <span class="n">qvals</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="n">F</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="n">x</span><span class="p">]])</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+
+            <span class="n">M_op</span> <span class="o">=</span> <span class="n">F</span><span class="p">(</span><span class="n">xpts</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_qsp_operators</span><span class="p">(</span><span class="n">M_op</span><span class="p">,</span><span class="n">conv</span><span class="o">=</span><span class="n">conv</span><span class="p">)</span>
+            <span class="n">op_ite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qsvt_sequence</span><span class="p">()</span>
+
+            <span class="n">qvals</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qsp_seq</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">qvals</span><span class="p">))</span></div>
+</div>
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     qsp_exp_sim (H)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Calculates the real-time unitary propagator exp(-i * H * dt) using</span>
+<span class="c1">###      a canned QSP sequence and a timestep $dt = 1.0 \omega_0^{-1}$,</span>
+<span class="c1">###      where $\omega_0$ is the characteristic frequency associated with the</span>
+<span class="c1">###      the Hamiltonian H.  Other timesteps may be used by rescaling the</span>
+<span class="c1">###      Hamiltonian or providing an alternate phase angle sequence (as sines</span>
+<span class="c1">###      and cosines via the Jacobi-Anger approximation)</span>
+<span class="c1">###</span>
+<span class="c1">###      As structured, this function can also give an imaginary time evolution</span>
+<span class="c1">###      if the H is rescaled by -i (or a nonunitary evolution if imaginary</span>
+<span class="c1">###      terms appear in H.  Note that this behavior *cannot* be emulated Using</span>
+<span class="c1">###      a straightforward gate-based representation of the QSP sequence.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      H = Matrix representation of a Hamiltonian operator</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      tr_norm = trace norm of oeprator A</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy          as np</span>
+<span class="c1">###      scipy.linalg   as sla</span>
+<span class="c1">###</span>
+<span class="c1">#</span>
+<div class="viewcode-block" id="qsp_exp_sim_r">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.simqsp.qsp_exp_sim_r">[docs]</a>
+<span class="k">def</span> <span class="nf">qsp_exp_sim_r</span><span class="p">(</span><span class="n">Ham</span><span class="p">,</span><span class="n">phaseCos</span><span class="o">=</span><span class="n">phaseCos10x</span><span class="p">,</span> <span class="n">phaseSin</span><span class="o">=</span><span class="n">phaseSin10x</span><span class="p">):</span>
+    <span class="n">cos</span> <span class="o">=</span> <span class="n">SimQSP</span><span class="p">(</span><span class="n">M_op</span><span class="o">=</span><span class="n">Ham</span><span class="p">)</span>
+    <span class="n">sin</span> <span class="o">=</span> <span class="n">SimQSP</span><span class="p">(</span><span class="n">M_op</span><span class="o">=</span><span class="n">Ham</span><span class="p">)</span>
+    <span class="n">cos</span><span class="o">.</span><span class="n">get_qsp_operators</span><span class="p">()</span>
+    <span class="n">sin</span><span class="o">.</span><span class="n">get_qsp_operators</span><span class="p">()</span>
+
+    <span class="c1"># Get QSP operators representing the half-sine and half-cosine.</span>
+    <span class="n">op_cos</span> <span class="o">=</span> <span class="n">cos</span><span class="o">.</span><span class="n">qsp_sequence</span><span class="p">(</span><span class="n">phaseCos</span><span class="p">)</span>
+    <span class="n">op_sin</span> <span class="o">=</span> <span class="n">sin</span><span class="o">.</span><span class="n">qsp_sequence</span><span class="p">(</span><span class="n">phaseSin</span><span class="p">)</span>
+
+    <span class="c1"># We calculate the sine and cosine terms directly as the real part of the</span>
+    <span class="c1"># sequence given by the respective QSP sequences (hence why the phases</span>
+    <span class="c1"># encode 1/2 sin(x) and 1/2 cos(x)).  This could be practically implemented,</span>
+    <span class="c1"># for instance, using controlled gates for the encoding QSP sequence and</span>
+    <span class="c1"># its conjugate as conditioned on the |+&gt; Hadamard state.</span>
+    <span class="n">op_cos</span> <span class="o">=</span> <span class="n">op_cos</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">op_cos</span><span class="p">)</span>
+    <span class="n">op_sin</span> <span class="o">=</span> <span class="n">op_sin</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">op_sin</span><span class="p">)</span>
+
+    <span class="c1"># Generate the qubitized exponential operator</span>
+    <span class="n">op_exp</span> <span class="o">=</span> <span class="n">op_cos</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">op_sin</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">op_exp</span><span class="p">)</span></div>
+
+
+
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># def qsp_exp_sim_w(Ham,phaseCos=phaseCos10x, phaseSin=phaseSin10x):</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#     # Get qubitized block encoding unitary Ua, reflection operator ZPi,</span>
+<span class="c1">#     # and identity IdM</span>
+<span class="c1">#     Rot,ZPi,IdM = get_qsp_operators_w(Ham)</span>
+<span class="c1">#</span>
+<span class="c1">#     # Get rotation operator as product of block encoding unitary Ua and</span>
+<span class="c1">#     # reflecton ZPi</span>
+<span class="c1">#     # Rot = np.matmul(Ua,ZPi)</span>
+<span class="c1">#</span>
+<span class="c1">#     # Get QSP operators representing the half-sine and half-cosine.</span>
+<span class="c1">#     op_cos = qsp_sequence(Rot,ZPi,phaseCos)</span>
+<span class="c1">#     op_sin = qsp_sequence(Rot,ZPi,phaseSin)</span>
+<span class="c1">#</span>
+<span class="c1">#     # We calculate the sine and cosine terms directly as the real part of the</span>
+<span class="c1">#     # sequence given by the respective QSP sequences (hence why the phases</span>
+<span class="c1">#     # encode 1/2 sin(x) and 1/2 cos(x)).  This could be practically implemented,</span>
+<span class="c1">#     # for instance, using controlled gates for the encoding QSP sequence and</span>
+<span class="c1">#     # its conjugate as conditioned on the |+&gt; Hadamard state.</span>
+<span class="c1">#     op_cos = op_cos + np.conj(op_cos)</span>
+<span class="c1">#     op_sin = op_sin + np.conj(op_sin)</span>
+<span class="c1">#</span>
+<span class="c1">#     # Generate the qubitized exponential operator</span>
+<span class="c1">#     op_exp = op_cos - 1j*op_sin</span>
+<span class="c1">#</span>
+<span class="c1">#     return(op_exp)</span>
+
+
+    <span class="c1"># sig = (1.0 / np.sqrt(2.0))*np.array([1,1])</span>
+    <span class="c1"># wfn = np.kron(sig,IdM)</span>
+    <span class="c1">#</span>
+    <span class="c1"># qsp_op = np.matmul(wfn,np.matmul(op_exp,np.transpose(wfn)))</span>
+    <span class="c1"># ref_op = sla.expm(-1j*10.0*Mop)</span>
+    <span class="c1">#</span>
+    <span class="c1"># trd = trace_distance(qsp_op,ref_op)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

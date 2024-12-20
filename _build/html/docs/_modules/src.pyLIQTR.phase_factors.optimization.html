@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.phase_factors.optimization package &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/pyliqtr_logo.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.phase_factors.optimization package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/_modules/src.pyLIQTR.phase_factors.optimization.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-pyliqtr-phase-factors-optimization-package">
+<h1>src.pyLIQTR.phase_factors.optimization package<a class="headerlink" href="#src-pyliqtr-phase-factors-optimization-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.phase_factors.optimization.ChebyshevPoly">
+<span id="src-pyliqtr-phase-factors-optimization-chebyshevpoly-module"></span><h2>src.pyLIQTR.phase_factors.optimization.ChebyshevPoly module<a class="headerlink" href="#module-src.pyLIQTR.phase_factors.optimization.ChebyshevPoly" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.</span></span><span class="sig-name descname"><span class="pre">ChebyshevPoly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeffs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.coeffs">
+<span class="sig-name descname"><span class="pre">coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeffs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly.coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.coeffs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly.eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.eval" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.evens">
+<span class="sig-name descname"><span class="pre">evens</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly.evens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.evens" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.odds">
+<span class="sig-name descname"><span class="pre">odds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly.odds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.odds" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.read_poly">
+<span class="sig-name descname"><span class="pre">read_poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly.read_poly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.read_poly" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_coeffs">
+<span class="sig-name descname"><span class="pre">set_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfs_set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly.set_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_coeffs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_evens">
+<span class="sig-name descname"><span class="pre">set_evens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfs_set</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly.set_evens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_evens" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_odds">
+<span class="sig-name descname"><span class="pre">set_odds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfs_set</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly.set_odds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_odds" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_parity">
+<span class="sig-name descname"><span class="pre">set_parity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly.set_parity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_parity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_type">
+<span class="sig-name descname"><span class="pre">set_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly.set_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.set_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.write_poly">
+<span class="sig-name descname"><span class="pre">write_poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly.write_poly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.write_poly" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.zero_poly">
+<span class="sig-name descname"><span class="pre">zero_poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#ChebyshevPoly.zero_poly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.ChebyshevPoly.zero_poly" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.eval_chebyshev">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.</span></span><span class="sig-name descname"><span class="pre">eval_chebyshev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#eval_chebyshev"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.eval_chebyshev" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.eval_chebyshev_strict">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.</span></span><span class="sig-name descname"><span class="pre">eval_chebyshev_strict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/ChebyshevPoly.html#eval_chebyshev_strict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.ChebyshevPoly.eval_chebyshev_strict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.phase_factors.optimization.angler_optimization">
+<span id="src-pyliqtr-phase-factors-optimization-angler-optimization-module"></span><h2>src.pyLIQTR.phase_factors.optimization.angler_optimization module<a class="headerlink" href="#module-src.pyLIQTR.phase_factors.optimization.angler_optimization" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.angler_optimization.</span></span><span class="sig-name descname"><span class="pre">Angler_opt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeffs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cheb_poly</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bfgs_conv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/angler_optimization.html#Angler_opt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/angler_optimization.html#Angler_opt.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt.generate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt.gradient_optimization">
+<span class="sig-name descname"><span class="pre">gradient_optimization</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/angler_optimization.html#Angler_opt.gradient_optimization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt.gradient_optimization" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt.set_poly">
+<span class="sig-name descname"><span class="pre">set_poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeffs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cheb_poly</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/angler_optimization.html#Angler_opt.set_poly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt.set_poly" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.angler_optimization.handle_scalar">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.angler_optimization.</span></span><span class="sig-name descname"><span class="pre">handle_scalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/angler_optimization.html#handle_scalar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.angler_optimization.handle_scalar" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.phase_factors.optimization.expander">
+<span id="src-pyliqtr-phase-factors-optimization-expander-module"></span><h2>src.pyLIQTR.phase_factors.optimization.expander module<a class="headerlink" href="#module-src.pyLIQTR.phase_factors.optimization.expander" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.Expander">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.expander.</span></span><span class="sig-name descname"><span class="pre">Expander</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#Expander"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.Expander" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ChebyshevPoly</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.Expander.erf">
+<span class="sig-name descname"><span class="pre">erf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#Expander.erf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.Expander.erf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.Expander.erf_shifted">
+<span class="sig-name descname"><span class="pre">erf_shifted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#Expander.erf_shifted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.Expander.erf_shifted" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.Expander.exponential_decay_even">
+<span class="sig-name descname"><span class="pre">exponential_decay_even</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#Expander.exponential_decay_even"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.Expander.exponential_decay_even" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.Expander.exponential_decay_odd">
+<span class="sig-name descname"><span class="pre">exponential_decay_odd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#Expander.exponential_decay_odd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.Expander.exponential_decay_odd" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.Expander.gaussian">
+<span class="sig-name descname"><span class="pre">gaussian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#Expander.gaussian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.Expander.gaussian" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.Expander.inverse">
+<span class="sig-name descname"><span class="pre">inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc_tgt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#Expander.inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.Expander.inverse" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.Expander.ja_cos">
+<span class="sig-name descname"><span class="pre">ja_cos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">err_tgt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#Expander.ja_cos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.Expander.ja_cos" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.Expander.ja_sin">
+<span class="sig-name descname"><span class="pre">ja_sin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc_tgt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#Expander.ja_sin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.Expander.ja_sin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.binomsum">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.expander.</span></span><span class="sig-name descname"><span class="pre">binomsum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#binomsum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.binomsum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.eval_chebyshev">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.expander.</span></span><span class="sig-name descname"><span class="pre">eval_chebyshev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#eval_chebyshev"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.eval_chebyshev" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.eval_chebyshev_strict">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.expander.</span></span><span class="sig-name descname"><span class="pre">eval_chebyshev_strict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#eval_chebyshev_strict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.eval_chebyshev_strict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.expander.handle_scalar">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.expander.</span></span><span class="sig-name descname"><span class="pre">handle_scalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/expander.html#handle_scalar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.expander.handle_scalar" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.phase_factors.optimization.fitter">
+<span id="src-pyliqtr-phase-factors-optimization-fitter-module"></span><h2>src.pyLIQTR.phase_factors.optimization.fitter module<a class="headerlink" href="#module-src.pyLIQTR.phase_factors.optimization.fitter" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.fitter.Fitter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.fitter.</span></span><span class="sig-name descname"><span class="pre">Fitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_tgt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_upper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pts_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpm_prec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">512</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/fitter.html#Fitter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.fitter.Fitter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ChebyshevPoly</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.fitter.Fitter.eval_approx">
+<span class="sig-name descname"><span class="pre">eval_approx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xpts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/fitter.html#Fitter.eval_approx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.eval_approx" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.fitter.Fitter.eval_func">
+<span class="sig-name descname"><span class="pre">eval_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xpts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/fitter.html#Fitter.eval_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.eval_func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.fitter.Fitter.get_chebyshev_domain">
+<span class="sig-name descname"><span class="pre">get_chebyshev_domain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/fitter.html#Fitter.get_chebyshev_domain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.get_chebyshev_domain" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.fitter.Fitter.get_pts">
+<span class="sig-name descname"><span class="pre">get_pts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/fitter.html#Fitter.get_pts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.get_pts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.fitter.Fitter.get_pts_m">
+<span class="sig-name descname"><span class="pre">get_pts_m</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/fitter.html#Fitter.get_pts_m"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.get_pts_m" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.fitter.Fitter.remez">
+<span class="sig-name descname"><span class="pre">remez</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/fitter.html#Fitter.remez"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.remez" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.fitter.Fitter.set_precision">
+<span class="sig-name descname"><span class="pre">set_precision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/fitter.html#Fitter.set_precision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.set_precision" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.fitter.Fitter.set_root_solver">
+<span class="sig-name descname"><span class="pre">set_root_solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/fitter.html#Fitter.set_root_solver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.fitter.Fitter.set_root_solver" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.fitter.chebyshev_func_m">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.fitter.</span></span><span class="sig-name descname"><span class="pre">chebyshev_func_m</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/fitter.html#chebyshev_func_m"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.fitter.chebyshev_func_m" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.fitter.chebyshev_m">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.fitter.</span></span><span class="sig-name descname"><span class="pre">chebyshev_m</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/fitter.html#chebyshev_m"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.fitter.chebyshev_m" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.phase_factors.optimization.fitter.m_to_np">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.phase_factors.optimization.fitter.</span></span><span class="sig-name descname"><span class="pre">m_to_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/phase_factors/optimization/fitter.html#m_to_np"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.phase_factors.optimization.fitter.m_to_np" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.phase_factors.optimization">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.pyLIQTR.phase_factors.optimization" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

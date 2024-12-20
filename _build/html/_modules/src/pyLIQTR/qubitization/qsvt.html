@@ -1,0 +1,720 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.qubitization.qsvt &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.qubitization.qsvt</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.qubitization.qsvt</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###           QSVT  -  Circuits and methods for QSP, QET, and QSVT           ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">DefaultDict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span>  <span class="nn">numpy</span>                  <span class="k">as</span>  <span class="nn">np</span>
+<span class="kn">import</span>  <span class="nn">cirq</span>                   <span class="k">as</span>  <span class="nn">cirq</span>
+<span class="kn">import</span>  <span class="nn">qualtran</span>               <span class="k">as</span>  <span class="nn">qt</span>
+<span class="kn">import</span>  <span class="nn">qualtran.cirq_interop.testing</span>  <span class="k">as</span>  <span class="nn">qt_test</span>
+<span class="kn">from</span> <span class="nn">cirq</span> <span class="kn">import</span> <span class="n">QasmArgs</span>
+<span class="kn">from</span> <span class="nn">qualtran._infra.data_types</span> <span class="kn">import</span> <span class="n">QBit</span>
+
+<span class="kn">from</span>  <span class="nn">pyLIQTR.phase_factors.phase_factors</span>   <span class="kn">import</span>  <span class="n">PhaseFactors</span>
+<span class="kn">from</span>  <span class="nn">pyLIQTR.qubitization.qubitized_gates</span>  <span class="kn">import</span>  <span class="n">QubitizedReflection</span><span class="p">,</span> <span class="n">QubitizedRotation</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.resource_analysis</span> <span class="kn">import</span> <span class="n">pylqt_t_complexity</span> <span class="k">as</span> <span class="n">t_complexity</span>
+<span class="c1">###</span>
+<span class="c1">### Need to add phase regsiter attribute (like .selection_registers)</span>
+<span class="c1">###</span>
+
+<span class="n">TDefault</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;TDefault&#39;</span><span class="p">)</span>
+<span class="n">RaiseTypeErrorIfNotProvided</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="p">([],)</span>
+
+
+
+<div class="viewcode-block" id="QSVT_abstract">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.qubitization.html#src.pyLIQTR.qubitization.qsvt.QSVT_abstract">[docs]</a>
+<span class="k">class</span> <span class="nc">QSVT_abstract</span><span class="p">(</span><span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">gate_with_registers</span><span class="o">.</span><span class="n">GateWithRegisters</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> 
+                  <span class="n">block_encoding</span><span class="p">,</span> 
+                  <span class="n">phis</span><span class="p">,</span> 
+                <span class="c1">#   instance=None, </span>
+                  <span class="n">phase_convention</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">,</span>
+                <span class="c1">#   control_val=None,</span>
+                  <span class="n">multi_control_val</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                  <span class="n">sequence_name</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span>           <span class="o">=</span>  <span class="n">sequence_name</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">phis</span><span class="p">,</span><span class="n">PhaseFactors</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_phis</span>                    <span class="o">=</span>  <span class="n">phis</span><span class="o">.</span><span class="n">phis</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_phis</span>                    <span class="o">=</span>  <span class="n">phis</span>
+
+ <span class="c1">#      self._phis                    =  phis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_phis</span>                  <span class="o">=</span>  <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_phis</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_phase_convention</span>        <span class="o">=</span>  <span class="n">phase_convention</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_multi_control_val</span>       <span class="o">=</span>  <span class="n">multi_control_val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_multi_target_val</span>        <span class="o">=</span>  <span class="mi">1</span>
+
+        <span class="c1">## Set rotataion and reflection / projection gates based on </span>
+        <span class="c1">## the phase angle convention.</span>
+        <span class="c1">##</span>
+        <span class="c1">##</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_phase_convention</span> <span class="o">==</span> <span class="s1">&#39;R&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rotation_gate</span>       <span class="o">=</span>  <span class="n">cirq</span><span class="o">.</span><span class="n">Rz</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_multi_target_gate</span>   <span class="o">=</span>  <span class="n">cirq</span><span class="o">.</span><span class="n">X</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_phase_convention</span> <span class="o">==</span> <span class="s1">&#39;Wx&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rotation_gate</span>       <span class="o">=</span>  <span class="n">cirq</span><span class="o">.</span><span class="n">Rz</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_multi_target_gate</span>   <span class="o">=</span>  <span class="n">cirq</span><span class="o">.</span><span class="n">X</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_phase_convention</span> <span class="o">==</span> <span class="s1">&#39;Wz&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rotation_gate</span>       <span class="o">=</span>  <span class="n">cirq</span><span class="o">.</span><span class="n">Rx</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_multi_target_gate</span>   <span class="o">=</span>  <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span>
+
+
+        <span class="c1">## Calculate the number of controls on the the qubitized rotation gate</span>
+        <span class="c1">## based on the number of qubits in the selection register.</span>
+        <span class="c1">##</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_rotation_controls</span>  <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">num_qubits_in_registers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">)</span>
+
+<div class="viewcode-block" id="QSVT_abstract.num_qubits_in_registers">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.qubitization.html#src.pyLIQTR.qubitization.qsvt.QSVT_abstract.num_qubits_in_registers">[docs]</a>
+    <span class="k">def</span> <span class="nf">num_qubits_in_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">registers</span><span class="p">):</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="n">registers</span><span class="p">:</span>
+            <span class="n">num</span> <span class="o">+=</span> <span class="n">reg</span><span class="o">.</span><span class="n">bitsize</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span>      </div>
+
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">all_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">helper</span> <span class="o">=</span> <span class="n">qt_test</span><span class="o">.</span><span class="n">GateHelper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">helper</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">helper</span> <span class="o">=</span> <span class="n">qt_test</span><span class="o">.</span><span class="n">GateHelper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">helper</span><span class="o">.</span><span class="n">circuit</span><span class="p">)</span>  
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">selection_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">control_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span><span class="o">.</span><span class="n">control_registers</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">target_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span><span class="o">.</span><span class="n">target_registers</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">junk_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span><span class="o">.</span><span class="n">junk_registers</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">phase_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span> <span class="p">[</span><span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Register</span><span class="p">(</span><span class="s1">&#39;phase&#39;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">QBit</span><span class="p">())]</span> <span class="p">)</span>
+
+    <span class="c1"># @property</span>
+    <span class="c1"># def phase_registers(self):</span>
+    <span class="c1">#     return(self.junk_registers)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="c1">#    phase_reg =  (cirq_ft.Register(&#39;phase&#39;,1),)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controlled</span><span class="p">:</span>
+            <span class="n">ctl_reg</span> <span class="o">=</span>  <span class="p">(</span><span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Register</span><span class="p">(</span><span class="s1">&#39;control&#39;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">QBit</span><span class="p">()),)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ctl_reg</span> <span class="o">=</span> <span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Signature</span><span class="p">(</span> <span class="p">[</span> <span class="o">*</span><span class="n">ctl_reg</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">,</span> 
+              <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">target_registers</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">junk_registers</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_registers</span><span class="p">]</span> <span class="p">)</span>
+    
+<span class="c1">#            [ *phase_reg, *ctl_reg, *self.selection_registers, </span>
+<span class="c1">#              *self.target_registers, *self.junk_registers, *self.phase_registers] )</span>
+
+    <span class="k">def</span> <span class="nf">_circuit_diagram_info_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CircuitDiagramInfoArgs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CircuitDiagramInfo</span><span class="p">:</span>
+            
+<span class="c1">##</span>
+<span class="c1">##  Add phase sequence tag.</span>
+<span class="c1">##</span>
+
+        <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;QSVT&#39;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">title</span> <span class="o">+=</span>  <span class="p">(</span>  <span class="s1">&#39;(&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;)&#39;</span> <span class="p">)</span>
+
+        <span class="n">wire_symbols</span>  <span class="o">=</span> <span class="p">[</span><span class="n">title</span><span class="p">]</span>
+<span class="c1">#        wire_symbols  += [&#39;#&#39;]*(self.num_qubits()-1)</span>
+        <span class="n">wire_symbols</span>  <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;QSVT&#39;</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CircuitDiagramInfo</span><span class="p">(</span><span class="n">wire_symbols</span><span class="o">=</span><span class="n">wire_symbols</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="QSVT_real_polynomial">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.qubitization.html#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial">[docs]</a>
+<span class="k">class</span> <span class="nc">QSVT_real_polynomial</span><span class="p">(</span><span class="n">QSVT_abstract</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">block_encoding</span><span class="p">,</span> <span class="n">phis</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">control_val</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="o">**</span><span class="n">kwargs</span> <span class="p">):</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_val</span>             <span class="o">=</span>  <span class="n">control_val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controlled</span>              <span class="o">=</span>  <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_control_val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_controlled</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1">## If uninstantiated block encoding and problem instance are supplied, </span>
+        <span class="c1">## go ahead and build the encoding.  Otherwise check the exiting encoding to </span>
+        <span class="c1">## ensure compatibilty with the sequence control conventions.</span>
+        <span class="c1">##</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span>      <span class="o">=</span>  <span class="n">block_encoding</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="n">control_val</span><span class="o">=</span><span class="n">control_val</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span>          <span class="o">=</span>  <span class="n">block_encoding</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span><span class="o">.</span><span class="n">_controlled</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controlled</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Block encoding and QSVT sequence must share a common control strategy.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span><span class="o">.</span><span class="n">_control_val</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_control_val</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Block encoding and QSVT squence common control condition.&quot;</span><span class="p">)</span>         
+
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">block_encoding</span><span class="p">,</span> <span class="n">phis</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="QSVT_real_polynomial.decompose_from_registers">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.qubitization.html#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial.decompose_from_registers">[docs]</a>
+    <span class="k">def</span> <span class="nf">decompose_from_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">quregs</span><span class="p">):</span>
+
+        <span class="n">selection_qubits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">junk_qubits</span>      <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">kw_block_regs</span>     <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;target&#39;</span>     <span class="p">:</span>  <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="p">}</span> 
+        <span class="n">kw_rotation_regs</span>  <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;target&#39;</span>     <span class="p">:</span>  <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;phase&#39;</span><span class="p">]</span>  <span class="p">}</span> 
+
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">:</span>
+            <span class="n">selection_qubits</span> <span class="o">+=</span> <span class="n">quregs</span><span class="p">[</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span> <span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">kw_block_regs</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>     <span class="o">=</span>  <span class="n">quregs</span><span class="p">[</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span> <span class="p">]</span>
+
+        <span class="c1">## Need since we allow these to be entangled with preparation</span>
+        <span class="c1">## registers (do some for qubitized walk.)</span>
+        <span class="c1">##</span>
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">junk_registers</span><span class="p">:</span>
+            <span class="n">junk_qubits</span> <span class="o">+=</span> <span class="n">quregs</span><span class="p">[</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span> <span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">kw_block_regs</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>     <span class="o">=</span>  <span class="n">quregs</span><span class="p">[</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span> <span class="p">]</span>
+            <span class="n">kw_rotation_regs</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>  <span class="o">=</span>  <span class="n">quregs</span><span class="p">[</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span> <span class="p">]</span>
+
+        <span class="n">kw_rotation_regs</span><span class="p">[</span><span class="s1">&#39;control&#39;</span><span class="p">]</span>  <span class="o">=</span>  <span class="n">selection_qubits</span> <span class="o">+</span> <span class="n">junk_qubits</span>
+
+        <span class="n">reg_phase</span>    <span class="o">=</span>  <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;phase&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controlled</span><span class="p">:</span>
+            <span class="n">kw_block_regs</span><span class="p">[</span><span class="s1">&#39;control&#39;</span><span class="p">]</span>              <span class="o">=</span>  <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;control&#39;</span><span class="p">]</span>
+            <span class="n">kw_rotation_regs</span><span class="p">[</span><span class="s1">&#39;rotation_control&#39;</span><span class="p">]</span>  <span class="o">=</span>  <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;control&#39;</span><span class="p">]</span>
+
+        <span class="n">n_rotation_controls</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">selection_qubits</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">junk_qubits</span><span class="p">)</span> 
+
+
+        <span class="n">kw_rotation_args</span>  <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;control_val&#39;</span>         <span class="p">:</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_control_val</span><span class="p">,</span>
+                              <span class="s1">&#39;rotation_gate&#39;</span>       <span class="p">:</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_rotation_gate</span><span class="p">,</span>
+                              <span class="s1">&#39;multi_control_val&#39;</span>   <span class="p">:</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_multi_control_val</span><span class="p">,</span>
+                              <span class="s1">&#39;multi_target_gate&#39;</span>   <span class="p">:</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_multi_target_gate</span>  <span class="p">}</span>
+
+
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">reg_phase</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">yield</span> <span class="n">QubitizedRotation</span><span class="p">(</span> <span class="n">n_rotation_controls</span><span class="p">,</span>
+                                 <span class="n">rads</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_phis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">kw_rotation_args</span><span class="p">)</span><span class="o">.</span>\
+                                    <span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">kw_rotation_regs</span><span class="p">)</span>  
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">reg_phase</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phis</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">kw_block_regs</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">QubitizedRotation</span><span class="p">(</span> <span class="n">n_rotation_controls</span><span class="p">,</span> <span class="n">rads</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_rotation_args</span><span class="p">)</span><span class="o">.</span>\
+                                        <span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">kw_rotation_regs</span><span class="p">)</span>  
+            <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">reg_phase</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+
+        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">kw_block_regs</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">QubitizedRotation</span><span class="p">(</span> <span class="n">n_rotation_controls</span><span class="p">,</span><span class="n">rads</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_phis</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">**</span><span class="n">kw_rotation_args</span><span class="p">)</span><span class="o">.</span>\
+                                    <span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">kw_rotation_regs</span><span class="p">)</span> 
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">reg_phase</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+
+        
+
+
+    <span class="k">def</span> <span class="nf">_t_complexity_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">qt</span><span class="o">.</span><span class="n">cirq_interop</span><span class="o">.</span><span class="n">t_complexity_protocol</span><span class="o">.</span><span class="n">TComplexity</span><span class="p">:</span>
+
+        <span class="n">n_reflect_controls</span>  <span class="o">=</span>  <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">:</span>
+            <span class="n">n_reflect_controls</span> <span class="o">+=</span> <span class="n">reg</span><span class="o">.</span><span class="n">bitsize</span>
+
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">junk_registers</span><span class="p">:</span>
+            <span class="n">n_reflect_controls</span> <span class="o">+=</span> <span class="n">reg</span><span class="o">.</span><span class="n">bitsize</span>
+
+
+        <span class="n">encoding_cost</span>   <span class="o">=</span>  <span class="n">t_complexity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span><span class="p">)</span>
+        <span class="n">rotation_cost</span>   <span class="o">=</span>  <span class="n">t_complexity</span><span class="p">(</span> <span class="n">QubitizedRotation</span><span class="p">(</span> <span class="n">n_reflect_controls</span><span class="p">,</span> <span class="n">control_val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_control_val</span> <span class="p">))</span>
+        <span class="n">clifford_cost</span>   <span class="o">=</span>  <span class="n">qt</span><span class="o">.</span><span class="n">cirq_interop</span><span class="o">.</span><span class="n">t_complexity_protocol</span><span class="o">.</span><span class="n">TComplexity</span><span class="p">(</span><span class="n">clifford</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_phis</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="p">(</span> <span class="n">rotation_cost</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_phis</span><span class="p">)</span> <span class="o">+</span> <span class="n">encoding_cost</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_phis</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">clifford_cost</span><span class="p">)</span>
+
+    <span class="c1">#def _qasm_(self, args: &#39;cirq.QasmArgs&#39;) -&gt; str:</span>
+    <span class="k">def</span> <span class="nf">_qasm_</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">QasmArgs</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">qubits</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="s1">&#39;cirq.Qid&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">:</span> <span class="n">DefaultDict</span> <span class="o">=</span> <span class="n">RaiseTypeErrorIfNotProvided</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TDefault</span><span class="p">]:</span>
+        <span class="c1"># args.validate_version(&#39;2.0&#39;)</span>
+        <span class="c1"># # build up all the qubits, minus the ancilla ones for now</span>
+        <span class="c1"># allQ = [</span>
+        <span class="c1">#     *self.selection_registers,</span>
+        <span class="c1">#     *self.control_registers,</span>
+        <span class="c1">#     *self.target_registers,</span>
+        <span class="c1">#     *self.phase_registers</span>
+        <span class="c1">#     ]</span>
+
+        <span class="c1"># ops = self.decompose_from_registers(allQ)</span>
+        <span class="c1"># return QasmOutput(</span>
+        <span class="c1">#     operations=self._block_encoding,</span>
+        <span class="c1">#     qubits=allQ,</span>
+        <span class="c1">#     # header=None,</span>
+        <span class="c1">#     # precision=10,</span>
+        <span class="c1">#     # version=&#39;2.0&#39;,</span>
+        <span class="c1"># )</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="viewcode-block" id="QSVT_real_polynomial_sum">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.qubitization.html#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum">[docs]</a>
+<span class="k">class</span> <span class="nc">QSVT_real_polynomial_sum</span><span class="p">(</span><span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">gate_with_registers</span><span class="o">.</span><span class="n">GateWithRegisters</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> 
+                  <span class="n">block_encoding</span><span class="p">,</span> 
+                  <span class="n">phis</span><span class="p">,</span> 
+                  <span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                  <span class="n">ctl_s_gate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                  <span class="n">ctl_z_gate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                  <span class="n">ctl_h_gate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  
+                  <span class="o">**</span><span class="n">kwargs</span> <span class="p">):</span>
+
+        <span class="c1">## Combo doesn&#39;t have an exernal control (for now)</span>
+        <span class="c1">##</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controlled</span>              <span class="o">=</span>  <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_val_0</span>           <span class="o">=</span>  <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_val_1</span>           <span class="o">=</span>  <span class="mi">1</span>
+
+
+        <span class="c1">## Note the flip in indexing vs. labels: </span>
+        <span class="c1">##   We condition the first argument on |1&gt; and </span>
+        <span class="c1">##   the second on |0&gt;</span>
+        <span class="c1">##</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">phis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">PhaseFactors</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_phis_0</span>     <span class="o">=</span>   <span class="n">phis</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">phis</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_phis_1</span>     <span class="o">=</span>   <span class="n">phis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">phis</span>
+            <span class="n">name_0</span>           <span class="o">=</span>   <span class="n">phis</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">name_1</span>           <span class="o">=</span>   <span class="n">phis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_phis_0</span>     <span class="o">=</span>  <span class="n">phis</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_phis_1</span>     <span class="o">=</span>  <span class="n">phis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">name_0</span>           <span class="o">=</span>  <span class="s2">&quot;</span><span class="si">{phis}</span><span class="s2">_0&quot;</span>
+            <span class="n">name_1</span>           <span class="o">=</span>  <span class="s2">&quot;</span><span class="si">{phis}</span><span class="s2">_1&quot;</span>
+
+        <span class="c1"># self._phis_0                  =  phis[0]</span>
+        <span class="c1"># self._phis_1                  =  phis[1]</span>
+
+  <span class="c1">#      self.n_phis                   =  [len(self._phis_0),len(self._phis_1)]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ctl_s_gate</span>              <span class="o">=</span>  <span class="n">ctl_s_gate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ctl_z_gate</span>              <span class="o">=</span>  <span class="n">ctl_z_gate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ctl_h_gate</span>              <span class="o">=</span>  <span class="n">ctl_h_gate</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">qsvt_gate_0</span>   <span class="o">=</span>   <span class="n">QSVT_real_polynomial</span><span class="p">(</span> <span class="n">block_encoding</span><span class="p">,</span> 
+                                                     <span class="n">phis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_phis_0</span><span class="p">,</span>
+                                                     <span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">,</span>
+                                                     <span class="n">sequence_name</span><span class="o">=</span><span class="n">name_0</span><span class="p">,</span>
+                                                     <span class="n">control_val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_control_val_0</span>  <span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">qsvt_gate_1</span>   <span class="o">=</span>   <span class="n">QSVT_real_polynomial</span><span class="p">(</span> <span class="n">block_encoding</span><span class="p">,</span> 
+                                                     <span class="n">phis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_phis_1</span><span class="p">,</span>
+                                                     <span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">,</span>
+                                                     <span class="n">sequence_name</span><span class="o">=</span><span class="n">name_1</span><span class="p">,</span>
+                                                     <span class="n">control_val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_control_val_1</span>  <span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">all_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">helper</span> <span class="o">=</span> <span class="n">qt_test</span><span class="o">.</span><span class="n">GateHelper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">helper</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">)</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">helper</span> <span class="o">=</span> <span class="n">qt_test</span><span class="o">.</span><span class="n">GateHelper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">helper</span><span class="o">.</span><span class="n">circuit</span><span class="p">)</span>  
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_phis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_phis_0</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_phis_1</span><span class="p">))</span> <span class="p">)</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">selection_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qsvt_gate_0</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">)</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">control_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qsvt_gate_0</span><span class="o">.</span><span class="n">control_registers</span><span class="p">)</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">target_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qsvt_gate_0</span><span class="o">.</span><span class="n">target_registers</span><span class="p">)</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">junk_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qsvt_gate_0</span><span class="o">.</span><span class="n">junk_registers</span><span class="p">)</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">phase_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qsvt_gate_0</span><span class="o">.</span><span class="n">phase</span><span class="p">)</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">phase_reg</span> <span class="o">=</span>  <span class="p">(</span><span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Register</span><span class="p">(</span><span class="s1">&#39;phase&#39;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">QBit</span><span class="p">()),)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controlled</span><span class="p">:</span>
+            <span class="n">ctl_reg</span> <span class="o">=</span>  <span class="p">(</span><span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Register</span><span class="p">(</span><span class="s1">&#39;control&#39;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">QBit</span><span class="p">()),)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ctl_reg</span> <span class="o">=</span> <span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Signature</span><span class="p">(</span>
+            <span class="p">[</span> <span class="o">*</span><span class="n">phase_reg</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">control_registers</span><span class="p">,</span>
+              <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">target_registers</span><span class="p">,</span>  <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">,</span> 
+              <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">junk_registers</span><span class="p">]</span> <span class="p">)</span>
+
+
+<div class="viewcode-block" id="QSVT_real_polynomial_sum.decompose_from_registers">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.qubitization.html#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.decompose_from_registers">[docs]</a>
+    <span class="k">def</span> <span class="nf">decompose_from_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">quregs</span><span class="p">):</span>
+
+
+        <span class="n">kw_qsvt_regs</span>      <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;control&#39;</span>     <span class="p">:</span>   <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;control&#39;</span><span class="p">],</span>
+                              <span class="s1">&#39;phase&#39;</span>       <span class="p">:</span>   <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;phase&#39;</span><span class="p">],</span>
+<span class="c1">#                              &#39;selection&#39;   :   quregs[&#39;selection&#39;],</span>
+                              <span class="s1">&#39;target&#39;</span>      <span class="p">:</span>   <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>  <span class="p">}</span>
+
+
+
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">:</span>
+ <span class="c1">#           selection_qubits += quregs[ reg.name ].tolist()</span>
+            <span class="n">kw_qsvt_regs</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span> <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">junk_registers</span><span class="p">:</span>
+            <span class="n">kw_qsvt_regs</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span> <span class="p">]</span>
+
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctl_h_gate</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;control&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">qsvt_gate_1</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">kw_qsvt_regs</span><span class="p">)</span>  
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctl_z_gate</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;control&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctl_s_gate</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;control&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">qsvt_gate_0</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">kw_qsvt_regs</span><span class="p">)</span>  
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctl_h_gate</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;control&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span></div>
+
+        
+
+    <span class="k">def</span> <span class="nf">_t_complexity_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">qt</span><span class="o">.</span><span class="n">cirq_interop</span><span class="o">.</span><span class="n">t_complexity_protocol</span><span class="o">.</span><span class="n">TComplexity</span><span class="p">:</span>
+
+        <span class="n">n_reflect_controls</span>  <span class="o">=</span>  <span class="mi">0</span>
+
+        <span class="n">encoding_cost_0</span>   <span class="o">=</span>  <span class="n">t_complexity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qsvt_gate_0</span><span class="p">)</span>
+        <span class="n">encoding_cost_1</span>   <span class="o">=</span>  <span class="n">t_complexity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qsvt_gate_1</span><span class="p">)</span>
+
+        <span class="n">cliff</span>  <span class="o">=</span>  <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_ctl_h_gate</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctl_s_gate</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctl_z_gate</span>
+
+        <span class="n">clifford_cost</span>   <span class="o">=</span>  <span class="n">qt</span><span class="o">.</span><span class="n">cirq_interop</span><span class="o">.</span><span class="n">t_complexity_protocol</span><span class="o">.</span><span class="n">TComplexity</span><span class="p">(</span><span class="n">clifford</span><span class="o">=</span><span class="n">cliff</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span> <span class="n">encoding_cost_0</span> <span class="o">+</span> <span class="n">encoding_cost_1</span> <span class="o">+</span> <span class="n">clifford_cost</span><span class="p">)</span></div>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+<div class="viewcode-block" id="QSP_fourier_response">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.qubitization.html#src.pyLIQTR.qubitization.qsvt.QSP_fourier_response">[docs]</a>
+<span class="k">class</span> <span class="nc">QSP_fourier_response</span><span class="p">(</span><span class="n">QSVT_abstract</span><span class="p">):</span>
+    
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">block_encoding</span><span class="p">,</span> <span class="n">phis</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span> <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controlled</span>              <span class="o">=</span>  <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_val</span>             <span class="o">=</span>  <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invert_later</span>            <span class="o">=</span>  <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding_prep</span>      <span class="o">=</span>  <span class="n">block_encoding</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="n">do_prepare_inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">control_val</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding_prep_inv</span>  <span class="o">=</span>  <span class="n">block_encoding</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="n">do_prepare</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">invert_select</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">control_val</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span>           <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding_prep</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">block_encoding</span><span class="o">.</span><span class="n">_do_prepare_inverse</span> <span class="o">!=</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Block encoding must only contain a prepare and select.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">block_encoding</span><span class="o">.</span><span class="n">_controlled</span> <span class="o">!=</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Block encoding be controlled and the control conditioned on |1&gt;.&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span>            <span class="o">=</span>  <span class="n">block_encoding</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding_prep</span>       <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding_prep_inv</span>   <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_invert_later</span>              <span class="o">=</span>  <span class="kc">True</span>
+        
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span><span class="p">,</span> <span class="n">phis</span><span class="p">,</span> <span class="n">phase_convention</span><span class="o">=</span><span class="s1">&#39;Wz&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            
+
+<div class="viewcode-block" id="QSP_fourier_response.decompose_from_registers">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.qubitization.html#src.pyLIQTR.qubitization.qsvt.QSP_fourier_response.decompose_from_registers">[docs]</a>
+    <span class="k">def</span> <span class="nf">decompose_from_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">quregs</span><span class="p">):</span>
+
+        <span class="n">selection_qubits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">junk_qubits</span>      <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">kw_block_regs</span>     <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;target&#39;</span>     <span class="p">:</span>  <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="p">}</span> 
+        <span class="n">kw_rotation_regs</span>  <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;target&#39;</span>     <span class="p">:</span>  <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;phase&#39;</span><span class="p">]</span>  <span class="p">}</span> 
+
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">:</span>
+            <span class="n">selection_qubits</span> <span class="o">+=</span> <span class="n">quregs</span><span class="p">[</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span> <span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">kw_block_regs</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>     <span class="o">=</span>  <span class="n">quregs</span><span class="p">[</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span> <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">junk_registers</span><span class="p">:</span>
+            <span class="n">junk_qubits</span> <span class="o">+=</span> <span class="n">quregs</span><span class="p">[</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span> <span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">kw_block_regs</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>     <span class="o">=</span>  <span class="n">quregs</span><span class="p">[</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span> <span class="p">]</span>
+            <span class="n">kw_rotation_regs</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>  <span class="o">=</span>  <span class="n">quregs</span><span class="p">[</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span> <span class="p">]</span>
+
+        <span class="n">kw_rotation_regs</span><span class="p">[</span><span class="s1">&#39;control&#39;</span><span class="p">]</span>  <span class="o">=</span>  <span class="n">selection_qubits</span> <span class="o">+</span> <span class="n">junk_qubits</span>
+
+        <span class="n">reg_phase</span>    <span class="o">=</span>  <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;phase&#39;</span><span class="p">]</span>
+
+
+        <span class="n">n_rotation_controls</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">selection_qubits</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">junk_qubits</span><span class="p">)</span> 
+
+
+        <span class="n">kw_rotation_args</span>  <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;control_val&#39;</span>         <span class="p">:</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_control_val</span><span class="p">,</span>
+                              <span class="s1">&#39;rotation_gate&#39;</span>       <span class="p">:</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_rotation_gate</span><span class="p">,</span>
+                              <span class="s1">&#39;multi_control_val&#39;</span>   <span class="p">:</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_multi_control_val</span><span class="p">,</span>
+                              <span class="s1">&#39;multi_target_gate&#39;</span>   <span class="p">:</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_multi_target_gate</span>  <span class="p">}</span>
+
+        <span class="n">kw_block_regs</span><span class="p">[</span><span class="s1">&#39;control&#39;</span><span class="p">]</span>  <span class="o">=</span>  <span class="n">reg_phase</span>
+
+        <span class="k">def</span> <span class="nf">encoding_plus_rotation</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="n">kw_block_regs</span><span class="p">):</span>
+
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding_prep</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">kw_block_regs</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Ry</span><span class="p">(</span><span class="n">rads</span><span class="o">=</span><span class="n">phi</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">reg_phase</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invert_later</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding_prep_inv</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">kw_block_regs</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding_prep_inv</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">kw_block_regs</span><span class="p">)</span>
+
+
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Rx</span><span class="p">(</span><span class="n">rads</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_phis</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">reg_phase</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_phis</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)):</span>
+            <span class="k">yield</span> <span class="n">encoding_plus_rotation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_phis</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span><span class="n">kw_block_regs</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">QubitizedRotation</span><span class="p">(</span> <span class="n">n_rotation_controls</span><span class="p">,</span>
+                                     <span class="n">rads</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_phis</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kw_rotation_args</span><span class="p">)</span><span class="o">.</span>\
+                                     <span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">kw_rotation_regs</span><span class="p">)</span>  
+        
+
+        <span class="k">yield</span> <span class="n">encoding_plus_rotation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_phis</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span><span class="n">kw_block_regs</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Rx</span><span class="p">(</span><span class="n">rads</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_phis</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">reg_phase</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+
+
+
+    <span class="k">def</span> <span class="nf">_t_complexity_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">qt</span><span class="o">.</span><span class="n">cirq_interop</span><span class="o">.</span><span class="n">t_complexity_protocol</span><span class="o">.</span><span class="n">TComplexity</span><span class="p">:</span>
+
+        <span class="n">n_reflect_controls</span>  <span class="o">=</span>  <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">:</span>
+            <span class="n">n_reflect_controls</span> <span class="o">+=</span> <span class="n">reg</span><span class="o">.</span><span class="n">bitsize</span>
+
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">junk_registers</span><span class="p">:</span>
+            <span class="n">n_reflect_controls</span> <span class="o">+=</span> <span class="n">reg</span><span class="o">.</span><span class="n">bitsize</span>
+
+
+
+        <span class="n">encoding_cost</span>   <span class="o">=</span>  <span class="n">t_complexity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_encoding</span><span class="p">)</span>
+        <span class="n">rotation_cost</span>   <span class="o">=</span>  <span class="n">t_complexity</span><span class="p">(</span> <span class="n">QubitizedRotation</span><span class="p">(</span> <span class="n">n_reflect_controls</span><span class="p">))</span>
+        <span class="n">clifford_cost</span>   <span class="o">=</span>  <span class="n">qt</span><span class="o">.</span><span class="n">cirq_interop</span><span class="o">.</span><span class="n">t_complexity_protocol</span><span class="o">.</span><span class="n">TComplexity</span><span class="p">(</span><span class="n">clifford</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_phis</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="p">(</span> <span class="n">rotation_cost</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_phis</span><span class="p">)</span> <span class="o">+</span> <span class="n">encoding_cost</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_phis</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">clifford_cost</span><span class="p">)</span></div>
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

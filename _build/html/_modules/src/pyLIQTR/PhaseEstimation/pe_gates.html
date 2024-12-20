@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.PhaseEstimation.pe_gates &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.PhaseEstimation.pe_gates</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.PhaseEstimation.pe_gates</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">openfermion.circuits</span>             <span class="kn">import</span> <span class="n">trotterize_exp_qubop_to_qasm</span>
+
+<span class="kn">from</span> <span class="nn">openfermion</span>                      <span class="kn">import</span> <span class="n">jordan_wigner</span><span class="p">,</span> <span class="n">QubitOperator</span>
+<span class="kn">from</span> <span class="nn">cirq.contrib</span>                     <span class="kn">import</span> <span class="n">qasm_import</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.utils</span>              <span class="kn">import</span> <span class="n">open_fermion_to_qasm</span>
+
+
+<div class="viewcode-block" id="S_k">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.PhaseEstimation.html#src.pyLIQTR.PhaseEstimation.pe_gates.S_k">[docs]</a>
+<span class="k">class</span> <span class="nc">S_k</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Gate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A gate for rotating away previously measured bits in a phase that is being estimated.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        qubit : the cirq qubit that the gate is acting on</span>
+
+<span class="sd">        prev_bits : A list containing only 1&#39;s or 0&#39;s for the previously measured bits</span>
+
+<span class="sd">        verbose : A boolean flag. Set to True to get debug info output to screen</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        N/A : Does stick the gate in the circuit where you want it.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qubit</span><span class="p">,</span> <span class="n">prev_bits</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span><span class="c1"># , control_key=&#39;&#39;):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qubit</span>     <span class="o">=</span> <span class="n">qubit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_bits</span> <span class="o">=</span> <span class="n">prev_bits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span>   <span class="o">=</span> <span class="n">verbose</span>
+        <span class="c1"># self.control_key = control_key</span>
+
+    <span class="k">def</span> <span class="nf">_num_qubits_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_circuit_diagram_info_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;S_k&#39;</span>
+
+    <span class="c1">### Testing</span>
+    <span class="k">def</span> <span class="nf">_decompose_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qubits</span><span class="p">):</span>
+        <span class="n">sum_val</span>  <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_bits</span><span class="p">:</span>
+            <span class="n">sum_val</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">40</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt;&gt; No previous bits, ==&gt; sum_val = </span><span class="si">{</span><span class="n">sum_val</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">idx_</span><span class="p">,</span> <span class="n">bit_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prev_bits</span><span class="p">):</span><span class="c1">#[::-1]):</span>
+                <span class="n">sum_val</span> <span class="o">+=</span> <span class="n">bit_</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">idx_</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">PhasedXZGate</span><span class="p">(</span>
+            <span class="n">x_exponent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">z_exponent</span><span class="o">=-</span><span class="mi">2</span><span class="o">*</span><span class="n">sum_val</span><span class="p">,</span> <span class="n">axis_phase_exponent</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qubit</span><span class="p">)</span></div>
+
+
+<span class="c1">### Not currently used, should be updated in the future.</span>
+<div class="viewcode-block" id="Trotter_Unitary">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.PhaseEstimation.html#src.pyLIQTR.PhaseEstimation.pe_gates.Trotter_Unitary">[docs]</a>
+<span class="k">class</span> <span class="nc">Trotter_Unitary</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Gate</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tgt_qubit</span><span class="p">,</span> <span class="n">reg_qubits</span><span class="p">,</span> <span class="n">prec_order</span><span class="p">,</span> <span class="n">operator_power</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="c1"># Qubit stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tgt_qubit</span>    <span class="o">=</span> <span class="n">tgt_qubit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reg_qubits</span>   <span class="o">=</span> <span class="n">reg_qubits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prec_order</span>   <span class="o">=</span> <span class="n">prec_order</span>
+        
+        <span class="c1"># Trotter param stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trotter_args</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ev_time</span>      <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trot_num</span>     <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trot_ord</span>     <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Get these from the kwargs dictionary</span>
+        <span class="k">if</span> <span class="s1">&#39;ev_time&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trotter_args</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ev_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trotter_args</span><span class="p">[</span><span class="s1">&#39;ev_time&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s1">&#39;trot_num&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trotter_args</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trot_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trotter_args</span><span class="p">[</span><span class="s1">&#39;trot_num&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s1">&#39;trot_ord&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trotter_args</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trot_ord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trotter_args</span><span class="p">[</span><span class="s1">&#39;trot_ord&#39;</span><span class="p">]</span>
+
+        <span class="c1"># apply jordan-wigner transform</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trotter_args</span><span class="p">[</span><span class="s1">&#39;mol_ham&#39;</span><span class="p">],</span> <span class="n">QubitOperator</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">jw_ham</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trotter_args</span><span class="p">[</span><span class="s1">&#39;mol_ham&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">jw_ham</span> <span class="o">=</span> <span class="n">jordan_wigner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trotter_args</span><span class="p">[</span><span class="s1">&#39;mol_ham&#39;</span><span class="p">])</span>
+
+        <span class="c1"># Else:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator_power</span> <span class="o">=</span> <span class="n">operator_power</span>
+
+        <span class="c1"># A circuit:</span>
+        <span class="c1"># self.build_circuit = cirq.Circuit()</span>
+
+
+    <span class="k">def</span> <span class="nf">_num_qubits_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reg_qubits</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_decompose_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qubits</span><span class="p">):</span>    
+    
+        <span class="c1"># Note: need factor of 2 bc of way OF trotterizes...</span>
+        <span class="c1"># Note: Since we&#39;re doing this in a for loop below, the jw_ham**2**1 is always **2**1, bc we&#39;re putting them next to eachother.</span>
+        <span class="n">jw_ham_trotterized_generator</span> <span class="o">=</span> <span class="n">trotterize_exp_qubop_to_qasm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jw_ham</span><span class="o">*</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">operator_power</span><span class="p">,</span> <span class="n">evolution_time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ev_time</span><span class="p">,</span> <span class="n">trotter_number</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trot_num</span><span class="p">,</span> <span class="n">trotter_order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trot_ord</span><span class="p">)</span>
+        <span class="n">jw_ham_trotterized_circuit</span>   <span class="o">=</span> <span class="n">open_fermion_to_qasm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">(),</span> <span class="n">jw_ham_trotterized_generator</span><span class="p">,</span> <span class="n">reg_name</span><span class="o">=</span><span class="s1">&#39;reg&#39;</span><span class="p">)</span> 
+        <span class="n">tmp_circuit</span>                  <span class="o">=</span> <span class="n">qasm_import</span><span class="o">.</span><span class="n">circuit_from_qasm</span><span class="p">(</span><span class="n">jw_ham_trotterized_circuit</span><span class="p">)</span>
+
+        <span class="c1"># Apply control operations on the z-rotations:</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">prec_order</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">tmp_circuit</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s1">&#39;Rz&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+                        <span class="n">angle</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;π&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">angle</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>             
+                        <span class="n">new_op</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">ControlledGate</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Rz</span><span class="p">(</span><span class="n">rads</span><span class="o">=</span><span class="n">angle</span><span class="p">))</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tgt_qubit</span><span class="p">,</span><span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="c1"># print(&#39;-----------&#39;)</span>
+                        <span class="c1"># print(new_op)</span>
+                        <span class="c1"># print(type(new_op))</span>
+                        <span class="k">yield</span><span class="p">(</span><span class="n">new_op</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">yield</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+        
+        <span class="c1">### ---&gt; Old, was here, not tested &lt;---</span>
+        <span class="c1"># jw_ham_trotterized_generator = trotterize_exp_qubop_to_qasm(self.jw_ham*2**(self.prec_order+1), evolution_time=self.ev_time, trotter_number=self.trot_num, trotter_order=self.trot_ord)</span>
+        <span class="c1"># jw_ham_trotterized_circuit   = open_fermion_to_qasm(self.num_qubits, jw_ham_trotterized_generator, reg_name=&#39;reg&#39;) </span>
+        <span class="c1"># tmp_circuit                  = qasm_import.circuit_from_qasm(jw_ham_trotterized_circuit)</span>
+        <span class="c1"># </span>
+        <span class="c1"># Apply control operations on the z-rotations:</span>
+        <span class="c1"># for moment in tmp_circuit:</span>
+        <span class="c1">#     for op in moment:</span>
+        <span class="c1">#         if &#39;Rz&#39; in str(op):</span>
+        <span class="c1">#             angle = float(str(op.gate).split(&#39;(&#39;)[-1].split(&#39;π&#39;)[0])</span>
+        <span class="c1">#     </span>
+        <span class="c1">#             angle *= np.pi # TODO: Check this factor of 2</span>
+        <span class="c1">#             # angle *= 2**(precision_order)</span>
+        <span class="c1">#     </span>
+        <span class="c1">#             new_op = cirq.ControlledGate(cirq.Rz(rads=angle)).on(self.precision_qubit,op.qubits[0])</span>
+        <span class="c1">#             yield (new_op)</span>
+        <span class="c1">#         else:</span>
+        <span class="c1">#             yield (op)</span>
+        <span class="c1">### ---&gt; End of Old, was here, not tested &lt;---</span>
+        
+
+    <span class="k">def</span> <span class="nf">_circuit_diagram_info_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;c-U**2**</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prec_order</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PhaseOffset">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.PhaseEstimation.html#src.pyLIQTR.PhaseEstimation.pe_gates.PhaseOffset">[docs]</a>
+<span class="k">class</span> <span class="nc">PhaseOffset</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Gate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A gate for adding a phase offset to the |1&gt; portion of a Hadamard|0&gt;&#39;ed state. This is for </span>
+<span class="sd">    GSE, but is implemented in PE bc of how the circuit is built</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        qubit : the cirq qubit that the gate is acting on</span>
+
+<span class="sd">        phase_offset : the phase offset to be applied</span>
+
+<span class="sd">        verbose : A boolean flag. Set to True to get debug info output to screen</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        N/A : Does stick the gate in the circuit where you want it.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qubit</span><span class="p">,</span> <span class="n">phase_offset</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qubit</span>        <span class="o">=</span> <span class="n">qubit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase_offset</span> <span class="o">=</span> <span class="n">phase_offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span>      <span class="o">=</span> <span class="n">verbose</span>
+
+    <span class="k">def</span> <span class="nf">_num_qubits_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_circuit_diagram_info_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;PhaseOffset </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_offset</span><span class="si">:</span><span class="s1">0.2f</span><span class="si">}</span><span class="s1">&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_decompose_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qubits</span><span class="p">):</span>
+
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">PhasedXZGate</span><span class="p">(</span>
+            <span class="n">x_exponent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">z_exponent</span><span class="o">=-</span><span class="mi">1</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_offset</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">axis_phase_exponent</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qubit</span><span class="p">)</span></div>
+
+
+    <span class="c1">###</span>
+    <span class="c1">### Not used bc doesnt decompose well into clifford+t</span>
+    <span class="c1">###</span>
+    <span class="c1"># def _unitary_(self):</span>
+         
+    <span class="c1">#     exp_val = np.exp(-1j*self.phase_offset)</span>
+    <span class="c1">#     if self.verbose:</span>
+    <span class="c1">#         print(&#39;-&#39;*40)</span>
+    <span class="c1">#         print(f&#39;&gt;&gt; Phase Offset= {self.phase_offset}&#39;)</span>
+
+    <span class="c1">#     return np.array([</span>
+    <span class="c1">#         [1.0,   0.0  ],</span>
+    <span class="c1">#         [0.0, exp_val],</span>
+    <span class="c1">#     ])</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

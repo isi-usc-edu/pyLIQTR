@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.operators.prepare_FirstQuantized &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.operators.prepare_FirstQuantized</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.circuits.operators.prepare_FirstQuantized</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">attrs</span> <span class="kn">import</span> <span class="n">frozen</span>
+
+<span class="kn">from</span> <span class="nn">qualtran</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Bloq</span><span class="p">,</span>
+    <span class="n">BloqBuilder</span><span class="p">,</span>
+    <span class="n">BoundedQUInt</span><span class="p">,</span>
+    <span class="n">QAny</span><span class="p">,</span>
+    <span class="n">QBit</span><span class="p">,</span>
+    <span class="n">Register</span><span class="p">,</span>
+    <span class="n">Signature</span><span class="p">,</span>
+    <span class="n">Soquet</span><span class="p">,</span>
+    <span class="n">SoquetT</span><span class="p">,</span>
+    <span class="n">Side</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.block_encoding.lcu_select_and_prepare</span> <span class="kn">import</span> <span class="n">PrepareOracle</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.chemistry.pbc.first_quantization.select_and_prepare</span> <span class="kn">import</span> <span class="n">PrepareTUVSuperpositions</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.basic_gates</span> <span class="kn">import</span> <span class="n">Hadamard</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.UniformSuperpositionIJ</span> <span class="kn">import</span> <span class="n">UniformSuperpositionIJFirstQuantization</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.PrepareT_FirstQuantized</span> <span class="kn">import</span> <span class="n">PrepareT_FirstQuantized</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.PrepareUV_FirstQuantized</span> <span class="kn">import</span> <span class="n">PrepareUVFirstQuantization</span>
+
+<div class="viewcode-block" id="PrepareFirstQuantization">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization">[docs]</a>
+<span class="nd">@frozen</span>
+<span class="k">class</span> <span class="nc">PrepareFirstQuantization</span><span class="p">(</span><span class="n">PrepareOracle</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;State preparation for the first quantized chemistry Hamiltonian.</span>
+
+<span class="sd">    Prepares the state in Eq. 48 of the reference.</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        &amp;(\\cos\\theta|0\\rangle+\\sin\\theta|1\\rangle)|+\\rangle\\frac{1}{\\sqrt{\\eta}}\\left( \\sqrt{\eta-1}|0\\rangle\\sum_{i\\neq j=1}^\\eta |i\\rangle|j\\rangle + |1\\rangle\\sum_{j=1}^\\eta |j\\rangle|j\\rangle \\right) \\left( \\frac{1}{\\sqrt{3}}\\sum_{w=0}^2|w\\rangle \\right)\\\\</span>
+<span class="sd">        &amp;\\otimes \\left( \\frac{1}{2^{n_p-1}-1} \\sum_{r,s=0}^{n_p-2} 2^{(r+s)/2}|r\\rangle|s\\rangle \\right) \\left( \\sqrt{\\frac{\\lambda_U}{\\lambda_U+\\lambda_V}}|0\\rangle + \\sqrt{\\frac{\\lambda_V}{\\lambda_U+\\lambda_V}}|1\\rangle\\right)\\\\</span>
+<span class="sd">        &amp;\\otimes \\left( \\sqrt{\\frac{p_\\nu}{\\lambda_\\nu}}|0\\rangle\\sum_{\\nu\\in G_0}\\frac{1}{||\\nu||}|\\nu\\rangle + \\sqrt{1-p_\\nu}|1\\rangle|\\nu^\\perp\\rangle \\right) \\left( \\frac{1}{\\sqrt{\\sum_\\ell\\zeta_\\ell}} \\sum_{\\ell=1}^L \\sqrt{\\zeta_\\ell}|\\ell\\rangle \\right)</span>
+
+<span class="sd">    Registers:</span>
+
+<span class="sd">    .. line-block::</span>
+<span class="sd">        tuv: Flag register for selecting between kinetic and potential terms in the Hamiltonian.</span>
+<span class="sd">        uv: Flag register for selecting between the different potential components of the Hamiltonian.</span>
+<span class="sd">        i: A register for selecting electronic registers.</span>
+<span class="sd">        j: A register for selecting electronic registers.</span>
+<span class="sd">        w: A register for selecting x, y and z components of the momentum register.</span>
+<span class="sd">        r: A register for controlling elements of the momentum register. Used for block encodiding kinetic energy operator.</span>
+<span class="sd">        s: A register for controlling elements of the momentum register. Used for block encodiding kinetic energy operator.</span>
+<span class="sd">        mu: A register used for implementing nested boxes for the momentum state preparation.</span>
+<span class="sd">        nu_x: x component of the momentum register for Coulomb potential.</span>
+<span class="sd">        nu_y: y component of the momentum register for Coulomb potential.</span>
+<span class="sd">        nu_z: z component of the momentum register for Coulomb potential.</span>
+<span class="sd">        m: an ancilla register in a uniform superposition.</span>
+<span class="sd">        l: The register for selecting the nuclei.</span>
+<span class="sd">        succ_nu: Flag for success of the UV state preparation.</span>
+<span class="sd">        plus_t: Qubit used for phasing.</span>
+<span class="sd">        succ_i:Qubit flagging success of the uniform superposition preparation for register i.</span>
+<span class="sd">        succ_j: Qubit flagging success of the uniform superposition preparation for register j.</span>
+<span class="sd">        flag_equal:Qubit flagging the states where :math:`i=j`.</span>
+<span class="sd">        less_than_ancilla: Qubits used for inequality test in uniform superposition preparation on i and j.</span>
+<span class="sd">        rotation_ancilla: Qubits rotated for amplitude amplification on i and j.</span>
+<span class="sd">        T_less_than_ancilla: Qubits used for inequality test in uniform superposition preparation in PrepareT.</span>
+<span class="sd">        T_rotation_ancilla: Qubits rotated for amplitude amplification in PrepareT.</span>
+<span class="sd">        catalytic: The catalytic state for controlled Hadamards.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        `Fault-Tolerant Quantum Simulations of Chemistry in First Quantization &lt;https://arxiv.org/abs/2105.12767&gt;`_</span>
+
+<span class="sd">    :param int num_bits_p: The number of bits to represent each dimension of the momentum register.</span>
+<span class="sd">    :param int eta: The number of electrons.</span>
+<span class="sd">    :param int num_atoms: The number of atoms. $L$ in the reference.</span>
+<span class="sd">    :param int lambda_zeta: The sum of nuclear charges.</span>
+<span class="sd">    :param int m_param: $\mathcal{M}$ in the reference.</span>
+<span class="sd">    :param int num_bits_nuc_pos: The number of bits of precision for representing the nuclear coordinates.</span>
+<span class="sd">    :param int num_bits_t: The number of bits of precision for the state preparation</span>
+<span class="sd">        over the register selecting between the different components of the</span>
+<span class="sd">        Hamiltonian.</span>
+<span class="sd">    :param int num_bits_rot_aa: The number of bits of precision for the rotation for</span>
+<span class="sd">        amplitude amplification.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">num_bits_p</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">eta</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">num_atoms</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">lambda_zeta</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">m_param</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">8</span>
+    <span class="n">num_bits_nuc_pos</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">num_bits_t</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">num_bits_rot_aa</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">selection_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Register</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="n">n_nu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">n_eta</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">n_at</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_atoms</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">n_m</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_param</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;tuv&#39;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">()),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;uv&#39;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">()),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">n_eta</span><span class="p">,</span> <span class="n">iteration_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">)),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;j&#39;</span><span class="p">,</span> <span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">n_eta</span><span class="p">,</span> <span class="n">iteration_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">)),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="mi">3</span><span class="p">)),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">)),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">)),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">)),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;nu_x&quot;</span><span class="p">,</span> <span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">n_nu</span><span class="p">)),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;nu_y&quot;</span><span class="p">,</span> <span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">n_nu</span><span class="p">)),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;nu_z&quot;</span><span class="p">,</span> <span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">n_nu</span><span class="p">)),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">n_m</span><span class="p">)),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">n_at</span><span class="p">)),</span>
+        <span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">junk_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Register</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;succ_nu&quot;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">()),</span> 
+            <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;plus_t&quot;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">()),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;succ_i&#39;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">(),</span> <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;succ_j&#39;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">(),</span> <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;flag_equal&#39;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">(),</span> <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;less_than_ancilla&#39;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">(),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;rotation_ancilla&#39;</span><span class="p">,</span> <span class="n">QBit</span><span class="p">(),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;T_less_than_ancilla&#39;</span><span class="p">,</span><span class="n">QBit</span><span class="p">()),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;T_rotation_ancilla&#39;</span><span class="p">,</span><span class="n">QBit</span><span class="p">()),</span>
+            <span class="n">Register</span><span class="p">(</span><span class="s1">&#39;catalytic&#39;</span><span class="p">,</span><span class="n">QBit</span><span class="p">()))</span>
+
+
+<div class="viewcode-block" id="PrepareFirstQuantization.pretty_name">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.pretty_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">pretty_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s1">&#39;PREP&#39;</span></div>
+
+
+<div class="viewcode-block" id="PrepareFirstQuantization.build_composite_bloq">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.build_composite_bloq">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_composite_bloq</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">bb</span><span class="p">:</span> <span class="n">BloqBuilder</span><span class="p">,</span>
+        <span class="n">tuv</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">uv</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">plus_t</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">i</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">j</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">w</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">r</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">s</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">T_less_than_ancilla</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">T_rotation_ancilla</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">catalytic</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">mu</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">nu_x</span><span class="p">:</span> <span class="n">Soquet</span><span class="p">,</span>
+        <span class="n">nu_y</span><span class="p">:</span> <span class="n">Soquet</span><span class="p">,</span>
+        <span class="n">nu_z</span><span class="p">:</span> <span class="n">Soquet</span><span class="p">,</span>
+        <span class="n">m</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">succ_nu</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+        <span class="n">l</span><span class="p">:</span> <span class="n">SoquetT</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;SoquetT&#39;</span><span class="p">]:</span>
+        <span class="n">tuv</span><span class="p">,</span> <span class="n">uv</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">PrepareTUVSuperpositions</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_bits_t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambda_zeta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits_rot_aa</span>
+            <span class="p">),</span>
+            <span class="n">tuv</span><span class="o">=</span><span class="n">tuv</span><span class="p">,</span>
+            <span class="n">uv</span><span class="o">=</span><span class="n">uv</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">succ_i</span><span class="p">,</span> <span class="n">succ_j</span><span class="p">,</span> <span class="n">flag_equal</span><span class="p">,</span> <span class="n">less_than_ancilla</span><span class="p">,</span> <span class="n">rotation_ancilla</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">UniformSuperpositionIJFirstQuantization</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">),</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># # |+&gt;</span>
+        <span class="n">plus_t</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Hadamard</span><span class="p">(),</span> <span class="n">q</span><span class="o">=</span><span class="n">plus_t</span><span class="p">)</span>
+
+        <span class="n">w</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">T_less_than_ancilla</span><span class="p">,</span> <span class="n">T_rotation_ancilla</span><span class="p">,</span> <span class="n">catalytic</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">PrepareT_FirstQuantized</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">),</span>
+            <span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">,</span>
+            <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span>
+            <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">,</span>
+            <span class="n">less_than_ancilla</span><span class="o">=</span><span class="n">T_less_than_ancilla</span><span class="p">,</span>
+            <span class="n">rot_ancilla</span><span class="o">=</span><span class="n">T_rotation_ancilla</span><span class="p">,</span>
+            <span class="n">catalytic</span><span class="o">=</span><span class="n">catalytic</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">mu</span><span class="p">,</span> <span class="p">[</span><span class="n">nu_x</span><span class="p">,</span> <span class="n">nu_y</span><span class="p">,</span> <span class="n">nu_z</span><span class="p">],</span> <span class="n">m</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">succ_nu</span><span class="p">,</span> <span class="n">catalytic</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">PrepareUVFirstQuantization</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_bits_p</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_atoms</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">m_param</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lambda_zeta</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_bits_nuc_pos</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span>
+            <span class="n">nu</span><span class="o">=</span><span class="p">[</span><span class="n">nu_x</span><span class="p">,</span> <span class="n">nu_y</span><span class="p">,</span> <span class="n">nu_z</span><span class="p">],</span>
+            <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
+            <span class="n">l</span><span class="o">=</span><span class="n">l</span><span class="p">,</span>
+            <span class="n">flag_nu</span><span class="o">=</span><span class="n">succ_nu</span><span class="p">,</span>
+            <span class="n">catalytic</span><span class="o">=</span><span class="n">catalytic</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;tuv&#39;</span><span class="p">:</span> <span class="n">tuv</span><span class="p">,</span>
+            <span class="s1">&#39;uv&#39;</span><span class="p">:</span> <span class="n">uv</span><span class="p">,</span>
+            <span class="s1">&#39;plus_t&#39;</span><span class="p">:</span> <span class="n">plus_t</span><span class="p">,</span>
+            <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
+            <span class="s1">&#39;j&#39;</span><span class="p">:</span> <span class="n">j</span><span class="p">,</span>
+            <span class="s1">&#39;succ_i&#39;</span><span class="p">:</span><span class="n">succ_i</span><span class="p">,</span>
+            <span class="s1">&#39;succ_j&#39;</span><span class="p">:</span><span class="n">succ_j</span><span class="p">,</span>
+            <span class="s1">&#39;flag_equal&#39;</span><span class="p">:</span><span class="n">flag_equal</span><span class="p">,</span>
+            <span class="s1">&#39;less_than_ancilla&#39;</span><span class="p">:</span><span class="n">less_than_ancilla</span><span class="p">,</span>
+            <span class="s1">&#39;rotation_ancilla&#39;</span><span class="p">:</span><span class="n">rotation_ancilla</span><span class="p">,</span>
+            <span class="s1">&#39;w&#39;</span><span class="p">:</span> <span class="n">w</span><span class="p">,</span>
+            <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="n">r</span><span class="p">,</span>
+            <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span>
+            <span class="s1">&#39;T_less_than_ancilla&#39;</span><span class="p">:</span><span class="n">T_less_than_ancilla</span><span class="p">,</span>
+            <span class="s1">&#39;T_rotation_ancilla&#39;</span><span class="p">:</span><span class="n">T_rotation_ancilla</span><span class="p">,</span>
+            <span class="s1">&#39;catalytic&#39;</span><span class="p">:</span><span class="n">catalytic</span><span class="p">,</span>
+            <span class="s1">&#39;mu&#39;</span><span class="p">:</span> <span class="n">mu</span><span class="p">,</span>
+            <span class="s1">&#39;nu_x&#39;</span><span class="p">:</span> <span class="n">nu_x</span><span class="p">,</span>
+            <span class="s1">&#39;nu_y&#39;</span><span class="p">:</span> <span class="n">nu_y</span><span class="p">,</span>
+            <span class="s1">&#39;nu_z&#39;</span><span class="p">:</span> <span class="n">nu_z</span><span class="p">,</span>
+            <span class="s1">&#39;m&#39;</span><span class="p">:</span> <span class="n">m</span><span class="p">,</span>
+            <span class="s1">&#39;l&#39;</span><span class="p">:</span> <span class="n">l</span><span class="p">,</span>
+            <span class="s1">&#39;succ_nu&#39;</span><span class="p">:</span> <span class="n">succ_nu</span><span class="p">,</span>
+        <span class="p">}</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

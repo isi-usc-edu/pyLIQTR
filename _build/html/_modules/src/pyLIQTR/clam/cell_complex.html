@@ -1,0 +1,592 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.clam.cell_complex &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.clam.cell_complex</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.clam.cell_complex</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###       CellComplex - Routines to generate cell / similical complexes      ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###      NOTE:  Routes in this module are specified with a heavy abuse </span>
+<span class="c1">###             of notation and terminology.  </span>
+<span class="c1">###</span>
+
+
+
+<span class="kn">import</span>  <span class="nn">numpy</span>           <span class="k">as</span>      <span class="nn">np</span>
+<span class="kn">from</span>    <span class="nn">pyLIQTR.clam.utilities</span>  <span class="kn">import</span>  <span class="n">listify</span><span class="p">,</span> <span class="n">tupleize</span><span class="p">,</span> <span class="n">tupleize_sites</span>
+
+
+
+<span class="c1">############################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   CLASS     Cell</span>
+<span class="c1">###</span>
+<span class="c1">############################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Defines a K-th order cell in a cell complex, where the topological </span>
+<span class="c1">###      dimension K is defined by the speicified basis elements (e.g., the</span>
+<span class="c1">###      designation must be internally consistent).</span>
+<span class="c1">###</span>
+<span class="c1">###   CONSTRUCTOR ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      basis      -    Basis elements that specify the cell. Dimensionality</span>
+<span class="c1">###                      is defined by the basis; to borrow from simplicial </span>
+<span class="c1">###                      complexes, a 0-cell is a single point, a 1-cell is </span>
+<span class="c1">###                      a line, a 2-cell is face / plaquette, etc.  </span>
+<span class="c1">###</span>
+<span class="c1">###      props      -    List of properties that are tagged to the cell. These</span>
+<span class="c1">###                      are formally arbitrary though derived classes can</span>
+<span class="c1">###                      associate Pauli / Fermionic operators with the cell</span>
+<span class="c1">###                      (e.g., operators acting on a lattice site or along </span>
+<span class="c1">###                      a bond.)   (KEYWORD, OPTIONAL)</span>
+<span class="c1">###</span>
+<span class="c1">###     boundary    -    List of cells that constitute the boundary of the current</span>
+<span class="c1">###                      cell.  For a 2-chain these would be bounding 1-chains, etc.</span>
+<span class="c1">###                      (KEYWORD, OPTIONAL)</span>
+<span class="c1">###</span>
+<span class="c1">###     label       -    Label associated with cell.  Essentially a one-off property that</span>
+<span class="c1">###                      is distinguished from other properties for referrential simplicity.</span>
+<span class="c1">###                      (KEYWORD, OPTIONAL)</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      Cell       -    Instance of the Cell Class</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy          as  np</span>
+<span class="c1">###      utilities      import listify, tupleize, tupleize_sites</span>
+<span class="c1">###</span>
+<span class="c1">###   PUBLIC MEMBERS</span>
+<span class="c1">###</span>
+<span class="c1">###      basis      -    Basis elements that define the cell</span>
+<span class="c1">###      dim        -    Dimension of basis (number of basis elements)</span>
+<span class="c1">###      edim       -    Dimension of the embedding space; e.g. the </span>
+<span class="c1">###                      dimension of a single basis element.  </span>
+<span class="c1">###      K          -    Topological dimension of the cell; equal to </span>
+<span class="c1">###                      (dim - 1)</span>
+<span class="c1">###      label      -    Label associated with the cell</span>
+<span class="c1">###      clabel     -    Additional label for internal use by user-defined</span>
+<span class="c1">###                      routines</span>
+<span class="c1">###      props      -    Cell properties</span>
+<span class="c1">###      boundary   -    Cell boundary</span>
+<span class="c1">###</span>
+<span class="c1">###   PUBLIC ROUTINES</span>
+<span class="c1">###</span>
+<span class="c1">###      tupleize()    </span>
+<span class="c1">###        </span>
+<span class="c1">###           Convert basis elements of the cell from python lists / </span>
+<span class="c1">###           numpy arrays to tuples.</span>
+<span class="c1">###</span>
+<span class="c1">###     set_label(label)</span>
+<span class="c1">###</span>
+<span class="c1">###           Set the label of the cell to label</span>
+<span class="c1">###</span>
+<span class="c1">###   MAGIC ROUTINES  </span>
+<span class="c1">###</span>
+<span class="c1">###     __str__()</span>
+<span class="c1">###</span>
+<span class="c1">###           Pretty-printing of comprehensive cell attributes.</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="Cell">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.cell_complex.Cell">[docs]</a>
+<span class="k">class</span> <span class="nc">Cell</span><span class="p">():</span>
+
+
+    <span class="c1">##  __init__()</span>
+    <span class="c1">## ---------------------------------------</span>
+    <span class="c1">##  Cell constructor. </span>
+    <span class="c1">##</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">basis</span><span class="p">,</span><span class="n">props</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boundary</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">basis</span>        <span class="o">=</span>  <span class="p">[]</span>                   <span class="c1"># Cell basis vectors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basis_cells</span>  <span class="o">=</span>  <span class="p">[]</span>                   <span class="c1"># Basis cells</span>
+
+
+        <span class="c1"># Determine if basis is passed as tuples or as </span>
+        <span class="c1"># other cells.</span>
+
+        <span class="k">if</span> <span class="p">(</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">basis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Cell</span><span class="p">)</span> <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">basis</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">basis</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">basis</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">basis_cells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">basis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> 
+               <span class="nb">isinstance</span><span class="p">(</span><span class="n">basis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">list</span><span class="p">)</span>  <span class="ow">or</span> 
+               <span class="nb">isinstance</span><span class="p">(</span><span class="n">basis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">basis</span>        <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Cell:  Invalid basis specification.&quot;</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span>       <span class="o">=</span>  <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)</span>           <span class="c1"># Dimension basis </span>
+                                                    <span class="c1"># (e.g., number of basis elements)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edim</span>      <span class="o">=</span>  <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>        <span class="c1"># Dimension of embedding space </span>
+                                                    <span class="c1"># (e.g., basis array dimension)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">K</span>         <span class="o">=</span>  <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>         <span class="c1"># Topological dimension of cell</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span>     <span class="o">=</span>  <span class="n">label</span>                     <span class="c1"># Cell label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clabel</span>    <span class="o">=</span>  <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span>     <span class="o">=</span>  <span class="n">props</span>                     <span class="c1"># Cell properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span>  <span class="o">=</span>  <span class="n">boundary</span>                  <span class="c1"># Boundary cells            </span>
+
+
+
+    <span class="c1">##  tupleize()</span>
+    <span class="c1">## ---------------------------------------</span>
+    <span class="c1">##  Convert basis elements of the cell</span>
+    <span class="c1">##  from python lists / numpy arrays to </span>
+    <span class="c1">##  tuples. </span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="Cell.tupleize">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.cell_complex.Cell.tupleize">[docs]</a>
+    <span class="k">def</span> <span class="nf">tupleize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basis</span> <span class="o">=</span> <span class="n">tupleize_sites</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)</span></div>
+
+
+
+
+    <span class="c1">##  set_label(label)</span>
+    <span class="c1">## ---------------------------------------</span>
+    <span class="c1">##  Set the label for a given cell to </span>
+    <span class="c1">##  &lt;label&gt;.  Useful for routines that </span>
+    <span class="c1">##  relabel cells within a complex by </span>
+    <span class="c1">##  connectivity or some other property.</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="Cell.set_label">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.cell_complex.Cell.set_label">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">label</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span></div>
+
+
+
+
+    <span class="c1">##  __str__()</span>
+    <span class="c1">## ---------------------------------------</span>
+    <span class="c1">##  Canonical printing routines for cell</span>
+    <span class="c1">##  class instances.</span>
+    <span class="c1">##</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">K</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;-Cell&quot;</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot; (&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;)&quot;</span>
+        
+        <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;: [ &quot;</span>
+        <span class="n">string</span> <span class="o">+=</span>  <span class="s2">&quot;K=&quot;</span>       <span class="o">+</span>  <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">K</span><span class="p">)</span>
+        <span class="n">string</span> <span class="o">+=</span>  <span class="s2">&quot;, dim=&quot;</span>    <span class="o">+</span>  <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+        <span class="n">string</span> <span class="o">+=</span>  <span class="s2">&quot;, edim=&quot;</span>  <span class="o">+</span>  <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edim</span><span class="p">)</span>
+        <span class="n">string</span> <span class="o">+=</span>  <span class="s2">&quot;, Basis=&quot;</span>  <span class="o">+</span>  <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;, Prop=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">)</span>
+
+        <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot; ]&quot;</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></div>
+
+    
+
+
+
+
+<span class="c1">############################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   CLASS     CellComplex</span>
+<span class="c1">###</span>
+<span class="c1">############################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Associates a set of cells into a cell complex.  Comprised of cells</span>
+<span class="c1">###      up to a maximal topological dimension K.  This class is globally</span>
+<span class="c1">###      tracked so that each complex has a unique index (for parsing cells </span>
+<span class="c1">###      shared between overlapping complexes)</span>
+<span class="c1">###</span>
+<span class="c1">###   CONSTRUCTOR ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###     NOTE:  Either a &lt;dim&gt; or a &lt;K&gt; keyword argument must be specified </span>
+<span class="c1">###            at instantiation or an exception will be thrown.  Setting one </span>
+<span class="c1">###            attribute will automatically set the other.</span>
+<span class="c1">###</span>
+<span class="c1">###      K          -    Maximum topological dimension of complex (KEYWORD, QUASI-REQUIRED).</span>
+<span class="c1">###      dim        -    Maximal &quot;natural&quot; dimension of the cell complex. Equals (K+!)</span>
+<span class="c1">###                      (KEYWORD, QUASI-REQUIRED).</span>
+<span class="c1">###</span>
+<span class="c1">###     label       -    Label associated with the cell complex.</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      CellComplex  -    Instance of the CellComplex class</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy          as  np</span>
+<span class="c1">###      utilities      import listify, tupleize, tupleize_sites</span>
+<span class="c1">###</span>
+<span class="c1">###   PUBLIC MEMBERS</span>
+<span class="c1">###</span>
+<span class="c1">###      skeletons   -   (K+1)-dimensional array, where each element is a list</span>
+<span class="c1">###                      of cells in the k-skeleton.</span>
+<span class="c1">###      dim        -    Dimension of basis (number of basis elements)</span>
+<span class="c1">###      K          -    Topological dimension of the cell; equal to (dim - 1)</span>
+<span class="c1">###</span>
+<span class="c1">###   PUBLIC ROUTINES</span>
+<span class="c1">###</span>
+<span class="c1">###      add(cell_set) </span>
+<span class="c1">###        </span>
+<span class="c1">###           Add cells in the list &lt;cell_set&gt; to the k-skeleton of the </span>
+<span class="c1">###           complex.  The topological dimension k is automatically determined</span>
+<span class="c1">###           for each cell in the list.</span>
+<span class="c1">###</span>
+<span class="c1">###   MAGIC ROUTINES  </span>
+<span class="c1">###</span>
+<span class="c1">###     __str__()</span>
+<span class="c1">###</span>
+<span class="c1">###           Pretty-printing of comprehensive cell attributes.</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="CellComplex">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.cell_complex.CellComplex">[docs]</a>
+<span class="k">class</span> <span class="nc">CellComplex</span><span class="p">():</span>
+
+    <span class="n">__complex_count_global</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Global to number each cell complex as it is added; not currently used but</span>
+    <span class="c1"># slated for future use.</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">K</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="c1"># self.complex_id = deepcopy(self.__complex_count_global)</span>
+        <span class="c1"># self.__complex_count_global += 1</span>
+        <span class="c1">#</span>
+        <span class="c1"># Add unique label for position in each complex</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span>  <span class="o">=</span>  <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span>      <span class="o">=</span>  <span class="n">label</span>
+
+        <span class="k">if</span>   <span class="p">(</span> <span class="p">(</span><span class="n">K</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">dim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">K</span>     <span class="o">=</span>  <span class="n">K</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dim</span>   <span class="o">=</span>  <span class="n">K</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">elif</span> <span class="p">(</span> <span class="p">(</span><span class="n">K</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">dim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dim</span>   <span class="o">=</span>  <span class="n">dim</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">K</span>     <span class="o">=</span>  <span class="n">dim</span><span class="o">-</span><span class="mi">1</span>
+        <span class="k">elif</span> <span class="p">(</span> <span class="p">(</span><span class="n">K</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">dim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="p">):</span> 
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Cannot specify both dim and K for CellComplex.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Must specify either K or dim for CellComplex.&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+    
+
+    
+    <span class="c1">##  add(S_set)</span>
+    <span class="c1">## </span>
+    <span class="c1">##      Add cells in the list S_set to a CellComplex instance.</span>
+    <span class="c1">##   </span>
+     
+<div class="viewcode-block" id="CellComplex.add">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.cell_complex.CellComplex.add">[docs]</a>
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S_set</span><span class="p">):</span>                         <span class="c1"># add a cell to the complex</span>
+
+        <span class="n">S_set</span> <span class="o">=</span> <span class="n">listify</span><span class="p">(</span><span class="n">S_set</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">S_set</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">K</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">K</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Cell dimension (&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">K</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;) is greater that maximal skeleton dimension (&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">K</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;)&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">clabel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+
+                <span class="n">cell_label</span>    <span class="o">=</span>  <span class="s2">&quot;c.&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">K</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;.&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="n">S</span><span class="o">.</span><span class="n">K</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">S</span><span class="o">.</span><span class="n">cell_label</span>  <span class="o">=</span>  <span class="n">cell_label</span>
+
+            <span class="c1"># check if subcells are already part of complex; if not, we add them.</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="n">S</span><span class="o">.</span><span class="n">K</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+            
+        <span class="k">return</span></div>
+
+    
+
+
+    <span class="c1">##  __str__()</span>
+    <span class="c1">## </span>
+    <span class="c1">##      Canonical printing routines for CellComplex instances.</span>
+    <span class="c1">##</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">):</span>
+
+            <span class="n">skeleton</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+            <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;-Skeleton:&quot;</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+
+            <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">skeleton</span><span class="p">:</span>
+                <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">+</span><span class="n">cell</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">############################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   CLASS     OperatorCell</span>
+<span class="c1">###</span>
+<span class="c1">############################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Cell explicitly associated with quantum operators. Derived from </span>
+<span class="c1">###      Cell class.</span>
+<span class="c1">###</span>
+<span class="c1">###   CONSTRUCTOR ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      basis      -    Basis elements used to specify the cell.  Dimensionality</span>
+<span class="c1">###                      is defined by it&#39;s basis; to borrow from the simplicial </span>
+<span class="c1">###                      context, a 0-cell is a single point, a 1-cell is a line, </span>
+<span class="c1">###                      a 2-cell is face / plaquette, etc.   (REQUIRED)</span>
+<span class="c1">###</span>
+<span class="c1">###      ops        -    List of operators associated with cell.</span>
+<span class="c1">###      cons       -    List of constants associated with the operators.</span>
+<span class="c1">###</span>
+<span class="c1">###     boundary    -    List of cells that constitute the boundary of the current</span>
+<span class="c1">###                      cell.  For a 2-chain these would be bounding 1-chains, etc.</span>
+<span class="c1">###                      (KEYWORD, OPTIONAL)</span>
+<span class="c1">###</span>
+<span class="c1">###     label       -    Label associated with cell.  Essentially a one-off property that</span>
+<span class="c1">###                      is distinguished from other properties for referrential simplicity.</span>
+<span class="c1">###                      (KEYWORD, OPTIONAL)</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      Cell       -    Instance of the Cell Class</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy          as  np</span>
+<span class="c1">###      utilities      import listify, tupleize, tupleize_sites</span>
+<span class="c1">###</span>
+<span class="c1">###   PUBLIC MEMBERS (see also parent class Cell)</span>
+<span class="c1">###</span>
+<span class="c1">###      basis      -    Basis elements that define the cell</span>
+<span class="c1">###      dim        -    Dimension of basis (number of basis elements)</span>
+<span class="c1">###      K          -    Topological dimension of the cell; equal to </span>
+<span class="c1">###                      (dim - 1)</span>
+<span class="c1">###      label      -    Label associated with the cel</span>
+<span class="c1">###      ops        -    List of operators associated with cell complex</span>
+<span class="c1">###      cons       -    List of constants associated with the operators</span>
+<span class="c1">###      props      -    Cell properties</span>
+<span class="c1">###      boundary   -    Cell boundary</span>
+<span class="c1">###</span>
+<span class="c1">###   PUBLIC ROUTINES  (see parent class Cell)</span>
+<span class="c1">###</span>
+<span class="c1">###   MAGIC ROUTINES  </span>
+<span class="c1">###</span>
+<span class="c1">###     __str__()</span>
+<span class="c1">###</span>
+<span class="c1">###           Pretty-printing of comprehensive cell attributes.</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="OperatorCell">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.cell_complex.OperatorCell">[docs]</a>
+<span class="k">class</span> <span class="nc">OperatorCell</span><span class="p">(</span><span class="n">Cell</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">basis</span><span class="p">,</span><span class="n">ops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">cons</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">boundary</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="n">basis</span> <span class="o">=</span> <span class="n">listify</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1">#EDIT: Changed d=2 to d=1 in the ops listify</span>
+        <span class="n">ops</span>   <span class="o">=</span> <span class="n">listify</span><span class="p">(</span><span class="n">ops</span><span class="p">,</span>   <span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">cons</span>  <span class="o">=</span> <span class="n">listify</span><span class="p">(</span><span class="n">cons</span><span class="p">,</span>  <span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">ops</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">cons</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="p">):</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">op</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ops</span><span class="p">,</span><span class="n">cons</span><span class="p">):</span>
+                <span class="n">props</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">op</span><span class="p">,</span><span class="n">c</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="kc">None</span>
+                
+        <span class="n">Cell</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">basis</span><span class="p">),</span> <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span><span class="n">boundary</span><span class="o">=</span><span class="n">boundary</span><span class="p">)</span>
+
+
+
+<div class="viewcode-block" id="OperatorCell.ops">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.cell_complex.OperatorCell.ops">[docs]</a>
+    <span class="k">def</span> <span class="nf">ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="nb">list</span><span class="p">([</span><span class="n">prop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">]))</span></div>
+
+
+
+
+<div class="viewcode-block" id="OperatorCell.cons">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.cell_complex.OperatorCell.cons">[docs]</a>
+    <span class="k">def</span> <span class="nf">cons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="nb">list</span><span class="p">([</span><span class="n">prop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">]))</span></div>
+
+
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">string</span>  <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Basis:</span><span class="se">\t\t</span><span class="s2">&quot;</span>
+
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;s&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;   &quot;</span>
+
+        <span class="c1"># Fix hanging +</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">Operators:</span><span class="se">\t</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+                <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;(&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">prop</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;)*&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">prop</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;  +  &quot;</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></div>
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

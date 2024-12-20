@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.gate_decomp.tests.benchmarks &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.gate_decomp.tests.benchmarks</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.gate_decomp.tests.benchmarks</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">perf_counter</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">import</span> <span class="nn">gmpy2</span>
+<span class="kn">from</span> <span class="nn">gmpy2</span> <span class="kn">import</span> <span class="n">mpfr</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cProfile</span><span class="o">,</span> <span class="nn">pstats</span><span class="o">,</span> <span class="nn">io</span>
+<span class="kn">from</span> <span class="nn">pstats</span> <span class="kn">import</span> <span class="n">SortKey</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.cirq_transforms</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">clifford_plus_t_direct_transform</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.gate_approximation</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_ring_elts_direct</span><span class="p">,</span>
+    <span class="n">approximate_rz_direct</span><span class="p">,</span>
+    <span class="n">approximate_rz_fallback</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">GSE_CIRCUIT_FILE</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span>
+    <span class="s2">&quot;pyLIQTR&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;gate_decomp/tests/data/gse_h2_decomp_circuit_example.json&quot;</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="estimate_t_count_direct">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.gate_decomp.tests.html#src.pyLIQTR.gate_decomp.tests.benchmarks.estimate_t_count_direct">[docs]</a>
+<span class="k">def</span> <span class="nf">estimate_t_count_direct</span><span class="p">(</span><span class="n">num_samples</span><span class="p">):</span>
+    <span class="n">precisions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span>
+    <span class="n">avg_t_counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">precisions</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">num_samples</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">denominator</span> <span class="o">=</span> <span class="mi">7919</span>  <span class="c1"># use a prime denominator so we don&#39;t end up approximating a multiple of pi/4</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">precisions</span><span class="p">):</span>
+        <span class="n">total_t_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_samples</span><span class="p">):</span>
+            <span class="n">numerator</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">7919</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">total_t_count</span> <span class="o">+=</span> <span class="n">approximate_rz_direct</span><span class="p">(</span><span class="n">numerator</span><span class="p">,</span> <span class="n">denominator</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">))[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">avg_t_counts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_t_count</span> <span class="o">/</span> <span class="n">num_samples</span>
+    <span class="n">prec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1e-10</span><span class="p">,</span> <span class="mf">1e-20</span><span class="p">,</span> <span class="mf">1e-30</span><span class="p">,</span> <span class="mf">1e-40</span><span class="p">,</span> <span class="mf">1e-50</span><span class="p">])</span>
+    <span class="c1"># perform a linear regression</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">prec</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prec</span><span class="p">))])</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">avg_t_counts</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Direct T count = </span><span class="si">{:.2f}</span><span class="s2"> x log2(1/eps) + </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="estimate_t_count_fallback">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.gate_decomp.tests.html#src.pyLIQTR.gate_decomp.tests.benchmarks.estimate_t_count_fallback">[docs]</a>
+<span class="k">def</span> <span class="nf">estimate_t_count_fallback</span><span class="p">(</span><span class="n">num_samples</span><span class="p">):</span>
+    <span class="n">precisions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">mpfr</span><span class="p">(</span><span class="s2">&quot;0.9999&quot;</span><span class="p">)</span>
+    <span class="n">avg_t_counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">precisions</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">num_samples</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">denominator</span> <span class="o">=</span> <span class="mi">7919</span>  <span class="c1"># use a prime denominator so we don&#39;t end up approximating a multiple of pi/4</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">precisions</span><span class="p">):</span>
+        <span class="n">total_t_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_samples</span><span class="p">):</span>
+            <span class="n">numerator</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">7919</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">primary_t_count</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">fallback_t_count</span> <span class="o">=</span> <span class="n">approximate_rz_fallback</span><span class="p">(</span>
+                <span class="n">numerator</span><span class="p">,</span> <span class="n">denominator</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">r</span>
+            <span class="p">)</span>
+            <span class="n">total_t_count</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">*</span> <span class="n">primary_t_count</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">))</span> <span class="o">*</span> <span class="n">fallback_t_count</span>
+            <span class="p">)</span>
+        <span class="n">avg_t_counts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_t_count</span> <span class="o">/</span> <span class="n">num_samples</span>
+    <span class="n">prec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1e-10</span><span class="p">,</span> <span class="mf">1e-20</span><span class="p">,</span> <span class="mf">1e-30</span><span class="p">,</span> <span class="mf">1e-40</span><span class="p">,</span> <span class="mf">1e-50</span><span class="p">])</span>
+    <span class="c1"># perform a linear regression</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">prec</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prec</span><span class="p">))])</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">avg_t_counts</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fallback T count = </span><span class="si">{:.2f}</span><span class="s2"> x log2(1/eps) + </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="benchmark_random_angles">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.gate_decomp.tests.html#src.pyLIQTR.gate_decomp.tests.benchmarks.benchmark_random_angles">[docs]</a>
+<span class="k">def</span> <span class="nf">benchmark_random_angles</span><span class="p">(</span><span class="n">prec</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">):</span>
+    <span class="n">PI</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">const_pi</span><span class="p">()</span>
+    <span class="n">denominator</span> <span class="o">=</span> <span class="mi">7919</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">perf_counter</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_samples</span><span class="p">):</span>
+        <span class="n">numerator</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">7919</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">get_ring_elts_direct</span><span class="p">(</span><span class="n">numerator</span> <span class="o">*</span> <span class="n">PI</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">,</span> <span class="n">prec</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">perf_counter</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;Time to decompose </span><span class="si">{}</span><span class="s2"> random angles at precision = </span><span class="si">{}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2">s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">num_samples</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="benchmark_gse_circuit">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.gate_decomp.tests.html#src.pyLIQTR.gate_decomp.tests.benchmarks.benchmark_gse_circuit">[docs]</a>
+<span class="k">def</span> <span class="nf">benchmark_gse_circuit</span><span class="p">():</span>
+    <span class="n">original_circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">GSE_CIRCUIT_FILE</span><span class="p">)</span>
+    <span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">time1</span> <span class="o">=</span> <span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">new_circuit2</span> <span class="o">=</span> <span class="n">clifford_plus_t_direct_transform</span><span class="p">(</span>
+        <span class="n">original_circuit</span><span class="p">,</span> <span class="n">use_rotation_decomp_gates</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">time2</span> <span class="o">=</span> <span class="n">perf_counter</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time to decompose GSE circuit: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time2</span> <span class="o">-</span> <span class="n">time1</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.gate_decomp.tests.html#src.pyLIQTR.gate_decomp.tests.benchmarks.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">benchmark_random_angles</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">benchmark_random_angles</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">benchmark_random_angles</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">estimate_t_count_direct</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">estimate_t_count_fallback</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">benchmark_gse_circuit</span><span class="p">()</span></div>
+
+    <span class="c1"># pr = cProfile.Profile()</span>
+    <span class="c1"># pr.enable()</span>
+    <span class="c1"># benchmark_random_angles(10, 100)</span>
+    <span class="c1"># pr.disable()</span>
+    <span class="c1"># s = io.StringIO()</span>
+    <span class="c1"># sortby = SortKey.TIME</span>
+    <span class="c1"># ps = pstats.Stats(pr, stream=s).sort_stats(sortby)</span>
+    <span class="c1"># ps.print_stats()</span>
+    <span class="c1"># print(s.getvalue())</span>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

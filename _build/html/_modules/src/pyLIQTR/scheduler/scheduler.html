@@ -1,0 +1,872 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.scheduler.scheduler &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.scheduler.scheduler</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.scheduler.scheduler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.circuit_decomposition</span> <span class="kn">import</span> <span class="n">circuit_decompose_multi</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.rotation_gates</span> <span class="kn">import</span> <span class="n">T_COUNT_CONST</span><span class="p">,</span> <span class="n">T_COUNT_SLOPE</span><span class="p">,</span> <span class="n">T_COUNT_STD_DEV</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.scheduler.Instruction</span> <span class="kn">import</span> <span class="n">Instruction</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.scheduler.DAG</span> <span class="kn">import</span> <span class="n">DAG</span>
+<span class="kn">import</span> <span class="nn">pyLIQTR.scheduler.sets</span> <span class="k">as</span> <span class="nn">sets</span>
+<span class="kn">from</span> <span class="nn">rustworkx.visualization</span> <span class="kn">import</span> <span class="n">graphviz_draw</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.printing</span> <span class="kn">import</span> <span class="n">keep</span>
+<span class="kn">import</span> <span class="nn">pyLIQTR.utils.global_ancilla_manager</span> <span class="k">as</span> <span class="nn">gam</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.circuit_decomposition</span> <span class="kn">import</span> <span class="n">generator_decompose</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.cirq_transforms</span> <span class="kn">import</span> <span class="n">_perop_clifford_plus_t_direct_transform</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.cirq_transforms</span> <span class="kn">import</span> <span class="n">determine_gate_precision</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.resource_analysis</span> <span class="kn">import</span> <span class="n">pylqt_t_complexity</span> <span class="k">as</span> <span class="n">t_complexity</span>
+    
+<div class="viewcode-block" id="Scheduler">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler">[docs]</a>
+<span class="k">class</span> <span class="nc">Scheduler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class for &#39;scheduling&#39; a given circuit and returning execution time and a number of other gate and circuit analysis metrics. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">arch_description</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">recursion_level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">custom_gateset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :param int global_time: tracks time as instructions execute and finish.</span>
+<span class="sd">        :param dict arch_description: a dictionary with gate resource entries either of the form {&#39;Max T&#39;: # available to be executed simultaneously} or {gate type (cirq.Gate object or similar): desired execution time}. Should also include an entry for each qubit in the circuit of the form {qX: 1}.</span>
+<span class="sd">        :param list ready_q: list of instructions most recently pulled from the DAG. These instructions could potentially be executed but have not yet been checked for qubit/resource availability.</span>
+<span class="sd">        :param list execution_q: list of instructions that will be next to execute. These instructions have been checked for qubit/resource availability.</span>
+<span class="sd">        :param list free_q: list of instructions most recently executed.</span>
+<span class="sd">        :param int cycle: Denotes the number of &#39;scheduler cycles&#39; completed: [instructions pulled from the DAG, instructions executed, instructions freed] is one cycle.</span>
+<span class="sd">        :param int t_depth: keeps track of the number of timesteps which include a T-gate.</span>
+<span class="sd">        :param dict t_width: a distribution of the number of T-gates occuring within a single timestep.</span>
+<span class="sd">        :param list qubits: list of all qubits which have been encountered during scheduling. This includes ancilla generated during recursion.</span>
+<span class="sd">        :param dict active_qubits: a distrubtion of the number of qubits being acted on within a single timestep.</span>
+<span class="sd">        :param float precision: decomposition precision used to decompose rotation gates into T gates.</span>
+<span class="sd">        :param int t_time: how many timesteps a single T-gate takes to execute.</span>
+<span class="sd">        :param dict gate_profile: a dictionary tracking each type of gate to be counted and how many times it occurs.</span>
+<span class="sd">        :param dict op_cache: if hierarchical or recursive decomposition is being used, this dictionary caches the execution time, gate counts, qubit counts, etc. for individual operators to be used when the operator is encountered again.</span>
+<span class="sd">        :param int recursion_level: how many levels down from the defined top level the recursive decomposition has gone. Only applicable when recursive decomposition is being used.</span>
+<span class="sd">        :param list custom_gateset: a user-input list defining which gates should be decomposed and which should be treated as ground-level operations and counted in gate_profile. If None, the default gateset will be used.</span>
+<span class="sd">        :param bool rotations_allowed: if True, rotations will not be deocomposed into T-gates, but rather counted in the &#39;Rotation&#39; entry of gate_profile. If False, rotations will be decomposed using rotations_to_t.</span>
+<span class="sd">        :param cirq.DecompositionContext context: cirq decomposition context.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arch</span> <span class="o">=</span> <span class="n">arch_description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ready_q</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execution_q</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">free_q</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_depth</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_width</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qubits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_qubits</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="n">precision</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_time</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gate_profile</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">op_cache</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recursion_level</span> <span class="o">=</span> <span class="n">recursion_level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_gateset</span> <span class="o">=</span> <span class="n">custom_gateset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotations_allowed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">gam</span><span class="o">.</span><span class="n">gam</span><span class="p">)</span>
+        
+        <span class="c1">#initialize gate counting dict</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_gateset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="nb">set</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_gateset</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gate_profile</span><span class="p">[</span><span class="nb">set</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gate_profile</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;T&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s1">&#39;H&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s1">&#39;S&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s1">&#39;CX&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s1">&#39;CZ&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s1">&#39;Pauli (X, Y, Z)&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s1">&#39;Rotation&#39;</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="p">}</span>
+
+        <span class="c1">#check if there&#39;s a limit on simultaneous T gates</span>
+        <span class="k">if</span> <span class="s1">&#39;Max T&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t_allowance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">[</span><span class="s1">&#39;Max T&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t_allowance</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="Scheduler.complex_inst">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.complex_inst">[docs]</a>
+    <span class="k">def</span> <span class="nf">complex_inst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inst</span><span class="p">:</span><span class="n">Instruction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function handles the recursive decomposition and scheduling of operators which are not in the defined gateset, AKA &#39;complex instructions&#39;. It will cache the resulting execution time, gate counts, qubits, etc for future use.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">_op</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">qubits</span><span class="p">))</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">op_cache</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="s1">&#39;cached_schedule&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">op_cache</span><span class="p">[(</span><span class="n">inst</span><span class="o">.</span><span class="n">_op</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">qubits</span><span class="p">))])</span>
+            <span class="k">return</span> <span class="n">inst</span><span class="o">.</span><span class="n">cached_schedule</span><span class="p">[</span><span class="s1">&#39;Execution time&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#essentially a repeat of the schedule_circuit function below, with a few small changes for recursion</span>
+            <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">_op</span><span class="p">)</span>
+
+            <span class="n">r_DAG</span> <span class="o">=</span> <span class="n">DAG</span><span class="p">(</span><span class="n">max_moments</span><span class="o">=</span><span class="mi">1000000</span><span class="p">)</span>
+
+            <span class="n">all_resource_config</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="n">circuit</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">():</span>
+                <span class="n">all_resource_config</span><span class="p">[</span><span class="n">qubit</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="s1">&#39;Execution Times&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">:</span>
+                <span class="n">all_resource_config</span><span class="p">[</span><span class="s1">&#39;Execution Times&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">[</span><span class="s1">&#39;Execution Times&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s1">&#39;Max T&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">:</span>
+                <span class="n">all_resource_config</span><span class="p">[</span><span class="s1">&#39;Max T&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">[</span><span class="s1">&#39;Max T&#39;</span><span class="p">]</span>
+                
+            <span class="n">r_Sched</span> <span class="o">=</span> <span class="n">Scheduler</span><span class="p">(</span><span class="n">all_resource_config</span><span class="p">,</span> <span class="n">recursion_level</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recursion_level</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">custom_gateset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_gateset</span><span class="p">,</span><span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+    
+            <span class="n">moment_idx</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">rotation_allowed</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">def</span> <span class="nf">convertMe</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">decomp_level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                <span class="c1">#A deep copy MUST be done here in order to keep qubit naming conventions consistent.</span>
+                <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">generator_decompose</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="n">keep</span><span class="p">,</span> <span class="n">on_stuck_raise</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span><span class="n">max_decomposition_passes</span><span class="o">=</span><span class="n">decomp_level</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="n">op</span>
+            <span class="c1">#assuming op is in defined gateset, whether default or custom:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">circuit</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">():</span>
+                    <span class="n">r_Sched</span><span class="o">.</span><span class="n">qubits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">convertMe</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">decomp_level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">r_Sched</span><span class="o">.</span><span class="n">qubits</span><span class="p">:</span>
+                                <span class="n">r_Sched</span><span class="o">.</span><span class="n">qubits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>  
+                        <span class="k">if</span> <span class="n">r_DAG</span><span class="o">.</span><span class="n">full</span><span class="p">():</span>
+                            <span class="n">r_DAG</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+                            <span class="k">while</span> <span class="n">r_Sched</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">r_DAG</span><span class="p">):</span>
+                                <span class="k">pass</span>
+                            <span class="n">global_time</span> <span class="o">+=</span> <span class="n">r_Sched</span><span class="o">.</span><span class="n">global_time</span>
+                            <span class="n">r_DAG</span><span class="o">.</span><span class="n">dependency_log</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+                            <span class="n">r_DAG</span><span class="o">.</span><span class="n">dag_cycle</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">r_DAG</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span><span class="n">Instruction</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">custom_gateset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_gateset</span><span class="p">))</span>
+
+                    <span class="n">r_DAG</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+                    <span class="k">while</span> <span class="n">r_Sched</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">r_DAG</span><span class="p">):</span>
+                        <span class="k">pass</span>
+    
+                    <span class="n">results_dict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;Execution time&#39;</span><span class="p">:</span> <span class="n">r_Sched</span><span class="o">.</span><span class="n">global_time</span><span class="p">,</span>
+                    <span class="s1">&#39;T-depth&#39;</span><span class="p">:</span> <span class="n">r_Sched</span><span class="o">.</span><span class="n">t_depth</span><span class="p">,</span>
+                    <span class="s1">&#39;T-width&#39;</span><span class="p">:</span> <span class="n">r_Sched</span><span class="o">.</span><span class="n">t_width</span><span class="p">,</span>
+                    <span class="s1">&#39;Gates&#39;</span><span class="p">:</span> <span class="n">r_Sched</span><span class="o">.</span><span class="n">gate_profile</span><span class="p">,</span>
+                    <span class="s1">&#39;Qubits&#39;</span><span class="p">:</span> <span class="n">r_Sched</span><span class="o">.</span><span class="n">qubits</span><span class="p">,</span>
+                    <span class="s1">&#39;Active Qubits&#39;</span><span class="p">:</span> <span class="n">r_Sched</span><span class="o">.</span><span class="n">active_qubits</span><span class="p">,</span>
+                    <span class="s1">&#39;Cache&#39;</span><span class="p">:</span> <span class="n">r_Sched</span><span class="o">.</span><span class="n">op_cache</span>
+                    <span class="p">}</span>
+            
+                    <span class="bp">self</span><span class="o">.</span><span class="n">op_cache</span><span class="p">[(</span><span class="n">inst</span><span class="o">.</span><span class="n">_op</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">qubits</span><span class="p">))]</span> <span class="o">=</span> <span class="n">results_dict</span>
+                    <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">results_dict</span><span class="p">[</span><span class="s1">&#39;Qubits&#39;</span><span class="p">]:</span>
+                        <span class="k">if</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubits</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">qubits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+                    <span class="c1">#throw all of our results for this op into our overall cache</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="s1">&#39;cached_schedule&#39;</span><span class="p">,</span> <span class="n">results_dict</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">inst</span><span class="o">.</span><span class="n">cached_schedule</span><span class="p">[</span><span class="s1">&#39;Execution time&#39;</span><span class="p">]</span>
+                
+                <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
+                    <span class="n">ex_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_gateset_decomposition_catchall</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">ex_time</span>  
+            <span class="c1">#oh no it&#39;s NOT in our gateset??? </span>
+            <span class="k">except</span> <span class="ne">RecursionError</span><span class="p">:</span>
+                <span class="n">ex_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_gateset_decomposition_catchall</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">ex_time</span></div>
+
+                
+<div class="viewcode-block" id="Scheduler.custom_gateset_decomposition_catchall">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.custom_gateset_decomposition_catchall">[docs]</a>
+    <span class="k">def</span> <span class="nf">custom_gateset_decomposition_catchall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inst</span><span class="p">:</span><span class="n">Instruction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function should only be accessed in the event that an error arises from recursive decomposition of a complex operator. It will determine whether the error was caused by a basic operator being left out of a user-defined gateset or an operation without a defined decomposition method. </span>
+<span class="sd">        In the event that the user-defined gateset is incomplete, this function will raise an error notifying them of the missing gate type.</span>
+<span class="sd">        If the operator in question is NOT a basic operator but does not have a defined decomposition method, this function will access that operator&#39;s T-Complexity method and use those counts to add to the global time, gate counts, t-depth, etc. While this will not account for any parallelism, it will at least acknowledge the existence of these gates and their effect on the circuit. The user will be warned about this action.</span>
+<span class="sd">        If the operator has NEITHER a decomposition method nor a defined T-Complexity, this function will cache an execution time of 0, gate counts of 0, etc since no information about makeup can be accessed. This will essentially exclude this operator from the results, but will allow the rest of the circuit to continue scheduling. The user will be warned about this action.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="c1">#if it&#39;s a rotation, we assume user just wants rotations decomposed into T gates</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">inst</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="n">sets</span><span class="o">.</span><span class="n">ROT</span><span class="p">:</span>
+            <span class="n">inst</span><span class="o">.</span><span class="n">complex</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rotations_allowed</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">sub_gates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_to_t</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">sub_gates</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">t_time</span>
+                    
+        <span class="c1">#check if it&#39;s a basic instruction that was left out of a custom gateset</span>
+        <span class="n">basic</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="nb">set</span> <span class="ow">in</span> <span class="p">[</span><span class="n">sets</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">sets</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="n">sets</span><span class="o">.</span><span class="n">S</span><span class="p">,</span> <span class="n">sets</span><span class="o">.</span><span class="n">CX</span><span class="p">,</span> <span class="n">sets</span><span class="o">.</span><span class="n">CZ</span><span class="p">,</span> <span class="n">sets</span><span class="o">.</span><span class="n">PAULI</span><span class="p">,</span> <span class="n">sets</span><span class="o">.</span><span class="n">MISC</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">inst</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">:</span>
+                <span class="n">basic</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#if it&#39;s not a basic instruction, then it either doesn&#39;t have a decomposition (not the user&#39;s fault) and/or it wasn&#39;t included in the custom gateset (user&#39;s fault)</span>
+        <span class="k">if</span> <span class="n">basic</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span>
+            <span class="c1">#if there&#39;s a custom gateset definied, we can&#39;t use our t complexity method because the custom gateset might not be in terms of t-rot-cliff. tell the user to fix it</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_gateset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">inst</span><span class="o">.</span><span class="n">_op</span><span class="si">}</span><span class="s1"> does not have a defined decomposition and is not included in custom gateset.&#39;</span><span class="p">)</span>
+            <span class="c1">#otherwise, we&#39;re gonna try to fix it</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">inst</span><span class="o">.</span><span class="n">_op</span><span class="si">}</span><span class="s1"> does not have a defined decomposition- defaulting to defined T-Complexity. Scheduling results will not represent the most efficient circuit possible.&#39;</span><span class="p">)</span>
+            <span class="c1">#basically the procedure here is grab the t-complexity (which ideally exists but we&#39;ll check for that), use those counts to sub for our gate counts and execution time, cache that result so we don&#39;t have to go through this again, and move on. </span>
+            <span class="n">counts</span> <span class="o">=</span> <span class="n">t_complexity</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">_op</span><span class="p">)</span>
+            <span class="c1">#oh no!!! qualtran didn&#39;t define a t_complexity for this operator??? shocker. set everything to 0, warn the user that the results aren&#39;t gonna be right, and move on.</span>
+            <span class="k">if</span> <span class="n">counts</span><span class="o">.</span><span class="n">clifford</span><span class="o">&lt;=</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">counts</span><span class="o">.</span><span class="n">rotations</span><span class="o">&lt;=</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">counts</span><span class="o">.</span><span class="n">t</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">inst</span><span class="o">.</span><span class="n">_op</span><span class="si">}</span><span class="s1"> does not have a defined T-Complexity. Operator will be skipped.&#39;</span><span class="p">)</span>
+                <span class="n">results_dict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;Execution time&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s1">&#39;T-depth&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s1">&#39;T-width&#39;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s1">&#39;Gates&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;T&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s1">&#39;Rotation&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s1">&#39;H&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s1">&#39;S&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> 
+                            <span class="s1">&#39;CX&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s1">&#39;CZ&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s1">&#39;Toffoli&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s1">&#39;Pauli (X, Y, Z)&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s1">&#39;Unknown&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+                    <span class="s1">&#39;Qubits&#39;</span><span class="p">:</span> <span class="n">inst</span><span class="o">.</span><span class="n">qubits</span><span class="p">,</span>
+                    <span class="s1">&#39;Executions&#39;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s1">&#39;Cache&#39;</span><span class="p">:</span> <span class="p">{}</span>
+                <span class="p">}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">op_cache</span><span class="p">[(</span><span class="n">inst</span><span class="o">.</span><span class="n">_op</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">qubits</span><span class="p">))]</span> <span class="o">=</span> <span class="n">results_dict</span>
+                <span class="n">inst</span><span class="o">.</span><span class="n">cached_schedule</span> <span class="o">=</span> <span class="n">results_dict</span>
+                <span class="k">return</span> <span class="mi">0</span>
+
+            <span class="n">gate_profile</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;T&#39;</span><span class="p">:</span> <span class="n">counts</span><span class="o">.</span><span class="n">t</span><span class="p">,</span>
+                <span class="s1">&#39;Rotation&#39;</span><span class="p">:</span> <span class="n">counts</span><span class="o">.</span><span class="n">rotations</span><span class="p">,</span>
+                <span class="s1">&#39;H&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s1">&#39;S&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> 
+                <span class="s1">&#39;CX&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s1">&#39;CZ&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s1">&#39;Toffoli&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s1">&#39;Pauli (X, Y, Z)&#39;</span><span class="p">:</span> <span class="n">counts</span><span class="o">.</span><span class="n">clifford</span><span class="p">,</span>
+                <span class="s1">&#39;Unknown&#39;</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="p">}</span>
+
+            <span class="n">t_time</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">rot_time</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">cliff_time</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="s1">&#39;Execution Times&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">:</span>
+                <span class="n">time_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">[</span><span class="s1">&#39;Execution Times&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s1">&#39;T&#39;</span> <span class="ow">in</span> <span class="n">time_dict</span><span class="p">:</span>
+                    <span class="n">t_time</span> <span class="o">=</span> <span class="n">time_dict</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s1">&#39;Rx&#39;</span> <span class="ow">in</span> <span class="n">time_dict</span> <span class="ow">or</span> <span class="s1">&#39;Ry&#39;</span> <span class="ow">in</span> <span class="n">time_dict</span> <span class="ow">or</span> <span class="s1">&#39;Rz&#39;</span> <span class="ow">in</span> <span class="n">time_dict</span><span class="p">:</span>
+                    <span class="n">rot_time</span> <span class="o">=</span> <span class="n">time_dict</span><span class="p">[</span><span class="s1">&#39;Rx&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s1">&#39;X&#39;</span> <span class="ow">in</span> <span class="n">time_dict</span> <span class="ow">or</span> <span class="s1">&#39;Y&#39;</span> <span class="ow">in</span> <span class="n">time_dict</span> <span class="ow">or</span> <span class="s1">&#39;Z&#39;</span> <span class="ow">in</span> <span class="n">time_dict</span><span class="p">:</span>
+                    <span class="n">cliff_time</span> <span class="o">=</span> <span class="n">time_dict</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">t_time</span> <span class="o">=</span> <span class="mi">3</span>
+                <span class="n">rot_time</span> <span class="o">=</span> <span class="mi">2</span>
+                <span class="n">cliff_time</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">ex_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_time</span> <span class="o">*</span> <span class="n">gate_profile</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="n">rot_time</span> <span class="o">*</span> <span class="n">gate_profile</span><span class="p">[</span><span class="s1">&#39;Rotation&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="n">cliff_time</span> <span class="o">*</span> <span class="n">gate_profile</span><span class="p">[</span><span class="s1">&#39;Pauli (X, Y, Z)&#39;</span><span class="p">])</span>    
+
+            <span class="n">inst</span><span class="o">.</span><span class="n">complex</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">results_dict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;Execution time&#39;</span><span class="p">:</span> <span class="n">ex_time</span><span class="p">,</span>
+                    <span class="s1">&#39;T-depth&#39;</span><span class="p">:</span> <span class="n">gate_profile</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;T-width&#39;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s1">&#39;Gates&#39;</span><span class="p">:</span> <span class="n">gate_profile</span><span class="p">,</span>
+                    <span class="s1">&#39;Qubits&#39;</span><span class="p">:</span> <span class="n">inst</span><span class="o">.</span><span class="n">qubits</span><span class="p">,</span>
+                    <span class="s1">&#39;Executions&#39;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s1">&#39;Cache&#39;</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">}</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">op_cache</span><span class="p">[(</span><span class="n">inst</span><span class="o">.</span><span class="n">_op</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">qubits</span><span class="p">))]</span> <span class="o">=</span> <span class="n">results_dict</span>
+            <span class="n">inst</span><span class="o">.</span><span class="n">cached_schedule</span> <span class="o">=</span> <span class="n">results_dict</span>
+            <span class="k">return</span> <span class="n">ex_time</span>
+
+
+        <span class="c1">#if we get all the way to here, it means our op is actually a basic operator that the user forgot to include in their custom gateset. tell them to fix it</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Custom gateset is incomplete: </span><span class="si">{</span><span class="n">inst</span><span class="o">.</span><span class="n">_op</span><span class="si">}</span><span class="s1"> cannot be decomposed or classified as an operation in custom gateset.&#39;</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="Scheduler.assign_execution_time">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.assign_execution_time">[docs]</a>
+    <span class="k">def</span> <span class="nf">assign_execution_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">inst</span><span class="p">:</span><span class="n">Instruction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given the instruction, assign an execution time for it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># is this a basic instruction or one that needs to be broken down?</span>
+        <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">complex</span><span class="p">:</span>
+            <span class="n">ex_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_inst</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ex_time</span>
+        
+        <span class="c1">#now we&#39;re out of all the complex instruction stuff, everything below here is for basic instructions only.</span>
+        <span class="c1"># did the user define execution times for certain types of gates?</span>
+        <span class="k">if</span> <span class="s1">&#39;Execution Times&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">:</span>
+            <span class="n">time_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">[</span><span class="s1">&#39;Execution Times&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="nb">set</span> <span class="ow">in</span> <span class="n">time_dict</span><span class="p">:</span>
+                <span class="k">for</span> <span class="nb">type</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">type</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">inst</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">inst</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="n">sets</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">t_time</span> <span class="o">=</span> <span class="n">time_dict</span><span class="p">[</span><span class="nb">set</span><span class="p">]</span>
+                        <span class="k">return</span> <span class="n">time_dict</span><span class="p">[</span><span class="nb">set</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">first_two</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">inst</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">first_two</span> <span class="ow">in</span> <span class="n">sets</span><span class="o">.</span><span class="n">ROT</span><span class="p">:</span>
+                            <span class="n">sub_gates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_to_t</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">)</span>
+                            <span class="k">return</span> <span class="n">sub_gates</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">t_time</span>
+                        <span class="k">elif</span> <span class="n">first_two</span> <span class="ow">in</span> <span class="n">sets</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_time</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span>
+        <span class="c1"># if they didn&#39;t, execution time is pretty arbitrary so we&#39;re just gonna generate some numbers</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">first_two</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">inst</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">first_two</span> <span class="ow">in</span> <span class="n">sets</span><span class="o">.</span><span class="n">ROT</span><span class="p">:</span>
+                <span class="n">sub_gates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_to_t</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">sub_gates</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">t_time</span>
+            <span class="k">elif</span> <span class="n">first_two</span> <span class="ow">in</span> <span class="n">sets</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_time</span>
+        
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="Scheduler.resource_available">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.resource_available">[docs]</a>
+    <span class="k">def</span> <span class="nf">resource_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inst</span><span class="p">:</span> <span class="n">Instruction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given an instruction, determine if we have resources (qubit is not being used by another operation, it doesn&#39;t violate restrictions on simultaneous T gates, etc.) available to run it. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">availability</span><span class="o">=</span> <span class="kc">True</span>
+        <span class="n">resources_needed</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">resource_counts</span><span class="p">()</span>
+
+        <span class="c1"># check each resource needed against the resources we&#39;ve defined as available</span>
+        <span class="c1"># if it&#39;s available or undefined(unlimited), return true</span>
+        <span class="k">for</span> <span class="n">resource_type</span> <span class="ow">in</span> <span class="n">resources_needed</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">resource_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">[</span><span class="n">resource_type</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">resources_needed</span><span class="p">[</span><span class="n">resource_type</span><span class="p">]:</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">return</span> <span class="n">availability</span></div>
+
+
+<div class="viewcode-block" id="Scheduler.allocate_resources">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.allocate_resources">[docs]</a>
+    <span class="k">def</span> <span class="nf">allocate_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inst</span><span class="p">:</span><span class="n">Instruction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given an instruction, if the resources are available, remove them from the common pool. This essentially reserves them for the instruction&#39;s use until it has finished executing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">resources_needed</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">resource_counts</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_available</span><span class="p">(</span><span class="n">inst</span><span class="p">):</span>
+            <span class="c1">#if a resource is available, take it out of the available resources while in use.</span>
+            <span class="k">for</span> <span class="n">resource_type</span> <span class="ow">in</span> <span class="n">resources_needed</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">resource_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">[</span><span class="n">resource_type</span><span class="p">]</span> <span class="o">-=</span> <span class="n">resources_needed</span><span class="p">[</span><span class="n">resource_type</span><span class="p">]</span></div>
+
+
+
+
+<div class="viewcode-block" id="Scheduler.free_resources">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.free_resources">[docs]</a>
+    <span class="k">def</span> <span class="nf">free_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inst</span><span class="p">:</span><span class="n">Instruction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given an instruction, determine which resources were being used by it during execution and return them to the common pool.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">resources_used</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">resource_counts</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">resource_type</span> <span class="ow">in</span> <span class="n">resources_used</span><span class="p">:</span>
+            <span class="c1">#for each resource used by a completed instruction, re-add it to the available pool.</span>
+            <span class="k">if</span> <span class="n">resource_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">[</span><span class="n">resource_type</span><span class="p">]</span> <span class="o">+=</span> <span class="n">resources_used</span><span class="p">[</span><span class="n">resource_type</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="Scheduler.populate_ready">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.populate_ready">[docs]</a>
+    <span class="k">def</span> <span class="nf">populate_ready</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dag</span><span class="p">:</span> <span class="n">DAG</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Query the DAG for free nodes (nodes with no incoming dependencies) and add them to the ready queue.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1">#grab free nodes from the DAG</span>
+        <span class="n">free_nodes</span> <span class="o">=</span> <span class="n">dag</span><span class="o">.</span><span class="n">get_available</span><span class="p">()</span>
+        <span class="c1">#the &#39;END&#39; node denotes the last instruction from the circuit</span>
+        <span class="k">if</span> <span class="n">free_nodes</span> <span class="o">==</span> <span class="s2">&quot;End&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="c1">#make sure the instruction isn&#39;t being duplicated in the ready q</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">free_nodes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">==</span> <span class="n">Instruction</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">ready</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ready_q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                    <span class="n">node</span><span class="o">.</span><span class="n">ready</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ready_q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="n">dag</span><span class="o">.</span><span class="n">free_instructions</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    
+
+        
+<div class="viewcode-block" id="Scheduler.move_ready_to_execute">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.move_ready_to_execute">[docs]</a>
+    <span class="k">def</span> <span class="nf">move_ready_to_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dag</span><span class="p">:</span> <span class="n">DAG</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For each instruction in the ready queue, determine if the resources needed to execute it are available. If they are, allocate them and move the instruction from the ready queue to the execute queue. Otherwise, the instruction remains in the ready queue until the next cycle, when it will be checked again for resource availability.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">removed_insts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ready_q</span><span class="p">:</span>
+            <span class="c1"># is this a qubit or an operation?</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span> <span class="o">!=</span> <span class="n">Instruction</span><span class="p">:</span>
+                <span class="c1"># if it&#39;s a qubit, don&#39;t worry about execution time and just throw it on the execution queue</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">execution_q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+                <span class="n">dag</span><span class="o">.</span><span class="n">_remove_dependency</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+                <span class="n">removed_insts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># otherwise, check if the resources are free for the op, set the execution time, and add to</span>
+                <span class="c1"># execution queue</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_available</span><span class="p">(</span><span class="n">inst</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">allocate_resources</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+                    <span class="n">inst</span><span class="o">.</span><span class="n">set_execution_time</span><span class="p">(</span><span class="n">start_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_time</span><span class="p">,</span>\
+                                        <span class="n">execution_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assign_execution_time</span><span class="p">(</span><span class="n">inst</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">execution_q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+                    <span class="n">removed_insts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+                    <span class="n">dag</span><span class="o">.</span><span class="n">_remove_dependency</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+
+        <span class="c1">#clear ready queue</span>
+        <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">removed_insts</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ready_q</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span></div>
+
+
+    
+<div class="viewcode-block" id="Scheduler.free_instructions">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.free_instructions">[docs]</a>
+    <span class="k">def</span> <span class="nf">free_instructions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dag</span><span class="p">:</span> <span class="n">DAG</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update the global time to the next timestep where an instruction completes. For each instruction in the execution queue, determine if its execution finishes before or at this &#39;first_done_time&#39;. If it is completed, add it to the free queue and free the resources it was using. Otherwise, it will remain in the execution queue.</span>
+<span class="sd">        Perform gate counting and paralellism analysis on the instructions in the free queue.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">execution_q</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="c1"># if the shortest execution time belongs to an op, set first done time to that op&#39;s ex. time</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">execution_q</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;_op&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">first_done_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execution_q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">finish_time</span>
+        <span class="c1"># if it&#39;s a qubit, set first done time to 0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">first_done_time</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># update global time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_time</span> <span class="o">=</span> <span class="n">first_done_time</span>
+        
+        <span class="n">finished_insts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># find everything that finishes before or at the same time as the first done time</span>
+        <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">execution_q</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="s1">&#39;_op&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">complex</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recursion_level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="k">pass</span>
+                <span class="n">finish_time</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">finish_time</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">finish_time</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">finish_time</span> <span class="o">&lt;=</span> <span class="n">first_done_time</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="s1">&#39;_op&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">free_resources</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+                <span class="n">finished_insts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gate_counting</span><span class="p">(</span><span class="n">finished_insts</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parallelism_analysis</span><span class="p">(</span><span class="n">finished_insts</span><span class="p">)</span></div>
+
+                    
+    
+    
+<div class="viewcode-block" id="Scheduler.parallelism_analysis">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.parallelism_analysis">[docs]</a>
+    <span class="k">def</span> <span class="nf">parallelism_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">insts</span><span class="p">:</span><span class="nb">list</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        For each instruction that has just executed, determine how many qubits it used and update the active_qubits distribution. Determine how many T-gates were used and update T-width and T-depth accordingly.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># gathering parallelism data</span>
+        <span class="n">active_qubits</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">insts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span> <span class="o">==</span> <span class="n">Instruction</span><span class="p">:</span>
+                <span class="n">qubits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span>
+                <span class="n">active_qubits</span> <span class="o">+=</span> <span class="n">qubits</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">active_qubits</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_qubits</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_qubits</span><span class="p">[</span><span class="n">active_qubits</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_qubits</span><span class="p">[</span><span class="n">active_qubits</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        
+        <span class="n">t_depth</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
+        <span class="n">t_width</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">insts</span><span class="p">:</span>
+            <span class="c1"># complex?</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="s1">&#39;complex&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="c1">#pull t-depth and t-width from cache</span>
+                <span class="n">t_depth</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">cached_schedule</span><span class="p">[</span><span class="s1">&#39;T-depth&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">t_width</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">cached_schedule</span><span class="p">[</span><span class="s1">&#39;T-width&#39;</span><span class="p">])</span>
+            <span class="c1"># not complex?</span>
+            <span class="k">elif</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="s1">&#39;_op&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="n">first_two</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">inst</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+                <span class="c1"># if op is a rotation, break down into t-gates, update t-depth and t-width accordingly</span>
+                <span class="k">if</span> <span class="n">first_two</span> <span class="ow">in</span> <span class="n">sets</span><span class="o">.</span><span class="n">ROT</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotations_allowed</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="n">t_width</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="c1"># if we have a restriciton on how many t-gates can execute simultaneously, add all t-gates</span>
+                    <span class="c1"># to t-depth.</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_allowance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">t_per_rot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_to_t</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">)</span>
+                        <span class="n">t_depth</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">t_per_rot</span><span class="p">))</span>
+                    <span class="c1"># if there&#39;s no restriciton on t-gates, just add one to t-depth.</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">t_depth</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># if op is a t-gate, add one to t-depth and t-width.</span>
+                <span class="k">elif</span> <span class="n">first_two</span> <span class="ow">in</span> <span class="n">sets</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
+                    <span class="n">t_depth</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">t_width</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">execution_q</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_depth</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">t_depth</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t_width</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_width</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t_width</span><span class="p">[</span><span class="n">t_width</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t_width</span><span class="p">[</span><span class="n">t_width</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+
+
+        
+<div class="viewcode-block" id="Scheduler.gate_counting">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.gate_counting">[docs]</a>
+    <span class="k">def</span> <span class="nf">gate_counting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">insts</span><span class="p">:</span><span class="nb">list</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        For each instruction that has just executed, either pull its cached gate counts and add them to the total or classify it as one of the gates in the defined gateset.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">insts</span><span class="p">:</span>
+            <span class="c1"># is it an op?</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="s1">&#39;_op&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="c1"># is it a basic or complex op?</span>
+                <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">complex</span><span class="p">:</span>
+                    <span class="c1"># pull gate counts for complex op from its cache</span>
+                    <span class="k">for</span> <span class="nb">type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_profile</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">gate_profile</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span> <span class="o">+=</span> <span class="n">inst</span><span class="o">.</span><span class="n">cached_schedule</span><span class="p">[</span><span class="s1">&#39;Gates&#39;</span><span class="p">][</span><span class="nb">type</span><span class="p">]</span>
+
+                <span class="c1"># not complex:</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">op</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">_op</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">ClassicallyControlledOperation</span><span class="p">):</span>
+                        <span class="n">op</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">without_classical_controls</span><span class="p">()</span>
+                    <span class="n">first_two</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">inst</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="c1"># classify op into one of the basic gate sets, add to count</span>
+                    <span class="c1"># check if rotations are allowed or need to be decomposed</span>
+                    <span class="k">if</span> <span class="n">first_two</span> <span class="ow">in</span> <span class="n">sets</span><span class="o">.</span><span class="n">ROT</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotations_allowed</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">gate_profile</span><span class="p">[</span><span class="s1">&#39;Rotation&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">sub_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_to_t</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">gate_profile</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sub_t</span>
+                            
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># this &#39;added&#39; flag is so that, in the event that an op could be classified into two of the sets in a custom gateset,</span>
+                        <span class="c1">#ex: if CX and CLIFFORD are specified, it only gets counted for the first set listed</span>
+                        <span class="n">added</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="c1">#custom gateset</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_gateset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="nb">set</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_gateset</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">added</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="n">first_two</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">:</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">gate_profile</span><span class="p">[</span><span class="nb">set</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+                                        <span class="n">added</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="c1">#default gateset        </span>
+                        <span class="k">else</span><span class="p">:</span>        
+                            <span class="k">for</span> <span class="nb">set</span> <span class="ow">in</span> <span class="p">[</span><span class="n">sets</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">sets</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="n">sets</span><span class="o">.</span><span class="n">S</span><span class="p">,</span> <span class="n">sets</span><span class="o">.</span><span class="n">CX</span><span class="p">,</span> <span class="n">sets</span><span class="o">.</span><span class="n">CZ</span><span class="p">,</span> <span class="n">sets</span><span class="o">.</span><span class="n">PAULI</span><span class="p">]:</span>
+                                <span class="k">if</span> <span class="n">first_two</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">gate_profile</span><span class="p">[</span><span class="nb">set</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+        
+<div class="viewcode-block" id="Scheduler.schedule">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.schedule">[docs]</a>
+    <span class="k">def</span> <span class="nf">schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dag</span><span class="p">:</span> <span class="n">DAG</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        In each cycle:</span>
+<span class="sd">            1. Query the DAG for free nodes and populate the ready queue</span>
+<span class="sd">            2. Move instructions from the ready queue to the execute queue as appropriate</span>
+<span class="sd">            3. Sort the execute queue by finish time</span>
+<span class="sd">            4. Execute all instructions in the execute queue which finish before or at the current timestep</span>
+<span class="sd">        This cycle will continue for as long as the DAG has nodes in it. Once the DAG is empty, schedule any remaining instructions in the execute queue until it is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1">#fetch finish time for sorting</span>
+        <span class="k">def</span> <span class="nf">finish_time</span><span class="p">(</span><span class="n">inst</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span> <span class="o">==</span> <span class="n">Instruction</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">inst</span><span class="o">.</span><span class="n">finish_time</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="c1">#as long as there are instructions in the DAG, keep pulling and scheduling</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">populate_ready</span><span class="p">(</span><span class="n">dag</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">move_ready_to_execute</span><span class="p">(</span><span class="n">dag</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">execution_q</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="n">finish_time</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">free_instructions</span><span class="p">(</span><span class="n">dag</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="o">+=</span><span class="mi">1</span>
+
+
+        <span class="c1">#once there&#39;s none left, finish scheduling anything left in the ex_q</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">execution_q</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">free_instructions</span><span class="p">(</span><span class="n">dag</span><span class="p">)</span>
+
+        <span class="c1">#if the DAG has pulled all it can from the circuit, this will return False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">populate_ready</span><span class="p">(</span><span class="n">dag</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="Scheduler.rotation_to_t">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.Scheduler.rotation_to_t">[docs]</a>
+    <span class="k">def</span> <span class="nf">rotation_to_t</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">precision</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Decompose rotations into T-gates at a given precision.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">T_from_single_rotation</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span>
+                <span class="n">T_COUNT_SLOPE</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">precision</span><span class="p">)</span> <span class="o">+</span> <span class="n">T_COUNT_CONST</span><span class="p">,</span>
+                <span class="n">T_COUNT_STD_DEV</span><span class="p">,</span>
+            <span class="p">))</span>
+        <span class="k">return</span> <span class="n">T_from_single_rotation</span></div>
+</div>
+
+        
+
+<span class="kn">import</span> <span class="nn">time</span>
+<div class="viewcode-block" id="schedule_circuit">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.scheduler.html#src.pyLIQTR.scheduler.scheduler.schedule_circuit">[docs]</a>
+<span class="k">def</span> <span class="nf">schedule_circuit</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span><span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">,</span> <span class="n">architecture_config</span><span class="p">:</span><span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">full_profile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> \
+					<span class="n">decomp_level</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">context</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">custom_gateset</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">circuit_precision</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">):</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function is the main interface with the Scheduler, DAG, and Instruction classes. </span>
+<span class="sd">    </span>
+<span class="sd">    :param cirq.Circuit circuit: a cirq.Circuit object to be scheduled. (Other circuit formats will be supported in the future.)</span>
+
+<span class="sd">    :param dict architecture_config: a dictionary specifying timing for various gate types and restrictions on how many T gates can operate simultaneously. This dictionary must be of the form </span>
+<span class="sd">        `{&#39;Execution Times&#39;: {(&#39;Gate 1&#39;,): Time X, (&#39;Gate 2&#39;, &#39;Gate 3&#39;): Time Y}, &#39;Max T&#39;: Z # of simultaneous T-gates allowed}`.</span>
+
+<span class="sd">    :param bool full_profile: bool specifying whether results should include gate counts and (if applicable) parallelism analysis. If False, only circuit execution time, T-depth, and total number of qubits used will be included in results.</span>
+
+<span class="sd">    :param int decomp_level: levels of decomposition implemented before scheduling. If set to `0`, each operator will be decomposed to one/two-qubit gates only on its first occurance and cached for each future occurance. If set to `&#39;Full&#39;`, entire circuit will be decomposed to one/two-qubit gates before scheduling.</span>
+
+<span class="sd">    :param cirq.DecompositionContext context: cirq decomposition context to be used.</span>
+
+<span class="sd">    :param list custom_gateset: a list specifying which gates to include in analysis. This list must be of the form</span>
+<span class="sd">            `[&#39;first two characters of gate 1&#39;, &#39;first two characters of gate 2&#39;, ... &#39;Name of gateset&#39;]`. We recommend checking &#39;scheduling_examples.ipynb&#39; for further details on this feature.</span>
+<span class="sd">    </span>
+<span class="sd">    :param float circuit_precision: precision used to decompose rotations into T-gates.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    :param dict results: a dictionary including &#39;Total time for execution&#39;, &#39;Circuit T-depth&#39;, and &#39;Number of qubits used&#39;. If `full_profile` == True, this dictionary will also include &#39;Gate profile&#39;. If `full_profile` == True AND `decomp_level` == &#39;Full&#39;, &#39;Active qubit distribution&#39; and &#39;T-widths&#39; will be included as well.</span>
+<span class="sd">        </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1">#context = cirq.DecompositionContext(cirq.SimpleQubitManager())</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">gam</span><span class="o">.</span><span class="n">gam</span><span class="p">)</span>
+    
+    <span class="n">rotation_allowed</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">def</span> <span class="nf">convertMe</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">decomp_level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1">#A deep copy MUST be done here in order to keep qubit naming conventions consistent.</span>
+        <span class="n">tcontext</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">generator_decompose</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="n">keep</span><span class="p">,</span> <span class="n">on_stuck_raise</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">tcontext</span><span class="p">,</span><span class="n">max_decomposition_passes</span><span class="o">=</span><span class="n">decomp_level</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">op</span>
+    
+    <span class="c1">#compile config dict from user input and all circuit qubits</span>
+    <span class="n">all_resource_config</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="n">circuit</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">():</span>
+        <span class="n">all_resource_config</span><span class="p">[</span><span class="n">qubit</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">architecture_config</span><span class="p">:</span>
+        <span class="n">all_resource_config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">architecture_config</span><span class="p">)</span>
+
+    <span class="n">t_comp</span> <span class="o">=</span> <span class="n">t_complexity</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+    <span class="n">rot_count</span> <span class="o">=</span> <span class="n">t_comp</span><span class="o">.</span><span class="n">rotations</span>
+    <span class="n">gate_precision</span> <span class="o">=</span> <span class="n">circuit_precision</span> <span class="o">/</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">rot_count</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="n">rot_count</span>
+
+    <span class="c1">#initialize scheduler</span>
+    <span class="n">mySched</span> <span class="o">=</span> <span class="n">Scheduler</span><span class="p">(</span><span class="n">all_resource_config</span><span class="p">,</span> <span class="n">custom_gateset</span><span class="o">=</span><span class="n">custom_gateset</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="n">gate_precision</span><span class="p">,</span> <span class="n">context</span> <span class="o">=</span> <span class="n">context</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">custom_gateset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">decomp_level</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1">#if decomp is full, we decompose BEFORE scheduling    </span>
+    <span class="n">parallelism_results</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">decomp_level</span> <span class="o">==</span> <span class="s1">&#39;Full&#39;</span><span class="p">:</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">prev_decomp</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">while</span> <span class="n">circuit</span> <span class="o">!=</span> <span class="n">prev_decomp</span><span class="p">:</span>
+            <span class="n">prev_decomp</span> <span class="o">=</span> <span class="n">circuit</span>
+            <span class="n">circuit</span> <span class="o">=</span> <span class="n">circuit_decompose_multi</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">circuit</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mySched</span><span class="o">.</span><span class="n">qubits</span><span class="p">:</span>
+                    <span class="n">mySched</span><span class="o">.</span><span class="n">qubits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+            <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Decomposition levels to basic gates: </span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="n">decomp_level</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">parallelism_results</span> <span class="o">=</span> <span class="kc">True</span>
+    
+    <span class="c1">#initialize DAG</span>
+    <span class="n">myDAG</span> <span class="o">=</span> <span class="n">DAG</span><span class="p">(</span><span class="n">max_moments</span><span class="o">=</span><span class="mi">1000000</span><span class="p">)</span>
+
+    <span class="n">global_time</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1">#Loop through circuit</span>
+    <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">convertMe</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">decomp_level</span><span class="o">=</span><span class="n">decomp_level</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mySched</span><span class="o">.</span><span class="n">qubits</span><span class="p">:</span>
+                <span class="n">mySched</span><span class="o">.</span><span class="n">qubits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">myDAG</span><span class="o">.</span><span class="n">full</span><span class="p">():</span>
+            <span class="n">myDAG</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+            <span class="k">while</span> <span class="n">mySched</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">myDAG</span><span class="p">):</span>
+                <span class="k">pass</span>
+            <span class="n">global_time</span> <span class="o">+=</span> <span class="n">mySched</span><span class="o">.</span><span class="n">global_time</span>
+            <span class="n">myDAG</span><span class="o">.</span><span class="n">dependency_log</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="n">myDAG</span><span class="o">.</span><span class="n">dag_cycle</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">myDAG</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span><span class="n">Instruction</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">custom_gateset</span><span class="o">=</span><span class="n">custom_gateset</span><span class="p">))</span>
+    
+    <span class="n">myDAG</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+    <span class="k">while</span> <span class="n">mySched</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">myDAG</span><span class="p">):</span>
+        <span class="k">pass</span>
+    
+    <span class="c1">#If the DAG fills and resets, it resets the scheduler&#39;s global time to 0. idk why. but we record it locally just in case</span>
+    <span class="n">global_time</span> <span class="o">+=</span> <span class="n">mySched</span><span class="o">.</span><span class="n">global_time</span>
+    
+    <span class="n">results_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;Total time for execution&#39;</span><span class="p">:</span> <span class="n">global_time</span><span class="p">,</span>
+        <span class="s1">&#39;Circuit T-depth&#39;</span><span class="p">:</span> <span class="n">mySched</span><span class="o">.</span><span class="n">t_depth</span><span class="p">,</span>
+        <span class="s1">&#39;Number of qubits used&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">mySched</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">full_profile</span><span class="p">:</span>
+        <span class="n">results_dict</span><span class="p">[</span><span class="s1">&#39;Gate profile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mySched</span><span class="o">.</span><span class="n">gate_profile</span>
+        <span class="c1">#parallelism results will only be reported if decomp_level=&#39;Full&#39;. otherwise they get pretty mangled by the recursion</span>
+        <span class="k">if</span> <span class="n">parallelism_results</span> <span class="p">:</span> 
+            <span class="n">results_dict</span><span class="p">[</span><span class="s1">&#39;Active qubit distribution&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mySched</span><span class="o">.</span><span class="n">active_qubits</span>
+            <span class="n">results_dict</span><span class="p">[</span><span class="s1">&#39;T-widths&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mySched</span><span class="o">.</span><span class="n">t_width</span>
+
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Time to schedule: </span><span class="si">{</span><span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="si">}</span><span class="s1"> s.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">results_dict</span></div>
+
+    
+
+                
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

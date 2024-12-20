@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.operators.prepare &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.operators.prepare</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.circuits.operators.prepare</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">### Note: This code is under development</span>
+
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">floor</span><span class="p">,</span> <span class="n">log2</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.pyLOperator</span> <span class="kn">import</span> <span class="n">pyLOperator</span><span class="p">,</span><span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.qsp_helpers</span> <span class="kn">import</span> <span class="n">splitInPairs</span><span class="p">,</span> <span class="n">splitIn2</span><span class="p">,</span> <span class="n">snorm</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.circuit_decomposition</span> <span class="kn">import</span> <span class="n">decompose_once</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.cirq_transforms</span> <span class="kn">import</span> <span class="n">clifford_plus_t_direct_transform</span><span class="p">,</span> <span class="n">get_approximate_t_depth</span>
+<span class="c1"># Improve theses imports</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="Prepare">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare">[docs]</a>
+<span class="k">class</span> <span class="nc">Prepare</span><span class="p">(</span><span class="n">pyLOperator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implements the Prepare operator from &lt;cite&gt;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qubit_reg</span><span class="p">:</span><span class="n">List</span><span class="p">,</span> <span class="n">alphas</span><span class="p">,</span> \
+            <span class="n">pp_exp</span><span class="o">=</span><span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">pp_ctl</span><span class="o">=</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">pp_com</span><span class="o">=</span><span class="n">cirq</span><span class="o">.</span><span class="n">I</span><span class="p">):</span>
+        <span class="c1"># check and make sure that the user is sending a power of 2 of the len(alphas)</span>
+        <span class="k">if</span> <span class="n">floor</span><span class="p">(</span><span class="n">log2</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">alphas</span><span class="p">)))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">qubit_reg</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The length of the alphas MUST be a power of 2, exiting...&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__reg_q</span>  <span class="o">=</span> <span class="n">qubit_reg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__alphas</span> <span class="o">=</span> <span class="n">alphas</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pp_exp</span> <span class="o">=</span> <span class="n">pp_exp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pp_ctl</span> <span class="o">=</span> <span class="n">pp_ctl</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pp_com</span> <span class="o">=</span> <span class="n">pp_com</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sel_q</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="nb">super</span><span class="p">(</span><span class="n">Prepare</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_decomp</span> <span class="o">=</span> <span class="mi">2</span>
+        
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+        <span class="n">qStr</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reg_q</span><span class="p">])</span>
+        <span class="k">return</span> <span class="s2">&quot;Prepare </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qStr</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_qasm_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span><span class="s1">&#39;cirq.QasmArgs&#39;</span><span class="p">,</span> <span class="n">qubits</span><span class="p">:</span><span class="n">Tuple</span><span class="p">[</span><span class="s1">&#39;cirq.Qid&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">validate_version</span><span class="p">(</span><span class="s1">&#39;2.0&#39;</span><span class="p">)</span>
+        <span class="n">allQ</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__reg_q</span><span class="p">]</span>
+        <span class="n">allQStr</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">args</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">allQ</span><span class="p">])</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Prepare(</span><span class="si">{</span><span class="n">allQStr</span><span class="si">}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        
+    <span class="k">def</span> <span class="nf">_num_qubits_</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__reg_q</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">_circuit_diagram_info_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;Prepare&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">()</span>
+        
+    <span class="k">def</span> <span class="nf">_get_as_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__reg_q</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">alphas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__alphas</span>
+
+    <span class="nd">@property</span> 
+    <span class="k">def</span> <span class="nf">reg_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reg_q</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pp_exp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pp_exp</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pp_ctl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pp_ctl</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pp_com</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pp_com</span>
+
+    <span class="k">def</span> <span class="nf">_decompose_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qubits</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">disentangle_recursive</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">flip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pp_tgt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pp_exp</span><span class="p">,</span> <span class="n">pp_com</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pp_com</span><span class="p">,</span> <span class="n">pp_ctl</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pp_ctl</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Prepare.alpha_prep">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.alpha_prep">[docs]</a>
+    <span class="k">def</span> <span class="nf">alpha_prep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flip</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">alpha_pair</span><span class="p">:</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">flip</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">alpha_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">alpha_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">snorm</span><span class="p">(</span><span class="n">alpha_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="n">new_b</span> <span class="o">=</span> <span class="n">snorm</span><span class="p">(</span><span class="n">alpha_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">new_a</span><span class="p">,</span> <span class="n">new_b</span><span class="p">)</span>        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">alpha_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">alpha_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">snorm</span><span class="p">(</span><span class="n">alpha_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="n">new_b</span> <span class="o">=</span> <span class="n">snorm</span><span class="p">(</span><span class="n">alpha_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">new_a</span><span class="p">,</span> <span class="n">new_b</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Prepare.prepare_angles">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.prepare_angles">[docs]</a>
+    <span class="k">def</span> <span class="nf">prepare_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flip</span> <span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">alphas</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+
+        <span class="c1"># Get these right from this function, and initialize other lists</span>
+        <span class="n">alphas_in_pairs</span>         <span class="o">=</span> <span class="n">splitInPairs</span><span class="p">(</span><span class="n">alphas</span><span class="p">)</span>
+        <span class="n">prepped_alphas</span>          <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha_prep</span><span class="p">(</span><span class="n">flip</span><span class="o">=</span><span class="n">flip</span><span class="p">,</span> <span class="n">alpha_pair</span><span class="o">=</span><span class="n">alpha_pair</span><span class="p">)</span> <span class="k">for</span> <span class="n">alpha_pair</span> <span class="ow">in</span> <span class="n">alphas_in_pairs</span><span class="p">]</span>
+    
+        <span class="c1"># unzip using list comprehension:</span>
+        <span class="n">angles</span>    <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="n">prepped_alphas</span><span class="p">]</span>
+        <span class="n">new_coefs</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="n">prepped_alphas</span><span class="p">]</span>
+        
+        <span class="k">return</span> <span class="n">angles</span><span class="p">,</span> <span class="n">new_coefs</span></div>
+
+
+<div class="viewcode-block" id="Prepare.expOp">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.expOp">[docs]</a>
+    <span class="k">def</span> <span class="nf">expOp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">tgt_q</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pp_exp</span><span class="o">==</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Rx</span><span class="p">(</span><span class="n">rads</span><span class="o">=</span><span class="n">phi</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">tgt_q</span><span class="p">)]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pp_exp</span><span class="o">==</span><span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt; Ry with phi=</span><span class="si">{</span><span class="n">phi</span><span class="o">*</span><span class="mi">2</span><span class="si">}</span><span class="s1"> on tgt=</span><span class="si">{</span><span class="n">tgt_q</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Ry</span><span class="p">(</span><span class="n">rads</span><span class="o">=</span><span class="n">phi</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">tgt_q</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># assuming one of the three...</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Rz</span><span class="p">(</span><span class="n">rads</span><span class="o">=</span><span class="n">phi</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">tgt_q</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="Prepare.ctrlOp">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.ctrlOp">[docs]</a>
+    <span class="k">def</span> <span class="nf">ctrlOp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctl</span><span class="p">,</span> <span class="n">tgt</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pp_ctl</span> <span class="o">==</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt; Cx ctl=</span><span class="si">{</span><span class="n">ctl</span><span class="si">}</span><span class="s1"> and tgt=</span><span class="si">{</span><span class="n">tgt</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sel_q</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">ctl</span><span class="p">,</span> <span class="n">tgt</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">CCX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sel_q</span><span class="p">,</span> <span class="n">ctl</span><span class="p">,</span> <span class="n">tgt</span><span class="p">)]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pp_ctl</span> <span class="o">==</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sel_q</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">CZ</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">ctl</span><span class="p">,</span> <span class="n">tgt</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">CCZ</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sel_q</span><span class="p">,</span> <span class="n">ctl</span><span class="p">,</span> <span class="n">tgt</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;help, dont see CY in cirq doc.&#39;</span><span class="p">)</span></div>
+
+
+    <span class="c1"># TODO: unit test this against the qp equivalent.</span>
+    <span class="c1"># Note: I think this basically works, just needs to be debugged</span>
+<div class="viewcode-block" id="Prepare.split_angles">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.split_angles">[docs]</a>
+    <span class="k">def</span> <span class="nf">split_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">alphas</span><span class="p">):</span>
+        <span class="n">l1</span><span class="p">,</span><span class="n">l2</span> <span class="o">=</span> <span class="n">splitIn2</span><span class="p">(</span><span class="n">alphas</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l1</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">l2</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Need same size lists in split_angles!!!&#39;</span><span class="p">)</span>
+
+        <span class="n">multiplier</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pp_com</span><span class="o">==</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">pp_com</span><span class="o">==</span><span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">):</span>
+            <span class="n">multiplier</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        
+        <span class="n">p</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">,</span><span class="n">x</span> <span class="p">:</span> <span class="p">(</span><span class="n">w</span><span class="o">+</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">,</span><span class="n">x</span> <span class="p">:</span> <span class="n">multiplier</span><span class="o">*</span><span class="p">(</span><span class="n">w</span><span class="o">-</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+        <span class="k">if</span> <span class="n">alt</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">([</span><span class="n">m</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">)],</span>\
+                    <span class="p">[</span><span class="n">p</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">)])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">([</span><span class="n">p</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">)],</span>\
+                    <span class="p">[</span><span class="n">m</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">)])</span></div>
+
+        
+<div class="viewcode-block" id="Prepare.disentangle_recursive">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.disentangle_recursive">[docs]</a>
+    <span class="k">def</span> <span class="nf">disentangle_recursive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">flip</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">pp_tgt</span><span class="p">,</span> <span class="n">pp_ctl</span><span class="p">,</span> <span class="n">pp_com</span><span class="p">):</span>
+        <span class="c1"># Not used:</span>
+        <span class="c1">#  flip   : bool</span>
+        <span class="c1">#  pp_tgt : pauli</span>
+        <span class="c1">#  pp_ctl : pauli</span>
+        <span class="c1">#  pp_com : pauli</span>
+
+        <span class="n">gates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">disentangle_recursion</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="n">alt</span><span class="p">,</span> <span class="n">alphas</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alphas</span><span class="p">,</span> <span class="n">qubit_reg</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reg_qubits</span><span class="p">))</span>
+        <span class="c1"># Assuming no gate_sh_inv right now...</span>
+        <span class="n">gates</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">gates</span></div>
+
+   
+    <span class="c1"># TODO: Check angles and signs and stuff</span>
+    <span class="c1"># TODO: Get to work kindly with existing infra</span>
+<div class="viewcode-block" id="Prepare.disentangle_recursion">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.disentangle_recursion">[docs]</a>
+    <span class="k">def</span> <span class="nf">disentangle_recursion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">alphas</span><span class="p">,</span> <span class="n">qubit_reg</span><span class="p">):</span>
+        <span class="n">gates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">qubit_reg</span><span class="p">:</span>
+            <span class="c1"># Need to figure out what to do here.</span>
+            <span class="k">return</span> <span class="n">gates</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">qh</span> <span class="o">=</span> <span class="n">qubit_reg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># first qubit</span>
+            <span class="n">qi</span> <span class="o">=</span> <span class="n">qubit_reg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">ql</span> <span class="o">=</span> <span class="n">qubit_reg</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># print(&#39;---------&#39;)</span>
+            <span class="c1"># print(f&#39;&gt; Alphas = {alphas}&#39;)</span>
+            <span class="n">angles</span><span class="p">,</span> <span class="n">new_coefs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_angles</span><span class="p">(</span><span class="n">flip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alphas</span><span class="o">=</span><span class="n">alphas</span><span class="p">)</span> <span class="c1"># Note: Where does flip come from?</span>
+
+            <span class="k">if</span> <span class="kc">True</span><span class="p">:</span> <span class="c1">#gopts.contains(rXYZ) </span>
+                <span class="c1"># -&gt; TODO pp_exp = pp_tgt</span>
+                <span class="n">pp_clf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pp_ctl</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">pp_exp</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span>
+                <span class="n">pp_ctl</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span>
+
+            <span class="k">if</span> <span class="n">pp_clf</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pp_exp</span><span class="p">:</span>
+                <span class="n">pp_clf_</span> <span class="o">=</span> <span class="n">pp_clf</span> <span class="c1"># note, i dont understand what&#39;s happening here in the haskell code</span>
+
+            <span class="n">gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiplexor</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="n">alt</span><span class="p">,</span> <span class="n">alphas</span><span class="o">=</span><span class="n">angles</span><span class="p">,</span> <span class="n">ctl_qubits</span><span class="o">=</span><span class="n">qi</span><span class="p">,</span> <span class="n">tgt_qubit</span><span class="o">=</span><span class="n">ql</span><span class="p">))</span>
+            <span class="n">gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">disentangle_recursion</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="n">alt</span><span class="p">,</span> <span class="n">alphas</span><span class="o">=</span><span class="n">new_coefs</span><span class="p">,</span> <span class="n">qubit_reg</span><span class="o">=</span><span class="n">qi</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">gates</span></div>
+
+
+    <span class="c1"># TODO: Check angles and signs and stuff</span>
+    <span class="c1"># TODO: Get to work kindly with existing infra</span>
+<div class="viewcode-block" id="Prepare.multiplexor">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.multiplexor">[docs]</a>
+    <span class="k">def</span> <span class="nf">multiplexor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">alphas</span><span class="p">,</span> <span class="n">ctl_qubits</span><span class="p">,</span> <span class="n">tgt_qubit</span><span class="p">):</span>
+        <span class="n">gates</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ctl_qubits</span><span class="p">:</span>
+            <span class="n">gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiplex_aux</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alphas</span><span class="o">=</span><span class="n">alphas</span><span class="p">,</span> <span class="n">ctl_qubits</span><span class="o">=</span><span class="n">ctl_qubits</span><span class="p">,</span> <span class="n">tgt_qubit</span><span class="o">=</span><span class="n">tgt_qubit</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">gates</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">alt</span><span class="p">:</span>
+                <span class="n">gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrlOp</span><span class="p">(</span><span class="n">ctl</span><span class="o">=</span><span class="n">ctl_qubits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tgt</span><span class="o">=</span><span class="n">tgt_qubit</span><span class="p">))</span>
+                <span class="n">gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiplex_aux</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alphas</span><span class="o">=</span><span class="n">alphas</span><span class="p">,</span> <span class="n">ctl_qubits</span><span class="o">=</span><span class="n">ctl_qubits</span><span class="p">,</span> <span class="n">tgt_qubit</span><span class="o">=</span><span class="n">tgt_qubit</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">gates</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiplex_aux</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alphas</span><span class="o">=</span><span class="n">alphas</span><span class="p">,</span> <span class="n">ctl_qubits</span><span class="o">=</span><span class="n">ctl_qubits</span><span class="p">,</span> <span class="n">tgt_qubit</span><span class="o">=</span><span class="n">tgt_qubit</span><span class="p">))</span>
+                <span class="n">gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrlOp</span><span class="p">(</span><span class="n">ctl</span><span class="o">=</span><span class="n">ctl_qubits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tgt</span><span class="o">=</span><span class="n">tgt_qubit</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">gates</span></div>
+
+    
+    <span class="c1"># TODO: Check angles and signs and stuff</span>
+    <span class="c1"># TODO: Get to work kindly with existing infra</span>
+<div class="viewcode-block" id="Prepare.multiplex_aux">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.multiplex_aux">[docs]</a>
+    <span class="k">def</span> <span class="nf">multiplex_aux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">alphas</span><span class="p">,</span> <span class="n">ctl_qubits</span><span class="p">,</span> <span class="n">tgt_qubit</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">gates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># ---------</span>
+        <span class="c1"># Haskell recursive structure:</span>
+        <span class="c1"># ---------</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ctl_qubits</span><span class="p">:</span>
+            <span class="c1"># is a return needed?</span>
+            <span class="n">gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expOp</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">alphas</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tgt_q</span><span class="o">=</span><span class="n">tgt_qubit</span><span class="p">))</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">q0</span> <span class="o">=</span> <span class="n">ctl_qubits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">qt</span> <span class="o">=</span> <span class="n">ctl_qubits</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="n">as0</span><span class="p">,</span> <span class="n">as1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_angles</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="n">alt</span><span class="p">,</span> <span class="n">alphas</span><span class="o">=</span><span class="n">alphas</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---------------------&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt; q0 = </span><span class="si">{</span><span class="n">q0</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt; qt = </span><span class="si">{</span><span class="n">qt</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt; alphas = </span><span class="si">{</span><span class="n">alphas</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt; as0    = </span><span class="si">{</span><span class="n">as0</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt; as1    = </span><span class="si">{</span><span class="n">as1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+            <span class="n">gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiplex_aux</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alphas</span><span class="o">=</span><span class="n">as0</span><span class="p">,</span> <span class="n">ctl_qubits</span><span class="o">=</span><span class="n">qt</span><span class="p">,</span> <span class="n">tgt_qubit</span><span class="o">=</span><span class="n">tgt_qubit</span><span class="p">))</span>
+            <span class="n">gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrlOp</span><span class="p">(</span><span class="n">ctl</span><span class="o">=</span><span class="n">q0</span><span class="p">,</span> <span class="n">tgt</span><span class="o">=</span><span class="n">tgt_qubit</span><span class="p">))</span>
+            <span class="n">gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiplex_aux</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alphas</span><span class="o">=</span><span class="n">as1</span><span class="p">,</span> <span class="n">ctl_qubits</span><span class="o">=</span><span class="n">qt</span><span class="p">,</span> <span class="n">tgt_qubit</span><span class="o">=</span><span class="n">tgt_qubit</span><span class="p">))</span>
+            <span class="c1"># Is a return needed?</span>
+
+        <span class="k">return</span> <span class="n">gates</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

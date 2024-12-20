@@ -1,0 +1,449 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.phase_factors.phase_factors &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.phase_factors.phase_factors</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.phase_factors.phase_factors</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span>  <span class="nn">numpy</span>      <span class="k">as</span>      <span class="nn">np</span>
+<span class="kn">import</span>  <span class="nn">mpmath</span>     <span class="k">as</span>      <span class="nn">mpm</span>
+<span class="kn">from</span>    <span class="nn">functools</span>  <span class="kn">import</span>  <span class="n">cache</span> 
+
+<span class="n">mpm</span><span class="o">.</span><span class="n">mp</span><span class="o">.</span><span class="n">prec</span> <span class="o">=</span> <span class="mi">512</span>       <span class="c1"># precision for fitting methods</span>
+
+<span class="c1">## Import different angle generation algorithms</span>
+<span class="c1">##</span>
+<span class="kn">from</span>  <span class="nn">pyLIQTR.phase_factors.fourier_response.fourier_response</span>    <span class="kn">import</span>  <span class="n">Angler_fourier_response</span>
+<span class="kn">from</span>  <span class="nn">pyLIQTR.phase_factors.optimization.angler_optimization</span>     <span class="kn">import</span>  <span class="n">Angler_opt</span>
+<span class="kn">from</span>  <span class="nn">pyLIQTR.phase_factors.angler</span>                               <span class="kn">import</span>  <span class="n">Angler_random</span>
+
+<span class="kn">from</span>  <span class="nn">pyLIQTR.phase_factors.conversions</span>                          <span class="kn">import</span>  <span class="n">phases_Wx_to_R</span>
+
+<span class="c1">## Import function approximation algorithms</span>
+<span class="c1">##</span>
+<span class="kn">from</span>  <span class="nn">pyLIQTR.phase_factors.optimization.expander</span>                <span class="kn">import</span>  <span class="n">Expander</span>
+<span class="kn">from</span>  <span class="nn">pyLIQTR.phase_factors.optimization.fitter</span>                  <span class="kn">import</span>  <span class="n">Fitter</span>
+
+<span class="c1">## Routines for plotting error</span>
+<span class="c1">##</span>
+<span class="kn">from</span>  <span class="nn">pyLIQTR.utils.plot_helpers</span>            <span class="kn">import</span>  <span class="n">plot_func_error</span>
+
+
+
+
+
+
+<div class="viewcode-block" id="PhaseFactors">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.phase_factors.html#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors">[docs]</a>
+<span class="k">class</span> <span class="nc">PhaseFactors</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span>  
+                <span class="c1">#   eps=1e-3,</span>
+                  <span class="n">precompute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                  <span class="n">angler_max_iter</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+                  <span class="n">angler_bfgs_conv</span><span class="o">=</span><span class="mf">1e-14</span><span class="p">,</span> 
+                  <span class="n">mpm_prec</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span>
+                  <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                  <span class="o">**</span><span class="n">kwargs</span>                <span class="p">):</span>
+
+        <span class="c1">### Define these always</span>
+        <span class="c1">###</span>
+        <span class="c1"># self.name         =  &quot;&quot;</span>
+        <span class="c1"># self.expr         =  &quot;$f(x) = &quot;</span>
+        <span class="c1"># self.eps          =  eps</span>
+        <span class="c1"># self.convention   =  &quot;R&quot;</span>
+        <span class="c1"># self.phase_algorithm   =  phase_algorithm</span>
+        <span class="c1"># self.expansion_method  =  expansion_method</span>
+
+        <span class="c1"># self.x            =   ### function parameter</span>
+        <span class="c1"># self.func         =   ### define function with one mandatory arg and others kwargs</span>
+        <span class="c1"># self.params       =   ### dict to pass as kwargs for function paramters</span>
+
+
+        <span class="c1">## Define these for fitter</span>
+        <span class="c1">##</span>
+        <span class="c1">#</span>
+        <span class="c1"># self.deg          =   30</span>
+        <span class="c1"># self.parity       =    0</span>
+        <span class="c1"># self.kappa        = 10.0</span>
+
+        <span class="c1">## Always take these as kwargs</span>
+        <span class="c1">##</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">precompute</span>         <span class="o">=</span>  <span class="n">precompute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">silent</span>             <span class="o">=</span>  <span class="n">silent</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mpm_prec</span>          <span class="o">=</span>  <span class="n">mpm_prec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_angler_bfgs_conv</span>  <span class="o">=</span>  <span class="n">angler_bfgs_conv</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_angler_max_iter</span>   <span class="o">=</span>  <span class="n">angler_max_iter</span>
+
+        <span class="c1">## Method to obtain polynomial expansion coefficients </span>
+        <span class="c1">## prior to fitting (for Angler_opt method)</span>
+        <span class="c1">##</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expansion_method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;analytical&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_angler_cheb_poly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expansion</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expansion_method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;fit&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_angler_cheb_poly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_success_angler</span>       <span class="o">=</span>  <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_success_fitter</span>       <span class="o">=</span>  <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_success_computation</span>  <span class="o">=</span>  <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_computed</span>             <span class="o">=</span>   <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_phases</span>              <span class="o">=</span>   <span class="mi">0</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precompute</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phis</span>
+
+        <span class="k">return</span>
+
+
+    <span class="c1">## Evaluate encoded function at value x (by passing instance arguments)</span>
+    <span class="c1">##</span>
+<div class="viewcode-block" id="PhaseFactors.f">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.phase_factors.html#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.f">[docs]</a>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">))</span></div>
+
+    
+
+    <span class="c1">## Generate Chebyshev polynomial expansion</span>
+    <span class="c1">## (should be expanded to give access to Fourier equivalent)</span>
+    <span class="c1">##</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">expansion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expdr</span> <span class="o">=</span> <span class="n">Expander</span><span class="p">()</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">expdr</span><span class="p">)</span>
+    
+
+    <span class="c1">## Return Chebyshev or Fourier expansion coefficients</span>
+    <span class="c1">##</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">expansion_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">expansion</span><span class="o">.</span><span class="n">coeffs</span> <span class="p">)</span>
+    
+
+    <span class="c1">## Evaluate error in expansion for target function (Chebyshev / Fourier)</span>
+    <span class="c1">## at designated value &lt;x&gt;</span>
+    <span class="c1">## (for assessing expansion error before fitting)</span>
+    <span class="c1">##</span>
+    <span class="k">def</span> <span class="nf">expansion_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expansion</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+    
+
+    <span class="c1">## Evaluate expansion for target function (Chebyshev / Fourier)</span>
+    <span class="c1">## at designated value &lt;x&gt;</span>
+    <span class="c1">## (for assessing expansion error before fitting)</span>
+    <span class="c1">##</span>
+<div class="viewcode-block" id="PhaseFactors.expansion_eval">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.phase_factors.html#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.expansion_eval">[docs]</a>
+    <span class="k">def</span> <span class="nf">expansion_eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expansion</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span></div>
+
+    
+
+    <span class="c1">## Plot error in approximating target function based on polynomial expansion</span>
+    <span class="c1">## alone (i.e., before phase fitting procedure)</span>
+    <span class="c1">##</span>
+<div class="viewcode-block" id="PhaseFactors.plot_expansion_error">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.phase_factors.html#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.plot_expansion_error">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_expansion_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n_pts</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+
+        <span class="n">kappa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span>
+
+        <span class="n">lbound</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+        <span class="n">ubound</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="c1">## change to range of designated parameter (wtih rescaling)</span>
+
+        <span class="n">xpts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lbound</span><span class="p">,</span><span class="n">ubound</span><span class="p">,</span><span class="n">n_pts</span><span class="p">)</span>
+        <span class="n">f_vals</span>      <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">xpts</span><span class="p">,</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">p_vals</span>      <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">expansion</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">xpts</span><span class="p">)</span>
+        <span class="n">plot_func_error</span><span class="p">(</span><span class="n">xpts</span><span class="p">,</span><span class="n">f_vals</span><span class="p">,</span><span class="n">p_vals</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">expr</span><span class="p">)</span></div>
+
+
+
+
+    <span class="c1">## Run angle generation and return angler object containg</span>
+    <span class="c1">## calculation output</span>
+    <span class="c1">##</span>
+    <span class="nd">@property</span>
+    <span class="nd">@cache</span> 
+    <span class="k">def</span> <span class="nf">phase_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convention</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">):</span>
+
+            <span class="c1">## Instantiate required angler</span>
+            <span class="c1">##</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;optimization&quot;</span><span class="p">):</span>
+                <span class="n">Ang</span> <span class="o">=</span> <span class="n">Angler_opt</span><span class="p">(</span> <span class="n">cheb_poly</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_angler_cheb_poly</span><span class="p">,</span> 
+                                  <span class="n">bfgs_conv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_angler_bfgs_conv</span><span class="p">,</span> 
+                                  <span class="n">max_iter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_angler_max_iter</span><span class="p">,</span>
+                                  <span class="n">silent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">silent</span>  <span class="p">)</span>
+  
+            <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">):</span>
+                <span class="n">Ang</span> <span class="o">=</span> <span class="n">Angler_random</span><span class="p">(</span> <span class="n">cheb_poly</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_angler_cheb_poly</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">)</span>
+
+            <span class="c1">## Placeholder for fourier response class (port old methods to this)</span>
+            <span class="c1">##</span>
+        <span class="k">elif</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">convention</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fourier_response&quot;</span><span class="p">,</span> <span class="s2">&quot;fourier&quot;</span><span class="p">,</span> <span class="s2">&quot;fr&quot;</span><span class="p">]</span> <span class="p">):</span>
+
+                <span class="n">fr_random</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span>  <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
+
+                <span class="n">Ang</span>  <span class="o">=</span>   <span class="n">Angler_fourier_response</span><span class="p">(</span> <span class="n">tau</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;tau&#39;</span><span class="p">],</span> 
+                                                  <span class="n">eps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">,</span>
+                                                  <span class="n">silent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">,</span>
+                                                  <span class="n">random</span><span class="o">=</span><span class="n">fr_random</span> <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Phase determination algorithm &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_algorithm</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; is not supported.&quot;</span><span class="p">)</span>
+
+        <span class="c1">## Run phase generation</span>
+        <span class="c1">##</span>
+        <span class="n">Ang</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+        
+        <span class="c1">## Note success or failure of calculation</span>
+        <span class="c1">##</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_success_angler</span>           <span class="o">=</span>  <span class="n">Ang</span><span class="o">.</span><span class="n">_success</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_success_angler</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_computed</span>             <span class="o">=</span>   <span class="kc">True</span>
+
+
+        <span class="k">return</span><span class="p">(</span><span class="n">Ang</span><span class="p">)</span>
+    
+
+
+    <span class="c1">## Convert phases to desired convention and provide a convenient </span>
+    <span class="c1">## access point for the data (while leaving external access to the Angler)</span>
+    <span class="c1">##</span>
+    <span class="nd">@property</span>
+    <span class="nd">@cache</span> 
+    <span class="k">def</span> <span class="nf">phis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">phis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_generator</span><span class="o">.</span><span class="n">phases</span>
+
+        <span class="c1">## Switch based on optimization algorithm, as it will (usually)</span>
+        <span class="c1">## have a fixed output convention</span>
+        <span class="c1">##</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;optimization&quot;</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convention</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;r&#39;</span><span class="p">):</span>
+                <span class="n">phis</span> <span class="o">=</span> <span class="n">phases_Wx_to_R</span><span class="p">(</span><span class="n">phis</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convention</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;wx&#39;</span><span class="p">):</span>
+                <span class="k">pass</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_phases</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phis</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">phis</span><span class="p">)</span>
+
+
+    <span class="c1">## Instantiate a fitter instance, run fitting, and provide access</span>
+    <span class="c1">## (only fitting algo right now is Remez)</span>
+    <span class="c1">##</span>
+    <span class="nd">@property</span>
+    <span class="nd">@cache</span> 
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">theFit</span>  <span class="o">=</span> <span class="n">Fitter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parity</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kappa</span><span class="p">,</span><span class="n">silent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">)</span>
+        <span class="n">theFit</span><span class="o">.</span><span class="n">remez</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_success_fitter</span> <span class="o">=</span>  <span class="n">theFit</span><span class="o">.</span><span class="n">_success</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">theFit</span><span class="p">)</span>
+    
+
+
+    <span class="c1">## Print useful output regarding the phase factors</span>
+    <span class="c1">##</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;Phase angles:</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;Expression:</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expr</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;# of Phases:</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_phases</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;Parameters:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t\t\t</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">param</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">param</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;Convention:</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convention</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+        <span class="c1"># if (self.expansion_method.lower() == &quot;analytical&quot;):</span>
+        <span class="c1">#     string += (&quot;Expansion error:\t&quot;+str(self.expansion_error)+&quot;\n&quot;)</span>
+        
+
+        <span class="n">string</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;Phase Algorithm:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_algorithm</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;Target Precision:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expansion_method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;fit&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_success_fitter</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">fit_string</span> <span class="o">=</span> <span class="s2">&quot;Failed&quot;</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_success_fitter</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">fit_string</span> <span class="o">=</span> <span class="s2">&quot;Success&quot;</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_success_fitter</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">fit_string</span> <span class="o">=</span> <span class="s2">&quot;Not run&quot;</span>
+
+            <span class="n">string</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;Fitter:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">+</span><span class="n">fit_string</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;optimization&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_success_angler</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">angle_string</span> <span class="o">=</span> <span class="s2">&quot;Failed&quot;</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_success_angler</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">angle_string</span> <span class="o">=</span> <span class="s2">&quot;Success&quot;</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_success_angler</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">angle_string</span> <span class="o">=</span> <span class="s2">&quot;Not run&quot;</span>
+
+            <span class="n">string</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;Optimizer:</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="o">+</span><span class="n">angle_string</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_computed</span><span class="p">):</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;Angles Computed:</span><span class="se">\t</span><span class="s2">True</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;Angles Computed:</span><span class="se">\t</span><span class="s2">False</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+
+        <span class="k">return</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    
+
+    <span class="c1">## Return degree of approximating Chebyshev polynomial</span>
+    <span class="c1">## or Fourier series</span>
+    <span class="c1">##</span>
+    <span class="nd">@property</span>
+    <span class="nd">@cache</span>
+    <span class="k">def</span> <span class="nf">expansion_degree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_angler_cheb_poly</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>
+
+
+    <span class="c1">##  Return number of calculated phase angles.</span>
+    <span class="c1">##  </span>
+    <span class="nd">@property</span> 
+    <span class="k">def</span> <span class="nf">num_phases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phis</span><span class="p">))</span>
+
+
+    <span class="c1">## Provide some colligative error measure over the fitting domain</span>
+    <span class="c1">##</span>
+<div class="viewcode-block" id="PhaseFactors.expansion_error">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.phase_factors.html#src.pyLIQTR.phase_factors.phase_factors.PhaseFactors.expansion_error">[docs]</a>
+    <span class="k">def</span> <span class="nf">expansion_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+
+
+    <span class="c1">## Provide a means for assessing error in a pointwise manner</span>
+    <span class="c1">##</span>
+    <span class="k">def</span> <span class="nf">_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+    
+  
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

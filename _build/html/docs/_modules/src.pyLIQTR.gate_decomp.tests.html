@@ -1,0 +1,725 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.gate_decomp.tests package &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/pyliqtr_logo.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.gate_decomp.tests package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/_modules/src.pyLIQTR.gate_decomp.tests.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-pyliqtr-gate-decomp-tests-package">
+<h1>src.pyLIQTR.gate_decomp.tests package<a class="headerlink" href="#src-pyliqtr-gate-decomp-tests-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.gate_decomp.tests.benchmarks">
+<span id="src-pyliqtr-gate-decomp-tests-benchmarks-module"></span><h2>src.pyLIQTR.gate_decomp.tests.benchmarks module<a class="headerlink" href="#module-src.pyLIQTR.gate_decomp.tests.benchmarks" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.benchmarks.benchmark_gse_circuit">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.benchmarks.</span></span><span class="sig-name descname"><span class="pre">benchmark_gse_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/benchmarks.html#benchmark_gse_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.benchmarks.benchmark_gse_circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.benchmarks.benchmark_random_angles">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.benchmarks.</span></span><span class="sig-name descname"><span class="pre">benchmark_random_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/benchmarks.html#benchmark_random_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.benchmarks.benchmark_random_angles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.benchmarks.estimate_t_count_direct">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.benchmarks.</span></span><span class="sig-name descname"><span class="pre">estimate_t_count_direct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_samples</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/benchmarks.html#estimate_t_count_direct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.benchmarks.estimate_t_count_direct" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.benchmarks.estimate_t_count_fallback">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.benchmarks.</span></span><span class="sig-name descname"><span class="pre">estimate_t_count_fallback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_samples</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/benchmarks.html#estimate_t_count_fallback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.benchmarks.estimate_t_count_fallback" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.benchmarks.main">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.benchmarks.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/benchmarks.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.benchmarks.main" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.gate_decomp.tests.conftest">
+<span id="src-pyliqtr-gate-decomp-tests-conftest-module"></span><h2>src.pyLIQTR.gate_decomp.tests.conftest module<a class="headerlink" href="#module-src.pyLIQTR.gate_decomp.tests.conftest" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.conftest.test_circuit_4_qubits">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.conftest.</span></span><span class="sig-name descname"><span class="pre">test_circuit_4_qubits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/conftest.html#test_circuit_4_qubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.conftest.test_circuit_4_qubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.conftest.test_circuit_no_rz">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.conftest.</span></span><span class="sig-name descname"><span class="pre">test_circuit_no_rz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/conftest.html#test_circuit_no_rz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.conftest.test_circuit_no_rz" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.gate_decomp.tests.test_cirq_transformers">
+<span id="src-pyliqtr-gate-decomp-tests-test-cirq-transformers-module"></span><h2>src.pyLIQTR.gate_decomp.tests.test_cirq_transformers module<a class="headerlink" href="#module-src.pyLIQTR.gate_decomp.tests.test_cirq_transformers" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.</span></span><span class="sig-name descname"><span class="pre">TestCirqTransforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.precision_is_valid">
+<span class="sig-name descname"><span class="pre">precision_is_valid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.precision_is_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.precision_is_valid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.pytestmark">
+<span class="sig-name descname"><span class="pre">pytestmark</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[Mark(name='usefixtures',</span> <span class="pre">args=('test_circuit_no_rz',),</span> <span class="pre">kwargs={}),</span> <span class="pre">Mark(name='usefixtures',</span> <span class="pre">args=('test_circuit_4_qubits',),</span> <span class="pre">kwargs={})]</span></em><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.pytestmark" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.setUp" title="Link to this definition"></a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_XPow_gates">
+<span class="sig-name descname"><span class="pre">test_XPow_gates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_XPow_gates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_XPow_gates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_accuracy_issue">
+<span class="sig-name descname"><span class="pre">test_accuracy_issue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_accuracy_issue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_accuracy_issue" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_determine_gate_precision_circuit_precision_none">
+<span class="sig-name descname"><span class="pre">test_determine_gate_precision_circuit_precision_none</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_determine_gate_precision_circuit_precision_none"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_determine_gate_precision_circuit_precision_none" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_determine_gate_precision_no_rotational_gates">
+<span class="sig-name descname"><span class="pre">test_determine_gate_precision_no_rotational_gates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_determine_gate_precision_no_rotational_gates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_determine_gate_precision_no_rotational_gates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_determine_gate_precision_only_circuit_precision">
+<span class="sig-name descname"><span class="pre">test_determine_gate_precision_only_circuit_precision</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_determine_gate_precision_only_circuit_precision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_determine_gate_precision_only_circuit_precision" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_determine_gate_precision_only_gate_precision">
+<span class="sig-name descname"><span class="pre">test_determine_gate_precision_only_gate_precision</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_determine_gate_precision_only_gate_precision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_determine_gate_precision_only_gate_precision" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_determine_gate_precision_valid_params">
+<span class="sig-name descname"><span class="pre">test_determine_gate_precision_valid_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_determine_gate_precision_valid_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_determine_gate_precision_valid_params" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_get_approx_t_depth">
+<span class="sig-name descname"><span class="pre">test_get_approx_t_depth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_get_approx_t_depth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_get_approx_t_depth" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_gse_circuit">
+<span class="sig-name descname"><span class="pre">test_gse_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_gse_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_gse_circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_multi_axis_rotation_prec10">
+<span class="sig-name descname"><span class="pre">test_multi_axis_rotation_prec10</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_multi_axis_rotation_prec10"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_multi_axis_rotation_prec10" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_multi_axis_rotation_prec13">
+<span class="sig-name descname"><span class="pre">test_multi_axis_rotation_prec13</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_multi_axis_rotation_prec13"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_multi_axis_rotation_prec13" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_multiple_decomp_rotations_to_qasm">
+<span class="sig-name descname"><span class="pre">test_multiple_decomp_rotations_to_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_multiple_decomp_rotations_to_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_multiple_decomp_rotations_to_qasm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_num_rotation_gates1">
+<span class="sig-name descname"><span class="pre">test_num_rotation_gates1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_num_rotation_gates1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_num_rotation_gates1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_pi_rots">
+<span class="sig-name descname"><span class="pre">test_pi_rots</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_pi_rots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_pi_rots" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_profile_prec10">
+<span class="sig-name descname"><span class="pre">test_profile_prec10</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_profile_prec10"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_profile_prec10" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_profile_prec15">
+<span class="sig-name descname"><span class="pre">test_profile_prec15</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_profile_prec15"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_profile_prec15" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_qsp_circuit">
+<span class="sig-name descname"><span class="pre">test_qsp_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_qsp_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_qsp_circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_random_decomp1">
+<span class="sig-name descname"><span class="pre">test_random_decomp1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_random_decomp1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_random_decomp1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_random_decomp2">
+<span class="sig-name descname"><span class="pre">test_random_decomp2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_random_decomp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_random_decomp2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rx_decomp_inverse_gate">
+<span class="sig-name descname"><span class="pre">test_rx_decomp_inverse_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_rx_decomp_inverse_gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rx_decomp_inverse_gate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rx_decomp_to_qasm">
+<span class="sig-name descname"><span class="pre">test_rx_decomp_to_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_rx_decomp_to_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rx_decomp_to_qasm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_ry_decomp_to_qasm">
+<span class="sig-name descname"><span class="pre">test_ry_decomp_to_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_ry_decomp_to_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_ry_decomp_to_qasm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rz_decomp1">
+<span class="sig-name descname"><span class="pre">test_rz_decomp1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_rz_decomp1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rz_decomp1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rz_decomp2">
+<span class="sig-name descname"><span class="pre">test_rz_decomp2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_rz_decomp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rz_decomp2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rz_decomp_circuit2qasm">
+<span class="sig-name descname"><span class="pre">test_rz_decomp_circuit2qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_rz_decomp_circuit2qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rz_decomp_circuit2qasm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rz_decomp_qsp_circuit">
+<span class="sig-name descname"><span class="pre">test_rz_decomp_qsp_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_rz_decomp_qsp_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rz_decomp_qsp_circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rz_decomp_to_qasm">
+<span class="sig-name descname"><span class="pre">test_rz_decomp_to_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_rz_decomp_to_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rz_decomp_to_qasm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rz_decomp_w_classical_controls">
+<span class="sig-name descname"><span class="pre">test_rz_decomp_w_classical_controls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_rz_decomp_w_classical_controls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_rz_decomp_w_classical_controls" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_single_qubit_x_rotation">
+<span class="sig-name descname"><span class="pre">test_single_qubit_x_rotation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_single_qubit_x_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_single_qubit_x_rotation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_single_qubit_y_rotation">
+<span class="sig-name descname"><span class="pre">test_single_qubit_y_rotation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_single_qubit_y_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_single_qubit_y_rotation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_single_qubit_z_rotation">
+<span class="sig-name descname"><span class="pre">test_single_qubit_z_rotation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_cirq_transformers.html#TestCirqTransforms.test_single_qubit_z_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.TestCirqTransforms.test_single_qubit_z_rotation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.random">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.</span></span><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">x</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">interval</span> <span class="pre">[0,</span> <span class="pre">1).</span></span></span><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_cirq_transformers.random" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.gate_decomp.tests.test_exact_decomp">
+<span id="src-pyliqtr-gate-decomp-tests-test-exact-decomp-module"></span><h2>src.pyLIQTR.gate_decomp.tests.test_exact_decomp module<a class="headerlink" href="#module-src.pyLIQTR.gate_decomp.tests.test_exact_decomp" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.test_exact_decomp.</span></span><span class="sig-name descname"><span class="pre">TestExactDecomp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_compressed_rep1">
+<span class="sig-name descname"><span class="pre">test_compressed_rep1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp.test_compressed_rep1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_compressed_rep1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_compressed_rep2">
+<span class="sig-name descname"><span class="pre">test_compressed_rep2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp.test_compressed_rep2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_compressed_rep2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_fallback_prec10">
+<span class="sig-name descname"><span class="pre">test_exact_decomp_fallback_prec10</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp.test_exact_decomp_fallback_prec10"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_fallback_prec10" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_fallback_prec20">
+<span class="sig-name descname"><span class="pre">test_exact_decomp_fallback_prec20</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp.test_exact_decomp_fallback_prec20"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_fallback_prec20" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_fallback_prec30">
+<span class="sig-name descname"><span class="pre">test_exact_decomp_fallback_prec30</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp.test_exact_decomp_fallback_prec30"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_fallback_prec30" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_fallback_prec40">
+<span class="sig-name descname"><span class="pre">test_exact_decomp_fallback_prec40</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp.test_exact_decomp_fallback_prec40"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_fallback_prec40" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_fallback_prec50">
+<span class="sig-name descname"><span class="pre">test_exact_decomp_fallback_prec50</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp.test_exact_decomp_fallback_prec50"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_fallback_prec50" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_prec10">
+<span class="sig-name descname"><span class="pre">test_exact_decomp_prec10</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp.test_exact_decomp_prec10"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_prec10" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_prec20">
+<span class="sig-name descname"><span class="pre">test_exact_decomp_prec20</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp.test_exact_decomp_prec20"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_prec20" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_prec30">
+<span class="sig-name descname"><span class="pre">test_exact_decomp_prec30</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp.test_exact_decomp_prec30"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_prec30" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_prec40">
+<span class="sig-name descname"><span class="pre">test_exact_decomp_prec40</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp.test_exact_decomp_prec40"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_exact_decomp_prec40" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_rand_angles_prec50">
+<span class="sig-name descname"><span class="pre">test_rand_angles_prec50</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_exact_decomp.html#TestExactDecomp.test_rand_angles_prec50"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_exact_decomp.TestExactDecomp.test_rand_angles_prec50" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.gate_decomp.tests.test_matrices">
+<span id="src-pyliqtr-gate-decomp-tests-test-matrices-module"></span><h2>src.pyLIQTR.gate_decomp.tests.test_matrices module<a class="headerlink" href="#module-src.pyLIQTR.gate_decomp.tests.test_matrices" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.test_matrices.</span></span><span class="sig-name descname"><span class="pre">TestMatrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_matrices.html#TestMatrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_convert_H">
+<span class="sig-name descname"><span class="pre">test_convert_H</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_matrices.html#TestMatrices.test_convert_H"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_convert_H" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_convert_HT">
+<span class="sig-name descname"><span class="pre">test_convert_HT</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_matrices.html#TestMatrices.test_convert_HT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_convert_HT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_convert_S">
+<span class="sig-name descname"><span class="pre">test_convert_S</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_matrices.html#TestMatrices.test_convert_S"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_convert_S" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_convert_T">
+<span class="sig-name descname"><span class="pre">test_convert_T</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_matrices.html#TestMatrices.test_convert_T"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_convert_T" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_convert_T2">
+<span class="sig-name descname"><span class="pre">test_convert_T2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_matrices.html#TestMatrices.test_convert_T2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_convert_T2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_convert_complicated">
+<span class="sig-name descname"><span class="pre">test_convert_complicated</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_matrices.html#TestMatrices.test_convert_complicated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_convert_complicated" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_mult_MATDOMEGA_1">
+<span class="sig-name descname"><span class="pre">test_mult_MATDOMEGA_1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_matrices.html#TestMatrices.test_mult_MATDOMEGA_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_mult_MATDOMEGA_1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_mult_MATDOMEGA_2">
+<span class="sig-name descname"><span class="pre">test_mult_MATDOMEGA_2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_matrices.html#TestMatrices.test_mult_MATDOMEGA_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_mult_MATDOMEGA_2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_mult_SO3_1">
+<span class="sig-name descname"><span class="pre">test_mult_SO3_1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_matrices.html#TestMatrices.test_mult_SO3_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_mult_SO3_1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_mult_SO3_2">
+<span class="sig-name descname"><span class="pre">test_mult_SO3_2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_matrices.html#TestMatrices.test_mult_SO3_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_mult_SO3_2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_mult_SO3_3">
+<span class="sig-name descname"><span class="pre">test_mult_SO3_3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_matrices.html#TestMatrices.test_mult_SO3_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_matrices.TestMatrices.test_mult_SO3_3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.gate_decomp.tests.test_point_enumeration">
+<span id="src-pyliqtr-gate-decomp-tests-test-point-enumeration-module"></span><h2>src.pyLIQTR.gate_decomp.tests.test_point_enumeration module<a class="headerlink" href="#module-src.pyLIQTR.gate_decomp.tests.test_point_enumeration" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.test_point_enumeration.</span></span><span class="sig-name descname"><span class="pre">TestApproximationFunctions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_A_op">
+<span class="sig-name descname"><span class="pre">test_A_op</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_A_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_A_op" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_B_op">
+<span class="sig-name descname"><span class="pre">test_B_op</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_B_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_B_op" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_K_op">
+<span class="sig-name descname"><span class="pre">test_K_op</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_K_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_K_op" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_R_op">
+<span class="sig-name descname"><span class="pre">test_R_op</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_R_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_R_op" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_bounding_ellipse">
+<span class="sig-name descname"><span class="pre">test_find_bounding_ellipse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_find_bounding_ellipse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_bounding_ellipse" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_e_and_z">
+<span class="sig-name descname"><span class="pre">test_find_e_and_z</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_find_e_and_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_e_and_z" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_k_1">
+<span class="sig-name descname"><span class="pre">test_find_k_1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_find_k_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_k_1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_k_2">
+<span class="sig-name descname"><span class="pre">test_find_k_2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_find_k_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_k_2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_k_3">
+<span class="sig-name descname"><span class="pre">test_find_k_3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_find_k_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_k_3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_k_4">
+<span class="sig-name descname"><span class="pre">test_find_k_4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_find_k_4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_k_4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_k_5">
+<span class="sig-name descname"><span class="pre">test_find_k_5</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_find_k_5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_k_5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_u_candidate_1">
+<span class="sig-name descname"><span class="pre">test_find_u_candidate_1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_find_u_candidate_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_u_candidate_1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_u_candidate_2">
+<span class="sig-name descname"><span class="pre">test_find_u_candidate_2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_find_u_candidate_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_u_candidate_2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_u_candidate_3">
+<span class="sig-name descname"><span class="pre">test_find_u_candidate_3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_find_u_candidate_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_u_candidate_3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_u_candidate_4">
+<span class="sig-name descname"><span class="pre">test_find_u_candidate_4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_find_u_candidate_4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_find_u_candidate_4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_one_dim_grid_problem_rand">
+<span class="sig-name descname"><span class="pre">test_one_dim_grid_problem_rand</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_one_dim_grid_problem_rand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_one_dim_grid_problem_rand" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_reduce_skew_extra_1">
+<span class="sig-name descname"><span class="pre">test_reduce_skew_extra_1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_reduce_skew_extra_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_reduce_skew_extra_1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_reduce_skew_large_bias1">
+<span class="sig-name descname"><span class="pre">test_reduce_skew_large_bias1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_reduce_skew_large_bias1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_reduce_skew_large_bias1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_reduce_skew_large_bias2">
+<span class="sig-name descname"><span class="pre">test_reduce_skew_large_bias2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_reduce_skew_large_bias2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_reduce_skew_large_bias2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_scaled_one_dim_grid_problem_1">
+<span class="sig-name descname"><span class="pre">test_scaled_one_dim_grid_problem_1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_scaled_one_dim_grid_problem_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_scaled_one_dim_grid_problem_1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_scaled_one_dim_grid_problem_2">
+<span class="sig-name descname"><span class="pre">test_scaled_one_dim_grid_problem_2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_scaled_one_dim_grid_problem_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_scaled_one_dim_grid_problem_2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_scaled_one_dim_grid_problem_3">
+<span class="sig-name descname"><span class="pre">test_scaled_one_dim_grid_problem_3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_scaled_one_dim_grid_problem_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_scaled_one_dim_grid_problem_3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_scaled_one_dim_grid_problem_4">
+<span class="sig-name descname"><span class="pre">test_scaled_one_dim_grid_problem_4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_scaled_one_dim_grid_problem_4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_scaled_one_dim_grid_problem_4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_shift_operator">
+<span class="sig-name descname"><span class="pre">test_shift_operator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_shift_operator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_shift_operator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_1">
+<span class="sig-name descname"><span class="pre">test_solve_one_dim_grid_problem_1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_solve_one_dim_grid_problem_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_2">
+<span class="sig-name descname"><span class="pre">test_solve_one_dim_grid_problem_2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_solve_one_dim_grid_problem_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_3">
+<span class="sig-name descname"><span class="pre">test_solve_one_dim_grid_problem_3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_solve_one_dim_grid_problem_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_4">
+<span class="sig-name descname"><span class="pre">test_solve_one_dim_grid_problem_4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_solve_one_dim_grid_problem_4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_5">
+<span class="sig-name descname"><span class="pre">test_solve_one_dim_grid_problem_5</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_solve_one_dim_grid_problem_5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_6">
+<span class="sig-name descname"><span class="pre">test_solve_one_dim_grid_problem_6</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_solve_one_dim_grid_problem_6"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_6" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_tmp">
+<span class="sig-name descname"><span class="pre">test_solve_one_dim_grid_problem_tmp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_solve_one_dim_grid_problem_tmp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_one_dim_grid_problem_tmp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_two_dim_grid_problem_ellipse">
+<span class="sig-name descname"><span class="pre">test_solve_two_dim_grid_problem_ellipse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_solve_two_dim_grid_problem_ellipse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_solve_two_dim_grid_problem_ellipse" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_two_dim_upright_rectangle1">
+<span class="sig-name descname"><span class="pre">test_two_dim_upright_rectangle1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_two_dim_upright_rectangle1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_two_dim_upright_rectangle1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_two_dim_upright_rectangle2">
+<span class="sig-name descname"><span class="pre">test_two_dim_upright_rectangle2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_point_enumeration.html#TestApproximationFunctions.test_two_dim_upright_rectangle2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_point_enumeration.TestApproximationFunctions.test_two_dim_upright_rectangle2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.gate_decomp.tests.test_solve_diophantine">
+<span id="src-pyliqtr-gate-decomp-tests-test-solve-diophantine-module"></span><h2>src.pyLIQTR.gate_decomp.tests.test_solve_diophantine module<a class="headerlink" href="#module-src.pyLIQTR.gate_decomp.tests.test_solve_diophantine" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.</span></span><span class="sig-name descname"><span class="pre">TestFactoringFunctions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_solve_diophantine.html#TestFactoringFunctions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_factor1">
+<span class="sig-name descname"><span class="pre">test_factor1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_solve_diophantine.html#TestFactoringFunctions.test_factor1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_factor1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_factor2">
+<span class="sig-name descname"><span class="pre">test_factor2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_solve_diophantine.html#TestFactoringFunctions.test_factor2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_factor2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_modular_square_root1">
+<span class="sig-name descname"><span class="pre">test_modular_square_root1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_solve_diophantine.html#TestFactoringFunctions.test_modular_square_root1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_modular_square_root1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_modular_square_root2">
+<span class="sig-name descname"><span class="pre">test_modular_square_root2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_solve_diophantine.html#TestFactoringFunctions.test_modular_square_root2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_modular_square_root2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_modular_square_root3">
+<span class="sig-name descname"><span class="pre">test_modular_square_root3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_solve_diophantine.html#TestFactoringFunctions.test_modular_square_root3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_modular_square_root3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_modular_square_root4">
+<span class="sig-name descname"><span class="pre">test_modular_square_root4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_solve_diophantine.html#TestFactoringFunctions.test_modular_square_root4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_modular_square_root4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_modular_square_root5">
+<span class="sig-name descname"><span class="pre">test_modular_square_root5</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/gate_decomp/tests/test_solve_diophantine.html#TestFactoringFunctions.test_modular_square_root5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.gate_decomp.tests.test_solve_diophantine.TestFactoringFunctions.test_modular_square_root5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.gate_decomp.tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.pyLIQTR.gate_decomp.tests" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

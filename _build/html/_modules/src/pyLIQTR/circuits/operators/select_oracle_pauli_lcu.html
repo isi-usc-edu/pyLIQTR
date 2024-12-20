@@ -1,0 +1,609 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1">#toffoli with appropriate basis change gates</span>
+<div class="viewcode-block" id="toffoli">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.toffoli">[docs]</a>
+<span class="k">def</span> <span class="nf">toffoli</span><span class="p">(</span><span class="n">b0</span><span class="p">,</span><span class="n">b1</span><span class="p">,</span><span class="n">ctl0</span><span class="p">,</span><span class="n">ctl1</span><span class="p">,</span><span class="n">trgt</span><span class="p">):</span>
+        <span class="c1">#3 qubits.</span>
+        <span class="n">basis_change</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">b0</span><span class="p">:</span>
+            <span class="n">basis_change</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">ctl0</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">b1</span><span class="p">:</span>
+            <span class="n">basis_change</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">ctl1</span><span class="p">))</span>
+        
+        <span class="n">cnX</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">trgt</span><span class="p">)</span><span class="o">.</span><span class="n">controlled_by</span><span class="p">(</span><span class="n">ctl0</span><span class="p">,</span><span class="n">ctl1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">basis_change</span><span class="o">+</span><span class="p">[</span><span class="n">cnX</span><span class="p">]</span><span class="o">+</span><span class="n">basis_change</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<span class="c1">#implemented &amp; checked</span>
+<div class="viewcode-block" id="walkDown">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.walkDown">[docs]</a>
+<span class="k">def</span> <span class="nf">walkDown</span><span class="p">(</span><span class="n">bTree</span><span class="p">,</span> <span class="n">qubits</span><span class="p">,</span> <span class="n">ancilla</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">walkDown_helper</span><span class="p">(</span><span class="n">myc</span><span class="p">,</span><span class="n">bt</span><span class="p">,</span><span class="n">qbt</span><span class="p">,</span><span class="n">anc</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">myc</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">myc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toffoli</span><span class="p">(</span><span class="n">bt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="kc">True</span><span class="p">,</span> <span class="n">qbt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">anc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">anc</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">myc</span> <span class="o">=</span> <span class="n">walkDown_helper</span><span class="p">(</span><span class="n">myc</span><span class="p">,</span> <span class="n">bt</span><span class="p">[</span><span class="mi">1</span><span class="p">::],</span> <span class="n">qbt</span><span class="p">[</span><span class="mi">1</span><span class="p">::],</span> <span class="n">anc</span><span class="p">[</span><span class="mi">1</span><span class="p">::])</span>
+            <span class="k">return</span> <span class="n">myc</span>
+        
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toffoli</span><span class="p">(</span><span class="n">bTree</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">bTree</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">qubits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qubits</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ancilla</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">walkDown_helper</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">bTree</span><span class="p">[</span><span class="mi">2</span><span class="p">::],</span> <span class="n">qubits</span><span class="p">[</span><span class="mi">2</span><span class="p">::],</span> <span class="n">ancilla</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">circuit</span></div>
+
+
+<span class="c1">#implemented</span>
+<span class="c1">#given a binary, insert the gates required to move from one node to a node on the right</span>
+<div class="viewcode-block" id="stepRight">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.stepRight">[docs]</a>
+<span class="k">def</span> <span class="nf">stepRight</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">bTree</span><span class="p">,</span> <span class="n">qubits</span><span class="p">,</span> <span class="n">ancilla</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">myTof</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span><span class="n">c2</span><span class="p">,</span><span class="n">trgt</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">toffoli</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span><span class="kc">False</span><span class="p">,</span><span class="n">c1</span><span class="p">,</span><span class="n">c2</span><span class="p">,</span><span class="n">trgt</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">nth2last</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">h_distance</span><span class="p">(</span><span class="n">val1</span><span class="p">,</span><span class="n">val2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">0</span> <span class="k">if</span> <span class="n">v1</span><span class="o">==</span><span class="n">v2</span> <span class="k">else</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">v1</span><span class="p">,</span><span class="n">v2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">val1</span><span class="p">,</span><span class="n">val2</span><span class="p">)])</span>
+    <span class="c1">#particular tree traversal rules</span>
+    <span class="n">distance</span> <span class="o">=</span> <span class="n">h_distance</span><span class="p">(</span><span class="n">bTree</span><span class="p">,</span><span class="n">incrementBooleanTree</span><span class="p">(</span><span class="n">bTree</span><span class="p">))</span>
+    <span class="n">n_anc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ancilla</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">distance</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">pass</span> <span class="c1">#no need to do anything.</span>
+    <span class="k">elif</span> <span class="n">distance</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">n_anc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">q0</span> <span class="o">=</span> <span class="n">ancilla</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">0</span><span class="p">)]</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">q0</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">q0</span> <span class="o">=</span> <span class="n">ancilla</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">0</span><span class="p">)]</span>
+            <span class="n">q1</span> <span class="o">=</span> <span class="n">ancilla</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">q0</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">distance</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">n_anc</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">q0</span> <span class="o">=</span> <span class="n">ancilla</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">0</span><span class="p">)]</span>
+            <span class="n">q1</span> <span class="o">=</span> <span class="n">ancilla</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="n">qubits</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">0</span><span class="p">)]</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">q0</span><span class="p">))</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="n">q0</span><span class="p">))</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">q1</span><span class="p">))</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">q0</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">q0</span> <span class="o">=</span> <span class="n">ancilla</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">0</span><span class="p">)]</span>
+            <span class="n">q1</span> <span class="o">=</span> <span class="n">ancilla</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span>
+            <span class="n">q2</span> <span class="o">=</span> <span class="n">ancilla</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="n">qubits</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">0</span><span class="p">)]</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">q0</span><span class="p">))</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">myTof</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">q0</span><span class="p">))</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span><span class="n">q1</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1">#recurse</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="n">qubits</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">0</span><span class="p">)]</span>
+        <span class="n">q0</span> <span class="o">=</span> <span class="n">ancilla</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">0</span><span class="p">)]</span>
+        <span class="n">q1</span> <span class="o">=</span> <span class="n">ancilla</span><span class="p">[</span><span class="n">nth2last</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span>
+
+        <span class="n">qubits2</span> <span class="o">=</span> <span class="n">qubits</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">ancilla2</span> <span class="o">=</span> <span class="n">ancilla</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">m_bTree</span> <span class="o">=</span> <span class="n">bTree</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toffoli</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">q0</span><span class="p">))</span>
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">stepRight</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">m_bTree</span><span class="p">,</span> <span class="n">qubits2</span><span class="p">,</span> <span class="n">ancilla2</span><span class="p">)</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toffoli</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">q0</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">circuit</span></div>
+
+
+<span class="c1">#implemented</span>
+<div class="viewcode-block" id="applyAndStep">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.applyAndStep">[docs]</a>
+<span class="k">def</span> <span class="nf">applyAndStep</span><span class="p">(</span><span class="n">operators</span><span class="p">,</span> <span class="n">start_bTree</span><span class="p">,</span> <span class="n">end_bTree</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">ancilla</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">applyAndStep_helper</span><span class="p">(</span><span class="n">myc</span><span class="p">,</span> <span class="n">ops</span><span class="p">,</span> <span class="n">sbT</span><span class="p">,</span> <span class="n">ebT</span><span class="p">,</span> <span class="n">qbs</span><span class="p">,</span> <span class="n">anc</span><span class="p">,</span> <span class="n">tgt</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sbT</span> <span class="o">==</span> <span class="n">ebT</span><span class="p">:</span>
+            <span class="n">myc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="n">anc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">tgt</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">myc</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">myc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="n">anc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">tgt</span><span class="p">))</span>
+            <span class="n">myc</span> <span class="o">=</span> <span class="n">stepRight</span><span class="p">(</span><span class="n">myc</span><span class="p">,</span> <span class="n">sbT</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">qbs</span><span class="p">,</span> <span class="n">anc</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">applyAndStep_helper</span><span class="p">(</span><span class="n">myc</span><span class="p">,</span> <span class="n">ops</span><span class="p">[</span><span class="mi">1</span><span class="p">::],</span> <span class="n">incrementBooleanTree</span><span class="p">(</span><span class="n">sbT</span><span class="p">),</span>\
+                            <span class="n">ebT</span><span class="p">,</span> <span class="n">qbs</span><span class="p">,</span> <span class="n">anc</span><span class="p">,</span> <span class="n">tgt</span><span class="p">)</span>
+
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">applyAndStep_helper</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">operators</span><span class="p">,</span> <span class="n">start_bTree</span><span class="p">,</span> <span class="n">end_bTree</span><span class="p">,</span>\
+                     <span class="n">controls</span><span class="p">,</span> <span class="n">ancilla</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></div>
+
+
+
+
+<span class="c1">#these two methods should just get wrapped into a class.</span>
+<div class="viewcode-block" id="constructBooleanTree">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.constructBooleanTree">[docs]</a>
+<span class="k">def</span> <span class="nf">constructBooleanTree</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">n</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;0&#39;</span> <span class="k">for</span> <span class="n">__</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">))]),</span><span class="n">n</span><span class="p">])</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span> <span class="k">if</span> <span class="n">v</span><span class="o">==</span><span class="s1">&#39;1&#39;</span> <span class="k">else</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span> <span class="p">]</span>
+    <span class="k">return</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="incrementBooleanTree">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.incrementBooleanTree">[docs]</a>
+<span class="k">def</span> <span class="nf">incrementBooleanTree</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">incBT</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">::]</span>
+        <span class="k">if</span> <span class="n">h</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">+</span> <span class="n">m</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">+</span> <span class="n">incBT</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">incBT</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">n</span></div>
+
+
+<div class="viewcode-block" id="convert_hamiltonian_terms_to_operators">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.convert_hamiltonian_terms_to_operators">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_hamiltonian_terms_to_operators</span><span class="p">(</span><span class="n">ham_terms</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">apply_gate</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">tq</span><span class="p">):</span>
+        <span class="n">gate_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="s2">&quot;I&quot;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">p</span> <span class="o">==</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span>
+            <span class="n">gate_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span><span class="n">tq</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">p</span> <span class="o">==</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span>
+            <span class="n">gate_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">tq</span><span class="p">)))</span>
+            <span class="n">gate_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span><span class="n">tq</span><span class="p">))</span>
+            <span class="n">gate_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">tq</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">p</span> <span class="o">==</span> <span class="s2">&quot;Z&quot;</span><span class="p">:</span>
+            <span class="n">gate_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CZ</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span><span class="n">tq</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">gate_list</span>
+
+    <span class="c1"># pauliString can be a string or a list of tuples of the form: [(P,0), ...]</span>
+    <span class="c1">#</span>
+    <span class="k">def</span> <span class="nf">controlled_pauli_gate</span><span class="p">(</span><span class="n">pauliString</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+        <span class="n">gate_sequence</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">pauliString</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pv</span> <span class="ow">in</span> <span class="n">pauliString</span><span class="p">:</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">pv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">tq</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="n">pv</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">gate_sequence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">tq</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">p</span><span class="p">,</span><span class="n">tq</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pauliString</span><span class="p">,</span><span class="n">targets</span><span class="p">):</span>
+                <span class="n">gate_sequence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">tq</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">gate_sequence</span>
+
+    <span class="n">operator_generators</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">ham_terms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">term</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">add_z</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">qubits</span> <span class="p">:</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">ctrl</span><span class="p">)]</span>
+            <span class="n">gate_seq</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">qubits</span><span class="p">,</span> <span class="n">pauli</span><span class="o">=</span><span class="n">term</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">add_z</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span> <span class="n">qubits</span><span class="p">)</span><span class="o">+</span><span class="n">controlled_pauli_gate</span><span class="p">(</span><span class="n">pauli</span><span class="p">,</span><span class="n">ctrl</span><span class="p">,</span><span class="n">qubits</span><span class="p">)</span>
+            <span class="n">operator_generators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate_seq</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gate_seq</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">qubits</span><span class="p">,</span> <span class="n">pauli</span><span class="o">=</span><span class="n">term</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">controlled_pauli_gate</span><span class="p">(</span><span class="n">pauli</span><span class="p">,</span><span class="n">ctrl</span><span class="p">,</span><span class="n">qubits</span><span class="p">)</span>
+            <span class="n">operator_generators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate_seq</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">operator_generators</span></div>
+
+
+<span class="c1"># apply operators from Hamiltonian controlled on address bits using a QROM</span>
+<span class="c1">#</span>
+<div class="viewcode-block" id="applyAndWalk">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.applyAndWalk">[docs]</a>
+<span class="k">def</span> <span class="nf">applyAndWalk</span><span class="p">(</span><span class="n">ham_terms</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">,</span> <span class="n">ctl_q</span><span class="p">,</span> <span class="n">sel_q</span><span class="p">,</span> <span class="n">anc_q</span><span class="p">,</span> <span class="n">tgt_q</span><span class="p">,</span> <span class="n">opType</span><span class="o">=</span><span class="s1">&#39;select&#39;</span><span class="p">):</span>
+
+    <span class="c1"># Generate a circuit that implements a QROM (based on construction in Fig. 2 of arXiv:1905.07682)</span>
+    <span class="c1"># This circuit accepts a dictionary with (address,data) pairs for each uniquue entry</span>
+    <span class="c1"># The bit-width of any address must be less than the specified bit-width, however,</span>
+    <span class="c1"># all addresses do not need to be specified</span>
+    <span class="c1"># The QROM works by iterating over the addresses in numeric order</span>
+    <span class="c1"># A set of ancilla bits (b) are used to build up the current selected address from the address bits (a)</span>
+    <span class="c1"># Each subsequent bit adds a bit of the selected address to the ancilla register</span>
+    <span class="c1"># For example, if we have a 3-bit address then: (where a_i corresponds to the current value of the address)</span>
+    <span class="c1"># b_2 = a_2</span>
+    <span class="c1"># b_1 = a_2 ^ a_1</span>
+    <span class="c1"># b_0 = a_2 ^ a_1 ^ a_0</span>
+    <span class="c1">#</span>
+    <span class="c1"># To set the current value, from a cleared ancilla register, we build it up one bit at a time</span>
+    <span class="c1"># with a CCX gate per bit (the control is either zero or one controlled based on the value of the address bit)</span>
+    <span class="c1">#</span>
+    <span class="c1"># To move from one current address value to another there are three main operations:</span>
+    <span class="c1">#      1) flipping the bit value of the current address (this is done as CX: b_i+1 -&gt; b_i)</span>
+    <span class="c1">#      2) clearing the current address (this is the inverse process of setting the value)</span>
+    <span class="c1">#      3) setting a new value (this is the same as above)</span>
+    <span class="c1"># This process of moving from one address to the next consists of three steps:</span>
+    <span class="c1">#      1) Clearing the current address bits differ in only one position</span>
+    <span class="c1">#      2) Flipping the bit that differs</span>
+    <span class="c1">#      3) Setting the bits that were cleared to the new value</span>
+    <span class="c1">#</span>
+    <span class="c1"># Parameters:</span>
+    <span class="c1"># qubit_dict - contains starting location of qubits</span>
+    <span class="c1"># width - number of address bit in QROM</span>
+    <span class="c1"># key_values - list of address values</span>
+    <span class="c1"># operators - operators for each key</span>
+    <span class="c1">#</span>
+    <span class="k">def</span> <span class="nf">qrom</span><span class="p">(</span><span class="n">qubit_dict</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">key_vals</span><span class="p">,</span> <span class="n">operators</span><span class="p">,</span> <span class="n">opType</span><span class="p">):</span>
+
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+        <span class="n">circuit2</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+        
+        <span class="n">prev_key_val</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">addrQubits</span> <span class="o">=</span> <span class="n">qubit_dict</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>   <span class="c1"># address bits</span>
+        <span class="n">ancQubits</span> <span class="o">=</span> <span class="n">qubit_dict</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>   <span class="c1"># ancilla that holds current address</span>
+        <span class="n">selQubit</span> <span class="o">=</span> <span class="n">qubit_dict</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]</span>   <span class="c1"># global select</span>
+        <span class="n">trgtQubits</span> <span class="o">=</span> <span class="n">qubit_dict</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span>   <span class="c1"># target for memory</span>
+
+        <span class="c1">#print(&quot;num keys = {}, len(addr) = {}, len(anc) = {}, len(trgt) = {}&quot;.format(len(key_vals), len(addrQubits), len(ancQubits), len(trgtQubits)))</span>
+    
+        <span class="k">for</span> <span class="n">kidx</span><span class="p">,</span><span class="n">key_val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">key_vals</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">prev_key_val</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># special case for the first value, build up the initial set of ancilla</span>
+                <span class="k">for</span> <span class="n">bi</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">ctlSense</span> <span class="o">=</span> <span class="p">(</span><span class="n">key_val</span> <span class="o">&gt;&gt;</span> <span class="n">bi</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span>
+
+                    <span class="c1"># Extend the address starting from the MSB, the first gate is controlled on the global select</span>
+                    <span class="k">if</span> <span class="n">bi</span><span class="o">+</span><span class="mi">1</span> <span class="o">==</span> <span class="n">width</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">selQubit</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="n">ctlSense</span><span class="p">:</span>
+                                <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">addrQubits</span><span class="p">[</span><span class="n">bi</span><span class="p">]))</span>
+                            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">addrQubits</span><span class="p">[</span><span class="n">bi</span><span class="p">],</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">bi</span><span class="p">]))</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="n">ctlSense</span><span class="p">:</span>
+                                <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">addrQubits</span><span class="p">[</span><span class="n">bi</span><span class="p">]))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toffoli</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">ctlSense</span><span class="p">,</span> <span class="n">selQubit</span> <span class="p">,</span> <span class="n">addrQubits</span><span class="p">[</span><span class="n">bi</span><span class="p">],</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">bi</span><span class="p">]))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toffoli</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">ctlSense</span><span class="p">,</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">bi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="p">,</span> <span class="n">addrQubits</span><span class="p">[</span><span class="n">bi</span><span class="p">],</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">bi</span><span class="p">]))</span>
+                    
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># move from previous key value to the new key value</span>
+                <span class="n">ci</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="c1"># clear the current address until we get to a state where the bit values are equal</span>
+                <span class="k">while</span> <span class="ow">not</span> <span class="p">(</span><span class="n">prev_key_val</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">ci</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">==</span> <span class="p">(</span><span class="n">key_val</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">ci</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span>
+                    <span class="n">ctlSense</span> <span class="o">=</span> <span class="p">(</span><span class="n">prev_key_val</span> <span class="o">&gt;&gt;</span> <span class="n">ci</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span>
+                    <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toffoli</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">ctlSense</span><span class="p">,</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">ci</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">addrQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">],</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">]))</span>
+
+                    <span class="n">ci</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="c1"># flip the address of the least signfificant bit that is different</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">ci</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">width</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">selQubit</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+                        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">ancQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">]))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">selQubit</span><span class="p">,</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">ancQubits</span><span class="p">[</span><span class="n">ci</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">]))</span>
+
+                <span class="c1"># work our way down to the new value</span>
+                <span class="k">while</span> <span class="n">ci</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">ctlSense</span> <span class="o">=</span> <span class="p">(</span><span class="n">key_val</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">ci</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span>
+                    <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toffoli</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">ctlSense</span><span class="p">,</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">],</span> <span class="n">addrQubits</span><span class="p">[</span><span class="n">ci</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">ci</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]))</span>
+                    
+                    <span class="n">ci</span> <span class="o">-=</span> <span class="mi">1</span>
+
+            <span class="c1"># apply the operator</span>
+            <span class="k">if</span> <span class="n">opType</span><span class="o">==</span><span class="s1">&#39;select&#39;</span><span class="p">:</span>
+                <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">operators</span><span class="p">[</span><span class="n">key_val</span><span class="p">](</span><span class="n">ancQubits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trgtQubits</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">opType</span><span class="o">==</span><span class="s1">&#39;fermion&#39;</span><span class="p">:</span>
+                <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">operators</span><span class="p">[</span><span class="n">key_val</span><span class="p">](</span><span class="n">ancQubits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trgtQubits</span><span class="p">))</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">kidx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">key_vals</span><span class="p">):</span>
+                    <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">ancQubits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">selQubit</span><span class="p">))</span>
+                    <span class="k">assert</span><span class="p">(</span><span class="n">key_val</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">trgtQubits</span><span class="p">))</span>
+                    <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CZ</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">selQubit</span><span class="p">,</span> <span class="n">trgtQubits</span><span class="p">[</span><span class="n">key_val</span><span class="p">]))</span>
+                        
+            <span class="n">prev_key_val</span> <span class="o">=</span> <span class="n">key_val</span>
+
+        <span class="c1"># clear the ancilla register</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">prev_key_val</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ci</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
+                <span class="n">ctlSense</span> <span class="o">=</span> <span class="p">(</span><span class="n">prev_key_val</span> <span class="o">&gt;&gt;</span> <span class="n">ci</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">ci</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">width</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">selQubit</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ctlSense</span><span class="p">:</span>
+                            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">addrQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">]))</span>
+                        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">addrQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">],</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">]))</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ctlSense</span><span class="p">:</span>
+                            <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">addrQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">]))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toffoli</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">ctlSense</span><span class="p">,</span> <span class="n">selQubit</span><span class="p">,</span> <span class="n">addrQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">],</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toffoli</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">ctlSense</span><span class="p">,</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">ci</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">addrQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">],</span> <span class="n">ancQubits</span><span class="p">[</span><span class="n">ci</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="n">circuit</span>
+
+    <span class="n">qubit_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">qubit_dict</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctl_q</span>
+    <span class="n">qubit_dict</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">anc_q</span>
+    <span class="n">qubit_dict</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sel_q</span>
+    <span class="n">qubit_dict</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tgt_q</span>
+    
+    <span class="n">key_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">ii</span><span class="o">+</span><span class="n">pos1</span> <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pos2</span><span class="o">-</span><span class="n">pos1</span><span class="p">)]</span>
+    <span class="n">operators</span> <span class="o">=</span> <span class="n">convert_hamiltonian_terms_to_operators</span><span class="p">(</span><span class="n">ham_terms</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">qrom</span><span class="p">(</span><span class="n">qubit_dict</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ctl_q</span><span class="p">),</span> <span class="n">key_values</span><span class="p">,</span> <span class="n">operators</span><span class="p">,</span> <span class="n">opType</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SelVBase">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.SelVBase">[docs]</a>
+<span class="k">class</span> <span class="nc">SelVBase</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Gate</span><span class="p">):</span>
+    <span class="c1">#do we need knowledge of the hamiltonian here?</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">invert</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="p">,</span><span class="n">phase_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">,</span> <span class="n">control_qubits</span><span class="p">,</span> <span class="n">ancilla_qubits</span><span class="p">,</span>\
+                    <span class="n">n_controls</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__phs_q</span> <span class="o">=</span> <span class="n">phase_qubit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span> <span class="o">=</span> <span class="n">control_qubits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span> <span class="o">=</span> <span class="n">target_qubits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span> <span class="o">=</span> <span class="n">ancilla_qubits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__hamiltonian</span> <span class="o">=</span> <span class="n">hamiltonian</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">SelVBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">_num_qubits_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__phs_q</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="p">)</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">)</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="p">)</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_decompose_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qubits</span><span class="p">):</span>
+        <span class="c1">#this is selectV!</span>
+        <span class="c1">#helper functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span>
+        <span class="c1">#identify pos1 and pos2</span>
+        <span class="c1">#need to map hamiltonian terms to operators</span>
+        <span class="n">ham_ps_is_identity</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">([</span><span class="n">p</span><span class="o">==</span><span class="s2">&quot;I&quot;</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">term</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="ow">or</span> <span class="n">term</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hamiltonian</span><span class="o">.</span><span class="n">terms</span><span class="p">]</span>
+        <span class="k">def</span> <span class="nf">find_first_non_identity_term</span><span class="p">(</span><span class="n">check</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">check</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">idx</span>    
+        <span class="n">pos1</span> <span class="o">=</span> <span class="n">find_first_non_identity_term</span><span class="p">(</span><span class="n">ham_ps_is_identity</span><span class="p">)</span>
+        <span class="n">pos2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__hamiltonian</span><span class="p">)</span> <span class="o">-</span> <span class="n">find_first_non_identity_term</span><span class="p">(</span><span class="n">ham_ps_is_identity</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1">#this travels a tree and implements the selectV as appropriate</span>
+        <span class="c1">#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span>
+
+        <span class="c1"># this is the new way to do SelectV</span>
+        <span class="c1">#ham_as_ops = convert_hamiltonian_terms_to_operators(self.__hamiltonian.terms)</span>
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">applyAndWalk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__hamiltonian</span><span class="o">.</span><span class="n">terms</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__phs_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">circuit</span>
+
+    <span class="k">def</span> <span class="nf">_circuit_diagram_info_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;SelVBase&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="UnaryIterate">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.UnaryIterate">[docs]</a>
+<span class="k">class</span> <span class="nc">UnaryIterate</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Gate</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ham_terms</span><span class="p">,</span> <span class="n">phase_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">,</span> <span class="n">control_qubits</span><span class="p">,</span> <span class="n">ancilla_qubits</span><span class="p">,</span> <span class="n">op_type</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ham</span> <span class="o">=</span> <span class="n">ham_terms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__phs_q</span> <span class="o">=</span> <span class="n">phase_qubit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span> <span class="o">=</span> <span class="n">control_qubits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span> <span class="o">=</span> <span class="n">target_qubits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span> <span class="o">=</span> <span class="n">ancilla_qubits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__op_type</span> <span class="o">=</span> <span class="n">op_type</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">UnaryIterate</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_num_qubits_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="p">)</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_decompose_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qubits</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">applyAndWalk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ham</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ham</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__phs_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="p">,</span> <span class="n">opType</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__op_type</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">_circuit_diagram_info_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;UnaryIterate&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="FermionSelect">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.FermionSelect">[docs]</a>
+<span class="k">class</span> <span class="nc">FermionSelect</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Gate</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="p">,</span> <span class="n">phase_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">,</span> <span class="n">control_qubits</span><span class="p">,</span> <span class="n">ancilla_qubits</span><span class="p">):</span>
+        <span class="c1">#from pyLIQTR.QSP.Hamiltonian import Hamiltonian as pyH</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">__phs_q</span> <span class="o">=</span> <span class="n">phase_qubit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span> <span class="o">=</span> <span class="n">control_qubits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span> <span class="o">=</span> <span class="n">target_qubits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span> <span class="o">=</span> <span class="n">ancilla_qubits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__hamiltonian</span> <span class="o">=</span> <span class="n">hamiltonian</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;len(ctl) = </span><span class="si">{}</span><span class="s2">, len(tgt) = </span><span class="si">{}</span><span class="s2">, len(anc) = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">)))</span>
+        
+        <span class="c1"># the Hamiltonian contains three components:</span>
+        <span class="c1"># U(p), T(p-q), V(p-q)</span>
+        <span class="c1"># Each component contains a number of terms: [(p,alpha,q,beta), amp]</span>
+        <span class="c1"># The number of orbitals + spin is specified as N</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hamiltonian</span><span class="o">.</span><span class="n">problem_size</span>
+        <span class="n">Nu</span> <span class="o">=</span> <span class="n">N</span>  <span class="c1"># number of U terms in the Hamiltonian (p,sigma,p,sigma)</span>
+        <span class="n">Nt</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">((</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>   <span class="c1"># number of Utterms in the Hamiltonian (p,sigma,q,sigma) (p != q)</span>
+        <span class="c1">#Nt = 2*Nt    # for now the prep does all combination of alpha,beta</span>
+        <span class="n">Nv</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">N</span>  <span class="c1"># number of V terms in the Hamiltonian (p,alpha) != (q,beta)</span>
+        <span class="c1">#print(&quot;N = {}, Nu = {}, Nt = {}, Nv = {}&quot;.format(N, Nu, Nt, Nv))</span>
+
+        <span class="c1"># Create the three select iterators used</span>
+        <span class="n">fermY</span> <span class="o">=</span> <span class="p">[([(</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span><span class="n">ni</span><span class="p">)],</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">ni</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>   <span class="c1"># Fermionic YpZp-1...Z0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__selFermY</span> <span class="o">=</span> <span class="n">fermY</span>
+        <span class="n">fermX</span> <span class="o">=</span> <span class="p">[([(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span><span class="n">ni</span><span class="p">)],</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">ni</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>   <span class="c1"># Fermionic XpZp-1...Z0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__selFermX</span> <span class="o">=</span> <span class="n">fermX</span>
+        <span class="n">fermZ</span> <span class="o">=</span> <span class="p">[([(</span><span class="s2">&quot;Z&quot;</span><span class="p">,</span><span class="n">ni</span><span class="p">)],</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">ni</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>   <span class="c1"># Zp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__selAplyZ</span> <span class="o">=</span> <span class="n">fermZ</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__N</span> <span class="o">=</span> <span class="n">N</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__np</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">N</span><span class="p">)))</span>
+        
+        <span class="nb">super</span><span class="p">(</span><span class="n">FermionSelect</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">_num_qubits_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="p">)</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_decompose_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qubits</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyLIQTR.QSP.qsp_cirq_gates</span> <span class="kn">import</span> <span class="n">MultiFredkin</span>
+        
+        <span class="n">np</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__np</span>
+        
+        <span class="c1"># Iterate on p</span>
+        <span class="c1">#ham_as_ops = convert_hamiltonian_terms_to_operators(self.__selFermY)</span>
+        <span class="k">yield</span> <span class="n">UnaryIterate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selFermY</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__phs_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[:</span><span class="n">np</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">[:</span><span class="n">np</span><span class="p">],</span> <span class="s1">&#39;fermion&#39;</span><span class="p">)</span><span class="o">.</span>\
+            <span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">__phs_q</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[:</span><span class="n">np</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">[:</span><span class="n">np</span><span class="p">]))</span>
+
+        <span class="c1"># Controlled swap p,alpha with q,beta</span>
+        <span class="k">yield</span> <span class="n">MultiFredkin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[:</span><span class="n">np</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="n">np</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="p">])</span><span class="o">.</span>\
+          <span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[:</span><span class="n">np</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="n">np</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="p">]))</span>
+          
+        <span class="c1"># Iterate on q</span>
+        <span class="c1"># ham_as_ops = convert_hamiltonian_terms_to_operators(self.__selFermX)</span>
+        <span class="k">yield</span> <span class="n">UnaryIterate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selFermX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__phs_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="n">np</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">[:</span><span class="n">np</span><span class="p">],</span> <span class="s1">&#39;fermion&#39;</span><span class="p">)</span><span class="o">.</span>\
+            <span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">__phs_q</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="n">np</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">[:</span><span class="n">np</span><span class="p">]))</span>
+            
+        <span class="c1"># Controlled swap p,alpha with q,beta</span>
+        <span class="k">yield</span> <span class="n">MultiFredkin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[:</span><span class="n">np</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="n">np</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="p">])</span><span class="o">.</span>\
+          <span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[:</span><span class="n">np</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="n">np</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="p">]))</span>
+
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CCX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__phs_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">[</span><span class="n">np</span><span class="p">])</span>
+        
+        <span class="c1"># Iterate on q</span>
+        <span class="c1"># ham_as_ops = convert_hamiltonian_terms_to_operators(self.__selAplyZ)</span>
+        <span class="k">yield</span> <span class="n">UnaryIterate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selAplyZ</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">[</span><span class="n">np</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="n">np</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">[:</span><span class="n">np</span><span class="p">],</span> <span class="s1">&#39;select&#39;</span><span class="p">)</span><span class="o">.</span>\
+            <span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">[</span><span class="n">np</span><span class="p">]]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">__tgt_q</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="n">np</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">[:</span><span class="n">np</span><span class="p">]))</span>
+
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CCX</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__phs_q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctl_q</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__anc_q</span><span class="p">[</span><span class="n">np</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_circuit_diagram_info_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;FermionSelect&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SelectOracle">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.SelectOracle">[docs]</a>
+<span class="k">def</span> <span class="nf">SelectOracle</span><span class="p">(</span><span class="n">hamiltonian</span><span class="p">,</span> <span class="n">phase_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">,</span> <span class="n">control_qubits</span><span class="p">,</span> <span class="n">ancilla_qubits</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">hamiltonian</span><span class="o">.</span><span class="n">is_fermionic</span><span class="p">:</span>
+        <span class="c1"># this is a fermionic Hamiltonian</span>
+        <span class="k">yield</span> <span class="n">FermionSelect</span><span class="p">(</span><span class="n">hamiltonian</span><span class="p">,</span> <span class="n">phase_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">,</span> <span class="n">control_qubits</span><span class="p">,</span> <span class="n">ancilla_qubits</span><span class="p">)</span><span class="o">.</span>\
+              <span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="n">phase_qubit</span><span class="p">]</span> <span class="o">+</span> <span class="n">target_qubits</span> <span class="o">+</span> <span class="n">control_qubits</span> <span class="o">+</span> <span class="n">ancilla_qubits</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">SelVBase</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="p">,</span> <span class="n">phase_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">,</span> <span class="n">control_qubits</span><span class="p">,</span> <span class="n">ancilla_qubits</span><span class="p">)</span><span class="o">.</span>\
+              <span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="n">phase_qubit</span><span class="p">]</span> <span class="o">+</span> <span class="n">target_qubits</span> <span class="o">+</span> <span class="n">control_qubits</span> <span class="o">+</span> <span class="n">ancilla_qubits</span><span class="p">))</span></div>
+
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

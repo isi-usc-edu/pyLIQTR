@@ -1,0 +1,511 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.gate_decomp.exact_decomp &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.gate_decomp.exact_decomp</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.gate_decomp.exact_decomp</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">DISTRIBUTION STATEMENT A. Approved for public release. Distribution is unlimited.</span>
+
+<span class="sd">This material is based upon work supported by the Under Secretary of Defense for</span>
+<span class="sd">Research and Engineering under Air Force Contract No. FA8702-15-D-0001. Any opinions,</span>
+<span class="sd">findings, conclusions or recommendations expressed in this material are those of the</span>
+<span class="sd">author(s) and do not necessarily reflect the views of the Under Secretary of Defense</span>
+<span class="sd">for Research and Engineering.</span>
+
+<span class="sd">© 2022 Massachusetts Institute of Technology.</span>
+
+<span class="sd">The software/firmware is provided to you on an As-Is basis</span>
+
+<span class="sd">Delivered to the U.S. Government with Unlimited Rights, as defined in DFARS Part</span>
+<span class="sd">252.227-7013 or 7014 (Feb 2014). Notwithstanding any copyright notice, U.S. Government</span>
+<span class="sd">rights in this work are defined by DFARS 252.227-7013 or DFARS 252.227-7014 as detailed</span>
+<span class="sd">above. Use of this work other than as specifically authorized by the U.S. Government</span>
+<span class="sd">may violate any copyrights that exist in this work.</span>
+
+<span class="sd">Functions for performing exact decomposition of single qubit unitary matrices with</span>
+<span class="sd">entries from the ring D[ω] over the Clifford+T gateset. Makes use of the Matsumoto-</span>
+<span class="sd">Amano normal form for single qubit Clifford+T operators [1,2,3]</span>
+<span class="sd">[1] - arXiv:0806.3834</span>
+<span class="sd">[2] - arXiv:1312.6584</span>
+<span class="sd">[3] - https://www.cs.umd.edu/~amchilds/qa/qa.pdf Section 3</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.matrices</span> <span class="kn">import</span> <span class="n">MAT_D_OMEGA</span><span class="p">,</span> <span class="n">SO3</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.rings</span> <span class="kn">import</span> <span class="n">Z_OMEGA</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.clifford_gates</span> <span class="kn">import</span> <span class="n">clifford_tuple</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+
+<span class="n">I2</span> <span class="o">=</span> <span class="n">MAT_D_OMEGA</span><span class="o">.</span><span class="n">I</span><span class="p">()</span>
+<span class="n">X2</span> <span class="o">=</span> <span class="n">MAT_D_OMEGA</span><span class="o">.</span><span class="n">X</span><span class="p">()</span>
+<span class="n">Y2</span> <span class="o">=</span> <span class="n">MAT_D_OMEGA</span><span class="o">.</span><span class="n">Y</span><span class="p">()</span>
+<span class="n">Z2</span> <span class="o">=</span> <span class="n">MAT_D_OMEGA</span><span class="o">.</span><span class="n">Z</span><span class="p">()</span>
+<span class="n">H2</span> <span class="o">=</span> <span class="n">MAT_D_OMEGA</span><span class="o">.</span><span class="n">H</span><span class="p">()</span>
+<span class="n">H3</span> <span class="o">=</span> <span class="n">H2</span><span class="o">.</span><span class="n">convert_to_so3</span><span class="p">()</span>
+<span class="n">S2</span> <span class="o">=</span> <span class="n">MAT_D_OMEGA</span><span class="o">.</span><span class="n">S</span><span class="p">()</span>
+<span class="n">S3</span> <span class="o">=</span> <span class="n">S2</span><span class="o">.</span><span class="n">convert_to_so3</span><span class="p">()</span>
+<span class="n">Sd2</span> <span class="o">=</span> <span class="n">MAT_D_OMEGA</span><span class="o">.</span><span class="n">Sd</span><span class="p">()</span>
+<span class="n">Sd3</span> <span class="o">=</span> <span class="n">Sd2</span><span class="o">.</span><span class="n">convert_to_so3</span><span class="p">()</span>
+<span class="n">T2</span> <span class="o">=</span> <span class="n">MAT_D_OMEGA</span><span class="o">.</span><span class="n">T</span><span class="p">()</span>
+<span class="n">T3</span> <span class="o">=</span> <span class="n">T2</span><span class="o">.</span><span class="n">convert_to_so3</span><span class="p">()</span>
+<span class="n">Td2</span> <span class="o">=</span> <span class="n">MAT_D_OMEGA</span><span class="o">.</span><span class="n">Td</span><span class="p">()</span>
+<span class="n">Td3</span> <span class="o">=</span> <span class="n">Td2</span><span class="o">.</span><span class="n">convert_to_so3</span><span class="p">()</span>
+
+
+<span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+<span class="n">HT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+<span class="n">SHT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+
+<span class="n">equiv_classes</span> <span class="o">=</span> <span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">HT</span><span class="p">,</span> <span class="n">SHT</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+<span class="n">gates</span> <span class="o">=</span> <span class="p">(</span><span class="n">Td3</span> <span class="o">@</span> <span class="n">H3</span><span class="p">,</span> <span class="n">Td3</span> <span class="o">@</span> <span class="n">H3</span> <span class="o">@</span> <span class="n">Sd3</span><span class="p">,</span> <span class="n">Td3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="exact_decomp_to_qasm">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.exact_decomp.exact_decomp_to_qasm">[docs]</a>
+<span class="k">def</span> <span class="nf">exact_decomp_to_qasm</span><span class="p">(</span>
+    <span class="n">u</span><span class="p">:</span> <span class="n">Z_OMEGA</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Z_OMEGA</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the decomposition as a list of qasm instructions</span>
+
+<span class="sd">    If conditional == True, add &#39;if (r1 == 1)&#39; to each instruction (used in fallback</span>
+<span class="sd">    approximation)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">qasm_instructions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;s q0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;s q0</span><span class="se">\n</span><span class="s2">s q0</span><span class="se">\n</span><span class="s2">s q0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;h q0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;x q0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;y q0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;z q0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;t q0&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="n">conditional</span><span class="p">:</span>
+        <span class="c1"># double loop because we have to split up the &quot;s q0\ns q0\n s q0&quot; string</span>
+        <span class="n">qasm_instructions</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;if (r1 == 1) &quot;</span> <span class="o">+</span> <span class="n">y</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">qasm_instructions</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="p">]</span>
+    <span class="n">gate_sequence</span><span class="p">,</span> <span class="n">t_count</span> <span class="o">=</span> <span class="n">exact_decomp</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">qasm_instructions</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">gate_sequence</span><span class="p">),</span> <span class="n">t_count</span></div>
+
+
+
+<div class="viewcode-block" id="exact_decomp_to_matrix_string">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.exact_decomp.exact_decomp_to_matrix_string">[docs]</a>
+<span class="k">def</span> <span class="nf">exact_decomp_to_matrix_string</span><span class="p">(</span><span class="n">u</span><span class="p">:</span> <span class="n">Z_OMEGA</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Z_OMEGA</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the gate decomposition as a string in matrix order&quot;&quot;&quot;</span>
+    <span class="n">gate_strs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;Sd&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">]</span>
+    <span class="n">gate_sequence</span><span class="p">,</span> <span class="n">t_count</span> <span class="o">=</span> <span class="n">exact_decomp</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">gate_strs</span><span class="p">,</span> <span class="n">circuit_order</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">gate_sequence</span><span class="p">),</span> <span class="n">t_count</span></div>
+
+
+
+<div class="viewcode-block" id="exact_decomp">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.exact_decomp.exact_decomp">[docs]</a>
+<span class="k">def</span> <span class="nf">exact_decomp</span><span class="p">(</span>
+    <span class="n">u</span><span class="p">:</span> <span class="n">Z_OMEGA</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Z_OMEGA</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">A</span><span class="p">],</span> <span class="n">circuit_order</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">A</span><span class="p">],</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decompose a matrix</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; ((1/sqrt(2)**k) * ([[u, -t.conj()],</span>
+<span class="sd">                            [t,  u.conj()]])</span>
+
+<span class="sd">    exactly into clifford+T gates.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    u: Z_OMEGA</span>
+<span class="sd">        upper left matrix entry</span>
+<span class="sd">    t: Z_OMEGA</span>
+<span class="sd">        lower left matrix entry</span>
+<span class="sd">    k: int</span>
+<span class="sd">        exponent on the 1/sqrt(2) scaling factor</span>
+<span class="sd">    return_objs: Sequence[A]</span>
+<span class="sd">        A list containing the representation of the gates you would like to return.</span>
+<span class="sd">        They need to be in the following order:</span>
+<span class="sd">        [S gate, S dagger gate, H gate, X gate, Y gate, Z dagger gate, T gate].</span>
+<span class="sd">        For example, if you want to return qasm strings, this would be</span>
+<span class="sd">        &gt;&gt;&gt; [&quot;s q0\\n&quot;, &quot;s q0\\ns q0\\ns q0&quot;, ...]</span>
+<span class="sd">        whereas if you wanted cirq gates,</span>
+<span class="sd">        &gt;&gt;&gt; [cirq.S, cirq.S**-1, ...]</span>
+<span class="sd">    circuit_order: bool</span>
+<span class="sd">        Whether or not to arrange the gates in circuit order (the first gate applied</span>
+<span class="sd">        to the qubit is first) or &quot;matrix order&quot; (the first gate applied to the qubit</span>
+<span class="sd">        is last)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[List[A], int]</span>
+<span class="sd">        A tuple consisting of a list of gates (of same type as the return_objs argument), and</span>
+<span class="sd">        and the number of T gates in the circuit.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">MAT_D_OMEGA</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="o">-</span><span class="n">t</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span> <span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span> <span class="n">k</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">convert_to_so3</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">circuit_order</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">decompose</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">),</span> <span class="n">s</span><span class="o">.</span><span class="n">k</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">decompose</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">.</span><span class="n">k</span></div>
+
+
+
+<div class="viewcode-block" id="exact_decomp_compressed">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.exact_decomp.exact_decomp_compressed">[docs]</a>
+<span class="k">def</span> <span class="nf">exact_decomp_compressed</span><span class="p">(</span>
+    <span class="n">u</span><span class="p">:</span> <span class="n">Z_OMEGA</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Z_OMEGA</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">A</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">A</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decompose a matrix</span>
+<span class="sd">    &gt;&gt;&gt; ((1/sqrt(2)**k) * ([[u, -t.conj()],</span>
+<span class="sd">                            [t,  u.conj()]])</span>
+
+<span class="sd">    exactly into clifford+T gates.</span>
+
+
+<span class="sd">    Every Clifford+T operator U can be represented in MA normal form (arXiv:0806.3834):</span>
+
+<span class="sd">    U = B_n B_{n-1} B_{n-2} ... B_1 C_0</span>
+
+<span class="sd">    where B_k ∈ {HT, SHT} for k ≠ n,  B_n ∈ {T, HT, SHT}, and C_0 is a clifford</span>
+<span class="sd">    operator. This function returns a &quot;compressed&quot; representation of the MA normal</span>
+<span class="sd">    form of a given Clifford+T operator. The compressed representation is a tuple of</span>
+<span class="sd">    four elements:</span>
+
+<span class="sd">    1. A bool indicating whether or not B_n = T</span>
+<span class="sd">    2. An integer who&#39;s binary representation corresponds to B_n ... B_1 (if 1 is false)</span>
+<span class="sd">    or B_{n-1} ... B_1 if (1 is true). We represent HT by 0 and SHT by 1.</span>
+<span class="sd">    3. The length of the sequence.</span>
+<span class="sd">    4. The clifford operator at the end of the sequence.</span>
+
+<span class="sd">    Example 1:</span>
+<span class="sd">    (T)(HT)(HT)(SHT)(SHT)(HT)(X)</span>
+<span class="sd">    has a binary representation 00110, so this becomes the tuple</span>
+<span class="sd">    (True, 6, 5, X)</span>
+
+<span class="sd">    Example 2:</span>
+<span class="sd">    (SHT)(SHT)(HT)(HT)(SHT)(S)</span>
+<span class="sd">    has binary representation 11001, so this becomes the tuple</span>
+<span class="sd">    (False, 25, 5, S)</span>
+
+<span class="sd">    Note that the binary representation is in &quot;Matrix order&quot; - this means that when we</span>
+<span class="sd">    want to convert the integer to a sequence of gates, we read the binary</span>
+<span class="sd">    representation &quot;backwards&quot; starting from the LSB.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">MAT_D_OMEGA</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="o">-</span><span class="n">t</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span> <span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">exact_decomp_compressed_m</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="exact_decomp_compressed_m">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.exact_decomp.exact_decomp_compressed_m">[docs]</a>
+<span class="k">def</span> <span class="nf">exact_decomp_compressed_m</span><span class="p">(</span>
+    <span class="n">m</span><span class="p">:</span> <span class="n">MAT_D_OMEGA</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">A</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">A</span><span class="p">]]:</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">convert_to_so3</span><span class="p">()</span>
+    <span class="n">sequence_length</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">k</span>
+    <span class="n">sequence_index</span> <span class="o">=</span> <span class="n">sequence_length</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">gate_sequence</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">equiv_class</span> <span class="o">=</span> <span class="n">get_equiv_class</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">get_parity</span><span class="p">())</span>
+    <span class="n">first_gate</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">equiv_class</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">first_gate</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">sequence_length</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gate_sequence</span> <span class="o">+=</span> <span class="p">(</span><span class="n">equiv_class</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">sequence_index</span><span class="p">)</span>
+    <span class="n">sequence_index</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">gates</span><span class="p">[</span><span class="n">equiv_class</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">@</span> <span class="n">s</span>
+    <span class="n">equiv_class</span> <span class="o">=</span> <span class="n">get_equiv_class</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">get_parity</span><span class="p">())</span>
+    <span class="k">while</span> <span class="n">equiv_class</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">equiv_class</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="n">gate_sequence</span> <span class="o">+=</span> <span class="p">(</span><span class="n">equiv_class</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">sequence_index</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">gates</span><span class="p">[</span><span class="n">equiv_class</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">@</span> <span class="n">s</span>
+        <span class="n">equiv_class</span> <span class="o">=</span> <span class="n">get_equiv_class</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">get_parity</span><span class="p">())</span>
+        <span class="n">sequence_index</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">clifford_tuple</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">23</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span>
+                <span class="s2">&quot;Final matrix did not match an element of the clifford group. Gate = &quot;</span><span class="p">,</span>
+                <span class="n">s</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="n">final_gates</span> <span class="o">=</span> <span class="n">clifford_tuple</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">clifford_part</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">final_gates</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">final_gates</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Sd&quot;</span><span class="p">:</span>
+            <span class="n">clifford_part</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">final_gates</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span>
+            <span class="n">clifford_part</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">final_gates</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span>
+            <span class="n">clifford_part</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">final_gates</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span>
+            <span class="n">clifford_part</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">final_gates</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span>
+            <span class="n">clifford_part</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">final_gates</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Z&quot;</span><span class="p">:</span>
+            <span class="n">clifford_part</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">first_gate</span><span class="p">,</span> <span class="n">gate_sequence</span><span class="p">,</span> <span class="n">sequence_length</span><span class="p">,</span> <span class="n">clifford_part</span></div>
+
+
+
+<div class="viewcode-block" id="decompose">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.exact_decomp.decompose">[docs]</a>
+<span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="n">SO3</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">A</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">A</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decompose a matrix into its MA normal form&quot;&quot;&quot;</span>
+    <span class="n">gate_sequence</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">equiv_class</span> <span class="o">=</span> <span class="n">get_equiv_class</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">get_parity</span><span class="p">())</span>
+    <span class="n">syllables</span> <span class="o">=</span> <span class="n">get_syllables</span><span class="p">(</span><span class="n">return_objs</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">equiv_class</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">gate_sequence</span> <span class="o">=</span> <span class="n">syllables</span><span class="p">[</span><span class="n">equiv_class</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">gate_sequence</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">gates</span><span class="p">[</span><span class="n">equiv_class</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">@</span> <span class="n">s</span>
+        <span class="n">equiv_class</span> <span class="o">=</span> <span class="n">get_equiv_class</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">get_parity</span><span class="p">())</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">clifford_tuple</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">23</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span>
+                <span class="s2">&quot;Final matrix did not match an element of the clifford group. Gate = &quot;</span><span class="p">,</span>
+                <span class="n">s</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="n">final_gates</span> <span class="o">=</span> <span class="n">clifford_tuple</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">final_gates</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">final_gates</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Sd&quot;</span><span class="p">:</span>
+            <span class="n">gate_sequence</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">final_gates</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span>
+            <span class="n">gate_sequence</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">final_gates</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span>
+            <span class="n">gate_sequence</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">final_gates</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span>
+            <span class="n">gate_sequence</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">final_gates</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span>
+            <span class="n">gate_sequence</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">final_gates</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Z&quot;</span><span class="p">:</span>
+            <span class="n">gate_sequence</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">gate_sequence</span></div>
+
+
+
+<div class="viewcode-block" id="get_syllables">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.exact_decomp.get_syllables">[docs]</a>
+<span class="k">def</span> <span class="nf">get_syllables</span><span class="p">(</span><span class="n">return_objs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">A</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">A</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the &#39;syllables&#39; of MA normal form using the return objs</span>
+
+<span class="sd">    MA normal form puts the gates into sequnces A1A2...AnC, where each Ai</span>
+<span class="sd">    is one of the &#39;syllables&#39; HT, SHT, or T, and then C is a clifford. This</span>
+<span class="sd">    function returns a tuple of the syllables using the return_objs.&quot;&quot;&quot;</span>
+    <span class="n">first</span> <span class="o">=</span> <span class="p">[</span><span class="n">return_objs</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+    <span class="n">second</span> <span class="o">=</span> <span class="p">[</span><span class="n">return_objs</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">return_objs</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">third</span> <span class="o">=</span> <span class="p">[</span><span class="n">return_objs</span><span class="p">[</span><span class="mi">6</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">,</span> <span class="n">third</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_equiv_class">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.exact_decomp.get_equiv_class">[docs]</a>
+<span class="k">def</span> <span class="nf">get_equiv_class</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">rep</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">rep</span><span class="p">,</span> <span class="n">equiv_classes</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="n">i</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Parity matrix did not match any equivalence class. Matrix = &quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="are_equivalent">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.exact_decomp.are_equivalent">[docs]</a>
+<span class="k">def</span> <span class="nf">are_equivalent</span><span class="p">(</span><span class="n">gates</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">U</span><span class="p">:</span> <span class="n">MAT_D_OMEGA</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify that a given gate sequence is exactly equal to the unitary U</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gates: str</span>
+<span class="sd">        A string of representing a circuit. Gates can be</span>
+<span class="sd">        - H: Hadamard</span>
+<span class="sd">        - S: Phase gate (√Z gate)</span>
+<span class="sd">        - Sd: Adjoint of the phase gate</span>
+<span class="sd">        - T: T gate (√S gate)</span>
+<span class="sd">        - X: Pauli X</span>
+<span class="sd">        - Y: Pauli Y</span>
+<span class="sd">        - Z: Pauli Z</span>
+<span class="sd">    U: MAT_D_OMEGA</span>
+<span class="sd">        The matrix that the circuit represented by gates should be equivalent to</span>
+<span class="sd">    verbose: bool</span>
+<span class="sd">        When true, prints out whether the circuit and matrix are equal and the phase</span>
+<span class="sd">        (as a power of ω = exp(iπ/4)), if any, to which they differ.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool:</span>
+<span class="sd">        True if the circuit and matrix represent the same operation (up to a global</span>
+<span class="sd">        phase), and False if they do not.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">zw</span> <span class="o">=</span> <span class="n">Z_OMEGA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">matm</span> <span class="o">=</span> <span class="n">I2</span>
+    <span class="n">applied_gates</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gates</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">gates</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Sd&quot;</span><span class="p">:</span>
+            <span class="n">matm</span> <span class="o">=</span> <span class="n">matm</span> <span class="o">@</span> <span class="n">Sd2</span>
+            <span class="n">applied_gates</span> <span class="o">+=</span> <span class="s2">&quot;Sd&quot;</span>
+        <span class="k">elif</span> <span class="n">gates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span>
+            <span class="n">matm</span> <span class="o">=</span> <span class="n">matm</span> <span class="o">@</span> <span class="n">H2</span>
+            <span class="n">applied_gates</span> <span class="o">+=</span> <span class="s2">&quot;H&quot;</span>
+        <span class="k">elif</span> <span class="n">gates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Z&quot;</span><span class="p">:</span>
+            <span class="n">matm</span> <span class="o">=</span> <span class="n">matm</span> <span class="o">@</span> <span class="n">Z2</span>
+            <span class="n">applied_gates</span> <span class="o">+=</span> <span class="s2">&quot;Z&quot;</span>
+        <span class="k">elif</span> <span class="n">gates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span>
+            <span class="n">matm</span> <span class="o">=</span> <span class="n">matm</span> <span class="o">@</span> <span class="n">X2</span>
+            <span class="n">applied_gates</span> <span class="o">+=</span> <span class="s2">&quot;X&quot;</span>
+        <span class="k">elif</span> <span class="n">gates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span>
+            <span class="n">matm</span> <span class="o">=</span> <span class="n">matm</span> <span class="o">@</span> <span class="n">Y2</span>
+            <span class="n">applied_gates</span> <span class="o">+=</span> <span class="s2">&quot;Y&quot;</span>
+        <span class="k">elif</span> <span class="n">gates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span>
+            <span class="n">matm</span> <span class="o">=</span> <span class="n">matm</span> <span class="o">@</span> <span class="n">S2</span>
+            <span class="n">applied_gates</span> <span class="o">+=</span> <span class="s2">&quot;S&quot;</span>
+        <span class="k">elif</span> <span class="n">gates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span>
+            <span class="n">matm</span> <span class="o">=</span> <span class="n">matm</span> <span class="o">@</span> <span class="n">T2</span>
+            <span class="n">applied_gates</span> <span class="o">+=</span> <span class="s2">&quot;T&quot;</span>
+
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">matm</span><span class="o">.</span><span class="n">k</span> <span class="o">-</span> <span class="n">U</span><span class="o">.</span><span class="n">k</span>
+    <span class="k">if</span> <span class="n">diff</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">mult_pow_2</span><span class="p">(</span><span class="n">diff</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">diff</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">diff</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">mult_pow_2</span><span class="p">(</span><span class="n">diff</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">matm</span><span class="o">.</span><span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">matm</span> <span class="o">=</span> <span class="n">matm</span> <span class="o">*</span> <span class="n">Z_OMEGA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">matm</span> <span class="o">=</span> <span class="n">matm</span> <span class="o">*</span> <span class="n">zw</span><span class="o">**</span><span class="mi">7</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">matm</span> <span class="o">*</span> <span class="n">zw</span><span class="o">**</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="n">U</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;The circuit is equal to the matrix up to a global phase of ω^</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The circuit is not equal to the approximate unitary&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

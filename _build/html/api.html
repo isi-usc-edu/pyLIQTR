@@ -1,0 +1,454 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyLIQTR API Reference &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="_static/pyliqtr_logo.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e358f374"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="src.pyLIQTR.BlockEncodings.getEncoding" href="generated/src.pyLIQTR.BlockEncodings.getEncoding.html" />
+    <link rel="prev" title="Best Practices" href="best_practice.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="best_practice.html">Best Practices</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pyLIQTR API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#block-encodings">Block Encodings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.getEncoding.html">src.pyLIQTR.BlockEncodings.getEncoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.BlockEncoding.html">src.pyLIQTR.BlockEncodings.BlockEncoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.CarlemanLinearization.html">src.pyLIQTR.BlockEncodings.CarlemanLinearization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.DoubleFactorized.html">src.pyLIQTR.BlockEncodings.DoubleFactorized</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding.html">src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.FirstQuantized.html">src.pyLIQTR.BlockEncodings.FirstQuantized</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.LinearT.html">src.pyLIQTR.BlockEncodings.LinearT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.PauliStringLCU.html">src.pyLIQTR.BlockEncodings.PauliStringLCU</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#circuit-operators">Circuit Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.cyclic_shift.html">src.pyLIQTR.circuits.operators.cyclic_shift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.diagonal_bitstring.html">src.pyLIQTR.circuits.operators.diagonal_bitstring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.BinaryToUnary.html">src.pyLIQTR.circuits.operators.BinaryToUnary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.BitwiseZRotation.html">src.pyLIQTR.circuits.operators.BitwiseZRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.ControlledUniformSuperposition.html">src.pyLIQTR.circuits.operators.ControlledUniformSuperposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.DF_InnerPrepare.html">src.pyLIQTR.circuits.operators.DF_InnerPrepare</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.DF_OuterPrepare.html">src.pyLIQTR.circuits.operators.DF_OuterPrepare</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.FixupTableQROM.html">src.pyLIQTR.circuits.operators.FixupTableQROM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition.html">src.pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.PhaseGradientRotation.html">src.pyLIQTR.circuits.operators.PhaseGradientRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.prepare_LinearT.html">src.pyLIQTR.circuits.operators.prepare_LinearT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.ProductPauliExponentials.html">src.pyLIQTR.circuits.operators.ProductPauliExponentials</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.QROMwithMeasurementUncompute.html">src.pyLIQTR.circuits.operators.QROMwithMeasurementUncompute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.RotationsQROM.html">src.pyLIQTR.circuits.operators.RotationsQROM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.select_LinearT.html">src.pyLIQTR.circuits.operators.select_LinearT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.translation.html">src.pyLIQTR.circuits.operators.translation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#clam">CLAM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.clam.operator_strings.html">src.pyLIQTR.clam.operator_strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.clam.operator_lattice.html">src.pyLIQTR.clam.operator_lattice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.clam.lattice_definitions.html">src.pyLIQTR.clam.lattice_definitions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gate-decomposition">Gate Decomposition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.gate_decomp.cirq_transforms.html">src.pyLIQTR.gate_decomp.cirq_transforms</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#phase-factors">Phase Factors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.phase_factors.angler.html">src.pyLIQTR.phase_factors.angler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#phase-estimation">Phase Estimation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.PhaseEstimation.pe.html">src.pyLIQTR.PhaseEstimation.pe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.PhaseEstimation.pe_gates.html">src.pyLIQTR.PhaseEstimation.pe_gates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.PhaseEstimation.pe_sim.html">src.pyLIQTR.PhaseEstimation.pe_sim</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#problem-instances">Problem Instances</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.ProblemInstance.html">src.pyLIQTR.ProblemInstances.ProblemInstance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.getInstance.html">src.pyLIQTR.ProblemInstances.getInstance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.html">src.pyLIQTR.ProblemInstances.ChemicalHamiltonian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.ElectronicStructure.html">src.pyLIQTR.ProblemInstances.ElectronicStructure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.fermionic_models.html">src.pyLIQTR.ProblemInstances.fermionic_models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.LatticeInstance.html">src.pyLIQTR.ProblemInstances.LatticeInstance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.MatrixInstance.html">src.pyLIQTR.ProblemInstances.MatrixInstance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.NonlinearODE.html">src.pyLIQTR.ProblemInstances.NonlinearODE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.spin_models.html">src.pyLIQTR.ProblemInstances.spin_models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Gate Decomposition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.gate_decomp.cirq_transforms.html">src.pyLIQTR.gate_decomp.cirq_transforms</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#qubitization">Qubitization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.qubitization.phase_estimation.html">src.pyLIQTR.qubitization.phase_estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.qubitization.qsvt_dynamics.html">src.pyLIQTR.qubitization.qsvt_dynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.qubitization.qsvt.html">src.pyLIQTR.qubitization.qsvt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.qubitization.qubitized_gates.html">src.pyLIQTR.qubitization.qubitized_gates</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#scheduler">Scheduler</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.scheduler.scheduler.html">src.pyLIQTR.scheduler.scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.scheduler.Instruction.html">src.pyLIQTR.scheduler.Instruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.scheduler.sets.html">src.pyLIQTR.scheduler.sets</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utility-methods">Utility Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.utils.circuit_decomposition.html">src.pyLIQTR.utils.circuit_decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.utils.printing.html">src.pyLIQTR.utils.printing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/src.pyLIQTR.utils.resource_analysis.html">src.pyLIQTR.utils.resource_analysis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pyLIQTR API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pyliqtr-api-reference">
+<h1>pyLIQTR API Reference<a class="headerlink" href="#pyliqtr-api-reference" title="Link to this heading"></a></h1>
+<section id="block-encodings">
+<h2>Block Encodings<a class="headerlink" href="#block-encodings" title="Link to this heading"></a></h2>
+<p>The different types of BlockEncodings that are currently supported within pyLIQTR</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.getEncoding.html#module-src.pyLIQTR.BlockEncodings.getEncoding" title="src.pyLIQTR.BlockEncodings.getEncoding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.BlockEncodings.getEncoding</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.BlockEncoding.html#module-src.pyLIQTR.BlockEncodings.BlockEncoding" title="src.pyLIQTR.BlockEncodings.BlockEncoding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.BlockEncodings.BlockEncoding</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.CarlemanLinearization.html#module-src.pyLIQTR.BlockEncodings.CarlemanLinearization" title="src.pyLIQTR.BlockEncodings.CarlemanLinearization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.BlockEncodings.CarlemanLinearization</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.DoubleFactorized.html#module-src.pyLIQTR.BlockEncodings.DoubleFactorized" title="src.pyLIQTR.BlockEncodings.DoubleFactorized"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.BlockEncodings.DoubleFactorized</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding.html#module-src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding" title="src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.FirstQuantized.html#module-src.pyLIQTR.BlockEncodings.FirstQuantized" title="src.pyLIQTR.BlockEncodings.FirstQuantized"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.BlockEncodings.FirstQuantized</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.LinearT.html#module-src.pyLIQTR.BlockEncodings.LinearT" title="src.pyLIQTR.BlockEncodings.LinearT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.BlockEncodings.LinearT</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.BlockEncodings.PauliStringLCU.html#module-src.pyLIQTR.BlockEncodings.PauliStringLCU" title="src.pyLIQTR.BlockEncodings.PauliStringLCU"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.BlockEncodings.PauliStringLCU</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="circuit-operators">
+<h2>Circuit Operators<a class="headerlink" href="#circuit-operators" title="Link to this heading"></a></h2>
+<p>Classes that define different circuit operations</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.cyclic_shift.html#module-src.pyLIQTR.circuits.operators.cyclic_shift" title="src.pyLIQTR.circuits.operators.cyclic_shift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.cyclic_shift</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.diagonal_bitstring.html#module-src.pyLIQTR.circuits.operators.diagonal_bitstring" title="src.pyLIQTR.circuits.operators.diagonal_bitstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.diagonal_bitstring</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.BinaryToUnary.html#module-src.pyLIQTR.circuits.operators.BinaryToUnary" title="src.pyLIQTR.circuits.operators.BinaryToUnary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.BinaryToUnary</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.BitwiseZRotation.html#module-src.pyLIQTR.circuits.operators.BitwiseZRotation" title="src.pyLIQTR.circuits.operators.BitwiseZRotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.BitwiseZRotation</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.ControlledUniformSuperposition.html#module-src.pyLIQTR.circuits.operators.ControlledUniformSuperposition" title="src.pyLIQTR.circuits.operators.ControlledUniformSuperposition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.ControlledUniformSuperposition</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.DF_InnerPrepare.html#module-src.pyLIQTR.circuits.operators.DF_InnerPrepare" title="src.pyLIQTR.circuits.operators.DF_InnerPrepare"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.DF_InnerPrepare</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.DF_OuterPrepare.html#module-src.pyLIQTR.circuits.operators.DF_OuterPrepare" title="src.pyLIQTR.circuits.operators.DF_OuterPrepare"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.DF_OuterPrepare</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.FixupTableQROM.html#module-src.pyLIQTR.circuits.operators.FixupTableQROM" title="src.pyLIQTR.circuits.operators.FixupTableQROM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.FixupTableQROM</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition.html#module-src.pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition" title="src.pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.PhaseGradientRotation.html#module-src.pyLIQTR.circuits.operators.PhaseGradientRotation" title="src.pyLIQTR.circuits.operators.PhaseGradientRotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.PhaseGradientRotation</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.prepare_LinearT.html#module-src.pyLIQTR.circuits.operators.prepare_LinearT" title="src.pyLIQTR.circuits.operators.prepare_LinearT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.prepare_LinearT</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.ProductPauliExponentials.html#module-src.pyLIQTR.circuits.operators.ProductPauliExponentials" title="src.pyLIQTR.circuits.operators.ProductPauliExponentials"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.ProductPauliExponentials</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.QROMwithMeasurementUncompute.html#module-src.pyLIQTR.circuits.operators.QROMwithMeasurementUncompute" title="src.pyLIQTR.circuits.operators.QROMwithMeasurementUncompute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.QROMwithMeasurementUncompute</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.RotationsQROM.html#module-src.pyLIQTR.circuits.operators.RotationsQROM" title="src.pyLIQTR.circuits.operators.RotationsQROM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.RotationsQROM</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.select_LinearT.html#module-src.pyLIQTR.circuits.operators.select_LinearT" title="src.pyLIQTR.circuits.operators.select_LinearT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.select_LinearT</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.circuits.operators.translation.html#module-src.pyLIQTR.circuits.operators.translation" title="src.pyLIQTR.circuits.operators.translation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.circuits.operators.translation</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="clam">
+<h2>CLAM<a class="headerlink" href="#clam" title="Link to this heading"></a></h2>
+<p>Classical Simulation Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.clam.operator_strings.html#module-src.pyLIQTR.clam.operator_strings" title="src.pyLIQTR.clam.operator_strings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.clam.operator_strings</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.clam.operator_lattice.html#module-src.pyLIQTR.clam.operator_lattice" title="src.pyLIQTR.clam.operator_lattice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.clam.operator_lattice</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.clam.lattice_definitions.html#module-src.pyLIQTR.clam.lattice_definitions" title="src.pyLIQTR.clam.lattice_definitions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.clam.lattice_definitions</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="gate-decomposition">
+<h2>Gate Decomposition<a class="headerlink" href="#gate-decomposition" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.gate_decomp.cirq_transforms.html#module-src.pyLIQTR.gate_decomp.cirq_transforms" title="src.pyLIQTR.gate_decomp.cirq_transforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.gate_decomp.cirq_transforms</span></code></a></p></td>
+<td><p>DISTRIBUTION STATEMENT A.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="phase-factors">
+<h2>Phase Factors<a class="headerlink" href="#phase-factors" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.phase_factors.angler.html#module-src.pyLIQTR.phase_factors.angler" title="src.pyLIQTR.phase_factors.angler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.phase_factors.angler</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="phase-estimation">
+<h2>Phase Estimation<a class="headerlink" href="#phase-estimation" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.PhaseEstimation.pe.html#module-src.pyLIQTR.PhaseEstimation.pe" title="src.pyLIQTR.PhaseEstimation.pe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.PhaseEstimation.pe</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.PhaseEstimation.pe_gates.html#module-src.pyLIQTR.PhaseEstimation.pe_gates" title="src.pyLIQTR.PhaseEstimation.pe_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.PhaseEstimation.pe_gates</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.PhaseEstimation.pe_sim.html#module-src.pyLIQTR.PhaseEstimation.pe_sim" title="src.pyLIQTR.PhaseEstimation.pe_sim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.PhaseEstimation.pe_sim</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="problem-instances">
+<h2>Problem Instances<a class="headerlink" href="#problem-instances" title="Link to this heading"></a></h2>
+<p>Classes that are used by specific Quantum Algorithms</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.ProblemInstance.html#module-src.pyLIQTR.ProblemInstances.ProblemInstance" title="src.pyLIQTR.ProblemInstances.ProblemInstance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.ProblemInstances.ProblemInstance</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.getInstance.html#module-src.pyLIQTR.ProblemInstances.getInstance" title="src.pyLIQTR.ProblemInstances.getInstance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.ProblemInstances.getInstance</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.ChemicalHamiltonian.html#module-src.pyLIQTR.ProblemInstances.ChemicalHamiltonian" title="src.pyLIQTR.ProblemInstances.ChemicalHamiltonian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.ProblemInstances.ChemicalHamiltonian</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.ElectronicStructure.html#module-src.pyLIQTR.ProblemInstances.ElectronicStructure" title="src.pyLIQTR.ProblemInstances.ElectronicStructure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.ProblemInstances.ElectronicStructure</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.fermionic_models.html#module-src.pyLIQTR.ProblemInstances.fermionic_models" title="src.pyLIQTR.ProblemInstances.fermionic_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.ProblemInstances.fermionic_models</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.LatticeInstance.html#module-src.pyLIQTR.ProblemInstances.LatticeInstance" title="src.pyLIQTR.ProblemInstances.LatticeInstance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.ProblemInstances.LatticeInstance</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.MatrixInstance.html#module-src.pyLIQTR.ProblemInstances.MatrixInstance" title="src.pyLIQTR.ProblemInstances.MatrixInstance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.ProblemInstances.MatrixInstance</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.NonlinearODE.html#module-src.pyLIQTR.ProblemInstances.NonlinearODE" title="src.pyLIQTR.ProblemInstances.NonlinearODE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.ProblemInstances.NonlinearODE</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.ProblemInstances.spin_models.html#module-src.pyLIQTR.ProblemInstances.spin_models" title="src.pyLIQTR.ProblemInstances.spin_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.ProblemInstances.spin_models</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id1">
+<h2>Gate Decomposition<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.gate_decomp.cirq_transforms.html#module-src.pyLIQTR.gate_decomp.cirq_transforms" title="src.pyLIQTR.gate_decomp.cirq_transforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.gate_decomp.cirq_transforms</span></code></a></p></td>
+<td><p>DISTRIBUTION STATEMENT A.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="qubitization">
+<h2>Qubitization<a class="headerlink" href="#qubitization" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.qubitization.phase_estimation.html#module-src.pyLIQTR.qubitization.phase_estimation" title="src.pyLIQTR.qubitization.phase_estimation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.qubitization.phase_estimation</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.qubitization.qsvt_dynamics.html#module-src.pyLIQTR.qubitization.qsvt_dynamics" title="src.pyLIQTR.qubitization.qsvt_dynamics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.qubitization.qsvt_dynamics</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.qubitization.qsvt.html#module-src.pyLIQTR.qubitization.qsvt" title="src.pyLIQTR.qubitization.qsvt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.qubitization.qsvt</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.qubitization.qubitized_gates.html#module-src.pyLIQTR.qubitization.qubitized_gates" title="src.pyLIQTR.qubitization.qubitized_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.qubitization.qubitized_gates</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="scheduler">
+<h2>Scheduler<a class="headerlink" href="#scheduler" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.scheduler.scheduler.html#module-src.pyLIQTR.scheduler.scheduler" title="src.pyLIQTR.scheduler.scheduler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.scheduler.scheduler</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.scheduler.Instruction.html#module-src.pyLIQTR.scheduler.Instruction" title="src.pyLIQTR.scheduler.Instruction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.scheduler.Instruction</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.scheduler.sets.html#module-src.pyLIQTR.scheduler.sets" title="src.pyLIQTR.scheduler.sets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.scheduler.sets</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="utility-methods">
+<h2>Utility Methods<a class="headerlink" href="#utility-methods" title="Link to this heading"></a></h2>
+<p>A set of methods to provide functional support to help with things such as generating QASM strings or managing ancillas.
+Plus a lot of other functionality that doesn’t fit well anywhere else.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.utils.circuit_decomposition.html#module-src.pyLIQTR.utils.circuit_decomposition" title="src.pyLIQTR.utils.circuit_decomposition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.utils.circuit_decomposition</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/src.pyLIQTR.utils.printing.html#module-src.pyLIQTR.utils.printing" title="src.pyLIQTR.utils.printing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.utils.printing</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/src.pyLIQTR.utils.resource_analysis.html#module-src.pyLIQTR.utils.resource_analysis" title="src.pyLIQTR.utils.resource_analysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLIQTR.utils.resource_analysis</span></code></a></p></td>
+<td><p>Copyright (c) 2024 Massachusetts Institute of Technology SPDX-License-Identifier: BSD-2-Clause</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="best_practice.html" class="btn btn-neutral float-left" title="Best Practices" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="generated/src.pyLIQTR.BlockEncodings.getEncoding.html" class="btn btn-neutral float-right" title="src.pyLIQTR.BlockEncodings.getEncoding" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

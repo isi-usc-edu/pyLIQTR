@@ -1,0 +1,227 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.gate_decomp.point_enumeration &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../_static/pyliqtr_logo.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src.pyLIQTR.gate_decomp.rings" href="src.pyLIQTR.gate_decomp.rings.html" />
+    <link rel="prev" title="src.pyLIQTR.gate_decomp.matrices" href="src.pyLIQTR.gate_decomp.matrices.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best_practice.html">Best Practices</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api-internal.html">Internal API reference, for users customizing behavior</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api-internal.html#circuit-operators">Circuit Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api-internal.html#clam">CLAM</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api-internal.html#gate-decomposition">Gate Decomposition</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.gate_decomp.clifford_gates.html">src.pyLIQTR.gate_decomp.clifford_gates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.gate_decomp.ellipse.html">src.pyLIQTR.gate_decomp.ellipse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.gate_decomp.exact_decomp.html">src.pyLIQTR.gate_decomp.exact_decomp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.gate_decomp.gate_approximation.html">src.pyLIQTR.gate_decomp.gate_approximation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.gate_decomp.grid_operator.html">src.pyLIQTR.gate_decomp.grid_operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.gate_decomp.matrices.html">src.pyLIQTR.gate_decomp.matrices</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">src.pyLIQTR.gate_decomp.point_enumeration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.gate_decomp.rings.html">src.pyLIQTR.gate_decomp.rings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.gate_decomp.rotation_gates.html">src.pyLIQTR.gate_decomp.rotation_gates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.gate_decomp.solve_diophantine.html">src.pyLIQTR.gate_decomp.solve_diophantine</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api-internal.html#phase-factors">Phase Factors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api-internal.html#scheduler">Scheduler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api-internal.html#utility-methods">Utility Methods</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.gate_decomp.point_enumeration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/src.pyLIQTR.gate_decomp.point_enumeration.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-src.pyLIQTR.gate_decomp.point_enumeration">
+<span id="src-pyliqtr-gate-decomp-point-enumeration"></span><h1>src.pyLIQTR.gate_decomp.point_enumeration<a class="headerlink" href="#module-src.pyLIQTR.gate_decomp.point_enumeration" title="Link to this heading"></a></h1>
+<p>DISTRIBUTION STATEMENT A. Approved for public release. Distribution is unlimited.</p>
+<p>This material is based upon work supported by the Under Secretary of Defense for
+Research and Engineering under Air Force Contract No. FA8702-15-D-0001. Any opinions,
+findings, conclusions or recommendations expressed in this material are those of the
+author(s) and do not necessarily reflect the views of the Under Secretary of Defense
+for Research and Engineering.</p>
+<p>© 2022 Massachusetts Institute of Technology.</p>
+<p>The software/firmware is provided to you on an As-Is basis</p>
+<p>Delivered to the U.S. Government with Unlimited Rights, as defined in DFARS Part
+252.227-7013 or 7014 (Feb 2014). Notwithstanding any copyright notice, U.S. Government
+rights in this work are defined by DFARS 252.227-7013 or DFARS 252.227-7014 as detailed
+above. Use of this work other than as specifically authorized by the U.S. Government
+may violate any copyrights that exist in this work.</p>
+<p>Functions for enumerating points of the ring D[ω] in various subregions of the unit
+disk. Uses methods described in [1].
+[1] - arXiv:1403.2975</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.apply_grid_operator" title="src.pyLIQTR.gate_decomp.point_enumeration.apply_grid_operator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_grid_operator</span></code></a>(grid_op, ellipse1, ellipse2)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.apply_op_to_ellipse" title="src.pyLIQTR.gate_decomp.point_enumeration.apply_op_to_ellipse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_op_to_ellipse</span></code></a>(grid_op, ellipse)</p></td>
+<td><p>Given a grid op G and ellipse E, performs the matrix multiplication (G^T)EG</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.apply_shift_operator" title="src.pyLIQTR.gate_decomp.point_enumeration.apply_shift_operator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_shift_operator</span></code></a>(k, grid_op)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.candidate_generator_direct" title="src.pyLIQTR.gate_decomp.point_enumeration.candidate_generator_direct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">candidate_generator_direct</span></code></a>(epsilon, phi)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.candidate_generator_fallback" title="src.pyLIQTR.gate_decomp.point_enumeration.candidate_generator_fallback"><code class="xref py py-obj docutils literal notranslate"><span class="pre">candidate_generator_fallback</span></code></a>(epsilon, phi, r)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.determine_shift_operator" title="src.pyLIQTR.gate_decomp.point_enumeration.determine_shift_operator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">determine_shift_operator</span></code></a>(ellipse1, ellipse2)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.find_bounding_ellipse_direct" title="src.pyLIQTR.gate_decomp.point_enumeration.find_bounding_ellipse_direct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_bounding_ellipse_direct</span></code></a>(epsilon, phi[, k])</p></td>
+<td><p>Given an epsilon and a phi, find x0, y0, a, b, and d such that the ellipse defined by a(x-x0)^2 + 2b(x-x0)(y-y0) + d(y-y0)^2 = (ab)^2 is the smallest ellipse that bounds the region {u | u•z &gt;= 1 - ε^2 / 2} where z = exp(iφ)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.find_bounding_ellipse_fallback" title="src.pyLIQTR.gate_decomp.point_enumeration.find_bounding_ellipse_fallback"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_bounding_ellipse_fallback</span></code></a>(epsilon, phi, ...)</p></td>
+<td><p>Given and epsilon, phi, r, and k, return the (approximately) smallest ellipse that bounds the region C = {u | <a href="#id1"><span class="problematic" id="id2">|u|</span></a> &gt;= r and Arg(u)∈[θ - δ, θ + δ]} for δ = arcsin(eps/2)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.find_ellipse_bounding_box" title="src.pyLIQTR.gate_decomp.point_enumeration.find_ellipse_bounding_box"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_ellipse_bounding_box</span></code></a>(ellipse)</p></td>
+<td><p>Given the matrix elements of an ellipse defined as a 2x2 positive definite matrix:</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.find_grid_operator" title="src.pyLIQTR.gate_decomp.point_enumeration.find_grid_operator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_grid_operator</span></code></a>(ellipse1, ellipse2)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.find_k" title="src.pyLIQTR.gate_decomp.point_enumeration.find_k"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_k</span></code></a>(delta)</p></td>
+<td><p>Given some value δ &gt;= 1, find the smallest integer k such that δ * (λ^-1)^k &lt; 1, where λ = 1 + √2</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.find_u_candidates_direct" title="src.pyLIQTR.gate_decomp.point_enumeration.find_u_candidates_direct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_u_candidates_direct</span></code></a>(epsilon, phi)</p></td>
+<td><p>Find all of the u candidates for the lowest k at which a candidate exists</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.get_num_pot_sols" title="src.pyLIQTR.gate_decomp.point_enumeration.get_num_pot_sols"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_num_pot_sols</span></code></a>(x0, x1, y0, y1)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.get_num_pot_sols_scaled" title="src.pyLIQTR.gate_decomp.point_enumeration.get_num_pot_sols_scaled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_num_pot_sols_scaled</span></code></a>(x0, x1, y0, y1)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.reduce_skew" title="src.pyLIQTR.gate_decomp.point_enumeration.reduce_skew"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reduce_skew</span></code></a>(ellipse1, ellipse2)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.scaled_one_dim_grid_problem" title="src.pyLIQTR.gate_decomp.point_enumeration.scaled_one_dim_grid_problem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scaled_one_dim_grid_problem</span></code></a>(x0, x1, y0, y1)</p></td>
+<td><p>Enumerate solutions to the scaled one dimensional grid problem for intervals [x0, x1], [y0, y1], i.e solve the one dimensional grid problem in the specific case that -1 + √2 &lt;= x1 - x0 &lt; 1.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.solve_one_dim_grid_problem" title="src.pyLIQTR.gate_decomp.point_enumeration.solve_one_dim_grid_problem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solve_one_dim_grid_problem</span></code></a>(x0, x1, y0, y1)</p></td>
+<td><p>Enumerate solutions to the one dimensional grid problem given intervals [x0, x1] and [y0, y1].</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.solve_two_dim_grid_problem_ellipse" title="src.pyLIQTR.gate_decomp.point_enumeration.solve_two_dim_grid_problem_ellipse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solve_two_dim_grid_problem_ellipse</span></code></a>(ellipse1, ...)</p></td>
+<td><p>Given the matrix elements of two ellipses A and B centered at (x1, y1) and (x2, y2) defined as a 2x2 positive definite matrices:]</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.point_enumeration.solve_two_dim_grid_problem_upright_rectangles" title="src.pyLIQTR.gate_decomp.point_enumeration.solve_two_dim_grid_problem_upright_rectangles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solve_two_dim_grid_problem_upright_rectangles</span></code></a>(...)</p></td>
+<td><p>Given two subregions A and B, of R^2, of the form A,B = [x0, x1] x [y0, y1], find all u ∈ Z[ω] such that u ∈ A and u.conj2() ∈ B (where conj2 is sqrt(2) conjugation)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="src.pyLIQTR.gate_decomp.matrices.html" class="btn btn-neutral float-left" title="src.pyLIQTR.gate_decomp.matrices" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="src.pyLIQTR.gate_decomp.rings.html" class="btn btn-neutral float-right" title="src.pyLIQTR.gate_decomp.rings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

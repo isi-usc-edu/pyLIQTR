@@ -1,0 +1,642 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.phase_factors.optimization.expander &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.phase_factors.optimization.expander</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.phase_factors.optimization.expander</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###       EXPANDER   -    Analytical expansions in a Chebyshev basis.        ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   REVISION: 11/08/2022</span>
+<span class="c1">###</span>
+<span class="c1">###   Justin E. Elenewski  -  MIT Lincoln Laboratory</span>
+<span class="c1">###   justin dot elenewski at ll dot mit dot edu</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>                <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.special</span>        <span class="k">as</span> <span class="nn">sfn</span>
+
+<span class="kn">from</span>   <span class="nn">pyLIQTR.phase_factors.optimization.ChebyshevPoly</span>        <span class="kn">import</span> <span class="n">ChebyshevPoly</span>
+
+
+
+
+<div class="viewcode-block" id="handle_scalar">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.handle_scalar">[docs]</a>
+<span class="k">def</span> <span class="nf">handle_scalar</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="eval_chebyshev">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.eval_chebyshev">[docs]</a>
+<span class="k">def</span> <span class="nf">eval_chebyshev</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">parity</span><span class="p">):</span>
+
+
+    <span class="n">x</span>     <span class="o">=</span> <span class="n">handle_scalar</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>      <span class="c1"># Transforms scalar input to a 0-d numpy array</span>
+
+    <span class="n">N_cfs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span>           <span class="c1"># Number of coefficients defining f(x)</span>
+    <span class="n">fx</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>      <span class="c1"># Store evaluation of of f(x)</span>
+    <span class="n">acx</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c1"># Arccos appearing in Chebyshev terms</span>
+
+    <span class="k">if</span>   <span class="p">(</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N_cfs</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">fx</span> <span class="o">+=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N_cfs</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">fx</span> <span class="o">+=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N_cfs</span><span class="p">):</span>
+            <span class="n">fx</span> <span class="o">+=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">fx</span><span class="p">)</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="eval_chebyshev_strict">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.eval_chebyshev_strict">[docs]</a>
+<span class="k">def</span> <span class="nf">eval_chebyshev_strict</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">parity</span><span class="p">):</span>
+
+
+    <span class="n">x</span>     <span class="o">=</span> <span class="n">handle_scalar</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>      <span class="c1"># Transforms scalar input to a 0-d numpy array</span>
+
+    <span class="n">N_cfs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span>           <span class="c1"># Number of coefficients defining f(x)</span>
+    <span class="n">fx</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>      <span class="c1"># Array to store evaluation of of f(x)</span>
+    <span class="n">acx</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c1"># Arccos appearing in Chebyshev terms</span>
+
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N_cfs</span><span class="p">):</span>
+            <span class="n">fx</span> <span class="o">+=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N_cfs</span><span class="p">):</span>
+            <span class="n">fx</span> <span class="o">+=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">acx</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">fx</span><span class="p">)</span></div>
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   CLASS     Expander</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Provides analytically-defined expansions of functions in a Chebyshev</span>
+<span class="c1">###      polynomial basis, for input to QSP angle generation routines.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      NONE</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      Expander object</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy          as  np</span>
+<span class="c1">###      numpy.special  as  sfn</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="Expander">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander">[docs]</a>
+<span class="k">class</span> <span class="nc">Expander</span><span class="p">(</span><span class="n">ChebyshevPoly</span><span class="p">):</span>
+
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span>    <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">err_tgt</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+    <span class="c1">############################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   FUNCTION     _ja_get_trig_order</span>
+    <span class="c1">###</span>
+    <span class="c1">############################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   DESCRIPTION</span>
+    <span class="c1">###</span>
+    <span class="c1">###      Calculates the target order for the Jacobi-Anger expansion of</span>
+    <span class="c1">###      trigonometric functions (sine, cosine), as needed to surpass</span>
+    <span class="c1">###      an accuracy threshold of acc_tgt.</span>
+    <span class="c1">###</span>
+    <span class="c1">###   ARGUMENTS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      acc_tgt    -    Accuracy target for the polynomial expansion</span>
+    <span class="c1">###      tau        -    Constant argument of the sine or cosine function</span>
+    <span class="c1">###                      (e.g. f(x) = cos(tau*x) ).</span>
+    <span class="c1">###</span>
+    <span class="c1">###   RETURNS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      max_order  -    Maximal order of the expansion</span>
+    <span class="c1">###      N_cf       -    Number of coefficients appearing in expansion</span>
+    <span class="c1">###</span>
+    <span class="c1">###   REQUIRES</span>
+    <span class="c1">###</span>
+    <span class="c1">###      numpy          as  np</span>
+    <span class="c1">###</span>
+
+    <span class="k">def</span> <span class="nf">_ja_get_trig_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">err_tgt</span><span class="p">):</span>
+
+        <span class="c1"># Maximum order of polynomial needed to hit accuracy target.</span>
+        <span class="n">max_order</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mf">1.4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">err_tgt</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">max_order</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">max_order</span> <span class="o">=</span> <span class="n">max_order</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">N_cf</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_order</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">max_order</span><span class="p">,</span> <span class="n">N_cf</span><span class="p">)</span>
+
+
+
+
+
+    <span class="c1">############################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   FUNCTION     ja_cos</span>
+    <span class="c1">###</span>
+    <span class="c1">############################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   DESCRIPTION</span>
+    <span class="c1">###</span>
+    <span class="c1">###      Returns coefficients for a Chebyshev polynomial representation</span>
+    <span class="c1">###      of the cosine function via the Jacobi-Anger expansion.</span>
+    <span class="c1">###</span>
+    <span class="c1">###   ARGUMENTS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      tau        -    Constant argument of the cosine function</span>
+    <span class="c1">###                      (e.g. f(x) = cos(tau*x) ).</span>
+    <span class="c1">###      acc_tgt    -    Accuracy target for the polynomial expansion</span>
+    <span class="c1">###</span>
+    <span class="c1">###   RETURNS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      self.chebyshev_coeffs   -   Chebyshev expansion oefficients</span>
+    <span class="c1">###      self.parity             -   Parity of the target function</span>
+    <span class="c1">###      self.type               -   Descriptive string for the expansion.</span>
+    <span class="c1">###</span>
+    <span class="c1">###   REQUIRES</span>
+    <span class="c1">###</span>
+    <span class="c1">###      numpy          as  np</span>
+    <span class="c1">###      numpy.special  as  sfn</span>
+    <span class="c1">###</span>
+
+    <span class="c1">### NOTE NOTE NOTE - Edit text to note that this gives cos/2</span>
+
+    <span class="c1">### need to make sure this is compatible with EVAL</span>
+
+<div class="viewcode-block" id="Expander.ja_cos">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.ja_cos">[docs]</a>
+    <span class="k">def</span> <span class="nf">ja_cos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">err_tgt</span><span class="p">):</span>
+
+        <span class="n">max_order</span><span class="p">,</span> <span class="n">N_cf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ja_get_trig_order</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">err_tgt</span><span class="p">)</span>
+
+        <span class="c1">#print(&quot;Maximum order of phase set = &quot;, max_order)</span>
+
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N_cf</span><span class="p">)</span>
+
+        <span class="c1"># Coefficients for the Jacobi-Anger expansion of cos</span>
+        <span class="c1"># in terms of Bessel functions</span>
+        <span class="c1">#</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,(</span><span class="n">N_cf</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span>
+            <span class="n">coeffs</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">sfn</span><span class="o">.</span><span class="n">jv</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">tau</span><span class="p">)</span>
+
+        <span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_coeffs</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+        <span class="k">return</span></div>
+
+
+
+
+
+
+    <span class="c1">############################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   FUNCTION     ja_sin</span>
+    <span class="c1">###</span>
+    <span class="c1">############################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   DESCRIPTION</span>
+    <span class="c1">###</span>
+    <span class="c1">###      Returns coefficients for a Chebyshev polynomial representation</span>
+    <span class="c1">###      of the sine function via the Jacobi-Anger expansion.</span>
+    <span class="c1">###</span>
+    <span class="c1">###   ARGUMENTS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      tau        -    Constant argument of the cosine function</span>
+    <span class="c1">###                      (e.g. f(x) = sin(tau*x) ).</span>
+    <span class="c1">###      acc_tgt    -    Accuracy target for the polynomial expansion</span>
+    <span class="c1">###</span>
+    <span class="c1">###   RETURNS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      self.chebyshev_coeffs   -   Chebyshev expansion oefficients</span>
+    <span class="c1">###      self.parity             -   Parity of the target function</span>
+    <span class="c1">###      self.type               -   Descriptive string for the expansion.</span>
+    <span class="c1">###</span>
+    <span class="c1">###   REQUIRES</span>
+    <span class="c1">###</span>
+    <span class="c1">###      numpy          as  np</span>
+    <span class="c1">###      numpy.special  as  sfn</span>
+    <span class="c1">###</span>
+
+<div class="viewcode-block" id="Expander.ja_sin">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.ja_sin">[docs]</a>
+    <span class="k">def</span> <span class="nf">ja_sin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">acc_tgt</span><span class="p">):</span>
+
+        <span class="n">max_order</span><span class="p">,</span> <span class="n">N_cf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ja_get_trig_order</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">acc_tgt</span><span class="p">)</span>
+
+        <span class="c1">#print(&quot;Maximum order of phase set = &quot;, max_order)</span>
+
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N_cf</span><span class="p">)</span>
+
+        <span class="c1"># Coefficients for the Jacobi-Anger expansion of cos</span>
+        <span class="c1"># in terms of Bessel functions</span>
+        <span class="c1">#</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N_cf</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">coeffs</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">sfn</span><span class="o">.</span><span class="n">jv</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span><span class="n">tau</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_coeffs</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+        <span class="k">return</span></div>
+
+
+
+
+    <span class="c1">############################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   FUNCTION     exponential_decay</span>
+    <span class="c1">###</span>
+    <span class="c1">############################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   DESCRIPTION</span>
+    <span class="c1">###</span>
+    <span class="c1">###      Returns coefficients for the exponential function with a negative</span>
+    <span class="c1">###      real argument, e.g., f(x) = exp(-beta*x)</span>
+    <span class="c1">###</span>
+    <span class="c1">###   ARGUMENTS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      beta        -   Constant argument of the exponential function</span>
+    <span class="c1">###                      (e.g. f(x) = exp(-beta*x) ).</span>
+    <span class="c1">###      epsilon     -    Accuracy target for the polynomial expansion</span>
+    <span class="c1">###</span>
+    <span class="c1">###   RETURNS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      self.chebyshev_coeffs   -   Chebyshev expansion coefficients</span>
+    <span class="c1">###                                  of even parity</span>
+    <span class="c1">###      self.parity = 0         -   Parity of the target function (even)</span>
+    <span class="c1">###      self.type               -   Descriptive string for the expansion.</span>
+    <span class="c1">###</span>
+    <span class="c1">###   REQUIRES</span>
+    <span class="c1">###</span>
+    <span class="c1">###      numpy          as  np</span>
+    <span class="c1">###      numpy.special  as  sfn</span>
+    <span class="c1">###</span>
+    <span class="c1">###   REFERENCES</span>
+    <span class="c1">###</span>
+    <span class="c1">###      Discussed contextually in:</span>
+    <span class="c1">###</span>
+    <span class="c1">###         G. H. Low and I. L. Chuang</span>
+    <span class="c1">###         &quot;Hamiltonian Simulation by Uniform Spectral Ampliification&quot;</span>
+    <span class="c1">###         arXiv:1707.05391</span>
+    <span class="c1">###</span>
+    <span class="c1">###      Expansion originally from:</span>
+    <span class="c1">###</span>
+    <span class="c1">###         S. Sachdeva and N. K. Vishnoi</span>
+    <span class="c1">###         &quot;Faster algorithms via approximation theory&quot;</span>
+    <span class="c1">###         Found. Trends Theoo. Comp. Sci. 9, 125 (2014)</span>
+    <span class="c1">###</span>
+
+
+    <span class="c1">#</span>
+    <span class="c1"># From:</span>
+    <span class="c1">#</span>
+    <span class="c1">#       A. M. Childs, R. Kothari, and R. D. Somma</span>
+    <span class="c1">#       &quot;Quantuum algorithm for systems of linear equations with</span>
+    <span class="c1">#        exponentially improved dependence on precision.</span>
+    <span class="c1">#       SIAM J. Comput. 46, 1920 (2017)</span>
+    <span class="c1">#</span>
+<div class="viewcode-block" id="Expander.exponential_decay_even">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.exponential_decay_even">[docs]</a>
+    <span class="k">def</span> <span class="nf">exponential_decay_even</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">epsilon</span><span class="p">):</span>
+
+        <span class="n">oterm1</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">beta</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="o">/</span><span class="n">epsilon</span><span class="p">)])))</span>
+        <span class="n">oterm2</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">4.0</span><span class="o">/</span><span class="n">epsilon</span><span class="p">))</span>
+
+        <span class="n">max_order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">oterm1</span> <span class="o">*</span> <span class="n">oterm2</span><span class="p">)</span>
+
+        <span class="n">N_cf</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_order</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N_cf</span><span class="p">)</span>
+
+        <span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">sfn</span><span class="o">.</span><span class="n">iv</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">beta</span><span class="p">)</span>
+
+        <span class="c1"># note that the coefficents are of T_j(-x) - should we change to make</span>
+        <span class="c1"># this consistent with trigonometric routines?</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N_cf</span><span class="p">):</span>
+            <span class="n">coeffs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">sfn</span><span class="o">.</span><span class="n">iv</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="p">,</span><span class="n">beta</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_coeffs</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+        <span class="k">return</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="Expander.exponential_decay_odd">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.exponential_decay_odd">[docs]</a>
+    <span class="k">def</span> <span class="nf">exponential_decay_odd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">epsilon</span><span class="p">):</span>
+
+        <span class="n">oterm1</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">beta</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="o">/</span><span class="n">epsilon</span><span class="p">)])))</span>
+        <span class="n">oterm2</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">4.0</span><span class="o">/</span><span class="n">epsilon</span><span class="p">))</span>
+
+        <span class="n">max_order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">oterm1</span> <span class="o">*</span> <span class="n">oterm2</span><span class="p">)</span>
+
+        <span class="n">N_cf</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_order</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N_cf</span><span class="p">)</span>
+
+        <span class="c1"># note that the coefficents are of T_j(-x) - should we change to make</span>
+        <span class="c1"># this consistent with trigonometric routines?</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N_cf</span><span class="p">):</span>
+            <span class="n">coeffs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">sfn</span><span class="o">.</span><span class="n">iv</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">beta</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_coeffs</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+        <span class="k">return</span></div>
+
+
+
+
+
+
+    <span class="c1">############################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   FUNCTION     jacobi_anger_gaussian</span>
+    <span class="c1">###</span>
+    <span class="c1">############################################################################</span>
+    <span class="c1">###</span>
+    <span class="c1">###   DESCRIPTION</span>
+    <span class="c1">###</span>
+    <span class="c1">###      Returns coefficients for the gaussan function with a</span>
+    <span class="c1">###      real argument, e.g., f(x) = exp(-(alpha^2)*x)</span>
+    <span class="c1">###</span>
+    <span class="c1">###   ARGUMENTS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      alpha       -    Constant argument of the exponential function</span>
+    <span class="c1">###                       (e.g. f(x) = exp(-(alpha^2)*x) ).</span>
+    <span class="c1">###      epsilon     -    Accuracy target for the polynomial expansion</span>
+    <span class="c1">###</span>
+    <span class="c1">###   RETURNS</span>
+    <span class="c1">###</span>
+    <span class="c1">###      self.chebyshev_coeffs   -   Chebyshev expansion oefficients</span>
+    <span class="c1">###      self.parity             -   Parity of the target function</span>
+    <span class="c1">###      self.type               -   Descriptive string for the expansion.</span>
+    <span class="c1">###</span>
+    <span class="c1">###   REQUIRES</span>
+    <span class="c1">###</span>
+    <span class="c1">###      numpy          as  np</span>
+    <span class="c1">###      numpy.special  as  sfn</span>
+    <span class="c1">###</span>
+
+
+<div class="viewcode-block" id="Expander.gaussian">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.gaussian">[docs]</a>
+    <span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">epsilon</span><span class="p">):</span>
+
+        <span class="n">max_order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">epsilon</span><span class="p">))</span> <span class="o">*</span>
+                              <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">epsilon</span><span class="p">)))</span>
+
+<span class="c1">#        max_order = max_order + 10</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">max_order</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">max_order</span> <span class="o">=</span> <span class="n">max_order</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">N_cf</span>      <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_order</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">coeffs</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N_cf</span><span class="p">)</span>
+
+        <span class="n">asqh</span>      <span class="o">=</span>  <span class="p">(</span><span class="n">alpha</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+
+        <span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">asqh</span><span class="p">)</span> <span class="o">*</span> <span class="n">sfn</span><span class="o">.</span><span class="n">iv</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">asqh</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N_cf</span><span class="p">):</span>
+            <span class="n">coeffs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">asqh</span><span class="p">)</span> <span class="o">*</span> <span class="n">sfn</span><span class="o">.</span><span class="n">iv</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">asqh</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_coeffs</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span></div>
+
+
+
+
+<div class="viewcode-block" id="Expander.erf">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.erf">[docs]</a>
+    <span class="k">def</span> <span class="nf">erf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kappa</span><span class="p">):</span>
+
+        <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="Expander.erf_shifted">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.erf_shifted">[docs]</a>
+    <span class="k">def</span> <span class="nf">erf_shifted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kappa</span><span class="p">):</span>
+
+        <span class="k">return</span></div>
+
+
+
+    <span class="c1">#</span>
+    <span class="c1"># From:</span>
+    <span class="c1">#</span>
+    <span class="c1">#       A. M. Childs, R. Kothari, and R. D. Somma</span>
+    <span class="c1">#       &quot;Quantuum algorithm for systems of linear equations with</span>
+    <span class="c1">#        exponentially improved dependence on precision.&quot;&quot;</span>
+    <span class="c1">#       SIAM J. Comput. 46, 1920 (2017)</span>
+    <span class="c1">#</span>
+<div class="viewcode-block" id="Expander.inverse">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.Expander.inverse">[docs]</a>
+    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">acc_tgt</span><span class="p">):</span>
+
+
+        <span class="n">b</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">kappa</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">kappa</span> <span class="o">/</span> <span class="n">acc_tgt</span><span class="p">)))</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">b</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">b</span><span class="o">/</span><span class="n">acc_tgt</span><span class="p">))))</span>
+
+<span class="c1">#        d = d+10</span>
+
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">coeffs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">binomsum</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="p">)))</span>
+
+        <span class="c1">### need to modify code to handle analytical expansion of binom</span>
+        <span class="c1">### so that denominator isn&#39;t problematic</span>
+
+        <span class="c1"># coeffs are of T_{2j+1}(x)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_coeffs</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span></div>
+</div>
+
+
+
+
+<div class="viewcode-block" id="binomsum">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.expander.binomsum">[docs]</a>
+<span class="k">def</span> <span class="nf">binomsum</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+
+    <span class="n">val</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">+=</span> <span class="n">sfn</span><span class="o">.</span><span class="n">binom</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="p">,</span><span class="n">b</span><span class="o">+</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">val</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

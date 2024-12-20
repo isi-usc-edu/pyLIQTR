@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.operators.tests.test_EqualityTest &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.operators.tests.test_EqualityTest</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.circuits.operators.tests.test_EqualityTest</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">qualtran.cirq_interop.testing</span> <span class="kn">import</span> <span class="n">assert_circuit_inp_out_cirqsim</span><span class="p">,</span> <span class="n">GateHelper</span>
+<span class="kn">from</span> <span class="nn">qualtran.cirq_interop.bit_tools</span> <span class="kn">import</span> <span class="n">iter_bits</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.global_ancilla_manager</span> <span class="kn">import</span> <span class="n">gam</span> <span class="k">as</span> <span class="n">gam</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.printing</span> <span class="kn">import</span> <span class="n">openqasm</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.EqualityTest</span> <span class="kn">import</span> <span class="n">EqualityTest</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.resource_analysis</span> <span class="kn">import</span> <span class="n">estimate_resources</span>
+
+<div class="viewcode-block" id="TestEqualityTest">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest">[docs]</a>
+<span class="k">class</span> <span class="nc">TestEqualityTest</span><span class="p">:</span>
+
+<div class="viewcode-block" id="TestEqualityTest.test_EqualityTest">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;bitsize&quot;</span><span class="p">,[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_EqualityTest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bitsize</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests the gate carries out the expected operation by comparing simulation output with the expected output for different input values.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">EqualityTest</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">bitsize</span><span class="p">)</span>
+        <span class="n">helper</span> <span class="o">=</span> <span class="n">GateHelper</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span>
+        <span class="n">operation</span> <span class="o">=</span> <span class="n">helper</span><span class="o">.</span><span class="n">operation</span>
+        <span class="c1"># circuit</span>
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+        <span class="c1"># check simulation results. target qubit should end in 1 state only if i==j, other qubits should be unchanged.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">bitsize</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">bitsize</span><span class="p">):</span>
+                <span class="n">input_state</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iter_bits</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="n">bitsize</span><span class="p">))</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">iter_bits</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="n">bitsize</span><span class="p">))</span><span class="o">+</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">output_state</span> <span class="o">=</span> <span class="n">input_state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="n">j</span><span class="p">:</span>
+                    <span class="n">output_state</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">assert_circuit_inp_out_cirqsim</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span><span class="n">qubit_order</span><span class="o">=</span><span class="p">[</span><span class="o">*</span><span class="n">helper</span><span class="o">.</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">],</span><span class="o">*</span><span class="n">helper</span><span class="o">.</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;B&#39;</span><span class="p">],</span><span class="o">*</span><span class="n">helper</span><span class="o">.</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]],</span><span class="n">inputs</span><span class="o">=</span><span class="n">input_state</span><span class="p">,</span><span class="n">outputs</span><span class="o">=</span><span class="n">output_state</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestEqualityTest.test_EqualityTest_ValueError">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_ValueError">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_EqualityTest_ValueError</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests the gate raises ValueError for bitsize &lt; 2.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">EqualityTest</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">pass</span>       </div>
+
+
+<div class="viewcode-block" id="TestEqualityTest.test_EqualityTest_inverse">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_inverse">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;bitsize&quot;</span><span class="p">,[</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_EqualityTest_inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bitsize</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># initialilze operator</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">EqualityTest</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">bitsize</span><span class="p">)</span>
+        <span class="n">helper</span> <span class="o">=</span> <span class="n">GateHelper</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span>
+        <span class="n">operation</span> <span class="o">=</span> <span class="n">helper</span><span class="o">.</span><span class="n">operation</span>
+        <span class="c1"># circuit</span>
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">operation</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># output states equal input which is |0&gt;</span>
+        <span class="c1"># verify simulated results</span>
+        <span class="n">qubits</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">()</span>
+        <span class="n">init_state</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">qubits</span><span class="p">)</span>
+        <span class="n">assert_circuit_inp_out_cirqsim</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span><span class="n">qubit_order</span><span class="o">=</span><span class="p">[</span><span class="o">*</span><span class="n">qubits</span><span class="p">],</span><span class="n">inputs</span><span class="o">=</span><span class="n">init_state</span><span class="p">,</span><span class="n">outputs</span><span class="o">=</span><span class="n">init_state</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestEqualityTest.test_EqualityTest_decomposes">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_decomposes">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;bitsize&quot;</span><span class="p">,[</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_EqualityTest_decomposes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bitsize</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests gate decomposition existence.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># initialilze operator</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">EqualityTest</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">bitsize</span><span class="p">)</span>
+        <span class="n">helper</span> <span class="o">=</span> <span class="n">GateHelper</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span>
+        <span class="n">operation</span> <span class="o">=</span> <span class="n">helper</span><span class="o">.</span><span class="n">operation</span>
+        <span class="c1"># check decompose_once raises no error</span>
+        <span class="n">decomposed_once</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+        <span class="c1"># check decompose returns decomposition not equal to operation itself</span>
+        <span class="n">decomposed</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">([</span><span class="n">operation</span><span class="p">]</span> <span class="o">!=</span> <span class="n">decomposed</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestEqualityTest.test_EqualityTest_qasm">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_qasm">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_EqualityTest_qasm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests qasm printing functionality.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">gam</span><span class="p">)</span>
+        <span class="n">bitsize</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">EqualityTest</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">bitsize</span><span class="p">)</span>
+        <span class="n">helper</span> <span class="o">=</span> <span class="n">GateHelper</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span>
+        <span class="n">operation</span> <span class="o">=</span> <span class="n">helper</span><span class="o">.</span><span class="n">operation</span>
+
+        <span class="n">qasm</span> <span class="o">=</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">operation</span><span class="p">,</span><span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">qasm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">qasm</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="TestEqualityTest.test_EqualityTest_resources">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_resources">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_EqualityTest_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests resources are counted correctly.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">bitsize</span><span class="o">=</span><span class="mi">5</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">EqualityTest</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">bitsize</span><span class="p">)</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">estimate_resources</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+        <span class="n">cliffs_for_zero_controls</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">bitsize</span>
+        <span class="n">cliffs_for_and</span> <span class="o">=</span> <span class="mi">9</span>
+        <span class="n">cliffs_for_and_adj</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">num_CNOTS</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">bitsize</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">num_ands</span> <span class="o">=</span> <span class="n">bitsize</span><span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">bitsize</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;Clifford&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">num_CNOTS</span> <span class="o">+</span> <span class="n">num_ands</span><span class="o">*</span><span class="p">(</span><span class="n">cliffs_for_and</span><span class="o">+</span><span class="n">cliffs_for_and_adj</span><span class="p">)</span> <span class="o">+</span> <span class="n">cliffs_for_zero_controls</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;LogicalQubits&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="o">*</span><span class="n">bitsize</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="n">gate</span><span class="o">.</span><span class="n">t_complexity</span><span class="p">()</span> <span class="o">==</span> <span class="n">gate</span><span class="o">.</span><span class="n">decompose_bloq</span><span class="p">()</span><span class="o">.</span><span class="n">t_complexity</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

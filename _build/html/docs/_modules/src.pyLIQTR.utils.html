@@ -1,0 +1,899 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.utils package &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/pyliqtr_logo.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.utils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/_modules/src.pyLIQTR.utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-pyliqtr-utils-package">
+<h1>src.pyLIQTR.utils package<a class="headerlink" href="#src-pyliqtr-utils-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="src.pyLIQTR.utils.tests.html">src.pyLIQTR.utils.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#module-src.pyLIQTR.utils.tests.conftest">src.pyLIQTR.utils.tests.conftest module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.conftest.electronic_structure_LinearT_encoding"><code class="docutils literal notranslate"><span class="pre">electronic_structure_LinearT_encoding()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.conftest.fermi_hubbard_dynamics"><code class="docutils literal notranslate"><span class="pre">fermi_hubbard_dynamics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.conftest.heisenberg_phase_estimation"><code class="docutils literal notranslate"><span class="pre">heisenberg_phase_estimation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#module-src.pyLIQTR.utils.tests.test_gate_complexity">src.pyLIQTR.utils.tests.test_gate_complexity module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_gate_complexity.TestGateComplexity"><code class="docutils literal notranslate"><span class="pre">TestGateComplexity</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_gate_complexity.TestGateComplexity.test_gate_complexity_init"><code class="docutils literal notranslate"><span class="pre">TestGateComplexity.test_gate_complexity_init()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#module-src.pyLIQTR.utils.tests.test_printing">src.pyLIQTR.utils.tests.test_printing module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting"><code class="docutils literal notranslate"><span class="pre">TestPrinting</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.build_circuit_repeat_different_key"><code class="docutils literal notranslate"><span class="pre">TestPrinting.build_circuit_repeat_different_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.build_circuit_rotations_qrom"><code class="docutils literal notranslate"><span class="pre">TestPrinting.build_circuit_rotations_qrom()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.build_circuit_single"><code class="docutils literal notranslate"><span class="pre">TestPrinting.build_circuit_single()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.chemical_phase_estimation"><code class="docutils literal notranslate"><span class="pre">TestPrinting.chemical_phase_estimation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.electronic_structure_LinearT_encoding"><code class="docutils literal notranslate"><span class="pre">TestPrinting.electronic_structure_LinearT_encoding()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.fermi_hubbard_dynamics"><code class="docutils literal notranslate"><span class="pre">TestPrinting.fermi_hubbard_dynamics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.heisenberg_phase_estimation"><code class="docutils literal notranslate"><span class="pre">TestPrinting.heisenberg_phase_estimation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_chemical_phase_estimation"><code class="docutils literal notranslate"><span class="pre">TestPrinting.test_chemical_phase_estimation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_chemical_phase_estimation_context"><code class="docutils literal notranslate"><span class="pre">TestPrinting.test_chemical_phase_estimation_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_classical_control_examples"><code class="docutils literal notranslate"><span class="pre">TestPrinting.test_classical_control_examples()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_electronic_structure_context"><code class="docutils literal notranslate"><span class="pre">TestPrinting.test_electronic_structure_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard"><code class="docutils literal notranslate"><span class="pre">TestPrinting.test_fermi_hubbard()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard_context"><code class="docutils literal notranslate"><span class="pre">TestPrinting.test_fermi_hubbard_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard_context_error"><code class="docutils literal notranslate"><span class="pre">TestPrinting.test_fermi_hubbard_context_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard_simple_context"><code class="docutils literal notranslate"><span class="pre">TestPrinting.test_fermi_hubbard_simple_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_get_attr_qasm"><code class="docutils literal notranslate"><span class="pre">TestPrinting.test_get_attr_qasm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_heisenberg"><code class="docutils literal notranslate"><span class="pre">TestPrinting.test_heisenberg()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_printing.script_loc"><code class="docutils literal notranslate"><span class="pre">script_loc()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#module-src.pyLIQTR.utils.tests.test_resoure_analyze">src.pyLIQTR.utils.tests.test_resoure_analyze module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#module-src.pyLIQTR.utils.tests.test_utils">src.pyLIQTR.utils.tests.test_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils"><code class="docutils literal notranslate"><span class="pre">TestUtils</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_invalid_trotterized_hamiltonian"><code class="docutils literal notranslate"><span class="pre">TestUtils.test_invalid_trotterized_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_is_mac"><code class="docutils literal notranslate"><span class="pre">TestUtils.test_is_mac()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_is_windows_on_mac_or_linux"><code class="docutils literal notranslate"><span class="pre">TestUtils.test_is_windows_on_mac_or_linux()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_is_windows_on_windows"><code class="docutils literal notranslate"><span class="pre">TestUtils.test_is_windows_on_windows()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_open_fermion_to_qasm"><code class="docutils literal notranslate"><span class="pre">TestUtils.test_open_fermion_to_qasm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_to_openqasm"><code class="docutils literal notranslate"><span class="pre">TestUtils.test_to_openqasm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_writing_out_qasm_with_decomposed_rotations"><code class="docutils literal notranslate"><span class="pre">TestUtils.test_writing_out_qasm_with_decomposed_rotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_writing_out_qasm_with_rotations"><code class="docutils literal notranslate"><span class="pre">TestUtils.test_writing_out_qasm_with_rotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.trotterized_hamiltonian"><code class="docutils literal notranslate"><span class="pre">TestUtils.trotterized_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.vlasov_n8_qsp"><code class="docutils literal notranslate"><span class="pre">TestUtils.vlasov_n8_qsp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.utils.tests.html#module-src.pyLIQTR.utils.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.utils.Hamiltonian">
+<span id="src-pyliqtr-utils-hamiltonian-module"></span><h2>src.pyLIQTR.utils.Hamiltonian module<a class="headerlink" href="#module-src.pyLIQTR.utils.Hamiltonian" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.Hamiltonian.Hamiltonian">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.Hamiltonian.</span></span><span class="sig-name descname"><span class="pre">Hamiltonian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ham_input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ham_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lcu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/Hamiltonian.html#Hamiltonian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.Hamiltonian.Hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.Hamiltonian.Hamiltonian.adjust_hamiltonian">
+<span class="sig-name descname"><span class="pre">adjust_hamiltonian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/Hamiltonian.html#Hamiltonian.adjust_hamiltonian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.Hamiltonian.Hamiltonian.adjust_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Adjust the length of the hamiltonian to be of size 2^x by adding
+Identity/0 terms (used to help navigate binary trees)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.Hamiltonian.Hamiltonian.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#src.pyLIQTR.utils.Hamiltonian.Hamiltonian.alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.Hamiltonian.Hamiltonian.alphas">
+<span class="sig-name descname"><span class="pre">alphas</span></span><a class="headerlink" href="#src.pyLIQTR.utils.Hamiltonian.Hamiltonian.alphas" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.Hamiltonian.Hamiltonian.is_fermionic">
+<span class="sig-name descname"><span class="pre">is_fermionic</span></span><a class="headerlink" href="#src.pyLIQTR.utils.Hamiltonian.Hamiltonian.is_fermionic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.Hamiltonian.Hamiltonian.is_lcu">
+<span class="sig-name descname"><span class="pre">is_lcu</span></span><a class="headerlink" href="#src.pyLIQTR.utils.Hamiltonian.Hamiltonian.is_lcu" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.Hamiltonian.Hamiltonian.loglen">
+<span class="sig-name descname"><span class="pre">loglen</span></span><a class="headerlink" href="#src.pyLIQTR.utils.Hamiltonian.Hamiltonian.loglen" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.Hamiltonian.Hamiltonian.problem_size">
+<span class="sig-name descname"><span class="pre">problem_size</span></span><a class="headerlink" href="#src.pyLIQTR.utils.Hamiltonian.Hamiltonian.problem_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.Hamiltonian.Hamiltonian.terms">
+<span class="sig-name descname"><span class="pre">terms</span></span><a class="headerlink" href="#src.pyLIQTR.utils.Hamiltonian.Hamiltonian.terms" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.circuit_decomposition">
+<span id="src-pyliqtr-utils-circuit-decomposition-module"></span><h2>src.pyLIQTR.utils.circuit_decomposition module<a class="headerlink" href="#module-src.pyLIQTR.utils.circuit_decomposition" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.circuit_decomposition.circuit_decompose_multi">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.circuit_decomposition.</span></span><span class="sig-name descname"><span class="pre">circuit_decompose_multi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/circuit_decomposition.html#circuit_decompose_multi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.circuit_decomposition.circuit_decompose_multi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.circuit_decomposition.decompose_once">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.circuit_decomposition.</span></span><span class="sig-name descname"><span class="pre">decompose_once</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/circuit_decomposition.html#decompose_once"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.circuit_decomposition.decompose_once" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.circuit_decomposition.decompose_op">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.circuit_decomposition.</span></span><span class="sig-name descname"><span class="pre">decompose_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/circuit_decomposition.html#decompose_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.circuit_decomposition.decompose_op" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.circuit_decomposition.generator_decompose">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.circuit_decomposition.</span></span><span class="sig-name descname"><span class="pre">generator_decompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">val:</span> <span class="pre">~typing.Any,</span> <span class="pre">*,</span> <span class="pre">intercepting_decomposer:</span> <span class="pre">~typing.Callable[[~cirq.ops.raw_types.Operation],</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">~typing.Any</span> <span class="pre">|</span> <span class="pre">~cirq.ops.raw_types.Operation</span> <span class="pre">|</span> <span class="pre">~cirq.ops.op_tree.OpTree]</span> <span class="pre">|</span> <span class="pre">~cirq.protocols.decompose_protocol.OpDecomposerWithContext</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">fallback_decomposer:</span> <span class="pre">~typing.Callable[[~cirq.ops.raw_types.Operation],</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">~typing.Any</span> <span class="pre">|</span> <span class="pre">~cirq.ops.raw_types.Operation</span> <span class="pre">|</span> <span class="pre">~cirq.ops.op_tree.OpTree]</span> <span class="pre">|</span> <span class="pre">~cirq.protocols.decompose_protocol.OpDecomposerWithContext</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">keep:</span> <span class="pre">~typing.Callable[[~cirq.ops.raw_types.Operation],</span> <span class="pre">bool]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">on_stuck_raise:</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">Exception</span> <span class="pre">|</span> <span class="pre">~typing.Callable[[~cirq.ops.raw_types.Operation],</span> <span class="pre">Exception</span> <span class="pre">|</span> <span class="pre">None]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">_value_error_describing_bad_operation&gt;,</span> <span class="pre">preserve_structure:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">context:</span> <span class="pre">~cirq.protocols.decompose_protocol.DecompositionContext</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">max_decomposition_passes:</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/circuit_decomposition.html#generator_decompose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.circuit_decomposition.generator_decompose" title="Link to this definition"></a></dt>
+<dd><p>NOTE: This is a modified version of cirq’s decompose function, which has been modified to return a generator and to stop decomposing after a number of passes</p>
+<p>Recursively decomposes a value into <a href="#id1"><span class="problematic" id="id2">`</span></a>cirq.Operation`s meeting a criteria.</p>
+<p>Args:
+val: The value to decompose into operations.
+intercepting_decomposer: An optional method that is called before the</p>
+<blockquote>
+<div><p>default decomposer (the value’s <cite>_decompose_</cite> method). If
+<cite>intercepting_decomposer</cite> is specified and returns a result that
+isn’t <cite>NotImplemented</cite> or <cite>None</cite>, that result is used. Otherwise the
+decomposition falls back to the default decomposer.</p>
+<p>Note that <cite>val</cite> will be passed into <cite>intercepting_decomposer</cite>, even
+if <cite>val</cite> isn’t a <cite>cirq.Operation</cite>.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>fallback_decomposer: An optional decomposition that used after the</dt><dd><p><cite>intercepting_decomposer</cite> and the default decomposer (the value’s
+<cite>_decompose_</cite> method) both fail.</p>
+</dd>
+<dt>keep: A predicate that determines if the initial operation or</dt><dd><p>intermediate decomposed operations should be kept or else need to be
+decomposed further. If <cite>keep</cite> isn’t specified, it defaults to “value
+can’t be decomposed anymore”.</p>
+</dd>
+<dt>on_stuck_raise: If there is an operation that can’t be decomposed and</dt><dd><p>also can’t be kept, <cite>on_stuck_raise</cite> is used to determine what error
+to raise. <cite>on_stuck_raise</cite> can either directly be an <cite>Exception</cite>, or
+a method that takes the problematic operation and returns an
+<cite>Exception</cite>. If <cite>on_stuck_raise</cite> is set to <cite>None</cite> or a method that
+returns <cite>None</cite>, non-decomposable operations are simply silently
+kept. <cite>on_stuck_raise</cite> defaults to a <cite>ValueError</cite> describing the
+unwanted non-decomposable operation.</p>
+</dd>
+<dt>preserve_structure: Prevents subcircuits (i.e. <a href="#id3"><span class="problematic" id="id4">`</span></a>CircuitOperation`s)</dt><dd><p>from being decomposed, but decomposes their contents. If this is
+True, <cite>intercepting_decomposer</cite> cannot be specified.</p>
+</dd>
+<dt>context: Decomposition context specifying common configurable options for</dt><dd><p>controlling the behavior of decompose.</p>
+</dd>
+<dt>max_decomposition_passes: If provided None (which is the default), then</dt><dd><p>the generator_decompose acts equivalently to cirq.decompose. If provided
+a int&gt;=0, then this decomposition will only decompose that number of
+passes</p>
+</dd>
+</dl>
+<p>Returns:
+A list of operations that the given value was decomposed into. If
+<cite>on_stuck_raise</cite> isn’t set to None, all operations in the list will
+satisfy the predicate specified by <cite>keep</cite>.</p>
+<p>Raises:
+TypeError:</p>
+<blockquote>
+<div><p><cite>val</cite> isn’t a <cite>cirq.Operation</cite> and can’t be decomposed even once.
+(So it’s not possible to return a list of operations.)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>ValueError:</dt><dd><p>Default type of error raised if there’s an non-decomposable
+operation that doesn’t satisfy the given <cite>keep</cite> predicate.</p>
+</dd>
+<dt>TError:</dt><dd><p>Custom type of error raised if there’s an non-decomposable operation
+that doesn’t satisfy the given <cite>keep</cite> predicate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.circuit_decomposition.intercept_decompose">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.circuit_decomposition.</span></span><span class="sig-name descname"><span class="pre">intercept_decompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate_op</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/circuit_decomposition.html#intercept_decompose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.circuit_decomposition.intercept_decompose" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.circuit_decomposition.keep">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.circuit_decomposition.</span></span><span class="sig-name descname"><span class="pre">keep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate_op</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/circuit_decomposition.html#keep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.circuit_decomposition.keep" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.circuit_decomposition.test_for_bad_gate_op">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.circuit_decomposition.</span></span><span class="sig-name descname"><span class="pre">test_for_bad_gate_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate_op</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GateOperation</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/circuit_decomposition.html#test_for_bad_gate_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.circuit_decomposition.test_for_bad_gate_op" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="src-pyliqtr-utils-df-utils-module">
+<h2>src.pyLIQTR.utils.df_utils module<a class="headerlink" href="#src-pyliqtr-utils-df-utils-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.utils.gate_complexity">
+<span id="src-pyliqtr-utils-gate-complexity-module"></span><h2>src.pyLIQTR.utils.gate_complexity module<a class="headerlink" href="#module-src.pyLIQTR.utils.gate_complexity" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.gate_complexity.GateComplexity">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.gate_complexity.</span></span><span class="sig-name descname"><span class="pre">GateComplexity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gatesets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/gate_complexity.html#GateComplexity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.gate_complexity.GateComplexity" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Dataclass storing counts gates or operations.
+Gatesets: dict{“gate_name”: cirq.Gateset}
+stc: circuit, gate, or operation to be decomposed.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.gate_complexity.GateComplexity.cliff_t_cx">
+<span class="sig-name descname"><span class="pre">cliff_t_cx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Any" title="(in Python v3.8)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/gate_complexity.html#GateComplexity.cliff_t_cx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.gate_complexity.GateComplexity.cliff_t_cx" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.gate_complexity.GateComplexity.cliff_t_cx_rot">
+<span class="sig-name descname"><span class="pre">cliff_t_cx_rot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Any" title="(in Python v3.8)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/gate_complexity.html#GateComplexity.cliff_t_cx_rot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.gate_complexity.GateComplexity.cliff_t_cx_rot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.gate_complexity.GateComplexity.cliff_t_cx_rot_toff">
+<span class="sig-name descname"><span class="pre">cliff_t_cx_rot_toff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Any" title="(in Python v3.8)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/gate_complexity.html#GateComplexity.cliff_t_cx_rot_toff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.gate_complexity.GateComplexity.cliff_t_cx_rot_toff" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.gate_complexity.gate_complexity">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.gate_complexity.</span></span><span class="sig-name descname"><span class="pre">gate_complexity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Any" title="(in Python v3.8)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gatesets</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.pyLIQTR.utils.gate_complexity.GateComplexity" title="src.pyLIQTR.utils.gate_complexity.GateComplexity"><span class="pre">GateComplexity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/gate_complexity.html#gate_complexity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.gate_complexity.gate_complexity" title="Link to this definition"></a></dt>
+<dd><p>Returns the TComplexity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stc</strong> – an object to compute its GateComplexity.</p></li>
+<li><p><strong>gatesets</strong> – dictionary of gate types: gatesets to count.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The GateComplexity of the given object or None on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.get_hdf5">
+<span id="src-pyliqtr-utils-get-hdf5-module"></span><h2>src.pyLIQTR.utils.get_hdf5 module<a class="headerlink" href="#module-src.pyLIQTR.utils.get_hdf5" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.get_hdf5.get_hdf5">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.get_hdf5.</span></span><span class="sig-name descname"><span class="pre">get_hdf5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_mol_no</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'chemistry_instances.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/get_hdf5.html#get_hdf5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.get_hdf5.get_hdf5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.global_ancilla_manager">
+<span id="src-pyliqtr-utils-global-ancilla-manager-module"></span><h2>src.pyLIQTR.utils.global_ancilla_manager module<a class="headerlink" href="#module-src.pyLIQTR.utils.global_ancilla_manager" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.global_ancilla_manager.GlobalQubitManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.global_ancilla_manager.</span></span><span class="sig-name descname"><span class="pre">GlobalQubitManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'gancilla'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/global_ancilla_manager.html#GlobalQubitManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.global_ancilla_manager.GlobalQubitManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QubitManager</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.global_ancilla_manager.GlobalQubitManager.qalloc">
+<span class="sig-name descname"><span class="pre">qalloc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">cirq.Qid</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/global_ancilla_manager.html#GlobalQubitManager.qalloc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.global_ancilla_manager.GlobalQubitManager.qalloc" title="Link to this definition"></a></dt>
+<dd><p>Allocate <cite>n</cite> clean qubits, i.e. qubits guaranteed to be in state <a href="#id5"><span class="problematic" id="id6">|</span></a>0&gt;.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.global_ancilla_manager.GlobalQubitManager.qborrow">
+<span class="sig-name descname"><span class="pre">qborrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">cirq.Qid</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/global_ancilla_manager.html#GlobalQubitManager.qborrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.global_ancilla_manager.GlobalQubitManager.qborrow" title="Link to this definition"></a></dt>
+<dd><p>Allocate <cite>n</cite> dirty qubits, i.e. the returned qubits can be in any state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.global_ancilla_manager.GlobalQubitManager.qfree">
+<span class="sig-name descname"><span class="pre">qfree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Iterable" title="(in Python v3.8)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><span class="pre">cirq.Qid</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/global_ancilla_manager.html#GlobalQubitManager.qfree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.global_ancilla_manager.GlobalQubitManager.qfree" title="Link to this definition"></a></dt>
+<dd><p>Free pre-allocated clean or dirty qubits managed by this qubit manager.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.global_ancilla_manager.GlobalQubitManager.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/global_ancilla_manager.html#GlobalQubitManager.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.global_ancilla_manager.GlobalQubitManager.reset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.pauli_string_manip">
+<span id="src-pyliqtr-utils-pauli-string-manip-module"></span><h2>src.pyLIQTR.utils.pauli_string_manip module<a class="headerlink" href="#module-src.pyLIQTR.utils.pauli_string_manip" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.pauli_string_manip.convert_projector">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.pauli_string_manip.</span></span><span class="sig-name descname"><span class="pre">convert_projector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pstr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/pauli_string_manip.html#convert_projector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.pauli_string_manip.convert_projector" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.pauli_string_manip.convert_sparse_term">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.pauli_string_manip.</span></span><span class="sig-name descname"><span class="pre">convert_sparse_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">term</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/pauli_string_manip.html#convert_sparse_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.pauli_string_manip.convert_sparse_term" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.pauli_string_manip.convert_to_dense_pauli_string">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.pauli_string_manip.</span></span><span class="sig-name descname"><span class="pre">convert_to_dense_pauli_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">term</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/pauli_string_manip.html#convert_to_dense_pauli_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.pauli_string_manip.convert_to_dense_pauli_string" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.plot_helpers">
+<span id="src-pyliqtr-utils-plot-helpers-module"></span><h2>src.pyLIQTR.utils.plot_helpers module<a class="headerlink" href="#module-src.pyLIQTR.utils.plot_helpers" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.plot_helpers.ig_plot_convergence">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.plot_helpers.</span></span><span class="sig-name descname"><span class="pre">ig_plot_convergence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/plot_helpers.html#ig_plot_convergence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.plot_helpers.ig_plot_convergence" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.plot_helpers.ig_plot_fit">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.plot_helpers.</span></span><span class="sig-name descname"><span class="pre">ig_plot_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xpts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/plot_helpers.html#ig_plot_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.plot_helpers.ig_plot_fit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.plot_helpers.ig_plot_scalar_qsp">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.plot_helpers.</span></span><span class="sig-name descname"><span class="pre">ig_plot_scalar_qsp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qsp_x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/plot_helpers.html#ig_plot_scalar_qsp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.plot_helpers.ig_plot_scalar_qsp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.plot_helpers.plot_func_error">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.plot_helpers.</span></span><span class="sig-name descname"><span class="pre">plot_func_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xpts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_vals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_vals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/plot_helpers.html#plot_func_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.plot_helpers.plot_func_error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.printing">
+<span id="src-pyliqtr-utils-printing-module"></span><h2>src.pyLIQTR.utils.printing module<a class="headerlink" href="#module-src.pyLIQTR.utils.printing" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.printing.QASMInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.printing.</span></span><span class="sig-name descname"><span class="pre">QASMInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/printing.html#QASMInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.printing.QASMInfo" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Internal class</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.printing.QASMInfo.add_measurement_result">
+<span class="sig-name descname"><span class="pre">add_measurement_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doClear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_op</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/printing.html#QASMInfo.add_measurement_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.printing.QASMInfo.add_measurement_result" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.printing.QASMInfo.get_measurement_result">
+<span class="sig-name descname"><span class="pre">get_measurement_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doClear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/printing.html#QASMInfo.get_measurement_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.printing.QASMInfo.get_measurement_result" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.printing.QASMInfo.sanitize_meas_name">
+<span class="sig-name descname"><span class="pre">sanitize_meas_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/printing.html#QASMInfo.sanitize_meas_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.printing.QASMInfo.sanitize_meas_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.printing.QASMInfo.update_info">
+<span class="sig-name descname"><span class="pre">update_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/printing.html#QASMInfo.update_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.printing.QASMInfo.update_info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.printing.openqasm">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.printing.</span></span><span class="sig-name descname"><span class="pre">openqasm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AbstractCircuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit_precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_header</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DecompositionContext</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_allowed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_stuck_raise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/exceptions.html#Exception" title="(in Python v3.8)"><span class="pre">Exception</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_random_decomp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_decomposition_passes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/printing.html#openqasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.printing.openqasm" title="Link to this definition"></a></dt>
+<dd><p>This function is an extension and wrapper around Cirq’s existing decomposition and openqasm printing workflow, and the primary intent is to address short-comings and usability that accompanies using the default cirq openqasm workflow.</p>
+<p>This function is a generator, and yields a string which corresponds to QASM output.</p>
+<p>NOTE: For the most part, this function requires that any operation has a ‘’’_qasm_’’’ defined, otherwise you will receive errors on output (with some small execptions).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>circuit</strong> – A cirq circuit that you wish to output as QASM</p></li>
+<li><p><strong>gate_precision</strong> – Union[int, float, None]
+Used to determine the maximum approximation error for each gate decomposition.
+If given an int, the decomposition returned by the function will be within a
+distance of 10^{-precision} of the given rotation in the operator norm, whereas
+if given a float the max error in the operator norm will simply be gate_precision.</p></li>
+<li><p><strong>circuit_precision</strong> – Union[int, float, None]
+If not None, the approximation error for each gate will be bounded by either
+<cite>circuit_precision</cite> divided by the number of rotation gates (if given a float),
+or 10^{-circuit_precision} (if given an int).</p></li>
+<li><p><strong>skip_header</strong> – bool
+Whether or not to output the QASM header</p></li>
+<li><p><strong>rotation_allowed</strong> – <p>bool
+Whether or not to allow rotations (Rx/Ry/Rz) to remain in the circuit.
+If set to false, we make use a of a Clifford+T representation outlined in <a class="reference external" href="https://arxiv.org/pdf/0806.3834.pdf">https://arxiv.org/pdf/0806.3834.pdf</a>
+(and further discussed in <a class="reference external" href="https://arxiv.org/pdf/1312.6584.pdf">https://arxiv.org/pdf/1312.6584.pdf</a> and <a class="reference external" href="http://www.cs.umd.edu/~amchilds/qa/qa.pdf">http://www.cs.umd.edu/~amchilds/qa/qa.pdf</a>,
+as potentially easier to digest forms).</p>
+<p>When rotation_allowed=False, we introduce the “rx_d/ry_d/rz_d gate”, followed by a line of the form:</p>
+<p>// (leading_T, gate_sequence, sequence_length, clifford_part)
+leading_T : A bool indicating whether or not there is a T gate at the start of the sequence
+gate_sequence: An int whose binary representation encodes a sequence of H, S, and T gates
+sequence_length: The number of T gates in the sequence (note if leading_T is true, the total number of</p>
+<blockquote>
+<div><p>gates is sequence_length+1)</p>
+</div></blockquote>
+<p>clifford_part: A List[str] of clifford gates that come at the end of the H,S,T sequence.
+Note that when rotation_allowed=False, you may also want to specify a level of precision by</p>
+<blockquote>
+<div><p>passing gate_precision or circuit_precision to pyLIQTR.utils.printing.openqasm</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>on_stuck_raise</strong> – Union[Exception, None]
+See cirq.decompose documentation for this</p></li>
+<li><p><strong>use_random_decomp</strong> – <p>bool
+Used if rotation_allowed==False. By default this is set true in the interest of time, and assumes
+a heuristic for how rotations are decomposed into Clifford+T. NOTE: Unless you need the circuit to be
+to implement the correct unitary, you should leave this False for the interest of speed (resource counts,
+parallelism, etc) will all be of the right order</p>
+<p>The heuristic for determining the length of the sequence depends on the given precision.
+For a precision of ε, the T count is sampled from a normal distribution with
+a mean of 3.02 * log2(1/ε) + 0.77 and a standard deviation of 2.06 (these
+numbers were obtained from decomposing 1000 random angles at varying
+precisions).</p>
+</p></li>
+<li><p><strong>max_decomposition_passes</strong> – Union[int,None]
+This sets how many decomposition passes to do before outputting to QASM (None implies until we stop)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.qsp_helpers">
+<span id="src-pyliqtr-utils-qsp-helpers-module"></span><h2>src.pyLIQTR.utils.qsp_helpers module<a class="headerlink" href="#module-src.pyLIQTR.utils.qsp_helpers" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.QSPFilesIO">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">QSPFilesIO</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#QSPFilesIO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.QSPFilesIO" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for reading and writing QSP relevant files.</p>
+<section id="attributes">
+<h3>Attributes:<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
+<p>None</p>
+</section>
+<section id="methods">
+<h3>Methods:<a class="headerlink" href="#methods" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>readHaml(fileName) -&gt; List[Tuple[str, float]]</dt><dd><p>Reads in a .haml file and outputs a list.</p>
+</dd>
+<dt>readAngles(fileName) -&gt; List[float]</dt><dd><p>Reads in a .angles file and outputs a list.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.QSPFilesIO.readAngles">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">readAngles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#QSPFilesIO.readAngles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.QSPFilesIO.readAngles" title="Link to this definition"></a></dt>
+<dd><p>Readds in a .angles file and outputs a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fileName</strong> – str
+The name of the file, with path if necessary.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>List[float]</dt><dd><p>The list of phi angles in [radians?].</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>outList</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.QSPFilesIO.readHaml">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">readHaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Tuple" title="(in Python v3.8)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#QSPFilesIO.readHaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.QSPFilesIO.readHaml" title="Link to this definition"></a></dt>
+<dd><p>Reads in a .haml file and outputs a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fileName</strong> – str
+The name of the file, with path if necessary</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>List[Tuple[str, float]]</dt><dd><p>The list of 2-tuples containing Hamiltonian info</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>outList</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.circuit_compare">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">circuit_compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignoreLen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#circuit_compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.circuit_compare" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.circuit_decompose_once">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">circuit_decompose_once</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#circuit_decompose_once"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.circuit_decompose_once" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.count_qubits">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">count_qubits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#count_qubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.count_qubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.decompose_CCZ">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">decompose_CCZ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#decompose_CCZ"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.decompose_CCZ" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.first_two_items">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">first_two_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Tuple" title="(in Python v3.8)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#first_two_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.first_two_items" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.getLineQubitIndexMap">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">getLineQubitIndexMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#tuple" title="(in Python v3.8)"><span class="pre">tuple</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#getLineQubitIndexMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.getLineQubitIndexMap" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.getQubitFromMap">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">getQubitFromMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tuple_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctl_q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anc_q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#getQubitFromMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.getQubitFromMap" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.get_state_vector">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">get_state_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lsb_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#get_state_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.get_state_vector" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.snorm">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">snorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#snorm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.snorm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.splitIn2">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">splitIn2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#splitIn2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.splitIn2" title="Link to this definition"></a></dt>
+<dd><p>Given [a,b,c,d,e,f]
+Return ([a,b,c],[d,e,f])</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.splitInPairs">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">splitInPairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inList</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Tuple" title="(in Python v3.8)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#splitInPairs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.splitInPairs" title="Link to this definition"></a></dt>
+<dd><p>Given [a,b,c,d,e,f,….]
+Return [(a,b),(c,d),(e,f),….]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.qsp_helpers.time_step_comparison_mpe">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.qsp_helpers.</span></span><span class="sig-name descname"><span class="pre">time_step_comparison_mpe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clscl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtbs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/qsp_helpers.html#time_step_comparison_mpe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.qsp_helpers.time_step_comparison_mpe" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.resource_analysis">
+<span id="src-pyliqtr-utils-resource-analysis-module"></span><h2>src.pyLIQTR.utils.resource_analysis module<a class="headerlink" href="#module-src.pyLIQTR.utils.resource_analysis" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.resource_analysis.count_clifford_and_rotations">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.resource_analysis.</span></span><span class="sig-name descname"><span class="pre">count_clifford_and_rotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circ</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/resource_analysis.html#count_clifford_and_rotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.resource_analysis.count_clifford_and_rotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.resource_analysis.count_t_gates">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.resource_analysis.</span></span><span class="sig-name descname"><span class="pre">count_t_gates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circ</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/resource_analysis.html#count_t_gates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.resource_analysis.count_t_gates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.resource_analysis.estimate_resources">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.resource_analysis.</span></span><span class="sig-name descname"><span class="pre">estimate_resources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit_element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Any" title="(in Python v3.8)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_gate_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Dict" title="(in Python v3.8)"><span class="pre">Dict</span></a></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/resource_analysis.html#estimate_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.resource_analysis.estimate_resources" title="Link to this definition"></a></dt>
+<dd><p>Keyword arguments:
+circuit_element – element to estimate resources of. Can be circuit, gate, or operation.
+rotation_gate_precision – maximum approximation error for each rotation gate decomposition
+circuit_precision – If not None, the approximation error for each rotation gate will be bounded by <cite>circuit_precision</cite> divided by the number of rotation gates in <cite>circuit_element</cite>
+profile – set to True to include rotation gates as a separate count rather than estimating their Clifford+T counts</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.resource_analysis.from_measurement">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.resource_analysis.</span></span><span class="sig-name descname"><span class="pre">from_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Any" title="(in Python v3.8)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TComplexity</span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/resource_analysis.html#from_measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.resource_analysis.from_measurement" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.resource_analysis.get_T_counts_from_rotations">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.resource_analysis.</span></span><span class="sig-name descname"><span class="pre">get_T_counts_from_rotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_rotation_gates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/resource_analysis.html#get_T_counts_from_rotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.resource_analysis.get_T_counts_from_rotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.resource_analysis.get_qubits_by_keys">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.resource_analysis.</span></span><span class="sig-name descname"><span class="pre">get_qubits_by_keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/resource_analysis.html#get_qubits_by_keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.resource_analysis.get_qubits_by_keys" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.resource_analysis.legacy_resource_profile">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.resource_analysis.</span></span><span class="sig-name descname"><span class="pre">legacy_resource_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/resource_analysis.html#legacy_resource_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.resource_analysis.legacy_resource_profile" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.resource_analysis.pylqt_t_complexity">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.resource_analysis.</span></span><span class="sig-name descname"><span class="pre">pylqt_t_complexity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Any" title="(in Python v3.8)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TComplexity</span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/resource_analysis.html#pylqt_t_complexity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.resource_analysis.pylqt_t_complexity" title="Link to this definition"></a></dt>
+<dd><p>A modified version fo Qualtran’s t_complexity
+Returns the TComplexity.
+:param stc: an object to compute its TComplexity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The TComplexity of the given object.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/exceptions.html#TypeError" title="(in Python v3.8)"><strong>TypeError</strong></a> – if the methods fails to compute TComplexity.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.resource_analysis.t_complexity_from_circuit">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.resource_analysis.</span></span><span class="sig-name descname"><span class="pre">t_complexity_from_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circ</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/resource_analysis.html#t_complexity_from_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.resource_analysis.t_complexity_from_circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.utils">
+<span id="src-pyliqtr-utils-utils-module"></span><h2>src.pyLIQTR.utils.utils module<a class="headerlink" href="#module-src.pyLIQTR.utils.utils" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.utils.count_T_gates">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.utils.</span></span><span class="sig-name descname"><span class="pre">count_T_gates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/utils.html#count_T_gates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.utils.count_T_gates" title="Link to this definition"></a></dt>
+<dd><p>For counting the number of T-Gates in a circuit</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>circuit</strong> (<em>-</em>) – The circuit to count T-Gates in</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the number of T-Gates in the circuit</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p>T_gate_counter</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.utils.getLineQubitIndexMap">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.utils.</span></span><span class="sig-name descname"><span class="pre">getLineQubitIndexMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_line</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">LineQubit</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#tuple" title="(in Python v3.8)"><span class="pre">tuple</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/utils.html#getLineQubitIndexMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.utils.getLineQubitIndexMap" title="Link to this definition"></a></dt>
+<dd><p>Helper function for mapping qubits to their register names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qubit_line</strong> – List of cirq.LineQubit’s</p></li>
+<li><p><strong>name</strong> – A string describing the register’s name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of tuples mapping the LineQubit index to its register name.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>out_map</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.utils.getQubitFromMap">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.utils.</span></span><span class="sig-name descname"><span class="pre">getQubitFromMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tuple_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#tuple" title="(in Python v3.8)"><span class="pre">tuple</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctl_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">LineQubit</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">LineQubit</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anc_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">LineQubit</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/utils.html#getQubitFromMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.utils.getQubitFromMap" title="Link to this definition"></a></dt>
+<dd><p>Helper function for getting a specific qubit from a list of
+LineQubits using the map generated using the getLineQubitIndexMap
+function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tuple_in</strong> – A tuple of the form (idx, reg_name)</p></li>
+<li><p><strong>ctl_q</strong> – The list of LineQubits representing the control register</p></li>
+<li><p><strong>tgt_q</strong> – The list of LineQubits representing the target register</p></li>
+<li><p><strong>anc_q</strong> – The list of LineQubits representing the ancilla register</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The LineQubit corresponding to the index idx from the tuple_in</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>_</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.utils.isLinux">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.utils.</span></span><span class="sig-name descname"><span class="pre">isLinux</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/utils.html#isLinux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.utils.isLinux" title="Link to this definition"></a></dt>
+<dd><p>will determine if the OS we are running on is Linux or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if OS is Linux
+False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.utils.isMac">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.utils.</span></span><span class="sig-name descname"><span class="pre">isMac</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/utils.html#isMac"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.utils.isMac" title="Link to this definition"></a></dt>
+<dd><p>will determine if the OS we are running on is Mac or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if OS is Mac
+False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.utils.isWindows">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.utils.</span></span><span class="sig-name descname"><span class="pre">isWindows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/utils.html#isWindows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.utils.isWindows" title="Link to this definition"></a></dt>
+<dd><p>will determine if the OS we are running on is Windows or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if OS is Windows
+False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.utils.open_fermion_to_qasm">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.utils.</span></span><span class="sig-name descname"><span class="pre">open_fermion_to_qasm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_qubits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ofq_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'reg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_heading</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decompose_rotations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/utils.html#open_fermion_to_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.utils.open_fermion_to_qasm" title="Link to this definition"></a></dt>
+<dd><p>A function for converting the openfermion qasm to OpenQASM 2.0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_qubits</strong> – the number of qubits in the circuit</p></li>
+<li><p><strong>ofq_str</strong> – trotterized qasm string generator (output of trotterise_exp_qubop_to_qasm)</p></li>
+<li><p><strong>reg_name</strong> – The prefix name for the register qubits</p></li>
+<li><p><strong>include_heading</strong> – Boolean, if you want to include the heading in the file</p></li>
+<li><p><strong>decompose_rotations</strong> – Boolean, if you want to decompose rotation gates to Clifford+T</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a string containing the OpenQASM 2.0 circuit</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str_out</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.pyLIQTR.utils" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

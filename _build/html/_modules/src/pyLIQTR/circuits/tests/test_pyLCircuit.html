@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.tests.test_pyLCircuit &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.tests.test_pyLCircuit</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.circuits.tests.test_pyLCircuit</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Some testing ideas to implement:</span>
+<span class="sd">create valid circuit [should pass]</span>
+<span class="sd">attempt to create valid circuit [should fail]</span>
+<span class="sd">add valid gate to circuit [pass/fail]</span>
+<span class="sd">add invalid (not sure what this would be just yet) gate to circuit [fail]</span>
+<span class="sd">add multiple gates to circuit [pass]</span>
+<span class="sd">add large number of gates to circuit [pass]</span>
+<span class="sd">can be printed [small/large]</span>
+<span class="sd">valid circuit can be decomposed into gate(s) [pass]</span>
+<span class="sd">empty circuit can be decomposed into gate(s) [fail?]</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.pyLCircuit</span> <span class="kn">import</span> <span class="n">pyLCircuit</span> <span class="k">as</span> <span class="n">circuit</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.cirq_transforms</span> <span class="kn">import</span> <span class="n">get_approximate_t_depth</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.resource_analysis</span> <span class="kn">import</span> <span class="n">estimate_resources</span>
+
+<div class="viewcode-block" id="TestPylCircuit">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit">[docs]</a>
+<span class="k">class</span> <span class="nc">TestPylCircuit</span><span class="p">:</span>
+<div class="viewcode-block" id="TestPylCircuit.single_gate">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.single_gate">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">single_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">qubits</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">LineQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">single_gate</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">yield</span> <span class="n">single_gate</span>
+        <span class="k">del</span> <span class="n">single_gate</span></div>
+
+
+<div class="viewcode-block" id="TestPylCircuit.ten_gates">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.ten_gates">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">ten_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">qubits</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">LineQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">ten_gates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">qubits</span><span class="p">:</span>
+            <span class="n">ten_gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+
+        <span class="k">yield</span> <span class="n">ten_gates</span>
+        <span class="k">del</span> <span class="n">ten_gates</span></div>
+
+
+<div class="viewcode-block" id="TestPylCircuit.hundred_gates">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.hundred_gates">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">hundred_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">qubits</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">LineQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+        <span class="n">hundred_gates</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubits</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">hundred_gates</span>
+        <span class="k">del</span> <span class="n">hundred_gates</span></div>
+
+
+<div class="viewcode-block" id="TestPylCircuit.thousand_gates">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.thousand_gates">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">thousand_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">qubits</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">LineQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+        <span class="n">thousand_gates</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubits</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">thousand_gates</span>
+        <span class="k">del</span> <span class="n">thousand_gates</span></div>
+
+
+<div class="viewcode-block" id="TestPylCircuit.test_pylcircuit_init">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.test_pylcircuit_init">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_pylcircuit_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestPylCircuit.test_single_gate_depth">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.test_single_gate_depth">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">test_single_gate_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_gate</span><span class="p">):</span>
+        <span class="n">t_depth</span> <span class="o">=</span> <span class="n">get_approximate_t_depth</span><span class="p">(</span><span class="n">single_gate</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">t_depth</span> <span class="o">==</span> <span class="mi">109</span></div>
+
+
+<div class="viewcode-block" id="TestPylCircuit.test_single_gate_resources">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.test_single_gate_resources">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_single_gate_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_gate</span><span class="p">):</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">estimate_resources</span><span class="p">(</span><span class="n">single_gate</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">resources</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">resources</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;LogicalQubits&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;Clifford&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="TestPylCircuit.test_ten_gate_resources">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.test_ten_gate_resources">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">test_ten_gate_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ten_gates</span><span class="p">):</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ten_gates</span><span class="p">:</span>
+            <span class="n">resources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">estimate_resources</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="n">resources</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">resources</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;LogicalQubits&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;Clifford&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="TestPylCircuit.test_hundred_gate_resources">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.test_hundred_gate_resources">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">test_hundred_gate_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hundred_gates</span><span class="p">):</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">estimate_resources</span><span class="p">(</span><span class="n">hundred_gates</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">resources</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">resources</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;LogicalQubits&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;Clifford&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="TestPylCircuit.test_thousand_gate_resources">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.test_thousand_gate_resources">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">test_thousand_gate_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thousand_gates</span><span class="p">):</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">estimate_resources</span><span class="p">(</span><span class="n">thousand_gates</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">resources</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">resources</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;LogicalQubits&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">resources</span><span class="p">[</span><span class="s1">&#39;Clifford&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span></div>
+</div>
+
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

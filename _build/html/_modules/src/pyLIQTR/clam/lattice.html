@@ -1,0 +1,494 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.clam.lattice &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.clam.lattice</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.clam.lattice</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###      Lattice - Routines to generate and manipulate periodic systems      ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+
+
+
+<span class="kn">import</span>  <span class="nn">numpy</span>                    <span class="k">as</span>      <span class="nn">np</span>
+
+<span class="kn">from</span>    <span class="nn">copy</span>                     <span class="kn">import</span>  <span class="n">deepcopy</span>
+<span class="kn">from</span>    <span class="nn">pyLIQTR.clam.cell_complex</span>        <span class="kn">import</span>  <span class="n">Cell</span><span class="p">,</span> <span class="n">CellComplex</span>
+
+
+<span class="c1">############################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   CLASS     UnitCell                                    (CellComplex)</span>
+<span class="c1">###</span>
+<span class="c1">############################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Class to define the UnitCell in a periodic system.  Derived from </span>
+<span class="c1">###      CellComplex.</span>
+<span class="c1">###</span>
+<span class="c1">###   CONSTRUCTOR ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      sites      -    List containing embers of the unit cell.  </span>
+<span class="c1">###                      Sites, edges, plaquettes, etc may all be included.</span>
+<span class="c1">###</span>
+<span class="c1">###   EXAMPLE</span>
+<span class="c1">###</span>
+<span class="c1">###         Generate a unit cell containing the site s0 and edges e0,e1</span>
+<span class="c1">###         which will connect  different cells in the periodic systems</span>
+<span class="c1">###</span>
+<span class="c1">###         s0  =  UnitCell([s0,e0,e1])</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      Site       -    Instance of the UnitCell Class</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy          as  np</span>
+<span class="c1">###      utilities      import listify, tupleize, tupleize_sites</span>
+<span class="c1">###</span>
+<span class="c1">###   PUBLIC MEMBERS (see also parent class Cell)</span>
+<span class="c1">###</span>
+<span class="c1">###      skeletons   -   (K+1)-dimensional array, where each element is a list</span>
+<span class="c1">###                      of cells in the k-skeleton.  The 0-skeleton </span>
+<span class="c1">###                      (e.g, skeletons[0]) is a list of points, the 1-skeleton</span>
+<span class="c1">###                      (e.g., skeletons[1]) is a list of edges, the </span>
+<span class="c1">###                      2-skeleton is a list of three-site operators (defined using</span>
+<span class="c1">###                      plaquetttes for everything higher-order than an edge).  </span>
+<span class="c1">###      dim        -    Dimension of basis (number of basis elements)</span>
+<span class="c1">###      K          -    Topological dimension of the cell; equal to (dim - 1)</span>
+<span class="c1">###</span>
+<span class="c1">###   PUBLIC ROUTINES  (see parent class CellComplex)</span>
+<span class="c1">###</span>
+<span class="c1">###   MAGIC ROUTINES  </span>
+<span class="c1">###</span>
+<span class="c1">###     __str__()</span>
+<span class="c1">###</span>
+<span class="c1">###           Pretty-printing of comprehensive unit cell members and attributes</span>
+<span class="c1">###           (inherited from cell complex).</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="UnitCell">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.lattice.UnitCell">[docs]</a>
+<span class="k">class</span> <span class="nc">UnitCell</span><span class="p">(</span><span class="n">CellComplex</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sites</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Kmax</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">sites</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">site</span><span class="o">.</span><span class="n">K</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">Kmax</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Kmax</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">K</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Kmax</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">CellComplex</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Kmax</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">sites</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">site</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">############################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   CLASS     Lattice                                    </span>
+<span class="c1">###</span>
+<span class="c1">############################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Parent class for periodic systems.</span>
+<span class="c1">###      </span>
+<span class="c1">###</span>
+<span class="c1">###   CONSTRUCTOR ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      vectors      -   List of lattice vectors.  Defines dimensionality</span>
+<span class="c1">###                       of the lattice (REQUIRED).</span>
+<span class="c1">###      size=        -   Size of the lattice as a list or tuple of integers. </span>
+<span class="c1">###                       Defined as number repetitions of the unit cell in each</span>
+<span class="c1">###                       dimension.</span>
+<span class="c1">###      unit=        -   Specifies the unit cell using a UnitCell object.  Optional</span>
+<span class="c1">###                       keyword; a single-point unit cell is used if this argument</span>
+<span class="c1">###                       is not provided.</span>
+<span class="c1">###      periodic=    -   Tuple or list of booean values indiciating if the system is</span>
+<span class="c1">###                       periodic in each dimension.  Default is a completely aperiodic</span>
+<span class="c1">###                       system (all false).</span>
+<span class="c1">###      overhang=    -   Keyword indicating how to handle dangling edges/plaquettes/...</span>
+<span class="c1">###                       in an aperiodic system:</span>
+<span class="c1">###</span>
+<span class="c1">###                             &#39;ignore&#39;    -   retain hanging chains even if no lattice</span>
+<span class="c1">###                                             site is present.</span>
+<span class="c1">###                             &#39;drop&#39;      -   drop hanging chains</span>
+<span class="c1">###                             &#39;fill&#39;      -   add in sites that would be linked by these</span>
+<span class="c1">###                                             edges by referencing back to the unit cell.</span>
+<span class="c1">###</span>
+<span class="c1">###   EXAMPLE</span>
+<span class="c1">###</span>
+<span class="c1">###         Generate a lattice based on the unit cell UC with lattice vectors [[0,2],[2,0]]</span>
+<span class="c1">###         for a 4 x 4 supercell in a fully-periodic system</span>
+<span class="c1">###</span>
+<span class="c1">###             lattice_vectors = np.array([[0,2],[2,0]])</span>
+<span class="c1">###</span>
+<span class="c1">###             LT  =  Lattice(lattice_vectors,unit=UC,periodic=(True,True),size=(4,4))</span>
+<span class="c1">###             LT.build()</span>
+<span class="c1">###</span>
+<span class="c1">###         Rebuild the same lattice for an 8x8 system:</span>
+<span class="c1">###</span>
+<span class="c1">###             LT.build((8,8))</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      Site       -    Instance of the UnitCell Class</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy          as  np</span>
+<span class="c1">###      utilities      import listify, tupleize, tupleize_sites</span>
+<span class="c1">###</span>
+<span class="c1">###   PUBLIC MEMBERS (see also parent class Cell)</span>
+<span class="c1">###</span>
+<span class="c1">###      skeletons   -   (K+1)-dimensional array, where each element is a list</span>
+<span class="c1">###                      of cells in the k-skeleton.  The 0-skeleton </span>
+<span class="c1">###                      (e.g, skeletons[0]) is a list of points, the 1-skeleton</span>
+<span class="c1">###                      (e.g., skeletons[1]) is a list of edges, the </span>
+<span class="c1">###                      2-skeleton is a list of three-site operators (defined using</span>
+<span class="c1">###                      plaquetttes for everything higher-order than an edge).  </span>
+<span class="c1">###      dim        -    Dimension of basis (number of basis elements)</span>
+<span class="c1">###      K          -    Topological dimension of the cell; equal to (dim - 1)</span>
+<span class="c1">###</span>
+<span class="c1">###   PUBLIC ROUTINES  (see parent class CellComplex)</span>
+<span class="c1">###</span>
+<span class="c1">###   MAGIC ROUTINES  </span>
+<span class="c1">###</span>
+<span class="c1">###     __str__()</span>
+<span class="c1">###</span>
+<span class="c1">###           Pretty-printing of comprehensive unit cell members and attributes</span>
+<span class="c1">###           (inherited from cell complex).</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="Lattice">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.lattice.Lattice">[docs]</a>
+<span class="k">class</span> <span class="nc">Lattice</span><span class="p">():</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> 
+                  <span class="n">vectors</span><span class="p">,</span>
+                  <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">periodic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">overhang</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span>   <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span>               <span class="o">=</span>  <span class="nb">len</span><span class="p">(</span><span class="n">vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basis_vectors</span>     <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vectors</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span>              <span class="o">=</span>  <span class="n">size</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_sites</span>           <span class="o">=</span>  <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">overhang</span>          <span class="o">=</span>  <span class="n">overhang</span> 
+ 
+        <span class="c1">## Set array denoting periodicity</span>
+        <span class="c1">##</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">periodic</span> <span class="o">==</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">periodic</span>  <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">periodic</span>  <span class="o">=</span>  <span class="n">deepcopy</span><span class="p">(</span><span class="n">periodic</span><span class="p">)</span>
+
+
+        <span class="c1">## Fill unit cell with a single site if none was specified</span>
+        <span class="c1">##</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">unit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+ <span class="c1">#           self.unit  =  UnitCell([Site([0]*self.dim)])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unit</span>  <span class="o">=</span>  <span class="n">UnitCell</span><span class="p">([</span><span class="n">Cell</span><span class="p">([[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">])])</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unit</span>  <span class="o">=</span>  <span class="n">unit</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span>         <span class="o">=</span>  <span class="p">[]</span>        <span class="c1"># Array to hold k-skeletons </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span>             <span class="o">=</span>  <span class="p">[]</span>        <span class="c1"># Array to hold properties </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span>            <span class="o">=</span>  <span class="p">[]</span>        <span class="c1"># Array to hold labels</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__populate_skeletons</span><span class="p">()</span>
+
+
+    <span class="k">def</span> <span class="nf">__populate_skeletons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="o">.</span><span class="n">dim</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+
+
+
+<div class="viewcode-block" id="Lattice.purge_skeletons">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.lattice.Lattice.purge_skeletons">[docs]</a>
+    <span class="k">def</span> <span class="nf">purge_skeletons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span>  <span class="o">=</span>  <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span>      <span class="o">=</span>  <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span>     <span class="o">=</span>  <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__populate_skeletons</span><span class="p">()</span></div>
+
+
+
+
+
+
+    <span class="c1">##</span>
+    <span class="c1">##  build()</span>
+    <span class="c1">## ==================================================</span>
+    <span class="c1">##  Driver to generate lattice with repetitions given</span>
+    <span class="c1">##  by tuple reps.</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="Lattice.build">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.lattice.Lattice.build">[docs]</a>
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">overhang</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">overhang</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">overhang</span> <span class="o">=</span> <span class="n">overhang</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">purge_skeletons</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">size</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Must specify number of lattice repetitions [ size = (n_0, n_1, ... n_d) ].&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_disp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_disp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_disp</span> <span class="o">+</span> <span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">basis_vectors</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="o">.</span><span class="n">dim</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__generate_lattice</span><span class="p">(</span><span class="n">k_level</span><span class="o">=</span><span class="n">k</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Lattice.num_sites">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.lattice.Lattice.num_sites">[docs]</a>
+    <span class="k">def</span> <span class="nf">num_sites</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_sites</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_sites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_sites</span><span class="p">)</span>            </div>
+
+
+
+
+    <span class="c1">##</span>
+    <span class="c1">##  displace_unit_cell()</span>
+    <span class="c1">## ==================================================</span>
+    <span class="c1">##  Displace chains of index &lt;k_level&gt; in unit cell</span>
+    <span class="c1">##  by multiple &lt;Nxyz&gt; of lattice basis vectors.</span>
+    <span class="c1">##</span>
+
+    <span class="k">def</span> <span class="nf">__displace_unit_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Nxyz</span><span class="p">,</span><span class="n">k_level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+        <span class="n">new_chain</span>  <span class="o">=</span>  <span class="p">[]</span>
+        <span class="n">new_prop</span>   <span class="o">=</span>  <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="n">k_level</span><span class="p">]:</span>
+
+            <span class="n">new_basis</span>  <span class="o">=</span>  <span class="p">[]</span>
+            <span class="n">drop_flag</span>  <span class="o">=</span>  <span class="kc">False</span>
+
+            <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">basis</span><span class="p">:</span>
+
+                <span class="n">new_point</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Nxyz</span><span class="p">)):</span>
+                    <span class="n">new_point</span>  <span class="o">=</span> <span class="n">new_point</span> <span class="o">+</span> <span class="n">Nxyz</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">basis_vectors</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+                
+                <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">pbc_flag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">periodic</span><span class="p">):</span>
+
+                    <span class="k">if</span> <span class="p">(</span> <span class="n">pbc_flag</span> <span class="ow">and</span> <span class="p">(</span><span class="n">new_point</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_disp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">):</span>
+                        <span class="n">new_point</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_point</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_disp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+                    <span class="k">elif</span> <span class="p">(</span> <span class="p">(</span><span class="ow">not</span> <span class="n">pbc_flag</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">new_point</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_disp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> 
+                          <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">overhang</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;drop&#39;</span><span class="p">)</span> <span class="p">):</span>
+
+                        <span class="n">drop_flag</span> <span class="o">=</span> <span class="kc">True</span> 
+
+                    <span class="k">elif</span> <span class="p">(</span> <span class="p">(</span><span class="ow">not</span> <span class="n">pbc_flag</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">new_point</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_disp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> 
+                          <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">overhang</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;fill&#39;</span><span class="p">)):</span>
+
+                        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+
+                        <span class="c1"># if (self.sites is not None):</span>
+                        <span class="c1">#     # find wrapback into unit and add an associated point to points and</span>
+                        <span class="c1">#     # to properties</span>
+                        <span class="c1">#     continue</span>
+
+                    <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">overhang</span><span class="o">.</span><span class="n">lower</span> <span class="o">==</span> <span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+                        <span class="k">continue</span>
+      
+                <span class="n">new_basis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_point</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">drop_flag</span><span class="p">):</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">skeletons</span><span class="p">[</span><span class="n">k_level</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_basis</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">k_level</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">props</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">k_level</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+
+
+
+
+
+    <span class="c1">##</span>
+    <span class="c1">##  __generate_lattice()</span>
+    <span class="c1">## ==================================================</span>
+    <span class="c1">##  Recursively generate lattce of sites, edges,</span>
+    <span class="c1">##  or plaquettes by displacement of the unit cell.</span>
+    <span class="c1">##</span>
+
+    <span class="k">def</span> <span class="nf">__generate_lattice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">k_level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+        <span class="n">is_base</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">x0</span> <span class="o">==</span> <span class="kc">None</span><span class="p">)</span> <span class="p">):</span>
+
+            <span class="n">x0</span>       <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+            <span class="n">is_base</span>  <span class="o">=</span>  <span class="kc">True</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="n">n</span><span class="p">]):</span>
+
+            <span class="n">x</span>    <span class="o">=</span> <span class="n">x0</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__generate_lattice</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">x0</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">k_level</span><span class="o">=</span><span class="n">k_level</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__displace_unit_cell</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">k_level</span><span class="o">=</span><span class="n">k_level</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_base</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="k">return</span></div>
+
+        
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.tests.test_qualtran_resource_analyze_multiple_gates &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.tests.test_qualtran_resource_analyze_multiple_gates</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.tests.test_qualtran_resource_analyze_multiple_gates</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;This set of unit tests will verify that we can still correctly decompose and analyze the resources,</span>
+<span class="sd">specificallty T-count, Rotations and Cliffords of the various cirq-ft gates.</span>
+
+<span class="sd">This is the current list of the gates and likely will need to be expanded as Google releases more</span>
+<span class="sd">cirq-ft gates.</span>
+
+<span class="sd">Test Process:</span>
+<span class="sd">1. Create an instance of the given gate</span>
+<span class="sd">2. Create an operator from the gate using the registers and associated qubits</span>
+<span class="sd">3. Run cirq_ft.t_complexity() against the operator</span>
+<span class="sd">4. Capture this result, it will give cirq&#39;s evaluation of T-count, Rotations and Cliffords</span>
+<span class="sd">5. Use cirq.decompose_once to evaluate the topmost level only</span>
+<span class="sd">6. Create an instance of our pyLCircuit</span>
+<span class="sd">7. Assign the operator to this pyLCircuit instance</span>
+<span class="sd">8. Run pyLCircuit.resourceAnalyze() against the pyLCircuit instance</span>
+<span class="sd">9. Capture the results of resourceAnalyze()</span>
+<span class="sd">10. Compare the T-count, Rotations and Cliffords counts against each other</span>
+
+<span class="sd">As long as these number match we are still correctly decomposing the cirq-ft gates.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">cirq</span>
+
+<span class="kn">import</span> <span class="nn">qualtran</span> <span class="k">as</span> <span class="nn">qt</span>
+<span class="kn">from</span> <span class="nn">qualtran</span> <span class="kn">import</span> <span class="n">_infra</span>
+<span class="kn">import</span> <span class="nn">qualtran.bloqs.chemistry.hubbard_model.qubitization</span> <span class="k">as</span> <span class="nn">qt_hm</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.multiplexers.select_pauli_lcu</span> <span class="kn">import</span> <span class="n">SelectPauliLCU</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.mcmt.multi_control_multi_target_pauli</span> <span class="kn">import</span> <span class="n">MultiTargetCNOT</span><span class="p">,</span> <span class="n">MultiControlPauli</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.qubitization_walk_operator_test</span> <span class="kn">import</span> <span class="n">get_walk_operator_for_1d_ising_model</span>
+<span class="kn">from</span> <span class="nn">qualtran._infra.data_types</span> <span class="kn">import</span> <span class="n">BoundedQUInt</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.resource_analysis</span> <span class="kn">import</span> <span class="n">pylqt_t_complexity</span> <span class="k">as</span> <span class="n">t_complexity</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.pyLCircuit</span> <span class="kn">import</span> <span class="n">pyLCircuit</span> <span class="k">as</span> <span class="n">pylc</span>
+
+<span class="k">def</span> <span class="nf">_z_to_odd</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span>
+    <span class="k">return</span> <span class="n">cirq</span><span class="o">.</span><span class="n">I</span>
+
+<div class="viewcode-block" id="get_resource_state">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.tests.html#src.pyLIQTR.tests.test_qualtran_resource_analyze_multiple_gates.get_resource_state">[docs]</a>
+<span class="k">def</span> <span class="nf">get_resource_state</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a state vector representing the resource state on m qubits from Eq.17 of Ref-1.</span>
+<span class="sd">    Returns a numpy array of size 2^{m} representing the state vector corresponding to the state</span>
+<span class="sd">    $$</span>
+<span class="sd">        \sqrt{\frac{2}{2^m + 1}} \sum_{n=0}^{2^{m}-1} \sin{\frac{\pi(n + 1)}{2^{m}+1}}\ket{n}</span>
+<span class="sd">    $$</span>
+<span class="sd">    </span>
+<span class="sd">    Params:</span>
+<span class="sd">        m: Number of qubits to prepare the resource state on.</span>
+<span class="sd">    </span>
+<span class="sd">    Ref:</span>
+<span class="sd">        1) [Encoding Electronic Spectra in Quantum Circuits with Linear T Complexity]</span>
+<span class="sd">            (https://arxiv.org/abs/1805.03662)</span>
+<span class="sd">            Eq. 17</span>
+<span class="sd">        2) [Google]</span>
+<span class="sd">            (https://github.com/quantumlib/Cirq/blob/master/cirq-ft/cirq_ft/algos/phase_estimation_of_quantum_walk.ipynb)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">den</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">m</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="n">den</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">norm</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">m</span><span class="p">))</span> <span class="o">/</span> <span class="n">den</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TestCirqFTMultipleGateDecompose">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.tests.html#src.pyLIQTR.tests.test_qualtran_resource_analyze_multiple_gates.TestCirqFTMultipleGateDecompose">[docs]</a>
+<span class="k">class</span> <span class="nc">TestCirqFTMultipleGateDecompose</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This class handles testing multiple gate decomposition and resource analysis. The goal is to make sure we are able</span>
+<span class="sd">    to correctly analyse the resources necessary to build the circuts as defined now and in the future.</span>
+<span class="sd">    </span>
+<span class="sd">    Unit tests enforce code that doesn&#39;t introduce breaking changes to the base.</span>
+
+<span class="sd">    WARNING: we set the decompose_rotations=False flag in pyLCircuit.resourceAnalyze() so that we can keep the comparison </span>
+<span class="sd">    with the cirq-ft resource analysis compatible. If we let it default to True then pyLIQTR will convert the rotation gates into</span>
+<span class="sd">    Clifford+T&#39;s and cause all of the counts to be drastically different.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TestCirqFTMultipleGateDecompose.test_cirqft_generic_select">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.tests.html#src.pyLIQTR.tests.test_qualtran_resource_analyze_multiple_gates.TestCirqFTMultipleGateDecompose.test_cirqft_generic_select">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cirqft_generic_select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">target_bitsize</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">us</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;XIXI&#39;</span><span class="p">,</span> <span class="s1">&#39;YIYI&#39;</span><span class="p">,</span> <span class="s1">&#39;ZZZZ&#39;</span><span class="p">,</span> <span class="s1">&#39;ZXYZ&#39;</span><span class="p">]</span>
+        <span class="n">us</span> <span class="o">=</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">DensePauliString</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">us</span><span class="p">]</span>
+        <span class="n">selection_bitsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">us</span><span class="p">))))</span>
+
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">SelectPauliLCU</span><span class="p">(</span><span class="n">selection_bitsize</span><span class="p">,</span> <span class="n">target_bitsize</span><span class="p">,</span> <span class="n">select_unitaries</span><span class="o">=</span><span class="n">us</span><span class="p">)</span>
+        <span class="n">cft_op</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">qt</span><span class="o">.</span><span class="n">_infra</span><span class="o">.</span><span class="n">gate_with_registers</span><span class="o">.</span><span class="n">get_named_qubits</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">signature</span><span class="p">))</span>
+        <span class="n">cft</span> <span class="o">=</span> <span class="n">t_complexity</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">cirq</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">pylc_and</span> <span class="o">=</span> <span class="n">pylc</span><span class="p">([</span><span class="n">cft_op</span><span class="p">])</span>
+        <span class="n">pylcra</span> <span class="o">=</span> <span class="n">pylc_and</span><span class="o">.</span><span class="n">resourceAnalyze</span><span class="p">(</span><span class="n">decompose_rotations</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">t</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Rotations&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">rotations</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Clifford&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">clifford</span></div>
+
+
+<div class="viewcode-block" id="TestCirqFTMultipleGateDecompose.test_cirqft_apply_gate_to_lth_qubit">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.tests.html#src.pyLIQTR.tests.test_qualtran_resource_analyze_multiple_gates.TestCirqFTMultipleGateDecompose.test_cirqft_apply_gate_to_lth_qubit">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cirqft_apply_gate_to_lth_qubit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">apply_z_to_odd</span> <span class="o">=</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">multiplexers</span><span class="o">.</span><span class="n">apply_gate_to_lth_target</span><span class="o">.</span><span class="n">ApplyGateToLthQubit</span><span class="p">(</span>
+            <span class="n">_infra</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">Register</span><span class="p">(</span><span class="s1">&#39;selection&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">BoundedQUInt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+            <span class="n">nth_gate</span><span class="o">=</span><span class="n">_z_to_odd</span><span class="p">,</span>
+            <span class="c1"># control_regs=cirq_ft.Signature.build(control=2),</span>
+        <span class="p">)</span>
+        <span class="n">cft_op</span> <span class="o">=</span> <span class="n">apply_z_to_odd</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">_infra</span><span class="o">.</span><span class="n">gate_with_registers</span><span class="o">.</span><span class="n">get_named_qubits</span><span class="p">(</span><span class="n">apply_z_to_odd</span><span class="o">.</span><span class="n">signature</span><span class="p">))</span>
+        <span class="n">cft</span> <span class="o">=</span> <span class="n">t_complexity</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">cirq</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">pylc_and</span> <span class="o">=</span> <span class="n">pylc</span><span class="p">([</span><span class="n">cft_op</span><span class="p">])</span>
+        <span class="n">pylcra</span> <span class="o">=</span> <span class="n">pylc_and</span><span class="o">.</span><span class="n">resourceAnalyze</span><span class="p">(</span><span class="n">decompose_rotations</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">t</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Rotations&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">rotations</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Clifford&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">clifford</span></div>
+
+
+<div class="viewcode-block" id="TestCirqFTMultipleGateDecompose.test_cirqft_hubbard">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.tests.html#src.pyLIQTR.tests.test_qualtran_resource_analyze_multiple_gates.TestCirqFTMultipleGateDecompose.test_cirqft_hubbard">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cirqft_hubbard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">x_dim</span><span class="p">,</span> <span class="n">y_dim</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">t</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">qt_hm</span><span class="o">.</span><span class="n">PrepareHubbard</span><span class="p">(</span><span class="n">x_dim</span><span class="o">=</span><span class="n">x_dim</span><span class="p">,</span> <span class="n">y_dim</span><span class="o">=</span><span class="n">x_dim</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">)</span>
+        <span class="n">cft_op</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">_infra</span><span class="o">.</span><span class="n">gate_with_registers</span><span class="o">.</span><span class="n">get_named_qubits</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">signature</span><span class="p">))</span>
+        <span class="n">cft</span> <span class="o">=</span> <span class="n">t_complexity</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">cirq</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">pylc_and</span> <span class="o">=</span> <span class="n">pylc</span><span class="p">([</span><span class="n">cft_op</span><span class="p">])</span>
+        <span class="n">pylcra</span> <span class="o">=</span> <span class="n">pylc_and</span><span class="o">.</span><span class="n">resourceAnalyze</span><span class="p">(</span><span class="n">decompose_rotations</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">t</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Rotations&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">rotations</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Clifford&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">clifford</span></div>
+
+
+<div class="viewcode-block" id="TestCirqFTMultipleGateDecompose.test_cirqft_multi_target_cnot">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.tests.html#src.pyLIQTR.tests.test_qualtran_resource_analyze_multiple_gates.TestCirqFTMultipleGateDecompose.test_cirqft_multi_target_cnot">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cirqft_multi_target_cnot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">MultiTargetCNOT</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> 
+        <span class="n">cft_op</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">_infra</span><span class="o">.</span><span class="n">gate_with_registers</span><span class="o">.</span><span class="n">get_named_qubits</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">signature</span><span class="p">))</span>
+        <span class="n">cft</span> <span class="o">=</span> <span class="n">t_complexity</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">cirq</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">pylc_and</span> <span class="o">=</span> <span class="n">pylc</span><span class="p">([</span><span class="n">cft_op</span><span class="p">])</span>
+        <span class="n">pylcra</span> <span class="o">=</span> <span class="n">pylc_and</span><span class="o">.</span><span class="n">resourceAnalyze</span><span class="p">(</span><span class="n">decompose_rotations</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">t</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Rotations&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">rotations</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Clifford&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">clifford</span></div>
+
+
+<div class="viewcode-block" id="TestCirqFTMultipleGateDecompose.test_cirqft_multicontrol_pauli">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.tests.html#src.pyLIQTR.tests.test_qualtran_resource_analyze_multiple_gates.TestCirqFTMultipleGateDecompose.test_cirqft_multicontrol_pauli">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cirqft_multicontrol_pauli</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cvs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">MultiControlPauli</span><span class="p">(</span><span class="n">cvs</span><span class="o">=</span><span class="n">cvs</span><span class="p">,</span> <span class="n">target_gate</span><span class="o">=</span><span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span> 
+        <span class="n">cft_op</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">_infra</span><span class="o">.</span><span class="n">gate_with_registers</span><span class="o">.</span><span class="n">get_named_qubits</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">signature</span><span class="p">))</span>
+        <span class="n">cft</span> <span class="o">=</span> <span class="n">t_complexity</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">cirq</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">pylc_and</span> <span class="o">=</span> <span class="n">pylc</span><span class="p">([</span><span class="n">cft_op</span><span class="p">])</span>
+        <span class="n">pylcra</span> <span class="o">=</span> <span class="n">pylc_and</span><span class="o">.</span><span class="n">resourceAnalyze</span><span class="p">(</span><span class="n">decompose_rotations</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">t</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Rotations&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">rotations</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Clifford&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">clifford</span></div>
+
+
+<div class="viewcode-block" id="TestCirqFTMultipleGateDecompose.test_cirqft_walk_operator">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.tests.html#src.pyLIQTR.tests.test_qualtran_resource_analyze_multiple_gates.TestCirqFTMultipleGateDecompose.test_cirqft_walk_operator">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cirqft_walk_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">num_sites</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span>
+        <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-5</span>
+        <span class="n">m_bits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">14</span>
+
+        <span class="n">walk</span> <span class="o">=</span> <span class="n">get_walk_operator_for_1d_ising_model</span><span class="p">(</span><span class="n">num_sites</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+        <span class="n">cft_op</span> <span class="o">=</span> <span class="n">walk</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">_infra</span><span class="o">.</span><span class="n">gate_with_registers</span><span class="o">.</span><span class="n">get_named_qubits</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">signature</span><span class="p">))</span>
+        <span class="n">cft</span> <span class="o">=</span> <span class="n">t_complexity</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">cirq</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">pylc_and</span> <span class="o">=</span> <span class="n">pylc</span><span class="p">([</span><span class="n">cft_op</span><span class="p">])</span>
+        <span class="n">pylcra</span> <span class="o">=</span> <span class="n">pylc_and</span><span class="o">.</span><span class="n">resourceAnalyze</span><span class="p">(</span><span class="n">decompose_rotations</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">t</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Rotations&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">rotations</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Clifford&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">clifford</span></div>
+
+
+<div class="viewcode-block" id="TestCirqFTMultipleGateDecompose.test_cirqft_prepare_uniform_superposition">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.tests.html#src.pyLIQTR.tests.test_qualtran_resource_analyze_multiple_gates.TestCirqFTMultipleGateDecompose.test_cirqft_prepare_uniform_superposition">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cirqft_prepare_uniform_superposition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># For now I&#39;ll tie the number if T-Basis states to 10 to test this</span>
+        <span class="c1"># there is no particular reason for using 10 just to keep the number of iterations low enough to not impact performance.</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">state_preparation</span><span class="o">.</span><span class="n">PrepareUniformSuperposition</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cvs</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,))</span>
+        <span class="n">cft_op</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="o">**</span><span class="n">_infra</span><span class="o">.</span><span class="n">gate_with_registers</span><span class="o">.</span><span class="n">get_named_qubits</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">signature</span><span class="p">))</span>
+        <span class="n">cft</span> <span class="o">=</span> <span class="n">t_complexity</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+        <span class="n">cirq</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">cft_op</span><span class="p">)</span>
+
+        <span class="n">pylc_and</span> <span class="o">=</span> <span class="n">pylc</span><span class="p">([</span><span class="n">cft_op</span><span class="p">])</span>
+        <span class="n">pylcra</span> <span class="o">=</span> <span class="n">pylc_and</span><span class="o">.</span><span class="n">resourceAnalyze</span><span class="p">(</span><span class="n">decompose_rotations</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">t</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Rotations&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">rotations</span>
+        <span class="k">assert</span> <span class="n">pylcra</span><span class="p">[</span><span class="s1">&#39;CliffT&#39;</span><span class="p">][</span><span class="s1">&#39;Clifford&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cft</span><span class="o">.</span><span class="n">clifford</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

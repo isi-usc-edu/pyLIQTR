@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.scheduler package &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/pyliqtr_logo.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.scheduler package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/_modules/src.pyLIQTR.scheduler.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-pyliqtr-scheduler-package">
+<h1>src.pyLIQTR.scheduler package<a class="headerlink" href="#src-pyliqtr-scheduler-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.scheduler.DAG">
+<span id="src-pyliqtr-scheduler-dag-module"></span><h2>src.pyLIQTR.scheduler.DAG module<a class="headerlink" href="#module-src.pyLIQTR.scheduler.DAG" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.DAG.DAG">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.scheduler.DAG.</span></span><span class="sig-name descname"><span class="pre">DAG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_moments</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/DAG.html#DAG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.DAG.DAG" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for storing and manipulating a DAG (directional acyclic graph). Allows for instructions to be linked by dependency type to qubits or previous instructions and removed by a scheduler or other external method. This class wraps around a rustworkx.PyDAG object.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.DAG.DAG.add_dependency">
+<span class="sig-name descname"><span class="pre">add_dependency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.scheduler.Instruction.Instruction" title="src.pyLIQTR.scheduler.Instruction.Instruction"><span class="pre">Instruction</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">forceAdd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/DAG.html#DAG.add_dependency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.DAG.DAG.add_dependency" title="Link to this definition"></a></dt>
+<dd><p>Add an instruction to the DAG along with each of its dependencies.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.DAG.DAG.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test.png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'png'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/DAG.html#DAG.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.DAG.DAG.draw" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.DAG.DAG.empty">
+<span class="sig-name descname"><span class="pre">empty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/DAG.html#DAG.empty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.DAG.DAG.empty" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.DAG.DAG.finish">
+<span class="sig-name descname"><span class="pre">finish</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/DAG.html#DAG.finish"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.DAG.DAG.finish" title="Link to this definition"></a></dt>
+<dd><p>Once all instructions have been added to the DAG, link sets of commutable operations one last time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.DAG.DAG.full">
+<span class="sig-name descname"><span class="pre">full</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/DAG.html#DAG.full"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.DAG.DAG.full" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.DAG.DAG.get_available">
+<span class="sig-name descname"><span class="pre">get_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/DAG.html#DAG.get_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.DAG.DAG.get_available" title="Link to this definition"></a></dt>
+<dd><p>Return current list of nodes with no incoming edges.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.DAG.DAG.remove_dependencies">
+<span class="sig-name descname"><span class="pre">remove_dependencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><span class="pre">list</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/DAG.html#DAG.remove_dependencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.DAG.DAG.remove_dependencies" title="Link to this definition"></a></dt>
+<dd><p>Remove multiple dependencies simultaneously.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.scheduler.Instruction">
+<span id="src-pyliqtr-scheduler-instruction-module"></span><h2>src.pyLIQTR.scheduler.Instruction module<a class="headerlink" href="#module-src.pyLIQTR.scheduler.Instruction" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.Instruction.DependencyEdge">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.scheduler.Instruction.</span></span><span class="sig-name descname"><span class="pre">DependencyEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/Instruction.html#DependencyEdge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.Instruction.DependencyEdge" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Simple class to store information attached to a DAG edge representing a data dependency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qubit</strong> (<em>cirq.Qubit</em>) – qubit that the dependency is on</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – dependency type (‘Z’, ‘X’, ‘All’, etc.)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.Instruction.Instruction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.scheduler.Instruction.</span></span><span class="sig-name descname"><span class="pre">Instruction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cirq_operation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_gateset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/Instruction.html#Instruction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.Instruction.Instruction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Stores operation, qubits it acts on, the index of the associated node in a DAG, its assigned execution time, and its status with regard to a Scheduler (ready, executing, or complete).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.Instruction.Instruction.get_data_dependencies">
+<span class="sig-name descname"><span class="pre">get_data_dependencies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/Instruction.html#Instruction.get_data_dependencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.Instruction.Instruction.get_data_dependencies" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of the form {qX: dependency type, qY: dependency type, …} with an entry for each qubit the instruction acts on.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.Instruction.Instruction.resource_counts">
+<span class="sig-name descname"><span class="pre">resource_counts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/Instruction.html#Instruction.resource_counts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.Instruction.Instruction.resource_counts" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of the form {resourceX: # required, resourceY: # required, …} with, at minimum, an entry for each qubit the instruction acts on. Resources could also include how many of a particular type of gate are required for the instruction tobe performed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.Instruction.Instruction.set_execution_time">
+<span class="sig-name descname"><span class="pre">set_execution_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">execution_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/Instruction.html#Instruction.set_execution_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.Instruction.Instruction.set_execution_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.scheduler.scheduler">
+<span id="src-pyliqtr-scheduler-scheduler-module"></span><h2>src.pyLIQTR.scheduler.scheduler module<a class="headerlink" href="#module-src.pyLIQTR.scheduler.scheduler" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.scheduler.scheduler.</span></span><span class="sig-name descname"><span class="pre">Scheduler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arch_description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursion_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_gateset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for ‘scheduling’ a given circuit and returning execution time and a number of other gate and circuit analysis metrics.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.allocate_resources">
+<span class="sig-name descname"><span class="pre">allocate_resources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.scheduler.Instruction.Instruction" title="src.pyLIQTR.scheduler.Instruction.Instruction"><span class="pre">Instruction</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.allocate_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.allocate_resources" title="Link to this definition"></a></dt>
+<dd><p>Given an instruction, if the resources are available, remove them from the common pool. This essentially reserves them for the instruction’s use until it has finished executing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.assign_execution_time">
+<span class="sig-name descname"><span class="pre">assign_execution_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.scheduler.Instruction.Instruction" title="src.pyLIQTR.scheduler.Instruction.Instruction"><span class="pre">Instruction</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.assign_execution_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.assign_execution_time" title="Link to this definition"></a></dt>
+<dd><p>Given the instruction, assign an execution time for it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.complex_inst">
+<span class="sig-name descname"><span class="pre">complex_inst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.scheduler.Instruction.Instruction" title="src.pyLIQTR.scheduler.Instruction.Instruction"><span class="pre">Instruction</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.complex_inst"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.complex_inst" title="Link to this definition"></a></dt>
+<dd><p>This function handles the recursive decomposition and scheduling of operators which are not in the defined gateset, AKA ‘complex instructions’. It will cache the resulting execution time, gate counts, qubits, etc for future use.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.custom_gateset_decomposition_catchall">
+<span class="sig-name descname"><span class="pre">custom_gateset_decomposition_catchall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.scheduler.Instruction.Instruction" title="src.pyLIQTR.scheduler.Instruction.Instruction"><span class="pre">Instruction</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.custom_gateset_decomposition_catchall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.custom_gateset_decomposition_catchall" title="Link to this definition"></a></dt>
+<dd><p>This function should only be accessed in the event that an error arises from recursive decomposition of a complex operator. It will determine whether the error was caused by a basic operator being left out of a user-defined gateset or an operation without a defined decomposition method.
+In the event that the user-defined gateset is incomplete, this function will raise an error notifying them of the missing gate type.
+If the operator in question is NOT a basic operator but does not have a defined decomposition method, this function will access that operator’s T-Complexity method and use those counts to add to the global time, gate counts, t-depth, etc. While this will not account for any parallelism, it will at least acknowledge the existence of these gates and their effect on the circuit. The user will be warned about this action.
+If the operator has NEITHER a decomposition method nor a defined T-Complexity, this function will cache an execution time of 0, gate counts of 0, etc since no information about makeup can be accessed. This will essentially exclude this operator from the results, but will allow the rest of the circuit to continue scheduling. The user will be warned about this action.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.free_instructions">
+<span class="sig-name descname"><span class="pre">free_instructions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.scheduler.DAG.DAG" title="src.pyLIQTR.scheduler.DAG.DAG"><span class="pre">DAG</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.free_instructions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.free_instructions" title="Link to this definition"></a></dt>
+<dd><p>Update the global time to the next timestep where an instruction completes. For each instruction in the execution queue, determine if its execution finishes before or at this ‘first_done_time’. If it is completed, add it to the free queue and free the resources it was using. Otherwise, it will remain in the execution queue.
+Perform gate counting and paralellism analysis on the instructions in the free queue.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.free_resources">
+<span class="sig-name descname"><span class="pre">free_resources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.scheduler.Instruction.Instruction" title="src.pyLIQTR.scheduler.Instruction.Instruction"><span class="pre">Instruction</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.free_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.free_resources" title="Link to this definition"></a></dt>
+<dd><p>Given an instruction, determine which resources were being used by it during execution and return them to the common pool.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.gate_counting">
+<span class="sig-name descname"><span class="pre">gate_counting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><span class="pre">list</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.gate_counting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.gate_counting" title="Link to this definition"></a></dt>
+<dd><p>For each instruction that has just executed, either pull its cached gate counts and add them to the total or classify it as one of the gates in the defined gateset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.move_ready_to_execute">
+<span class="sig-name descname"><span class="pre">move_ready_to_execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.scheduler.DAG.DAG" title="src.pyLIQTR.scheduler.DAG.DAG"><span class="pre">DAG</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.move_ready_to_execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.move_ready_to_execute" title="Link to this definition"></a></dt>
+<dd><p>For each instruction in the ready queue, determine if the resources needed to execute it are available. If they are, allocate them and move the instruction from the ready queue to the execute queue. Otherwise, the instruction remains in the ready queue until the next cycle, when it will be checked again for resource availability.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.parallelism_analysis">
+<span class="sig-name descname"><span class="pre">parallelism_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><span class="pre">list</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.parallelism_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.parallelism_analysis" title="Link to this definition"></a></dt>
+<dd><p>For each instruction that has just executed, determine how many qubits it used and update the active_qubits distribution. Determine how many T-gates were used and update T-width and T-depth accordingly.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.populate_ready">
+<span class="sig-name descname"><span class="pre">populate_ready</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.scheduler.DAG.DAG" title="src.pyLIQTR.scheduler.DAG.DAG"><span class="pre">DAG</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.populate_ready"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.populate_ready" title="Link to this definition"></a></dt>
+<dd><p>Query the DAG for free nodes (nodes with no incoming dependencies) and add them to the ready queue.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.resource_available">
+<span class="sig-name descname"><span class="pre">resource_available</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.scheduler.Instruction.Instruction" title="src.pyLIQTR.scheduler.Instruction.Instruction"><span class="pre">Instruction</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.resource_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.resource_available" title="Link to this definition"></a></dt>
+<dd><p>Given an instruction, determine if we have resources (qubit is not being used by another operation, it doesn’t violate restrictions on simultaneous T gates, etc.) available to run it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.rotation_to_t">
+<span class="sig-name descname"><span class="pre">rotation_to_t</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">precision</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.rotation_to_t"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.rotation_to_t" title="Link to this definition"></a></dt>
+<dd><p>Decompose rotations into T-gates at a given precision.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.Scheduler.schedule">
+<span class="sig-name descname"><span class="pre">schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.scheduler.DAG.DAG" title="src.pyLIQTR.scheduler.DAG.DAG"><span class="pre">DAG</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#Scheduler.schedule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.Scheduler.schedule" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>In each cycle:</dt><dd><ol class="arabic simple">
+<li><p>Query the DAG for free nodes and populate the ready queue</p></li>
+<li><p>Move instructions from the ready queue to the execute queue as appropriate</p></li>
+<li><p>Sort the execute queue by finish time</p></li>
+<li><p>Execute all instructions in the execute queue which finish before or at the current timestep</p></li>
+</ol>
+</dd>
+</dl>
+<p>This cycle will continue for as long as the DAG has nodes in it. Once the DAG is empty, schedule any remaining instructions in the execute queue until it is empty.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler.schedule_circuit">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.scheduler.scheduler.</span></span><span class="sig-name descname"><span class="pre">schedule_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><span class="pre">dict</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decomp_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_gateset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler.html#schedule_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler.schedule_circuit" title="Link to this definition"></a></dt>
+<dd><p>This function is the main interface with the Scheduler, DAG, and Instruction classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>circuit</strong> (<em>cirq.Circuit</em>) – a cirq.Circuit object to be scheduled. (Other circuit formats will be supported in the future.)</p></li>
+<li><p><strong>architecture_config</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – a dictionary specifying timing for various gate types and restrictions on how many T gates can operate simultaneously. This dictionary must be of the form
+<cite>{‘Execution Times’: {(‘Gate 1’,): Time X, (‘Gate 2’, ‘Gate 3’): Time Y}, ‘Max T’: Z # of simultaneous T-gates allowed}</cite>.</p></li>
+<li><p><strong>full_profile</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – bool specifying whether results should include gate counts and (if applicable) parallelism analysis. If False, only circuit execution time, T-depth, and total number of qubits used will be included in results.</p></li>
+<li><p><strong>decomp_level</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – levels of decomposition implemented before scheduling. If set to <cite>0</cite>, each operator will be decomposed to one/two-qubit gates only on its first occurance and cached for each future occurance. If set to <cite>‘Full’</cite>, entire circuit will be decomposed to one/two-qubit gates before scheduling.</p></li>
+<li><p><strong>context</strong> (<em>cirq.DecompositionContext</em>) – cirq decomposition context to be used.</p></li>
+<li><p><strong>custom_gateset</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a>) – a list specifying which gates to include in analysis. This list must be of the form
+<cite>[‘first two characters of gate 1’, ‘first two characters of gate 2’, … ‘Name of gateset’]</cite>. We recommend checking ‘scheduling_examples.ipynb’ for further details on this feature.</p></li>
+<li><p><strong>circuit_precision</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – precision used to decompose rotations into T-gates.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>results</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – a dictionary including ‘Total time for execution’, ‘Circuit T-depth’, and ‘Number of qubits used’. If <cite>full_profile</cite> == True, this dictionary will also include ‘Gate profile’. If <cite>full_profile</cite> == True AND <cite>decomp_level</cite> == ‘Full’, ‘Active qubit distribution’ and ‘T-widths’ will be included as well.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.scheduler.scheduler_utils">
+<span id="src-pyliqtr-scheduler-scheduler-utils-module"></span><h2>src.pyLIQTR.scheduler.scheduler_utils module<a class="headerlink" href="#module-src.pyLIQTR.scheduler.scheduler_utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler_utils.dag_creation">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.scheduler.scheduler_utils.</span></span><span class="sig-name descname"><span class="pre">dag_creation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler_utils.html#dag_creation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler_utils.dag_creation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler_utils.get_instruction2node_map">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.scheduler.scheduler_utils.</span></span><span class="sig-name descname"><span class="pre">get_instruction2node_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ops</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler_utils.html#get_instruction2node_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler_utils.get_instruction2node_map" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.scheduler.scheduler_utils.manual_link">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.scheduler.scheduler_utils.</span></span><span class="sig-name descname"><span class="pre">manual_link</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubit_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inst_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/scheduler/scheduler_utils.html#manual_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.scheduler.scheduler_utils.manual_link" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.scheduler.sets">
+<span id="src-pyliqtr-scheduler-sets-module"></span><h2>src.pyLIQTR.scheduler.sets module<a class="headerlink" href="#module-src.pyLIQTR.scheduler.sets" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.scheduler">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.pyLIQTR.scheduler" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

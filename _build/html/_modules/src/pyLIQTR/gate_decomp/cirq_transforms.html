@@ -1,0 +1,856 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.gate_decomp.cirq_transforms &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.gate_decomp.cirq_transforms</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.gate_decomp.cirq_transforms</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">DISTRIBUTION STATEMENT A. Approved for public release. Distribution is unlimited.</span>
+
+<span class="sd">This material is based upon work supported by the Under Secretary of Defense for</span>
+<span class="sd">Research and Engineering under Air Force Contract No. FA8702-15-D-0001. Any opinions,</span>
+<span class="sd">findings, conclusions or recommendations expressed in this material are those of the</span>
+<span class="sd">author(s) and do not necessarily reflect the views of the Under Secretary of Defense</span>
+<span class="sd">for Research and Engineering.</span>
+
+<span class="sd">© 2022 Massachusetts Institute of Technology.</span>
+
+<span class="sd">The software/firmware is provided to you on an As-Is basis</span>
+
+<span class="sd">Delivered to the U.S. Government with Unlimited Rights, as defined in DFARS Part</span>
+<span class="sd">252.227-7013 or 7014 (Feb 2014). Notwithstanding any copyright notice, U.S. Government</span>
+<span class="sd">rights in this work are defined by DFARS 252.227-7013 or DFARS 252.227-7014 as detailed</span>
+<span class="sd">above. Use of this work other than as specifically authorized by the U.S. Government</span>
+<span class="sd">may violate any copyrights that exist in this work.</span>
+
+<span class="sd">Transformers for decomposing single qubit rotations in cirq circuits into</span>
+<span class="sd">Clifford+T gates using the approximation method described in arXiv:1403.2975v3,</span>
+<span class="sd">and an exact synthesis algorithm based on the Matsumoto-Amano normal form (see</span>
+<span class="sd">arXiv:0806.3834, arXiv:1312.6584, and https://www.cs.umd.edu/~amchilds/qa/qa.pdf</span>
+<span class="sd">Section 3)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">FrozenSet</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">GeneratorType</span>
+
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">gmpy2</span>
+<span class="kn">from</span> <span class="nn">gmpy2</span> <span class="kn">import</span> <span class="n">mpfr</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.exact_decomp</span> <span class="kn">import</span> <span class="n">exact_decomp</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.gate_approximation</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_ring_elts_direct</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.rotation_gates</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">T_COUNT_CONST</span><span class="p">,</span>
+    <span class="n">T_COUNT_SLOPE</span><span class="p">,</span>
+    <span class="n">T_COUNT_STD_DEV</span><span class="p">,</span>
+    <span class="n">check_common_angles</span><span class="p">,</span>
+    <span class="n">CLIFFORD_GATES</span><span class="p">,</span>
+    <span class="n">clifford_plus_T_ops</span><span class="p">,</span>
+    <span class="n">rx_decomp</span><span class="p">,</span>
+    <span class="n">ry_decomp</span><span class="p">,</span>
+    <span class="n">rz_decomp</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># Single qubit gates that don&#39;t get decomposed.</span>
+<span class="n">clifford_plus_T_gates</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;H&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;H**-1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;H**-1.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;T&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;X&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;X**-1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Y**-1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Z&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Z**-1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;S&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;S**-1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;T**-1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;reset&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">directCpT_gates</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;CCX&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ccx&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CCZ&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ccz&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TOFFOLI&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;toffoli&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">filtered_gates</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;RESET&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;reset&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="parse_and_reconstruct">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.parse_and_reconstruct">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_and_reconstruct</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+    <span class="c1"># The Clifford + T representation can be reconstructed by:</span>
+    <span class="k">def</span> <span class="nf">reconstruct</span><span class="p">(</span><span class="n">leading_T</span><span class="p">,</span> <span class="n">gate_sequence</span><span class="p">,</span> <span class="n">sequence_length</span><span class="p">,</span> <span class="n">clifford_part</span><span class="p">):</span>
+        <span class="n">cirq_cliffs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="p">,</span>
+            <span class="s2">&quot;Sd&quot;</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="p">),</span>
+            <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">,</span>
+            <span class="s2">&quot;Z&quot;</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span>
+            <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">,</span>
+            <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span>
+            <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">def</span> <span class="nf">fixS</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;S&quot;</span> <span class="ow">in</span> <span class="n">g</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;Sd&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">g</span>
+
+        <span class="n">ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">cirq_cliffs</span><span class="p">[</span><span class="n">fixS</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">strip</span><span class="p">())]</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">clifford_part</span><span class="p">]</span>
+        <span class="n">gate_seq</span> <span class="o">=</span> <span class="n">gate_sequence</span>
+        <span class="k">while</span> <span class="n">gate_seq</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ops</span> <span class="o">+=</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">gate_seq</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">ops</span> <span class="o">+=</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="p">]</span>
+            <span class="n">gate_seq</span> <span class="o">//=</span> <span class="mi">2</span>
+            <span class="n">sequence_length</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">ops</span> <span class="o">+=</span> <span class="n">sequence_length</span> <span class="o">*</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">leading_T</span><span class="p">:</span>
+            <span class="n">ops</span> <span class="o">+=</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">ops</span>
+
+    <span class="n">parsed_line</span> <span class="o">=</span> <span class="n">line</span>
+    <span class="k">for</span> <span class="n">rmv</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;// &quot;</span><span class="p">,</span> <span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="s2">&quot;]&quot;</span><span class="p">]:</span>
+        <span class="n">parsed_line</span> <span class="o">=</span> <span class="n">parsed_line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">rmv</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parsed_line</span> <span class="o">=</span> <span class="n">parsed_line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">parsed_line</span><span class="p">)</span>
+    <span class="n">leadingT</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">parsed_line</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">gate_sequence</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">parsed_line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">sequence_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">parsed_line</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">clifford_part</span> <span class="o">=</span> <span class="n">parsed_line</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="n">reconstruct</span><span class="p">(</span><span class="n">leadingT</span><span class="p">,</span> <span class="n">gate_sequence</span><span class="p">,</span> <span class="n">sequence_length</span><span class="p">,</span> <span class="n">clifford_part</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># direct decomposition of a gate into Clifford+T</span>
+<div class="viewcode-block" id="decompose_cirq_directCpT">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.decompose_cirq_directCpT">[docs]</a>
+<span class="k">def</span> <span class="nf">decompose_cirq_directCpT</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">rev</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">gate</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">qubits</span>
+    <span class="n">gate_to_gen</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">dGate</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CCX&quot;</span><span class="p">,</span> <span class="s2">&quot;ccx&quot;</span><span class="p">,</span> <span class="s2">&quot;TOFFOLI&quot;</span><span class="p">,</span> <span class="s2">&quot;toffoli&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">dGate</span><span class="p">):</span>
+            <span class="n">gate_to_gen</span> <span class="o">=</span> <span class="s2">&quot;ccx&quot;</span>
+    <span class="k">for</span> <span class="n">dGate</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CCZ&quot;</span><span class="p">,</span> <span class="s2">&quot;ccz&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">dGate</span><span class="p">):</span>
+            <span class="n">gate_to_gen</span> <span class="o">=</span> <span class="s2">&quot;ccz&quot;</span>
+
+    <span class="c1"># construct the gate</span>
+    <span class="n">gate_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">gate_to_gen</span> <span class="o">==</span> <span class="s2">&quot;ccx&quot;</span><span class="p">:</span>
+        <span class="n">gate_list</span> <span class="o">+=</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">(</span><span class="n">q2</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">rev</span><span class="p">:</span>
+        <span class="n">gate_list</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q0</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">q2</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">q2</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">),</span>
+        <span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gate_list</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">q2</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">q2</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">CX</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">q0</span><span class="p">),</span>
+            <span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span>
+        <span class="p">]</span>
+    <span class="k">if</span> <span class="n">gate_to_gen</span> <span class="o">==</span> <span class="s2">&quot;ccx&quot;</span><span class="p">:</span>
+        <span class="n">gate_list</span> <span class="o">+=</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">(</span><span class="n">q2</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="n">gate_list</span></div>
+
+
+
+<div class="viewcode-block" id="count_rotation_gates">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.count_rotation_gates">[docs]</a>
+<span class="k">def</span> <span class="nf">count_rotation_gates</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">AbstractCircuit</span><span class="p">):</span>
+    <span class="n">total_gates</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">circuit</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">is_filtered_gate</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+                <span class="k">pass</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_gate_clifford_plus_T</span><span class="p">(</span><span class="n">op</span><span class="p">)):</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;R[xyz]</span><span class="se">\\</span><span class="s2">(([^\)]+)</span><span class="se">\\</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">angle_str</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">angle</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                        <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                            <span class="p">[</span>
+                                <span class="n">s</span>
+                                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">angle_str</span>
+                                <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">s</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">())</span>
+                            <span class="p">]</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">)</span>
+                        <span class="ow">or</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">)</span>
+                        <span class="ow">or</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">)</span>
+                    <span class="p">):</span>
+                        <span class="k">pass</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">total_gates</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">total_gates</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_perop_clifford_plus_t_direct_transform</span><span class="p">(</span>
+        <span class="n">op</span><span class="p">,</span>
+    <span class="n">gate_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">use_rotation_decomp_gates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">use_random_decomp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">warn_if_not_decomposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+
+    <span class="n">operations</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">is_directCpT_gate</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+        <span class="c1"># these gates have known optimal decompositions into Clifford+T</span>
+        <span class="k">if</span> <span class="s2">&quot;**-1.0&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+            <span class="c1"># We want the inverse C+T circuit to be the inverted gate-wise</span>
+            <span class="c1"># reverse of the base circuit. This should allow for better</span>
+            <span class="c1"># optimization. This is valid for this limited set of gates that we</span>
+            <span class="c1"># know has a unitary decomposition and are self inverses. If we</span>
+            <span class="c1"># allow cirq to decompose the inverse circuit then it will produce</span>
+            <span class="c1"># an inverse circuit that has the form of the forward circuit</span>
+            <span class="c1"># (11/23/22 KMO)</span>
+            <span class="n">new_gates</span> <span class="o">=</span> <span class="n">decompose_cirq_directCpT</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">rev</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_gates</span> <span class="o">=</span> <span class="n">decompose_cirq_directCpT</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+
+        <span class="n">operations</span> <span class="o">+=</span> <span class="n">new_gates</span>
+    <span class="k">elif</span> <span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span>
+        <span class="ow">or</span> <span class="n">is_gate_clifford_plus_T</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">without_classical_controls</span><span class="p">())</span>
+        <span class="ow">or</span> <span class="s2">&quot;Measurement&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">classical_controls</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">ClassicallyControlledOperation</span><span class="p">):</span>
+            <span class="n">classical_controls</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">classical_controls</span>
+            <span class="n">op</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">without_classical_controls</span><span class="p">()</span>
+
+        <span class="n">qubit</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">gate_list</span> <span class="o">=</span> <span class="n">parse_gate</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">,</span> <span class="n">warn_if_not_decomposed</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate_list</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Gate</span><span class="p">):</span>
+            <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">gate_tuple</span> <span class="ow">in</span> <span class="n">gate_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">gate_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># if Z rotation, can directly approximate</span>
+                <span class="k">if</span> <span class="n">gate_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;z&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">use_rotation_decomp_gates</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">classical_controls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="n">rz_decomp</span><span class="p">(</span>
+                                    <span class="n">gate_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="n">gate_precision</span><span class="p">,</span>
+                                    <span class="n">use_random_decomp</span><span class="p">,</span>
+                                <span class="p">)</span>
+                                <span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">with_classical_controls</span><span class="p">(</span><span class="o">*</span><span class="n">classical_controls</span><span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="n">rz_decomp</span><span class="p">(</span>
+                                    <span class="n">gate_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="n">gate_precision</span><span class="p">,</span>
+                                    <span class="n">use_random_decomp</span><span class="p">,</span>
+                                <span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span>
+                            <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">operations</span> <span class="o">+=</span> <span class="n">decompose_diagonal_cirq</span><span class="p">(</span>
+                                <span class="n">mpfr</span><span class="p">(</span><span class="n">gate_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                                <span class="n">gate_precision</span><span class="p">,</span>
+                                <span class="n">qubit</span><span class="p">,</span>
+                                <span class="n">classical_controls</span><span class="p">,</span>
+                                <span class="n">use_random_decomp</span><span class="p">,</span>
+                            <span class="p">)</span>
+                <span class="c1"># if Y gate, can approximate with RY(θ) = (SH)RZ(θ)(SH)dag</span>
+                <span class="c1"># = (SH)RZ(θ)(HSdag)</span>
+                <span class="k">if</span> <span class="n">gate_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">use_rotation_decomp_gates</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">classical_controls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="n">ry_decomp</span><span class="p">(</span>
+                                    <span class="n">gate_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="n">gate_precision</span><span class="p">,</span>
+                                    <span class="n">use_random_decomp</span><span class="p">,</span>
+                                <span class="p">)</span>
+                                <span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">with_classical_controls</span><span class="p">(</span><span class="o">*</span><span class="n">classical_controls</span><span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="n">ry_decomp</span><span class="p">(</span>
+                                    <span class="n">gate_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="n">gate_precision</span><span class="p">,</span>
+                                    <span class="n">use_random_decomp</span><span class="p">,</span>
+                                <span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span>
+                            <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">(</span><span class="n">qubit</span><span class="p">))</span>
+                        <span class="n">operations</span> <span class="o">+=</span> <span class="n">decompose_diagonal_cirq</span><span class="p">(</span>
+                                <span class="n">mpfr</span><span class="p">(</span><span class="n">gate_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                                <span class="n">gate_precision</span><span class="p">,</span>
+                                <span class="n">qubit</span><span class="p">,</span>
+                                <span class="n">classical_controls</span><span class="p">,</span>
+                                <span class="n">use_random_decomp</span><span class="p">,</span>
+                            <span class="p">)</span>
+                        <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">(</span><span class="n">qubit</span><span class="p">))</span>
+                        <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="p">(</span><span class="n">qubit</span><span class="p">))</span>
+                <span class="c1"># if X gate, can approximate with RX(θ) = H RZ(θ) H</span>
+                <span class="k">if</span> <span class="n">gate_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">use_rotation_decomp_gates</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">classical_controls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="n">rx_decomp</span><span class="p">(</span>
+                                    <span class="n">gate_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="n">gate_precision</span><span class="p">,</span>
+                                    <span class="n">use_random_decomp</span><span class="p">,</span>
+                                <span class="p">)</span>
+                                <span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">with_classical_controls</span><span class="p">(</span><span class="o">*</span><span class="n">classical_controls</span><span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="n">rx_decomp</span><span class="p">(</span>
+                                    <span class="n">gate_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="n">gate_precision</span><span class="p">,</span>
+                                    <span class="n">use_random_decomp</span><span class="p">,</span>
+                                <span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span>
+                            <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">(</span><span class="n">qubit</span><span class="p">))</span>
+                        <span class="n">operations</span> <span class="o">+=</span> <span class="n">decompose_diagonal_cirq</span><span class="p">(</span>
+                                <span class="n">mpfr</span><span class="p">(</span><span class="n">gate_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                                <span class="n">gate_precision</span><span class="p">,</span>
+                                <span class="n">qubit</span><span class="p">,</span>
+                                <span class="n">classical_controls</span><span class="p">,</span>
+                                <span class="n">use_random_decomp</span><span class="p">,</span>
+                            <span class="p">)</span>
+                        <span class="n">operations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">(</span><span class="n">qubit</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">operations</span>
+
+
+<div class="viewcode-block" id="clifford_plus_t_direct_transform">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.clifford_plus_t_direct_transform">[docs]</a>
+<span class="k">def</span> <span class="nf">clifford_plus_t_direct_transform</span><span class="p">(</span>
+    <span class="n">circuit</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">AbstractCircuit</span><span class="p">,</span>
+    <span class="n">gate_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">circuit_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">num_rotation_gates</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">use_rotation_decomp_gates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">use_random_decomp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">warn_if_not_decomposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">AbstractCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decompose every single qubit unitary in the circuit into a Clifford+T</span>
+<span class="sd">    approximation.</span>
+
+<span class="sd">    Setting the Precision</span>
+<span class="sd">    ---------------------</span>
+<span class="sd">    There are two ways to specify the desired approximation error due to decomposition:</span>
+<span class="sd">    `gate_precision` and `circuit_precision`. If `circuit_precision` is not None, then</span>
+<span class="sd">    each gate will have an approximation error bounded by `circuit_precision` divided by</span>
+<span class="sd">    the number of rotation gates, so that the approximation error of the entire circuit</span>
+<span class="sd">    will be bounded by `circuit_precision`. If `circuit_precision` is None, and</span>
+<span class="sd">    `gate_precision` is not, then each rotation gate in the circuit will be replaced by</span>
+<span class="sd">    an approximation upper bounded by `gate_precision` in the operator norm.</span>
+
+<span class="sd">    Output Circuit</span>
+<span class="sd">    --------------</span>
+<span class="sd">    There are also two ways in which the circuit can be output, which is specificed via the</span>
+<span class="sd">    `use_rotation_decomp_gates` parameter (`False` by default). In the default mode, this function</span>
+<span class="sd">    returns the fully decomposed circuit, with all of the single qubit rotations replaced with</span>
+<span class="sd">    Clifford and T gates.</span>
+
+<span class="sd">    When `use_rotation_decomp_gates` is set to `True`, the single qubit rotation gates in</span>
+<span class="sd">    the circuit get replaced with custom gates (`r&lt;x/y/z&gt;_decomp`) that know their</span>
+<span class="sd">    Clifford+T decomposition, and can be queried for their number of T gates. Users can</span>
+<span class="sd">    obtain a fully decomposed circuit using `cirq.decompose`, for example, if `circuit`</span>
+<span class="sd">    is a `cirq.Circuit` containing the custom rotation gates, they can be expanding via</span>
+
+<span class="sd">    &gt;&gt;&gt; expanded_circuit = cirq.expand_composite(</span>
+<span class="sd">            circuit, no_decomp=lambda g: g.gate in [cirq.H]</span>
+<span class="sd">        )</span>
+
+<span class="sd">    Note that we have to specify that we do not want H gates to be decomposed.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    circuit: cirq.AbstractCircuit</span>
+<span class="sd">        The circuit to be decomposed. Currently, the circuit can only use the following</span>
+<span class="sd">        gates:</span>
+<span class="sd">        - Multi-qubit gates. CCX and CCZ gates are decomposed into Clifford+T exactly.</span>
+<span class="sd">        The rest are ignored by the decomposition function.</span>
+<span class="sd">        - Single qubit gates from the list clifford_plus_T_gates above (ignored by the</span>
+<span class="sd">        decomposition function.</span>
+<span class="sd">        - Rx, Ry, and Rz gates, which are decomposed into clifford+T approximations.</span>
+
+<span class="sd">    gate_precision: Union[int, float, None]</span>
+<span class="sd">        Used to determine the maximum approximation error for each gate decomposition.</span>
+<span class="sd">        If given an int, the decomposition returned by the function will be within a</span>
+<span class="sd">        distance of 10^{-precision} of the given rotation in the operator norm, whereas</span>
+<span class="sd">        if given a float the max error in the operator norm will simply be</span>
+<span class="sd">        gate_precision.</span>
+<span class="sd">    circuit_precision: Union[int, float, None]</span>
+<span class="sd">        If not None, the approximation error for each gate will be bounded by either</span>
+<span class="sd">        `circuit_precision` divided by the number of rotation gates (if given a float),</span>
+<span class="sd">        or 10^{-circuit_precision} (if given an int). Note that this requires doing an</span>
+<span class="sd">        initial pass over the circuit to count the number of rotation gates, unless</span>
+<span class="sd">        `num_rotation_gates` is specified by the caller.</span>
+<span class="sd">    num_rotation_gates: Union[int, None]:</span>
+<span class="sd">        The number of rotation gates in the circuit. If known, pass this in as it will cut down</span>
+<span class="sd">        on the amount of execution time, particularly if the number of gates is very large.</span>
+<span class="sd">    use_rotation_decomp_gates: bool</span>
+<span class="sd">        If true, replace `cirq.r&lt;x/y/z&gt;` gates with</span>
+<span class="sd">        `pyLIQTR.gate_decomp.r&lt;x/y/z&gt;_decomp` gates, which can be expanded later into a</span>
+<span class="sd">        Clifford+T circuit. If false, return a fully expanded Clifford+T circuit.</span>
+<span class="sd">    use_random_decomp: bool</span>
+<span class="sd">        If true, rotations will be &quot;decomposed&quot; into randomly selected Clifford+T</span>
+<span class="sd">        sequences, with the length of the sequence depending on the given precision.</span>
+<span class="sd">        For a precision of ε, the T count is sampled from a normal distribution with</span>
+<span class="sd">        a mean of 3.02 * log2(1/ε) + 0.77 and a standard deviation of 2.06 (these</span>
+<span class="sd">        numbers were obtained from decomposing 1000 random angles at varying</span>
+<span class="sd">        precisions).</span>
+<span class="sd">    warn_if_not_decomposed: bool</span>
+<span class="sd">        If true, raises a warning when the circuit includes a non-clifford+T gate that</span>
+<span class="sd">        is not an X, Y, or Z rotation. Such gates are not decomposed.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    cirq.AbstractCircuit:</span>
+<span class="sd">        A new circuit where the single qubit rotations have been replaced by approximations</span>
+<span class="sd">        using the gates listed in the list clifford_plus_T_ops above</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">cirq</span><span class="o">.</span><span class="n">with_debug</span><span class="p">(</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">gate_precision</span> <span class="o">=</span> <span class="n">determine_gate_precision</span><span class="p">(</span>
+            <span class="n">circuit</span><span class="p">,</span> <span class="n">gate_precision</span><span class="p">,</span> <span class="n">circuit_precision</span><span class="p">,</span> <span class="n">num_rotation_gates</span>
+        <span class="p">)</span>
+        <span class="n">operations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">circuit</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">:</span>
+                <span class="n">operations</span> <span class="o">+=</span> <span class="n">_perop_clifford_plus_t_direct_transform</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">gate_precision</span><span class="p">,</span><span class="n">use_rotation_decomp_gates</span><span class="p">,</span><span class="n">use_random_decomp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">operations</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="determine_gate_precision">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.determine_gate_precision">[docs]</a>
+<span class="k">def</span> <span class="nf">determine_gate_precision</span><span class="p">(</span>
+    <span class="n">circuit</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">AbstractCircuit</span><span class="p">,</span>
+    <span class="n">gate_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">circuit_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">num_rotation_gates</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">circuit_precision</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">num_rotation_gates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">num_rotation_gates</span> <span class="o">=</span> <span class="n">get_num_rotation_gates</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit_precision</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">circuit_precision</span> <span class="o">/</span> <span class="n">num_rotation_gates</span><span class="p">)</span> <span class="k">if</span> <span class="n">num_rotation_gates</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">circuit_precision</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">precision</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="n">circuit_precision</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">precision</span> <span class="o">/</span> <span class="n">num_rotation_gates</span><span class="p">)</span> <span class="k">if</span> <span class="n">num_rotation_gates</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">precision</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate_precision</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">gate_precision</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="n">gate_precision</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_num_rotation_gates">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.get_num_rotation_gates">[docs]</a>
+<span class="k">def</span> <span class="nf">get_num_rotation_gates</span><span class="p">(</span>
+    <span class="n">circuit</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">AbstractCircuit</span><span class="p">,</span><span class="n">GeneratorType</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">num_rotation_gates</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span><span class="n">GeneratorType</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">circuit</span><span class="p">:</span>
+                <span class="n">gate_string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;R&quot;</span> <span class="ow">in</span> <span class="n">gate_string</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">parse_gate</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">num_rotation_gates</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">circuit</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">:</span>
+                <span class="n">gate_string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;R&quot;</span> <span class="ow">in</span> <span class="n">gate_string</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">parse_gate</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">num_rotation_gates</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">num_rotation_gates</span></div>
+
+
+
+<div class="viewcode-block" id="get_approximate_t_depth">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.get_approximate_t_depth">[docs]</a>
+<span class="k">def</span> <span class="nf">get_approximate_t_depth</span><span class="p">(</span>
+    <span class="n">circuit</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">AbstractCircuit</span><span class="p">,</span>
+    <span class="n">depthToff</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span>
+    <span class="n">gate_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">circuit_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the approximate T depth of a circuit.</span>
+
+<span class="sd">    This function approximates the T depth of a circuit using the following heuristic:</span>
+<span class="sd">    for each moment in the cirq circuit, it finds the gate with the highest T-count</span>
+<span class="sd">    when decomposed to Clifford+T, and then adds up the the T count from each moment.</span>
+
+<span class="sd">    Gate T counts are determined as follows:</span>
+<span class="sd">    - Single qubit rotation gate: For a precision of ε, the T count is</span>
+<span class="sd">    3.02 * log2(1/ε) + 0.77 (these numbers were obtained from decomposing 1000 random</span>
+<span class="sd">    angles at varying precisions).</span>
+<span class="sd">    - CCX/CCZ Gates: `depthToff` T gates (7 by default)</span>
+<span class="sd">    - T or T^{\dagger}: 1 T gate</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    circuit: cirq.AbstractCircuit</span>
+<span class="sd">        The circuit whose T depth will be estimated</span>
+<span class="sd">    depthToff: int</span>
+<span class="sd">        The number of T gates that a CCX or CCZ gate counts as</span>
+<span class="sd">    gate_precision: Union[int, float, None]</span>
+<span class="sd">        Used to determine the how many T gates a single qubit rotation counts as.</span>
+<span class="sd">        If given an int, precision used to estimate the gate_count will be</span>
+<span class="sd">        10^{-gate_precision} whereas if given a float the precision will simply be</span>
+<span class="sd">        gate_precision.</span>
+<span class="sd">    circuit_precision: Union[int, float, None]</span>
+<span class="sd">        If not None, the precision for each gate will be either `circuit_precision`</span>
+<span class="sd">        divided by the number of rotation gates (if given a float), or</span>
+<span class="sd">        10^{-circuit_precision} divided by the number of rotation gates (if given an</span>
+<span class="sd">        int). Note that this requires doing an initial pass over the circuit to count</span>
+<span class="sd">        the number of rotation gates, unless `num_rotation_gates` is specified by the caller.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">precision</span> <span class="o">=</span> <span class="n">determine_gate_precision</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">gate_precision</span><span class="p">,</span> <span class="n">circuit_precision</span><span class="p">)</span>
+    <span class="n">t_depth</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">circuit</span><span class="p">:</span>
+        <span class="n">max_t_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">:</span>
+            <span class="n">t_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">gate</span> <span class="ow">in</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="o">**-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">t_count</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">cc_gate</span> <span class="ow">in</span> <span class="n">directCpT_gates</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">cc_gate</span><span class="p">):</span>
+                    <span class="n">t_count</span> <span class="o">=</span> <span class="n">depthToff</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">parse_gate</span><span class="p">(</span>
+                    <span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">,</span> <span class="kc">False</span>
+                <span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_gate_clifford_plus_T</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+                    <span class="n">t_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                        <span class="n">T_COUNT_SLOPE</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">precision</span><span class="p">)</span> <span class="o">+</span> <span class="n">T_COUNT_CONST</span>
+                    <span class="p">)</span>
+            <span class="k">if</span> <span class="n">t_count</span> <span class="o">&gt;</span> <span class="n">max_t_count</span><span class="p">:</span>
+                <span class="n">max_t_count</span> <span class="o">=</span> <span class="n">t_count</span>
+        <span class="n">t_depth</span> <span class="o">+=</span> <span class="n">max_t_count</span>
+    <span class="k">return</span> <span class="n">t_depth</span></div>
+
+
+
+<div class="viewcode-block" id="parse_gate">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.parse_gate">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_gate</span><span class="p">(</span>
+    <span class="n">gate</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Gate</span><span class="p">,</span> <span class="n">warn_if_not_decomposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse cirq gate into something that can be decomposed</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate: cirq.Gate</span>
+<span class="sd">        The gate to be decomposed. Currently only supports for Rx, Ry, and Rz gates.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[Tuple[str, float]]:</span>
+<span class="sd">        A list of gates represented by a tuple. The tuple elements are</span>
+<span class="sd">        - str: rotation axis (x/y/z)</span>
+<span class="sd">        - float: rotation angle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gate_string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;R&quot;</span> <span class="ow">in</span> <span class="n">gate_string</span><span class="p">:</span>
+        <span class="n">axis</span> <span class="o">=</span> <span class="n">gate_string</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">]:</span>
+            <span class="n">angle</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">_rads</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="s2">&quot;X&quot;</span> <span class="ow">in</span> <span class="n">gate_string</span> <span class="ow">or</span> <span class="s2">&quot;Y&quot;</span> <span class="ow">in</span> <span class="n">gate_string</span> <span class="ow">or</span> <span class="s2">&quot;Z&quot;</span> <span class="ow">in</span> <span class="n">gate_string</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s2">&quot;**&quot;</span> <span class="ow">in</span> <span class="n">gate_string</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s2">&quot;Pow&quot;</span> <span class="ow">in</span> <span class="n">gate_string</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="n">axis</span> <span class="o">=</span> <span class="n">gate_string</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">gate</span><span class="o">.</span><span class="n">exponent</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">warn_if_not_decomposed</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2"> is not a rotation gate, cannot decompose. Set&quot;</span>
+                <span class="s2">&quot; warn_if_not_decomposed=False to silence this warning.&quot;</span><span class="p">,</span>
+                <span class="ne">RuntimeWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">gate</span>
+    <span class="k">return</span> <span class="p">[(</span><span class="n">axis</span><span class="p">,</span> <span class="n">angle</span><span class="p">)]</span></div>
+
+
+
+<div class="viewcode-block" id="decompose_diagonal_cirq">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.decompose_diagonal_cirq">[docs]</a>
+<span class="k">def</span> <span class="nf">decompose_diagonal_cirq</span><span class="p">(</span>
+    <span class="n">angle</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">,</span>
+    <span class="n">precision</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">qubit</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">,</span>
+    <span class="n">classical_control</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Condition</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">use_random_decomp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Operation</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decompose an rz rotation into cirq gates</span>
+
+<span class="sd">    If the original operation was classically controlled, all of the gates from the</span>
+<span class="sd">    decomposition will be classically controlled as well.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">eps</span> <span class="o">=</span> <span class="n">mpfr</span><span class="p">(</span><span class="n">precision</span><span class="p">)</span>
+    <span class="n">gmpy2</span><span class="o">.</span><span class="n">get_context</span><span class="p">()</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="mf">2.5</span> <span class="o">*</span> <span class="n">precision</span> <span class="o">+</span> <span class="mi">15</span><span class="p">)))),</span> <span class="mi">100</span>
+    <span class="p">)</span>
+    <span class="n">easy_approx</span> <span class="o">=</span> <span class="n">check_common_angles</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="n">precision</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">classical_control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">easy_approx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">easy_approx</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">use_random_decomp</span><span class="p">:</span>
+                <span class="n">gates</span> <span class="o">=</span> <span class="n">random_decomp</span><span class="p">(</span><span class="n">eps</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">gates</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">u</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">get_ring_elts_direct</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="n">prec</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">)</span>
+                <span class="n">gates</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">exact_decomp</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">clifford_plus_T_ops</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">gates</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">easy_approx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="n">cirq</span><span class="o">.</span><span class="n">ClassicallyControlledOperation</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubit</span><span class="p">),</span> <span class="n">classical_control</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">easy_approx</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">use_random_decomp</span><span class="p">:</span>
+                <span class="n">gates</span> <span class="o">=</span> <span class="n">random_decomp</span><span class="p">(</span><span class="n">eps</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">[</span>
+                    <span class="n">cirq</span><span class="o">.</span><span class="n">ClassicallyControlledOperation</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubit</span><span class="p">),</span> <span class="n">classical_control</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">gates</span>
+                <span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">u</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">get_ring_elts_direct</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="n">prec</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">)</span>
+                <span class="n">gates</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">exact_decomp</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">clifford_plus_T_ops</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">[</span>
+                    <span class="n">cirq</span><span class="o">.</span><span class="n">ClassicallyControlledOperation</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">qubit</span><span class="p">),</span> <span class="n">classical_control</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">gates</span>
+                <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="is_gate_clifford_plus_T">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.is_gate_clifford_plus_T">[docs]</a>
+<span class="k">def</span> <span class="nf">is_gate_clifford_plus_T</span><span class="p">(</span><span class="n">op</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Operation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">in</span> <span class="n">clifford_plus_T_gates</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="is_directCpT_gate">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.is_directCpT_gate">[docs]</a>
+<span class="k">def</span> <span class="nf">is_directCpT_gate</span><span class="p">(</span><span class="n">op</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Operation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">gate</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">dGate</span> <span class="ow">in</span> <span class="n">directCpT_gates</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">dGate</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="is_filtered_gate">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.is_filtered_gate">[docs]</a>
+<span class="k">def</span> <span class="nf">is_filtered_gate</span><span class="p">(</span><span class="n">op</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Operation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">gate</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">dGate</span> <span class="ow">in</span> <span class="n">filtered_gates</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">dGate</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="random_decomp">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.gate_decomp.html#src.pyLIQTR.gate_decomp.cirq_transforms.random_decomp">[docs]</a>
+<span class="k">def</span> <span class="nf">random_decomp</span><span class="p">(</span><span class="n">eps</span><span class="p">:</span> <span class="n">mpfr</span><span class="p">):</span>
+    <span class="n">gates</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">CLIFFORD_GATES</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">23</span><span class="p">)])</span>
+    <span class="n">sequence_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span>
+            <span class="n">T_COUNT_SLOPE</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">eps</span><span class="p">)</span> <span class="o">+</span> <span class="n">T_COUNT_CONST</span><span class="p">,</span>
+            <span class="n">T_COUNT_STD_DEV</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">leading_T</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
+    <span class="k">if</span> <span class="n">leading_T</span><span class="p">:</span>
+        <span class="n">sequence_length</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="n">gate_seq</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getrandbits</span><span class="p">(</span><span class="n">sequence_length</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">gate_seq</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">gates</span> <span class="o">+=</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">gate_seq</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">gates</span> <span class="o">+=</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="p">]</span>
+        <span class="n">gate_seq</span> <span class="o">//=</span> <span class="mi">2</span>
+        <span class="n">sequence_length</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="n">gates</span> <span class="o">+=</span> <span class="n">sequence_length</span> <span class="o">*</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">leading_T</span><span class="p">:</span>
+        <span class="n">gates</span> <span class="o">+=</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">gates</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

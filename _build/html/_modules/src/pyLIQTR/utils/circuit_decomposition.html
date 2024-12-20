@@ -1,0 +1,425 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.utils.circuit_decomposition &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.utils.circuit_decomposition</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.utils.circuit_decomposition</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">qualtran</span>
+<span class="kn">from</span> <span class="nn">cirq.ops.gate_operation</span> <span class="kn">import</span> <span class="n">GateOperation</span>
+
+<span class="kn">import</span> <span class="nn">cirq.protocols.decompose_protocol</span> <span class="k">as</span> <span class="nn">cpdp</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TYPE_CHECKING</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">Iterable</span><span class="p">,</span>
+    <span class="n">Iterator</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">overload</span><span class="p">,</span>
+    <span class="n">Sequence</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">TypeVar</span><span class="p">,</span>
+    <span class="n">Union</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_controlled_decompose_dfs</span><span class="p">(</span><span class="n">current_pass</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">max_decomposition_passes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>\
+                              <span class="n">item</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">cpdp</span><span class="o">.</span><span class="n">_DecomposeArgs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="s1">&#39;cirq.Operation&#39;</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A modified version of cirq&#39;s cirq.protocol.decompose_protocol._decompose_dfs that limits the </span>
+<span class="sd">    number of times it will recurse.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">cirq.circuits</span> <span class="kn">import</span> <span class="n">CircuitOperation</span><span class="p">,</span> <span class="n">FrozenCircuit</span>
+    <span class="kn">from</span> <span class="nn">cirq.protocols.decompose_protocol</span> <span class="kn">import</span> <span class="n">ops</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ops</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+        <span class="n">item_untagged</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">untagged</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">preserve_structure</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item_untagged</span><span class="p">,</span> <span class="n">CircuitOperation</span><span class="p">):</span>
+            <span class="n">new_fc</span> <span class="o">=</span> <span class="n">FrozenCircuit</span><span class="p">(</span><span class="n">_decompose_dfs</span><span class="p">(</span><span class="n">item_untagged</span><span class="o">.</span><span class="n">circuit</span><span class="p">,</span> <span class="n">args</span><span class="p">))</span>
+            <span class="k">yield</span> <span class="n">item_untagged</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">circuit</span><span class="o">=</span><span class="n">new_fc</span><span class="p">)</span><span class="o">.</span><span class="n">with_tags</span><span class="p">(</span><span class="o">*</span><span class="n">item</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">keep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">keep</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">item</span>
+            <span class="k">return</span>
+
+    <span class="n">decomposed</span> <span class="o">=</span> <span class="n">cpdp</span><span class="o">.</span><span class="n">_try_op_decomposer</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">intercepting_decomposer</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">decomposed</span> <span class="ow">is</span> <span class="bp">NotImplemented</span> <span class="ow">or</span> <span class="n">decomposed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">decomposed</span> <span class="o">=</span> <span class="n">cpdp</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flatten</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">decomposed</span> <span class="ow">is</span> <span class="bp">NotImplemented</span> <span class="ow">or</span> <span class="n">decomposed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">decomposed</span> <span class="o">=</span> <span class="n">cpdp</span><span class="o">.</span><span class="n">_try_op_decomposer</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">fallback_decomposer</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">decomposed</span> <span class="ow">is</span> <span class="bp">NotImplemented</span> <span class="ow">or</span> <span class="n">decomposed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ops</span><span class="o">.</span><span class="n">Operation</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="n">decomposed</span> <span class="o">=</span> <span class="n">item</span>
+
+    <span class="k">if</span> <span class="n">decomposed</span> <span class="ow">is</span> <span class="bp">NotImplemented</span> <span class="ow">or</span> <span class="n">decomposed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">keep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">on_stuck_raise</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">on_stuck_raise</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">args</span><span class="o">.</span><span class="n">on_stuck_raise</span>
+            <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">on_stuck_raise</span><span class="p">):</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">on_stuck_raise</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">error</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">error</span>
+        <span class="k">yield</span> <span class="n">item</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">max_decomposition_passes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">current_pass</span> <span class="o">&lt;</span> <span class="n">max_decomposition_passes</span><span class="p">):</span>
+            <span class="n">current_pass</span><span class="o">+=</span><span class="mi">1</span>
+            <span class="n">do_decomp</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">do_decomp</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">ops</span><span class="o">.</span><span class="n">flatten_to_ops</span><span class="p">(</span><span class="n">decomposed</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">do_decomp</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">_controlled_decompose_dfs</span><span class="p">(</span><span class="n">current_pass</span><span class="p">,</span> <span class="n">max_decomposition_passes</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">oop</span> <span class="ow">in</span> <span class="n">op</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">oop</span><span class="o">.</span><span class="n">gate</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">MatrixGate</span><span class="p">):</span>
+                                <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">oop</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">yield</span> <span class="n">oop</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">MatrixGate</span><span class="p">):</span>
+                            <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">yield</span> <span class="n">op</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">vval</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vval</span><span class="o">.</span><span class="n">gate</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">MatrixGate</span><span class="p">):</span>
+                            <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">vval</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">yield</span> <span class="n">vval</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">gate</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">MatrixGate</span><span class="p">):</span>
+                        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">yield</span> <span class="n">val</span>
+            
+<div class="viewcode-block" id="generator_decompose">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.circuit_decomposition.generator_decompose">[docs]</a>
+<span class="k">def</span> <span class="nf">generator_decompose</span><span class="p">(</span>
+    <span class="n">val</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">intercepting_decomposer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">cpdp</span><span class="o">.</span><span class="n">OpDecomposer</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fallback_decomposer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">cpdp</span><span class="o">.</span><span class="n">OpDecomposer</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">keep</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="s1">&#39;cirq.Operation&#39;</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">on_stuck_raise</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="s1">&#39;cirq.Operation&#39;</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="n">cpdp</span><span class="o">.</span><span class="n">_value_error_describing_bad_operation</span><span class="p">,</span>
+    <span class="n">preserve_structure</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">cpdp</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_decomposition_passes</span> <span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    NOTE: This is a modified version of cirq&#39;s decompose function, which has been modified to return a generator and to stop decomposing after a number of passes</span>
+<span class="sd">    </span>
+<span class="sd">    Recursively decomposes a value into `cirq.Operation`s meeting a criteria.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    val: The value to decompose into operations.</span>
+<span class="sd">    intercepting_decomposer: An optional method that is called before the</span>
+<span class="sd">        default decomposer (the value&#39;s `_decompose_` method). If</span>
+<span class="sd">        `intercepting_decomposer` is specified and returns a result that</span>
+<span class="sd">        isn&#39;t `NotImplemented` or `None`, that result is used. Otherwise the</span>
+<span class="sd">        decomposition falls back to the default decomposer.</span>
+
+<span class="sd">        Note that `val` will be passed into `intercepting_decomposer`, even</span>
+<span class="sd">        if `val` isn&#39;t a `cirq.Operation`.</span>
+<span class="sd">    fallback_decomposer: An optional decomposition that used after the</span>
+<span class="sd">        `intercepting_decomposer` and the default decomposer (the value&#39;s</span>
+<span class="sd">        `_decompose_` method) both fail.</span>
+<span class="sd">    keep: A predicate that determines if the initial operation or</span>
+<span class="sd">        intermediate decomposed operations should be kept or else need to be</span>
+<span class="sd">        decomposed further. If `keep` isn&#39;t specified, it defaults to &quot;value</span>
+<span class="sd">        can&#39;t be decomposed anymore&quot;.</span>
+<span class="sd">    on_stuck_raise: If there is an operation that can&#39;t be decomposed and</span>
+<span class="sd">        also can&#39;t be kept, `on_stuck_raise` is used to determine what error</span>
+<span class="sd">        to raise. `on_stuck_raise` can either directly be an `Exception`, or</span>
+<span class="sd">        a method that takes the problematic operation and returns an</span>
+<span class="sd">        `Exception`. If `on_stuck_raise` is set to `None` or a method that</span>
+<span class="sd">        returns `None`, non-decomposable operations are simply silently</span>
+<span class="sd">        kept. `on_stuck_raise` defaults to a `ValueError` describing the</span>
+<span class="sd">        unwanted non-decomposable operation.</span>
+<span class="sd">    preserve_structure: Prevents subcircuits (i.e. `CircuitOperation`s)</span>
+<span class="sd">        from being decomposed, but decomposes their contents. If this is</span>
+<span class="sd">        True, `intercepting_decomposer` cannot be specified.</span>
+<span class="sd">    context: Decomposition context specifying common configurable options for</span>
+<span class="sd">        controlling the behavior of decompose.</span>
+<span class="sd">    max_decomposition_passes: If provided None (which is the default), then</span>
+<span class="sd">        the generator_decompose acts equivalently to cirq.decompose. If provided</span>
+<span class="sd">        a int&gt;=0, then this decomposition will only decompose that number of </span>
+<span class="sd">        passes</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    A list of operations that the given value was decomposed into. If</span>
+<span class="sd">    `on_stuck_raise` isn&#39;t set to None, all operations in the list will</span>
+<span class="sd">    satisfy the predicate specified by `keep`.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">    TypeError:</span>
+<span class="sd">        `val` isn&#39;t a `cirq.Operation` and can&#39;t be decomposed even once.</span>
+<span class="sd">        (So it&#39;s not possible to return a list of operations.)</span>
+
+<span class="sd">    ValueError:</span>
+<span class="sd">        Default type of error raised if there&#39;s an non-decomposable</span>
+<span class="sd">        operation that doesn&#39;t satisfy the given `keep` predicate.</span>
+
+<span class="sd">    TError:</span>
+<span class="sd">        Custom type of error raised if there&#39;s an non-decomposable operation</span>
+<span class="sd">        that doesn&#39;t satisfy the given `keep` predicate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="p">(</span>
+            <span class="n">on_stuck_raise</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">cpdp</span><span class="o">.</span><span class="n">_value_error_describing_bad_operation</span>
+            <span class="ow">and</span> <span class="n">on_stuck_raise</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">keep</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Must specify &#39;keep&#39; if specifying &#39;on_stuck_raise&#39;, because it&#39;s &quot;</span>
+                <span class="s2">&quot;not possible to get stuck if you don&#39;t have a criteria on what&#39;s &quot;</span>
+                <span class="s2">&quot;acceptable to keep.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="n">reclim</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">getrecursionlimit</span><span class="p">()</span> 
+    <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">cpdp</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">cpdp</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">SimpleQubitManager</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;_decompose_protocol&#39;</span><span class="p">))</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">cpdp</span><span class="o">.</span><span class="n">_DecomposeArgs</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">intercepting_decomposer</span><span class="o">=</span><span class="n">intercepting_decomposer</span><span class="p">,</span>
+            <span class="n">fallback_decomposer</span><span class="o">=</span><span class="n">fallback_decomposer</span><span class="p">,</span>
+            <span class="n">keep</span><span class="o">=</span><span class="n">keep</span><span class="p">,</span>
+            <span class="n">on_stuck_raise</span><span class="o">=</span><span class="n">on_stuck_raise</span><span class="p">,</span>
+            <span class="n">preserve_structure</span><span class="o">=</span><span class="n">preserve_structure</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">setrecursionlimit</span><span class="p">(</span><span class="nb">min</span><span class="p">([</span><span class="n">reclim</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">100000</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">_controlled_decompose_dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">max_decomposition_passes</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">,</span><span class="n">qualtran</span><span class="o">.</span><span class="n">cirq_interop</span><span class="o">.</span><span class="n">_bloq_to_cirq</span><span class="o">.</span><span class="n">BloqAsCirqGate</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;qualtran.bloqs.basic_gates&quot;</span> <span class="ow">in</span> <span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="vm">__module__</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">cirq_gate</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s2">&quot;qualtran.cirq_interop._bloq_to_cirq&quot;</span> <span class="ow">in</span> <span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="vm">__module__</span><span class="p">:</span>
+                <span class="n">gates</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bloq.CNOT&#39;</span><span class="p">,</span><span class="s1">&#39;bloq.XGate&#39;</span><span class="p">,</span><span class="s1">&#39;bloq.YGate&#39;</span><span class="p">,</span><span class="s1">&#39;bloq.ZGate&#39;</span><span class="p">,</span><span class="s1">&#39;bloq.HGate&#39;</span><span class="p">,</span><span class="s1">&#39;bloq.H&#39;</span><span class="p">,</span><span class="s1">&#39;bloq.SGate&#39;</span><span class="p">,</span><span class="s1">&#39;bloq.TGate&#39;</span><span class="p">,</span><span class="s1">&#39;bloq.T&#39;</span><span class="p">]</span>
+                <span class="n">cirq_gates</span> <span class="o">=</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">CNOT</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
+                <span class="n">gate2cirq</span> <span class="o">=</span> <span class="p">{</span><span class="n">g</span><span class="p">:</span><span class="n">cg</span> <span class="k">for</span> <span class="n">g</span><span class="p">,</span><span class="n">cg</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">gates</span><span class="p">,</span><span class="n">cirq_gates</span><span class="p">)}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">gate2cirq</span><span class="p">):</span>
+                    <span class="c1">#Annoying, there are some &#39;non basic&#39; gates mixed in with these -_-</span>
+                    <span class="k">if</span> <span class="s1">&#39;bloq.MultiAnd&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;bloq.Add&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;bloq.TwoBitCSwap&#39;</span><span class="p">:</span>
+                        <span class="k">yield</span> <span class="n">op</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">gate2cirq</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="p">)]</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Uncaught/bad qualtran -&gt; cirq conversion&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">op</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">setrecursionlimit</span><span class="p">(</span><span class="n">reclim</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="test_for_bad_gate_op">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.circuit_decomposition.test_for_bad_gate_op">[docs]</a>
+<span class="k">def</span> <span class="nf">test_for_bad_gate_op</span><span class="p">(</span><span class="n">gate_op</span><span class="p">:</span><span class="n">cirq</span><span class="o">.</span><span class="n">GateOperation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">gate_op_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">gate_op</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate_op</span><span class="p">,</span> <span class="s1">&#39;_gate&#39;</span><span class="p">):</span>
+        <span class="n">gate_op_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">gate_op</span><span class="o">.</span><span class="n">_gate</span><span class="p">)</span>
+
+    <span class="n">gates2check</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;reset&quot;</span><span class="p">,</span><span class="s2">&quot;cirq.Measure&quot;</span><span class="p">,</span><span class="s2">&quot;cirq.MeasurementGate&quot;</span><span class="p">]</span>
+    <span class="n">gates2check</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span><span class="s2">&quot;Z&quot;</span><span class="p">,</span><span class="s2">&quot;S&quot;</span><span class="p">,</span><span class="s2">&quot;H&quot;</span><span class="p">,</span><span class="s2">&quot;T&quot;</span><span class="p">]</span>
+    <span class="n">gates2check</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;X**-1.0&quot;</span><span class="p">,</span><span class="s2">&quot;Y**-1.0&quot;</span><span class="p">,</span><span class="s2">&quot;Z**-1.0&quot;</span><span class="p">,</span><span class="s2">&quot;H**-1.0&quot;</span><span class="p">]</span>
+    <span class="n">gates2check</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;X**-1&quot;</span><span class="p">,</span><span class="s2">&quot;Y**-1&quot;</span><span class="p">,</span><span class="s2">&quot;Z**-1&quot;</span><span class="p">,</span><span class="s2">&quot;H**-1&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">gate_op_str</span> <span class="ow">in</span> <span class="n">gates2check</span><span class="p">)</span> <span class="ow">or</span> \
+        <span class="p">(</span><span class="n">gate_op_str</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s1">&#39;reset&#39;</span><span class="p">,</span><span class="s1">&#39;Rx&#39;</span><span class="p">,</span><span class="s1">&#39;Ry&#39;</span><span class="p">,</span><span class="s1">&#39;Rz&#39;</span><span class="p">,</span>\
+            <span class="s1">&#39;CX&#39;</span><span class="p">,</span><span class="s1">&#39;CZ&#39;</span><span class="p">,</span><span class="s1">&#39;CCZ&#39;</span><span class="p">,</span><span class="s1">&#39;CCX&#39;</span><span class="p">,</span>\
+            <span class="s1">&#39;TOFFOLI&#39;</span><span class="p">,</span> <span class="s1">&#39;CCXi&#39;</span><span class="p">,</span> <span class="s1">&#39;ccxi&#39;</span><span class="p">,</span> <span class="s1">&#39;cirq.Measure&#39;</span><span class="p">,</span> <span class="s1">&#39;CNOT&#39;</span><span class="p">))):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;**-1.0&quot;</span> <span class="ow">in</span> <span class="n">gate_op_str</span> <span class="ow">or</span> <span class="s2">&quot;**-1&quot;</span> <span class="ow">in</span> <span class="n">gate_op_str</span><span class="p">)</span> <span class="ow">and</span> \
+                <span class="p">((</span><span class="s2">&quot;TOFFOLI&quot;</span> <span class="ow">in</span> <span class="n">gate_op_str</span><span class="p">)</span> \
+                    <span class="ow">or</span> <span class="p">(</span><span class="s2">&quot;CNOT&quot;</span> <span class="ow">in</span> <span class="n">gate_op_str</span><span class="p">)</span> \
+                    <span class="ow">or</span> <span class="p">(</span><span class="s2">&quot;CZ&quot;</span> <span class="ow">in</span> <span class="n">gate_op_str</span><span class="p">)</span>\
+                    <span class="ow">or</span> <span class="p">(</span><span class="s2">&quot;CX&quot;</span> <span class="ow">in</span> <span class="n">gate_op_str</span><span class="p">)</span>
+                <span class="p">):</span>
+                <span class="k">return</span> <span class="n">cirq</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">gate_op</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">gate_op</span></div>
+
+            
+<div class="viewcode-block" id="intercept_decompose">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.circuit_decomposition.intercept_decompose">[docs]</a>
+<span class="k">def</span> <span class="nf">intercept_decompose</span><span class="p">(</span><span class="n">gate_op</span><span class="p">):</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="n">test_for_bad_gate_op</span><span class="p">(</span><span class="n">gate_op</span><span class="p">)</span>
+    <span class="k">if</span>  <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">top</span><span class="p">]</span></div>
+
+    
+<div class="viewcode-block" id="keep">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.circuit_decomposition.keep">[docs]</a>
+<span class="k">def</span> <span class="nf">keep</span><span class="p">(</span><span class="n">gate_op</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">test_for_bad_gate_op</span><span class="p">(</span><span class="n">gate_op</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="circuit_decompose_multi">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.circuit_decomposition.circuit_decompose_multi">[docs]</a>
+<span class="k">def</span> <span class="nf">circuit_decompose_multi</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span><span class="n">N</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pyLIQTR.utils.global_ancilla_manager</span> <span class="k">as</span> <span class="nn">gam</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">gam</span><span class="o">.</span><span class="n">gam</span><span class="p">)</span>
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">align_left</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">generator_decompose</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span>\
+                                               <span class="n">keep</span><span class="o">=</span><span class="n">keep</span><span class="p">,</span> \
+                                                <span class="n">on_stuck_raise</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> \
+                                                <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>\
+                                                <span class="n">max_decomposition_passes</span><span class="o">=</span><span class="n">N</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">circuit</span></div>
+
+
+
+<div class="viewcode-block" id="decompose_once">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.circuit_decomposition.decompose_once">[docs]</a>
+<span class="k">def</span> <span class="nf">decompose_once</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pyLIQTR.utils.global_ancilla_manager</span> <span class="k">as</span> <span class="nn">gam</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">gam</span><span class="o">.</span><span class="n">gam</span><span class="p">)</span>
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">align_left</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">generator_decompose</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span>\
+                                               <span class="n">keep</span><span class="o">=</span><span class="n">keep</span><span class="p">,</span> \
+                                                <span class="n">on_stuck_raise</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> \
+                                                <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>\
+                                                <span class="n">max_decomposition_passes</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">circuit</span></div>
+
+
+<div class="viewcode-block" id="decompose_op">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.circuit_decomposition.decompose_op">[docs]</a>
+<span class="k">def</span> <span class="nf">decompose_op</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pyLIQTR.utils.global_ancilla_manager</span> <span class="k">as</span> <span class="nn">gam</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">gam</span><span class="o">.</span><span class="n">gam</span><span class="p">)</span>
+    <span class="n">gates</span> <span class="o">=</span> <span class="p">[</span><span class="n">op</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">generator_decompose</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">op</span><span class="p">),</span>\
+                                               <span class="n">keep</span><span class="o">=</span><span class="n">keep</span><span class="p">,</span> \
+                                                <span class="n">on_stuck_raise</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> \
+                                                <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>\
+                                                <span class="n">max_decomposition_passes</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">gates</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

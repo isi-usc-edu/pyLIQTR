@@ -1,0 +1,482 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.operators.prepare_LinearT &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.operators.prepare_LinearT</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.circuits.operators.prepare_LinearT</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">attr</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">qualtran</span> <span class="k">as</span> <span class="nn">qt</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">from</span> <span class="nn">qualtran</span> <span class="kn">import</span> <span class="n">GateWithRegisters</span><span class="p">,</span> <span class="n">Register</span><span class="p">,</span> <span class="n">Signature</span><span class="p">,</span> <span class="n">BoundedQUInt</span><span class="p">,</span> <span class="n">QBit</span><span class="p">,</span> <span class="n">QAny</span><span class="p">,</span> <span class="n">QInt</span>
+<span class="kn">from</span> <span class="nn">qualtran.linalg.lcu_util</span> <span class="kn">import</span> <span class="n">preprocess_lcu_coefficients_for_reversible_sampling</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.data_loading.qrom</span> <span class="kn">import</span> <span class="n">QROM</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.mcmt</span> <span class="kn">import</span> <span class="n">MultiControlPauli</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.state_preparation</span> <span class="kn">import</span> <span class="n">PrepareUniformSuperposition</span>
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.AddMod</span> <span class="kn">import</span> <span class="n">Add</span>
+
+<div class="viewcode-block" id="FermionicPrepare_LinearT">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.FermionicPrepare_LinearT">[docs]</a>
+<span class="k">class</span> <span class="nc">FermionicPrepare_LinearT</span><span class="p">(</span><span class="n">GateWithRegisters</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Implements circuit from Fig. 16 of https://arxiv.org/pdf/1805.03662.pdf.</span>
+
+<span class="sd">    Initializes the state </span>
+<span class="sd">        </span>
+<span class="sd">    .. math::</span>
+<span class="sd">        (\\sum_{p,\\sigma} U(p) |\\theta_p\\rangle |1\\rangle_U |0\\rangle_V |p, \\sigma, p, \\sigma\\rangle  </span>
+<span class="sd">        + \\sum_{p!=q, \\sigma} T(p-q) |\\theta_{p-q}^0\\rangle |0\\rangle_U |0\\rangle_V |p, \\sigma, q, \\sigma\\rangle </span>
+<span class="sd">        + \\sum_{(p,\\alpha)!=(q,\\beta)} V(p-q) |\\theta_{p-q}^1\\rangle |0\\rangle_U |1\\rangle_V  |p,\\alpha,q,\\beta\\rangle) |temp\\rangle</span>
+<span class="sd">        </span>
+<span class="sd">    where the coefficients :math:`U(d)`, :math:`T(d)`, and :math:`V(d)` are :math:`\\mu`-bit binary approximations to the true values. :math:`\\mu` is set according to the condition approx_error :math:`&lt;= 1/(2^\\mu N)` where N is the total number of T,U, and V coefficients.</span>
+
+<span class="sd">    :param List[Tuple[int,float]] T_array: The (XZX + YZY) operator coefficients, equivalent to :math:`\\tilde{T}^2` in the reference. Formatted such that the ith coefficient, Ti, is given by T_array[i] = ((1-sign(Ti))/2,abs(Ti)).</span>
+<span class="sd">    :param List[Tuple[int,float]] U_array: The (Z) operator coefficients, equivalent to :math:`\\tilde{U}^2` in the reference. Formatted the same as T_array.</span>
+<span class="sd">    :param List[Tuple[int,float]] V_array: The (ZZ) operator coefficients, equivalent to :math:`\\tilde{V}^2` in the reference. Formatted the same as T_array.</span>
+<span class="sd">    :param NDArray[int] M_vals: Number of grid points (orbitals) along each spatial dimension.</span>
+<span class="sd">    :param float approx_error: The desired accuracy to represent each coefficient which sets :math:`\\mu` size and keep/alt integers. See `qualtran.linalg.lcu_util.preprocess_lcu_coefficients_for_reversible_sampling` for more information.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T_array</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">]],</span> <span class="n">U_array</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">]],</span> <span class="n">V_array</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">]],</span> <span class="n">M_vals</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">],</span> <span class="n">approx_error</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">M_vals</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="c1"># qualtran AdditionGate doesn&#39;t decompose properly for bitsize (logM) of 1 so need this warning for now</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;All M_vals must be greater than 2 for full circuit decomposition to work, currently M_vals=</span><span class="si">{</span><span class="n">M_vals</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__T_array</span> <span class="o">=</span> <span class="n">T_array</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__U_array</span> <span class="o">=</span> <span class="n">U_array</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__V_array</span> <span class="o">=</span> <span class="n">V_array</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__M_vals</span> <span class="o">=</span> <span class="n">M_vals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__approx_error</span> <span class="o">=</span> <span class="n">approx_error</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__logM_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">M_vals</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__N</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">M_vals</span><span class="p">))</span> <span class="c1"># total number of spin orbitals. Factor of 2 for up and down spin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__Np_bits</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__logM_vals</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__D</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">M_vals</span><span class="p">)</span>
+        
+        <span class="n">num_coeffs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">T_array</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">V_array</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">U_array</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__mu</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">approx_error</span> <span class="o">*</span> <span class="n">num_coeffs</span><span class="p">))))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mu</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;approx_error=</span><span class="si">{</span><span class="n">approx_error</span><span class="si">}</span><span class="s2"> may be too large for given basis size </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__M_vals</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">FermionicPrepare_LinearT</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">selection_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Register</span><span class="p">]:</span>
+        <span class="n">theta_reg</span> <span class="o">=</span> <span class="n">Register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;theta&quot;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">QBit</span><span class="p">())</span>
+        <span class="n">U_reg</span> <span class="o">=</span> <span class="n">Register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;U&quot;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">BoundedQUInt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">V_reg</span> <span class="o">=</span> <span class="n">Register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;V&quot;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">BoundedQUInt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">p_reg</span> <span class="o">=</span> <span class="n">Register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__Np_bits</span><span class="p">,</span><span class="n">iteration_length</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__N</span><span class="o">/</span><span class="mi">2</span><span class="p">)))</span>
+        <span class="n">a_reg</span> <span class="o">=</span> <span class="n">Register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">BoundedQUInt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">q_reg</span> <span class="o">=</span> <span class="n">Register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;q&#39;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">BoundedQUInt</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__Np_bits</span><span class="p">,</span><span class="n">iteration_length</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__N</span><span class="o">/</span><span class="mi">2</span><span class="p">)))</span>
+        <span class="n">b_reg</span> <span class="o">=</span> <span class="n">Register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">BoundedQUInt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">theta_reg</span><span class="p">,</span><span class="n">U_reg</span><span class="p">,</span><span class="n">V_reg</span><span class="p">,</span><span class="n">p_reg</span><span class="p">,</span><span class="n">a_reg</span><span class="p">,</span><span class="n">q_reg</span><span class="p">,</span><span class="n">b_reg</span><span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">alternates_bitsize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="c1"># factor of 2 comes from U and V bits</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__logM_vals</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">keep_bitsize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mu</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">junk_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Register</span><span class="p">]:</span>
+        <span class="c1"># These make up the temp register. They are not perfectly uncomputed due to entanglement with the selection register and so must be retained and passed to the next instance of Subprepare/prepare.</span>
+        <span class="k">return</span> <span class="p">(</span> <span class="n">Signature</span><span class="o">.</span><span class="n">build</span><span class="p">(</span>
+            <span class="n">sigma_mu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__mu</span><span class="p">,</span>
+            <span class="n">alt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alternates_bitsize</span><span class="p">,</span>
+            <span class="n">keep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">keep_bitsize</span><span class="p">,</span>
+            <span class="n">theta_alt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">less_than_equal</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span> <span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Signature</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Signature</span><span class="p">([</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">junk_registers</span><span class="p">])</span>
+   
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">T_repr</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">_compat</span><span class="o">.</span><span class="n">proper_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__T_array</span><span class="p">)</span>
+        <span class="n">U_repr</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">_compat</span><span class="o">.</span><span class="n">proper_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__U_array</span><span class="p">)</span>
+        <span class="n">V_repr</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">_compat</span><span class="o">.</span><span class="n">proper_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__V_array</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;pyLIQTR.FermionicPrepare_LinearT(&#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">T_repr</span><span class="si">}</span><span class="s1">, &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">U_repr</span><span class="si">}</span><span class="s1">, &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">V_repr</span><span class="si">}</span><span class="s1">, &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__M_vals</span><span class="si">}</span><span class="s1">, &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__approx_error</span><span class="si">}</span><span class="s1">)&#39;</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="FermionicPrepare_LinearT.decompose_from_registers">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.FermionicPrepare_LinearT.decompose_from_registers">[docs]</a>
+    <span class="k">def</span> <span class="nf">decompose_from_registers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">,</span> <span class="o">**</span><span class="n">quregs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">OP_TREE</span><span class="p">:</span>
+        
+        <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;U&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;V&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;q&#39;</span><span class="p">]</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+        <span class="n">theta</span><span class="p">,</span> <span class="n">theta_alt</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;theta_alt&#39;</span><span class="p">]</span>
+        <span class="n">sigma_mu</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">keep</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;sigma_mu&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;alt&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;keep&#39;</span><span class="p">]</span>
+        <span class="n">less_than_equal</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;less_than_equal&#39;</span><span class="p">]</span>
+
+        <span class="c1"># seperate p and q registers into D registers each with sizes according to logM_vals</span>
+        <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">q_regs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">p_regs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">logM</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__logM_vals</span><span class="p">:</span>
+            <span class="n">q_regs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">logM</span><span class="p">])</span>
+            <span class="n">p_regs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">logM</span><span class="p">])</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="n">logM</span>
+
+        <span class="n">subprepare</span> <span class="o">=</span> <span class="n">Subprepare_LinearT</span><span class="o">.</span><span class="n">from_TUV_arrays</span><span class="p">(</span><span class="n">T_array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__T_array</span><span class="p">,</span> <span class="n">U_array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__U_array</span><span class="p">,</span> <span class="n">V_array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__V_array</span><span class="p">,</span> <span class="n">M_vals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__M_vals</span><span class="p">,</span> <span class="n">approx_error</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__approx_error</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">subprepare</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span><span class="n">V</span><span class="o">=</span><span class="n">V</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="n">p</span><span class="p">,</span><span class="n">sigma_mu</span><span class="o">=</span><span class="n">sigma_mu</span><span class="p">,</span><span class="n">alt</span><span class="o">=</span><span class="n">alt</span><span class="p">,</span><span class="n">keep</span><span class="o">=</span><span class="n">keep</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span><span class="n">theta_alt</span><span class="o">=</span><span class="n">theta_alt</span><span class="p">,</span><span class="n">less_than_equal</span><span class="o">=</span><span class="n">less_than_equal</span><span class="p">)</span>
+
+        <span class="c1"># prepare a uniform superposition over M for each dimension on the q register, zero-controlled on U</span>
+        <span class="k">for</span> <span class="n">qi</span><span class="p">,</span> <span class="n">q_reg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">q_regs</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">PrepareUniformSuperposition</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__M_vals</span><span class="p">[</span><span class="n">qi</span><span class="p">]),</span><span class="n">cvs</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,))</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">ctrl</span><span class="o">=</span><span class="n">U</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="n">q_reg</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">controlled_by</span><span class="p">(</span><span class="o">*</span><span class="n">V</span><span class="p">)</span>
+        <span class="n">control_bits</span> <span class="o">=</span> <span class="p">[[</span><span class="n">bit</span><span class="p">]</span> <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">V</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
+        <span class="k">yield</span> <span class="n">MultiControlPauli</span><span class="p">(</span><span class="n">cvs</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span><span class="o">+</span><span class="p">(</span><span class="mi">0</span><span class="p">,)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__Np_bits</span><span class="p">,</span><span class="n">target_gate</span><span class="o">=</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">)</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">controls</span><span class="o">=</span><span class="n">control_bits</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">MultiControlPauli</span><span class="p">(</span><span class="n">cvs</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span><span class="o">+</span><span class="p">(</span><span class="mi">0</span><span class="p">,)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__Np_bits</span><span class="p">,</span><span class="n">target_gate</span><span class="o">=</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">controls</span><span class="o">=</span><span class="n">control_bits</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">*</span><span class="n">b</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">basic_gates</span><span class="o">.</span><span class="n">swap</span><span class="o">.</span><span class="n">CSwap</span><span class="o">.</span><span class="n">make_on</span><span class="p">(</span><span class="n">ctrl</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">Mi</span><span class="p">,</span><span class="n">logM</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__logM_vals</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">Add</span><span class="p">(</span><span class="n">a_dtype</span><span class="o">=</span><span class="n">QInt</span><span class="p">(</span><span class="n">logM</span><span class="p">))</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">q_regs</span><span class="p">[</span><span class="n">Mi</span><span class="p">],</span><span class="o">*</span><span class="n">p_regs</span><span class="p">[</span><span class="n">Mi</span><span class="p">])</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Subprepare_LinearT">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT">[docs]</a>
+<span class="nd">@cirq</span><span class="o">.</span><span class="n">value_equality</span><span class="p">()</span>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">frozen</span>
+<span class="k">class</span> <span class="nc">Subprepare_LinearT</span><span class="p">(</span><span class="n">GateWithRegisters</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Implements circuit from Fig. 15 of https://arxiv.org/pdf/1805.03662.pdf. Code structure based on qualtran.StatePreparationAliasSampling. </span>
+
+<span class="sd">    Initializes the sate </span>
+<span class="sd">    </span>
+<span class="sd">    .. math::</span>
+<span class="sd">        \\sum_{d=0}^{N-1} ( U(d) |\\theta_d\\rangle |1\\rangle_U |0\\rangle_V  + T(d) |\\theta_d^0\\rangle |0\\rangle_U |0\\rangle_V  + V(d) |\\theta_d^1\\rangle |0\\rangle_U |1\\rangle_V ) |d\\rangle |temp_d\\rangle</span>
+<span class="sd">        </span>
+<span class="sd">    where the coefficients :math:`U(d)`, :math:`T(d)`, and :math:`V(d)` are :math:`\\mu`-bit binary approximations to the true values. The preparation involves classical alias sampling.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">M_vals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="c1"># number of p index values per dimension</span>
+    <span class="n">logM_vals</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">]</span> <span class="c1"># ceil(log2) of the above</span>
+    <span class="n">D</span><span class="p">:</span> <span class="nb">int</span> <span class="c1"># spatial dimension</span>
+    <span class="n">alt</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">]</span> <span class="c1"># alternate indices</span>
+    <span class="n">keep</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">]</span> <span class="c1"># probability numerator for keeping the initially sampled index. Full probability is keep/2**mu</span>
+    <span class="n">theta</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">]</span> <span class="c1"># represents signs (+/-) of input coefficients. 0 for positive, 1 for negative.</span>
+    <span class="n">theta_alt</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">]</span> <span class="c1"># signs of coefficients at the alternate indices.</span>
+    <span class="n">mu</span><span class="p">:</span> <span class="nb">int</span> <span class="c1"># exponent of the denominator to divide keep by in order to get a probability. Related to precision of the approximation.</span>
+    
+
+<div class="viewcode-block" id="Subprepare_LinearT.from_TUV_arrays">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.from_TUV_arrays">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_TUV_arrays</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">T_array</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">]],</span><span class="n">U_array</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">]],</span><span class="n">V_array</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">]],</span> <span class="n">M_vals</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">]</span> <span class="p">,</span><span class="o">*</span><span class="p">,</span> <span class="n">approx_error</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-3</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Subprepare_LinearT&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Factory to construct the state subpreparation gate for a given set of T, U, and V coefficients.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            T_array: The (XZX + YZY) operator coefficients, equivalent to tilde(T)**2 in the reference. Formatted such that the ith coefficient, Ti = T(i), is given by T_array[i] = ((1-sign(Ti))/2,abs(Ti)).</span>
+<span class="sd">            U_array: The (Z) operator coefficients, equivalent to tilde(U)**2 in the reference. Formatted the same as T_array.</span>
+<span class="sd">            V_array: The (ZZ) operator coefficients, equivalent to tilde(V)**2 in the reference. Formatted the same as T_array.</span>
+<span class="sd">            M_vals: Number of grid points (spin orbitals) along each spatial dimension.</span>
+<span class="sd">            approx_error: The desired accuracy to represent each coefficient</span>
+<span class="sd">                (which sets mu size and keep/alt integers).</span>
+<span class="sd">                See `qualtran.linalg.lcu_util.preprocess_lcu_coefficients_for_reversible_sampling`</span>
+<span class="sd">                for more information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># NOTE: the order of T, V, and U is important since T -&gt; 00, V -&gt; 01, U -&gt; 10 in terms of the UV registers</span>
+        <span class="n">coefficients</span> <span class="o">=</span> <span class="p">[</span><span class="n">coeff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">T_array</span> <span class="o">+</span> <span class="n">V_array</span> <span class="o">+</span> <span class="n">U_array</span><span class="p">]</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">coeff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">T_array</span> <span class="o">+</span> <span class="n">V_array</span> <span class="o">+</span> <span class="n">U_array</span><span class="p">])</span> <span class="c1"># entries should be 0 or 1</span>
+
+        <span class="n">alt</span><span class="p">,</span> <span class="n">keep</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">preprocess_lcu_coefficients_for_reversible_sampling</span><span class="p">(</span>
+            <span class="n">lcu_coefficients</span><span class="o">=</span><span class="n">coefficients</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">approx_error</span>
+        <span class="p">)</span>
+        <span class="n">theta_alt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">theta</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">alt</span><span class="p">])</span>
+
+        <span class="n">logM_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">M_vals</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int_&#39;</span><span class="p">)</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">M_vals</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Subprepare_LinearT</span><span class="p">(</span>
+            <span class="n">M_vals</span><span class="o">=</span><span class="n">M_vals</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="c1"># convert numpy int to python int</span>
+            <span class="n">logM_vals</span><span class="o">=</span><span class="n">logM_vals</span><span class="p">,</span>
+            <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span>
+            <span class="n">alt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alt</span><span class="p">),</span>
+            <span class="n">keep</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">keep</span><span class="p">),</span>
+            <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span>
+            <span class="n">theta_alt</span> <span class="o">=</span> <span class="n">theta_alt</span><span class="p">,</span>
+            <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">alternates_bitsize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="c1"># factor of 2 comes from U and V bits</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logM_vals</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">keep_bitsize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">selection_bitsize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="c1"># factor of 2 comes from U and V bits</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logM_vals</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">junk_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Register</span><span class="p">]:</span>
+        <span class="c1"># These (except for theta) make up the temp register. They are not perfectly uncomputed due to entanglement with the selection register and so must be retained and passed to the next instance of Subprepare/prepare.</span>
+        <span class="k">return</span> <span class="p">(</span> <span class="n">Signature</span><span class="o">.</span><span class="n">build</span><span class="p">(</span>
+            <span class="n">sigma_mu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span>
+            <span class="n">alt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alternates_bitsize</span><span class="p">,</span>
+            <span class="n">keep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">keep_bitsize</span><span class="p">,</span>
+            <span class="n">theta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">theta_alt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">less_than_equal</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span> <span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">selection_registers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Register</span><span class="p">]:</span>
+        <span class="n">U_reg</span> <span class="o">=</span> <span class="n">Register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;U&quot;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">BoundedQUInt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">V_reg</span> <span class="o">=</span> <span class="n">Register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;V&quot;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">BoundedQUInt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">d_reg</span> <span class="o">=</span> <span class="n">Register</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">QAny</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logM_vals</span><span class="p">))))</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">U_reg</span><span class="p">,</span>
+            <span class="n">V_reg</span><span class="p">,</span>
+            <span class="n">d_reg</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Signature</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Signature</span><span class="p">([</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_registers</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">junk_registers</span><span class="p">])</span>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">M_repr</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">_compat</span><span class="o">.</span><span class="n">proper_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_vals</span><span class="p">)</span>
+        <span class="n">logM_repr</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">_compat</span><span class="o">.</span><span class="n">proper_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logM_vals</span><span class="p">)</span>
+        <span class="n">alt_repr</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">_compat</span><span class="o">.</span><span class="n">proper_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alt</span><span class="p">)</span>
+        <span class="n">keep_repr</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">_compat</span><span class="o">.</span><span class="n">proper_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keep</span><span class="p">)</span>
+        <span class="n">theta_repr</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">_compat</span><span class="o">.</span><span class="n">proper_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">theta_alt_repr</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">_compat</span><span class="o">.</span><span class="n">proper_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta_alt</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;pyLIQTR.Subprepare_LinearT(&#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">M_repr</span><span class="si">}</span><span class="s1">, &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">logM_repr</span><span class="si">}</span><span class="s1">, &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="si">}</span><span class="s1">, &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">alt_repr</span><span class="si">}</span><span class="s1">, &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">keep_repr</span><span class="si">}</span><span class="s1">, &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">theta_repr</span><span class="si">}</span><span class="s1">, &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">theta_alt_repr</span><span class="si">}</span><span class="s1">, &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="si">}</span><span class="s1">)&#39;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_value_equality_values_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># NOTE: needed to make qualtran.t_complexity() work. Returns values used to determine when two objects are equal. See https://github.com/quantumlib/Cirq/blob/v1.2.0/cirq-core/cirq/value/value_equality_attr.py#L26 for more info</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_vals</span><span class="p">),</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logM_vals</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">,</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alt</span><span class="p">),</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keep</span><span class="p">),</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">),</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta_alt</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Subprepare_LinearT.decompose_from_registers">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.decompose_from_registers">[docs]</a>
+    <span class="k">def</span> <span class="nf">decompose_from_registers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">,</span> <span class="o">**</span><span class="n">quregs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Qid</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">OP_TREE</span><span class="p">:</span>
+        
+        <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;U&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;V&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span>
+        <span class="n">sigma_mu</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">keep</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;sigma_mu&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;alt&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;keep&#39;</span><span class="p">]</span>
+        <span class="n">theta</span><span class="p">,</span> <span class="n">theta_alt</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">],</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;theta_alt&#39;</span><span class="p">]</span>
+        <span class="n">less_than_equal</span> <span class="o">=</span> <span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;less_than_equal&#39;</span><span class="p">]</span>
+
+        <span class="c1"># seperate d register into D registers with sizes according to logM_vals</span>
+        <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">d_regs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">logM</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">logM_vals</span><span class="p">:</span>
+            <span class="n">d_regs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">logM</span><span class="p">])</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="n">logM</span>
+
+        <span class="c1"># prepare a uniform superposition on the UV bits to produce |00&gt;_UV -&gt; (|00&gt;_UV + |01&gt;_UV + |10&gt;_UV)/sqrt(3)</span>
+        <span class="k">yield</span> <span class="n">PrepareUniformSuperposition</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="p">[</span><span class="o">*</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;U&#39;</span><span class="p">],</span><span class="o">*</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;V&#39;</span><span class="p">]],</span><span class="n">controls</span><span class="o">=</span><span class="p">[])</span>
+        <span class="c1"># prepare a uniform superposition over M for each dimension on the d register</span>
+        <span class="k">for</span> <span class="n">di</span><span class="p">,</span> <span class="n">d_reg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">d_regs</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">PrepareUniformSuperposition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_vals</span><span class="p">[</span><span class="n">di</span><span class="p">])</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">d_reg</span><span class="p">)</span>
+        <span class="c1"># prepare uniform superposition on sigma_mu register for comparing to keep during alias sampling procedure</span>
+        <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">on_each</span><span class="p">(</span><span class="o">*</span><span class="n">sigma_mu</span><span class="p">)</span>
+        <span class="c1"># use QROM to iterate over combined UV-d registers to load theta, alt and keep data</span>
+        <span class="n">qrom_gate</span> <span class="o">=</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">data_loading</span><span class="o">.</span><span class="n">QROM</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">alt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta_alt</span><span class="p">],</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_bitsize</span><span class="p">,),</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alternates_bitsize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_bitsize</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">yield</span> <span class="n">qrom_gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="o">*</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;U&#39;</span><span class="p">],</span><span class="o">*</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;V&#39;</span><span class="p">],</span><span class="o">*</span><span class="n">quregs</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]],</span> <span class="n">target0_</span><span class="o">=</span><span class="n">alt</span><span class="p">,</span> <span class="n">target1_</span><span class="o">=</span><span class="n">keep</span><span class="p">,</span> <span class="n">target2_</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">target3_</span><span class="o">=</span><span class="n">theta_alt</span><span class="p">)</span>
+        <span class="c1"># flip less_than_equal bit when keep is less than sigma_mu</span>
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">arithmetic</span><span class="o">.</span><span class="n">comparison</span><span class="o">.</span><span class="n">LessThanEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span>
+            <span class="o">*</span><span class="n">keep</span><span class="p">,</span> <span class="o">*</span><span class="n">sigma_mu</span><span class="p">,</span> <span class="o">*</span><span class="n">less_than_equal</span>
+        <span class="p">)</span>
+        <span class="c1"># swap alt data controlled on less_than_equal_bit</span>
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">basic_gates</span><span class="o">.</span><span class="n">swap</span><span class="o">.</span><span class="n">CSwap</span><span class="o">.</span><span class="n">make_on</span><span class="p">(</span>
+            <span class="n">ctrl</span><span class="o">=</span><span class="n">less_than_equal</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">theta_alt</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">theta</span>
+        <span class="p">)</span>
+        <span class="c1">## the zero indexed alt bit corresponds to U</span>
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">basic_gates</span><span class="o">.</span><span class="n">swap</span><span class="o">.</span><span class="n">CSwap</span><span class="o">.</span><span class="n">make_on</span><span class="p">(</span>
+            <span class="n">ctrl</span><span class="o">=</span><span class="n">less_than_equal</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">alt</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">y</span><span class="o">=</span><span class="n">U</span>
+        <span class="p">)</span>
+        <span class="c1">## the one indexed alt bit corresponds to V</span>
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">basic_gates</span><span class="o">.</span><span class="n">swap</span><span class="o">.</span><span class="n">CSwap</span><span class="o">.</span><span class="n">make_on</span><span class="p">(</span>
+            <span class="n">ctrl</span><span class="o">=</span><span class="n">less_than_equal</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">alt</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">y</span><span class="o">=</span><span class="n">V</span>
+        <span class="p">)</span>
+        <span class="c1">## the remaining alt bits correspond to d</span>
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">basic_gates</span><span class="o">.</span><span class="n">swap</span><span class="o">.</span><span class="n">CSwap</span><span class="o">.</span><span class="n">make_on</span><span class="p">(</span>
+            <span class="n">ctrl</span><span class="o">=</span><span class="n">less_than_equal</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">alt</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span>
+        <span class="p">)</span>
+        <span class="c1"># undo the less than comparison so the less_than_equal_bit returns to |0&gt;</span>
+        <span class="k">yield</span> <span class="n">qt</span><span class="o">.</span><span class="n">bloqs</span><span class="o">.</span><span class="n">arithmetic</span><span class="o">.</span><span class="n">comparison</span><span class="o">.</span><span class="n">LessThanEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span>
+            <span class="o">*</span><span class="n">keep</span><span class="p">,</span> <span class="o">*</span><span class="n">sigma_mu</span><span class="p">,</span> <span class="o">*</span><span class="n">less_than_equal</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

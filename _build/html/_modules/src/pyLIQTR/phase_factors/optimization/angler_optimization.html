@@ -1,0 +1,775 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.phase_factors.optimization.angler_optimization &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.phase_factors.optimization.angler_optimization</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.phase_factors.optimization.angler_optimization</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###       ANGLER   -    Phase angles for quantum signal processing.          ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   REVISION: 11/21/2022</span>
+<span class="c1">###</span>
+<span class="c1">###   Justin E. Elenewski  -  MIT Lincoln Laboratory</span>
+<span class="c1">###   justin dot elenewski at ll dot mit dot edu</span>
+<span class="c1">###</span>
+
+<span class="kn">import</span> <span class="nn">abc</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>                <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.special</span>        <span class="k">as</span> <span class="nn">sfn</span>
+<span class="kn">import</span> <span class="nn">copy</span>                 <span class="k">as</span> <span class="nn">copy</span>
+
+<span class="kn">from</span>   <span class="nn">pyLIQTR.phase_factors.optimization.ChebyshevPoly</span>    <span class="kn">import</span>  <span class="n">ChebyshevPoly</span>
+<span class="kn">from</span>   <span class="nn">pyLIQTR.phase_factors.optimization.ChebyshevPoly</span>    <span class="kn">import</span>  <span class="n">eval_chebyshev</span><span class="p">,</span> <span class="n">eval_chebyshev_strict</span>
+
+<span class="kn">from</span>   <span class="nn">pyLIQTR.phase_factors.angler</span>                        <span class="kn">import</span>  <span class="n">Angler_abstract</span>
+
+
+
+
+
+
+<div class="viewcode-block" id="Angler_opt">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt">[docs]</a>
+<span class="k">class</span> <span class="nc">Angler_opt</span><span class="p">:</span>
+
+    <span class="c1">## QSP unitary in the &quot;W&quot; convention</span>
+    <span class="c1">##</span>
+    <span class="c1"># _Wx    = lambda x : np.array( [[          x,             1.0j*np.sqrt(1-x**2) ],</span>
+    <span class="c1">#                         [ 1.0j*np.sqrt(1-x**2),            x           ]] )</span>
+
+    <span class="c1">## Z-rotation by pi/4</span>
+    <span class="c1">##</span>
+    <span class="n">_Z_pi4</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[[</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span><span class="p">),</span>              <span class="mf">0.0</span>              <span class="p">],</span>
+                         <span class="p">[</span>          <span class="mf">0.0</span><span class="p">,</span>         <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span><span class="p">))</span> <span class="p">]])</span>
+
+    <span class="k">def</span> <span class="nf">_Wx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="n">M</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[[</span>          <span class="n">x</span><span class="p">,</span>             <span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">],</span>
+                        <span class="p">[</span> <span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span>            <span class="n">x</span>           <span class="p">]]</span> <span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">coeffs</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">],</span><span class="n">parity</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">cheb_poly</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bfgs_conv</span><span class="o">=</span><span class="mf">1.0e-12</span><span class="p">,</span><span class="n">max_iter</span><span class="o">=</span><span class="mf">5e4</span><span class="p">,</span><span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+
+        <span class="c1">## Make a copy of coefficients from an existing ChebyshevPoly object.</span>
+        <span class="c1">##</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cheb_poly</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">poly</span>    <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">cheb_poly</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">poly</span>    <span class="o">=</span> <span class="n">ChebyshevPoly</span><span class="p">(</span><span class="n">coeffs</span><span class="o">=</span><span class="n">coeffs</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="n">parity</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_success</span>            <span class="o">=</span>  <span class="o">-</span><span class="mi">1</span>          <span class="c1"># Procedural success flag (-1 = not run; 0 = failed; 1 = successful)</span>
+
+
+        <span class="c1">## Suppress progress output</span>
+        <span class="c1">##</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_silent</span>     <span class="o">=</span> <span class="n">silent</span>
+
+        <span class="c1">## Set parity equal to polynomial parity and make the target function</span>
+        <span class="c1">## simply evaluation of the Chebyshev polynomial (makes for easier</span>
+        <span class="c1">## access by internal and external routines).</span>
+        <span class="c1">##</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parity</span>      <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="o">.</span><span class="n">parity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_tgt</span>       <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">]))</span>
+
+        <span class="c1">## Set optimizer properties that will frequently be changed between</span>
+        <span class="c1">## different fucntions.</span>
+        <span class="c1">##</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bfgs_conv</span>   <span class="o">=</span> <span class="n">bfgs_conv</span>        <span class="c1"># Convergence threshold for L-BFGS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span>    <span class="o">=</span> <span class="n">max_iter</span>         <span class="c1"># Max. number of L-BFGS iterations</span>
+
+
+        <span class="c1">## Defaults for L-BFGS parameters that are much less likely to be</span>
+        <span class="c1">## changed.</span>
+        <span class="c1">##</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span>       <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">accept_rate</span> <span class="o">=</span> <span class="mf">1.0e-3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_step</span>    <span class="o">=</span> <span class="mf">1.0e-5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmem</span>        <span class="o">=</span> <span class="mi">200</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_conv</span>  <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_silent</span>
+
+        <span class="c1">## Placeholders for the generated phase angles and final value of the</span>
+        <span class="c1">## L-BFGS objective function.</span>
+        <span class="c1">##</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phases</span>      <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_value</span>   <span class="o">=</span> <span class="kc">None</span>
+
+
+
+
+<div class="viewcode-block" id="Angler_opt.set_poly">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt.set_poly">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_poly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">cheb_poly</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">cheb_poly</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">poly</span>    <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">cheb_poly</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">poly</span>    <span class="o">=</span> <span class="n">ChebyshevPoly</span><span class="p">(</span><span class="n">coeffs</span><span class="o">=</span><span class="n">coeffs</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="n">parity</span><span class="p">)</span>
+
+        <span class="c1"># self.f_tgt = lambda x : eval_chebyshev_strict(np.array([x]),</span>
+        <span class="c1">#                                              self.coeffs, self.parity)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parity</span>      <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="o">.</span><span class="n">parity</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_tgt</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">]))</span>
+
+        <span class="k">return</span></div>
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     _qsp_unitary_symmetric(phi,x, parity)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Calculate the QSP unitary that that is defined by the phase factors</span>
+<span class="c1">###      &lt;phi&gt; and evaluate it with an argument of &lt;x&gt;.  The parity of the</span>
+<span class="c1">###      encoded polynomials are given by &lt;parity&gt;.  Phase factors are assumed</span>
+<span class="c1">###      to have been generated with a SYMMETRIC convention.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      phi     =   array containing QSP phase factors</span>
+<span class="c1">###      x       =   value or array of values for function evaluation</span>
+<span class="c1">###      parity  =   parity of the polynomial terms to evaluate:</span>
+<span class="c1">###</span>
+<span class="c1">###                           0   -&gt;   even terms</span>
+<span class="c1">###                           1   -&gt;   odd terms</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      fx  =   value of function evaluated at point(s) x</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy   as   np</span>
+<span class="c1">###</span>
+
+    <span class="k">def</span> <span class="nf">_qsp_unitary_symmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">Np</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Np</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">phi</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="n">phi</span><span class="o">.</span><span class="n">size</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>     <span class="c1"># currently uses &quot;fortran&quot;</span>
+                                                        <span class="c1"># column-major ordering</span>
+
+        <span class="n">Z_phi</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">n</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[[</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">[</span><span class="n">n</span><span class="p">]),</span>           <span class="mf">0.0</span>       <span class="p">],</span>
+                                      <span class="p">[</span>        <span class="mf">0.0</span><span class="p">,</span>          <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">[</span><span class="n">n</span><span class="p">])]])</span>
+        <span class="c1">## EVEN PARITY</span>
+        <span class="c1">##</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+
+            <span class="n">seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Np</span><span class="p">):</span>
+                <span class="n">seq</span>  <span class="o">=</span>  <span class="p">(</span><span class="n">seq</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Wx</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">@</span> <span class="n">Z_phi</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+            <span class="n">seq</span>  <span class="o">=</span>  <span class="n">seq</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Z_pi4</span>
+            <span class="n">Ua</span>   <span class="o">=</span>  <span class="n">seq</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">Z_phi</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">@</span> <span class="n">seq</span><span class="p">)</span>
+
+        <span class="c1">## ODD PARITY</span>
+        <span class="c1">##</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">seq</span> <span class="o">=</span> <span class="n">Z_phi</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Np</span><span class="p">):</span>
+                <span class="n">seq</span>  <span class="o">=</span>  <span class="n">seq</span> <span class="o">@</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Wx</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">@</span> <span class="n">Z_phi</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+
+            <span class="n">seq</span>  <span class="o">=</span>  <span class="n">seq</span>   <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Z_pi4</span>
+            <span class="n">Ua</span>   <span class="o">=</span>  <span class="n">seq</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Wx</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">@</span> <span class="n">seq</span><span class="p">)</span>
+
+
+        <span class="k">return</span><span class="p">(</span><span class="n">Ua</span><span class="p">)</span>
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     _qsp_obj_func(phi,x_vec,opts)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Calculate the objective function associated with the optimization-based</span>
+<span class="c1">###      approach to QSP phase angle generation.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      phi     =   array containing QSP phase factors</span>
+<span class="c1">###      x_vec   =   value or array of values for function evaluation</span>
+<span class="c1">###      opts    =   params_gradopt dataclass</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      obj  =   value of function evaluated at point(s) x_vec</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy   as   np</span>
+<span class="c1">###</span>
+
+    <span class="k">def</span> <span class="nf">_qsp_objective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">x_vec</span><span class="p">):</span>
+
+        <span class="n">M</span>   <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_vec</span><span class="p">)</span>
+        <span class="n">Np</span>  <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+
+            <span class="n">Ua</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qsp_unitary_symmetric</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="n">x_vec</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">obj</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Ua</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_tgt</span><span class="p">(</span><span class="n">x_vec</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     _qsp_obj_func_grad(phi,x_vec,opts)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Calculate the analytical gradient of the objective function, as needed</span>
+<span class="c1">###      for the optimization-based approach to QSP phase angle generation.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      phi     =   array containing QSP phase factors</span>
+<span class="c1">###      x_vec   =   value or array of values for function evaluation</span>
+<span class="c1">###      opts    =   params_gradopt dataclass</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      obj  =   value of the objective function evaluated at point(s) x_vec</span>
+<span class="c1">###               with phases phi</span>
+<span class="c1">###      grad =   gradient of the objective function with respect to the angles</span>
+<span class="c1">###               phi, when evaluated at point(s) x_vec</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy   as   np</span>
+<span class="c1">###</span>
+
+    <span class="k">def</span> <span class="nf">_qsp_objective_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">x_vec</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">D</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">D</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">phi</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="n">phi</span><span class="o">.</span><span class="n">size</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+
+        <span class="n">M</span>       <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_vec</span><span class="p">)</span>
+
+        <span class="n">obj</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>                <span class="c1"># Array to hold values of objective function</span>
+        <span class="n">grad</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span><span class="n">D</span><span class="p">))</span>            <span class="c1"># Array to hold values of gradient for each degree d</span>
+
+        <span class="n">IV</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="n">j</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">j</span><span class="p">]])</span>
+
+        <span class="c1">##</span>
+        <span class="n">Z_phi</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">n</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[[</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">[</span><span class="n">n</span><span class="p">]),</span>           <span class="mf">0.0</span>       <span class="p">],</span>
+                                      <span class="p">[</span>        <span class="mf">0.0</span><span class="p">,</span>          <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">[</span><span class="n">n</span><span class="p">])]])</span>
+
+
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+
+            <span class="n">x</span>        <span class="o">=</span> <span class="n">x_vec</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
+
+            <span class="c1">## Temporary arrays which will to hold components of the objective</span>
+            <span class="c1">## gradient with respect to phase set.</span>
+            <span class="c1">##</span>
+            <span class="n">tmp1</span>         <span class="o">=</span>  <span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">D</span><span class="p">))</span>
+            <span class="n">tmp2</span>         <span class="o">=</span>  <span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">D</span><span class="p">))</span>
+
+            <span class="n">tmp1</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>  <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">tmp2</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>  <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">Z_phi</span><span class="p">(</span><span class="n">D</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">_Z_pi4</span><span class="p">)</span>
+
+
+            <span class="k">for</span> <span class="n">d1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">D</span><span class="p">):</span>
+
+                <span class="c1"># &quot;Right&quot; side terms</span>
+                <span class="n">tmp1</span><span class="p">[:,:,</span><span class="n">d1</span><span class="p">]</span>  <span class="o">=</span> <span class="p">(</span><span class="n">tmp1</span><span class="p">[:,:,</span><span class="n">d1</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">@</span> <span class="n">Z_phi</span><span class="p">(</span><span class="n">d1</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Wx</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+                <span class="c1"># &quot;Left&quot; side terms</span>
+                <span class="n">tmp2</span><span class="p">[:,:,</span><span class="n">d1</span><span class="p">]</span>  <span class="o">=</span> <span class="n">Z_phi</span><span class="p">(</span><span class="n">D</span><span class="o">-</span><span class="n">d1</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Wx</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">@</span> <span class="n">tmp2</span><span class="p">[:,:,</span><span class="n">d1</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+
+                <span class="c1"># Compute unitary from &quot;left&quot; and &quot;right&quot; parts, then estimate the</span>
+                <span class="c1"># deficit in the objective function</span>
+                <span class="c1">#</span>
+                <span class="n">Ua</span>         <span class="o">=</span> <span class="p">(</span><span class="n">tmp2</span><span class="p">[:,:,</span><span class="n">D</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Wx</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">@</span> <span class="n">tmp2</span><span class="p">[:,:,</span><span class="n">D</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">leftseq</span>    <span class="o">=</span> <span class="p">(</span><span class="n">tmp2</span><span class="p">[:,:,</span><span class="n">D</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Wx</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+                <span class="n">d_obj</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Ua</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_tgt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+                <span class="k">for</span> <span class="n">d2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
+
+                    <span class="n">grad_tmp</span>   <span class="o">=</span> <span class="n">leftseq</span> <span class="o">@</span> <span class="p">((</span><span class="n">tmp1</span><span class="p">[:,:,</span><span class="n">d2</span><span class="p">]</span> <span class="o">@</span> <span class="n">IV</span><span class="p">)</span> <span class="o">@</span> <span class="n">tmp2</span><span class="p">[:,:,</span><span class="n">D</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">d2</span><span class="p">])</span>
+                    <span class="n">grad</span><span class="p">[</span><span class="n">m</span><span class="p">,</span><span class="n">d2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">grad_tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">d_obj</span>
+
+                <span class="n">grad</span><span class="p">[</span><span class="n">m</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>    <span class="o">=</span> <span class="n">grad</span><span class="p">[</span><span class="n">m</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">2.0</span>
+                <span class="n">obj</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>       <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Ua</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_tgt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">Ua</span>          <span class="o">=</span> <span class="p">(</span><span class="n">tmp2</span><span class="p">[:,:,</span><span class="n">D</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>  <span class="o">@</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_Wx</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="o">@</span>  <span class="n">tmp2</span><span class="p">[:,:,</span><span class="n">D</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">leftseq</span>     <span class="o">=</span>  <span class="n">tmp2</span><span class="p">[:,:,</span><span class="n">D</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>  <span class="o">@</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_Wx</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+                <span class="n">d_obj</span>       <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Ua</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_tgt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">d2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
+
+                    <span class="n">grad_tmp</span>   <span class="o">=</span> <span class="n">leftseq</span> <span class="o">@</span> <span class="p">((</span><span class="n">tmp1</span><span class="p">[:,:,</span><span class="n">d2</span><span class="p">]</span> <span class="o">@</span> <span class="n">IV</span><span class="p">)</span> <span class="o">@</span> <span class="n">tmp2</span><span class="p">[:,:,</span><span class="n">D</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">d2</span><span class="p">])</span>
+                    <span class="n">grad</span><span class="p">[</span><span class="n">m</span><span class="p">,</span><span class="n">d2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">grad_tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">d_obj</span>
+
+                <span class="n">obj</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Ua</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">f_tgt</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span><span class="n">obj</span><span class="p">)</span>
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     _phases_lbfgs(obj_func,grad_func,x_vec,phi,opts)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Runs an L-BFGS optimizer for QSP phase angle generation.  Pulled</span>
+<span class="c1">###      very directly from the methods in QSPPACK:</span>
+<span class="c1">###</span>
+<span class="c1">###                 Xiang Meng, K. Birgitta Whaley, Lin Lin.</span>
+<span class="c1">###                 &quot;Efficient Phase Factor Evaluation in Quantum</span>
+<span class="c1">###                     Signal Processing&quot;   [arXiv:2002.11649].</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      obj_func     =   objective function</span>
+<span class="c1">###      grad_func    =   gradient of objective function</span>
+<span class="c1">###      x_vec        =   array of points for evaluation</span>
+<span class="c1">###      phi          =   initial phase angle set</span>
+<span class="c1">###      opts         =   params_gradopt dataclass</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      phi          =   optimized set of phase angles</span>
+<span class="c1">###      obj_max      =   maximal value of the objective function over x_vec</span>
+<span class="c1">###                       in the final optimization step</span>
+<span class="c1">###      itr          =   total number of iterations for the optimizer</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy   as   np</span>
+<span class="c1">###</span>
+
+    <span class="k">def</span> <span class="nf">_phases_lbfgs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj_func</span><span class="p">,</span><span class="n">grad_func</span><span class="p">,</span><span class="n">x_vec</span><span class="p">,</span><span class="n">phi</span><span class="p">):</span>
+
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_silent</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="o">*</span><span class="mi">80</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#             GRADIENT OPTIMIZER for QSP Phase Angle Determination             #&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="o">*</span><span class="mi">80</span><span class="p">,</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Iteration</span><span class="se">\t\t</span><span class="s2">Max. Obj.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">50</span><span class="p">,</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">accuracy_target</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bfgs_conv</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="n">d</span>         <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>     <span class="c1"># number of phases</span>
+
+        <span class="c1">## Define memory terms for previous iterations of BFGS optimizer</span>
+        <span class="c1">##</span>
+        <span class="n">mem_size</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>                          <span class="n">mem_now</span>   <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">mem_grad</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">lmem</span><span class="p">,</span><span class="n">d</span><span class="p">));</span>    <span class="n">mem_obj</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">lmem</span><span class="p">,</span><span class="n">d</span><span class="p">));</span>
+        <span class="n">mem_dot</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lmem</span><span class="p">);</span>
+
+        <span class="c1">## Calculate value of BFGS objecive function (e.g., the mean gradient)</span>
+        <span class="c1">##</span>
+        <span class="n">grad_s</span><span class="p">,</span><span class="n">obj_s</span> <span class="o">=</span> <span class="n">grad_func</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="n">x_vec</span><span class="p">)</span>
+        <span class="n">obj_value</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">obj_s</span><span class="p">)</span>
+
+        <span class="n">grad</span>         <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">grad_s</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">run_flag</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">itr</span>      <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">while</span><span class="p">(</span><span class="n">run_flag</span><span class="p">):</span>
+
+            <span class="n">itr</span>      <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">theta_d</span>   <span class="o">=</span> <span class="n">grad</span>
+
+            <span class="n">alpha</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">mem_size</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mem_size</span><span class="p">):</span>
+                <span class="n">subsc</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">mem_now</span><span class="o">-</span><span class="n">k</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">lmem</span><span class="p">)</span>
+                <span class="n">alpha</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">mem_dot</span><span class="p">[</span><span class="n">subsc</span><span class="p">]</span>    <span class="o">*</span>  <span class="p">(</span><span class="n">mem_obj</span><span class="p">[</span><span class="n">subsc</span><span class="p">,:]</span> <span class="o">@</span> <span class="n">theta_d</span><span class="p">)</span>
+                <span class="n">theta_d</span>  <span class="o">=</span> <span class="n">theta_d</span><span class="o">-</span><span class="n">alpha</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>  <span class="o">*</span>   <span class="n">mem_grad</span><span class="p">[</span><span class="n">subsc</span><span class="p">,:]</span>
+
+
+            <span class="n">theta_d</span>   <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">theta_d</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">theta_d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">theta_d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mem_size</span><span class="p">):</span>
+                <span class="n">subsc</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">mem_now</span><span class="o">-</span><span class="p">(</span><span class="n">mem_size</span><span class="o">-</span><span class="n">k</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">lmem</span><span class="p">)</span>
+                <span class="n">beta</span>     <span class="o">=</span> <span class="n">mem_dot</span><span class="p">[</span><span class="n">subsc</span><span class="p">]</span>    <span class="o">*</span>   <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mem_grad</span><span class="p">[</span><span class="n">subsc</span><span class="p">,:],</span><span class="n">theta_d</span><span class="p">)</span>
+                <span class="n">theta_d</span>  <span class="o">=</span> <span class="n">theta_d</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">alpha</span><span class="p">[</span><span class="n">mem_size</span><span class="o">-</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">beta</span><span class="p">,</span>
+                                            <span class="n">mem_obj</span><span class="p">[</span><span class="n">subsc</span><span class="p">,:])</span>
+
+
+            <span class="n">step</span>      <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">exp_des</span>   <span class="o">=</span> <span class="p">(</span><span class="n">grad</span> <span class="o">@</span> <span class="n">theta_d</span><span class="p">)</span>
+
+
+            <span class="n">ts_flag</span>   <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">while</span><span class="p">(</span><span class="n">ts_flag</span><span class="p">):</span>
+                <span class="n">theta_new</span>    <span class="o">=</span> <span class="n">phi</span> <span class="o">-</span> <span class="p">(</span><span class="n">step</span><span class="o">*</span><span class="n">theta_d</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span>
+
+
+
+                <span class="n">obj_snew</span>     <span class="o">=</span> <span class="n">obj_func</span><span class="p">(</span><span class="n">theta_new</span><span class="p">,</span><span class="n">x_vec</span><span class="p">)</span>
+
+                <span class="n">obj_valuenew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">obj_snew</span><span class="p">)</span>
+                <span class="n">ad</span>           <span class="o">=</span> <span class="p">(</span><span class="n">obj_value</span> <span class="o">-</span> <span class="n">obj_valuenew</span><span class="p">)</span>
+
+                <span class="c1"># this is awful style for flow control</span>
+                <span class="k">if</span> <span class="p">((</span><span class="n">ad</span> <span class="o">&gt;</span> <span class="n">exp_des</span><span class="o">*</span><span class="n">step</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">accept_rate</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">step</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_step</span><span class="p">)):</span>
+                    <span class="k">break</span>
+
+                <span class="n">step</span> <span class="o">=</span> <span class="n">step</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span>
+
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">theta_new</span>
+            <span class="n">obj_value</span> <span class="o">=</span> <span class="n">obj_valuenew</span>
+            <span class="n">obj_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">obj_snew</span><span class="p">)</span>
+            <span class="p">[</span><span class="n">grad_s</span><span class="p">,</span><span class="n">obj_s_tmp</span><span class="p">]</span> <span class="o">=</span> <span class="n">grad_func</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="n">x_vec</span><span class="p">)</span>
+            <span class="n">grad_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">grad_s</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">mem_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">lmem</span><span class="p">,</span><span class="n">mem_size</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">mem_now</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">mem_now</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">lmem</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+            <span class="n">mem_grad</span><span class="p">[</span><span class="n">mem_now</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">grad_new</span> <span class="o">-</span> <span class="n">grad</span>
+            <span class="n">mem_obj</span><span class="p">[</span><span class="n">mem_now</span><span class="p">,:]</span>  <span class="o">=</span> <span class="o">-</span><span class="n">step</span><span class="o">*</span><span class="n">theta_d</span>
+
+            <span class="n">mem_dot</span><span class="p">[</span><span class="n">mem_now</span><span class="p">]</span>    <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="n">mem_grad</span><span class="p">[</span><span class="n">mem_now</span><span class="p">,:]</span> <span class="o">@</span> <span class="n">mem_obj</span><span class="p">[</span><span class="n">mem_now</span><span class="p">,:])</span>
+            <span class="n">grad</span> <span class="o">=</span> <span class="n">grad_new</span>
+
+
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">print_conv</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+                <span class="c1">#print(itr, obj_max, ad/(exp_des*step))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">itr</span><span class="p">,</span><span class="s2">&quot;</span><span class="se">\t\t\t</span><span class="si">{a:.6e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">obj_max</span><span class="p">))</span>
+
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">itr</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">GRADOPT-LBFGS: Stopping. Max iterations (&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">,</span><span class="s2">&quot;) reached.  &quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;GRADOPT-LBFGS: Increase iterations or change starting guess...  &quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_success</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">run_flag</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">obj_max</span> <span class="o">&lt;</span> <span class="n">accuracy_target</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_silent</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">GRADOPT-LBFGS: Optimization converged to target accuracy (max_obj &lt;&quot;</span><span class="p">,</span> <span class="n">accuracy_target</span><span class="p">,</span><span class="s2">&quot;).&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_success</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">run_flag</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="n">obj_max</span><span class="p">,</span><span class="n">itr</span><span class="p">)</span>
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     phases_gradopt(poly_coeffs,opts)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Wrapper function for the optimizer-based refinement of phase angles</span>
+<span class="c1">###      for a given QSP sequence.  The target function is approximated by</span>
+<span class="c1">###      Chebyshev polynomial coeffients &lt;poly_coeffs&gt;, and the parity of</span>
+<span class="c1">###      this function is specified through opts.parity</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      poly_coeffs  =   array of Chebyshev expansion coefficients that</span>
+<span class="c1">###                       approximate a target function</span>
+<span class="c1">###      opts         =   params_gradopt dataclass</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      phi_proc     =   array of optimized phases</span>
+<span class="c1">###      obj_value    =   final (maximal) value of the optimizer&#39;s objective</span>
+<span class="c1">###                       function (over all roots of the Chebyshev polynomial)</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy   as   np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="Angler_opt.gradient_optimization">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt.gradient_optimization">[docs]</a>
+    <span class="k">def</span> <span class="nf">gradient_optimization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1"># Number of coefficients in the approximating Chebyshev polynomial</span>
+        <span class="c1">#</span>
+        <span class="c1"># Nc            = len(self.coeffs)</span>
+
+        <span class="n">Nc</span>            <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="o">.</span><span class="n">N</span>
+
+        <span class="c1"># Define target points for fitting in x_vec, corresponding to the</span>
+        <span class="c1"># zeros of a Chebyshev polynomial with degree 2*Nc</span>
+        <span class="c1">#</span>
+        <span class="n">apts</span>          <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,(</span><span class="mi">2</span><span class="o">*</span><span class="n">Nc</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">x_vec</span>         <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">apts</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">Nc</span><span class="p">))</span>
+
+        <span class="c1"># Array to hold resulting phase factors</span>
+        <span class="c1">#</span>
+        <span class="n">phi0</span>          <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Nc</span><span class="p">)</span>
+
+        <span class="c1"># Target function is the Chebyshev polynomial defined by only the even (or odd) terms</span>
+        <span class="c1"># specified by opts.parity and contained in poly_coefs.</span>
+        <span class="c1">#</span>
+        <span class="c1"># self.f_tgt = lambda x : eval_chebyshev_strict(np.array([x]),</span>
+        <span class="c1">#                                                  self.coeffs, self.parity)</span>
+
+
+        <span class="n">phi</span><span class="p">,</span><span class="n">obj_value</span><span class="p">,</span><span class="n">itr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phases_lbfgs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_qsp_objective</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qsp_objective_grad</span><span class="p">,</span>
+                                               <span class="n">x_vec</span><span class="p">,</span><span class="n">phi0</span><span class="p">)</span>
+
+        <span class="c1"># Set initial phase vector to [pi/4, 0.0, 0.0, ... 0.0], which gives robust convergence</span>
+        <span class="c1"># for exponential functions.  This is specific to the symmetrized approach, while</span>
+        <span class="c1"># [pi/4, 0.0, 0.0, ... pi/4] would be needed otherwise.</span>
+        <span class="c1">#</span>
+        <span class="n">phif</span>          <span class="o">=</span> <span class="n">phi</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">phif</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>     <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span>
+
+        <span class="n">Nphi</span>          <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phif</span><span class="p">)</span>
+
+        <span class="c1">## Optimization has computed the target set of phase vectors, but these</span>
+        <span class="c1">## only corespond to unique values.  Here we apply symmetry to get a</span>
+        <span class="c1">## phase angle vector that containts the actual QSP sequence.</span>
+        <span class="c1">##</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+
+            <span class="n">Nproc</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">Nphi</span><span class="o">-</span><span class="mi">1</span>
+
+            <span class="n">phi_proc</span>                  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Nproc</span><span class="p">)</span>
+            <span class="n">phi_proc</span><span class="p">[</span><span class="mi">0</span><span class="p">:(</span><span class="n">Nphi</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>      <span class="o">=</span> <span class="n">phif</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">phi_proc</span><span class="p">[(</span><span class="n">Nphi</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span><span class="n">Nproc</span><span class="p">]</span>  <span class="o">=</span> <span class="n">phif</span><span class="p">[:]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">Nproc</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">Nphi</span>
+
+            <span class="n">phi_proc</span>                  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Nproc</span><span class="p">)</span>
+            <span class="n">phi_proc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">Nphi</span><span class="p">]</span>          <span class="o">=</span> <span class="n">phif</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">phi_proc</span><span class="p">[</span><span class="n">Nphi</span><span class="p">:</span><span class="n">Nproc</span><span class="p">]</span>      <span class="o">=</span> <span class="n">phif</span><span class="p">[:]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phases</span>    <span class="o">=</span> <span class="n">phi_proc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_value</span> <span class="o">=</span> <span class="n">obj_value</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">phi_proc</span><span class="p">,</span><span class="n">obj_value</span><span class="p">)</span></div>
+
+
+
+
+
+
+<div class="viewcode-block" id="Angler_opt.generate">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.angler_optimization.Angler_opt.generate">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient_optimization</span><span class="p">()</span>
+        <span class="k">return</span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     handle_scalar(x)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Converts a scalar value into a numpy array, while leaving a numpy</span>
+<span class="c1">###      array unchanged</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      x  =   Scalar value</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      x  =   The value x as a numpy array</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy          as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="handle_scalar">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.phase_factors.optimization.html#src.pyLIQTR.phase_factors.optimization.angler_optimization.handle_scalar">[docs]</a>
+<span class="k">def</span> <span class="nf">handle_scalar</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

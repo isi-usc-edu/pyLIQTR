@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.utils.tests.test_utils &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.utils.tests.test_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.utils.tests.test_utils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">openfermion.circuits</span> <span class="kn">import</span> <span class="n">trotterize_exp_qubop_to_qasm</span>
+<span class="kn">from</span> <span class="nn">openfermion</span> <span class="kn">import</span> <span class="n">jordan_wigner</span>
+<span class="kn">from</span> <span class="nn">openfermion.chem</span> <span class="kn">import</span> <span class="n">MolecularData</span>
+<span class="kn">from</span> <span class="nn">cirq.contrib</span> <span class="kn">import</span> <span class="n">qasm_import</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c1">#qsp</span>
+<span class="c1"># import pyLIQTR.QSP.gen_qsp                 as qspFuncs</span>
+<span class="c1"># import pyLIQTR.QSP.QSP                     as pQSP</span>
+<span class="c1"># import pyLIQTR.sim_methods.quantum_ops  as vs        </span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.Hamiltonian</span>             <span class="kn">import</span> <span class="n">Hamiltonian</span> <span class="k">as</span> <span class="n">pyH</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.qsp_helpers</span>             <span class="kn">import</span> <span class="n">circuit_decompose_once</span>
+<span class="c1">#utils</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.utils</span> <span class="kn">import</span> <span class="n">isWindows</span><span class="p">,</span> <span class="n">open_fermion_to_qasm</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.printing</span> <span class="kn">import</span> <span class="n">openqasm</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.cirq_transforms</span> <span class="kn">import</span> <span class="n">clifford_plus_t_direct_transform</span>
+
+
+<span class="n">TEST_QASM_FILE</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span>
+    <span class="s2">&quot;pyLIQTR&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;utils/tests/test_data/test_qasm_file.qasm&quot;</span>
+<span class="p">)</span>
+<span class="n">TEST_QASM_NO_ROTATIONS_FILE</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span>
+    <span class="s2">&quot;pyLIQTR&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;utils/tests/test_data/test_qasm_file_with_decomposed_rotations.qasm&quot;</span>
+<span class="p">)</span>
+
+<div class="viewcode-block" id="TestUtils">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils">[docs]</a>
+<span class="k">class</span> <span class="nc">TestUtils</span><span class="p">:</span>
+<div class="viewcode-block" id="TestUtils.trotterized_hamiltonian">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.trotterized_hamiltonian">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">trotterized_hamiltonian</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the hamiltonian for a system (H2 in this case),</span>
+<span class="sd">        apply jordan-wigner transform and create the trotterized hamiltonian cirq-qasm generator&quot;&quot;&quot;</span>
+        <span class="n">diatomic_bond_length</span> <span class="o">=</span> <span class="mf">0.7414</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)),</span> <span class="p">(</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">diatomic_bond_length</span><span class="p">))]</span>
+        <span class="n">basis</span> <span class="o">=</span> <span class="s2">&quot;sto-3g&quot;</span>
+        <span class="n">multiplicity</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">charge</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">diatomic_bond_length</span><span class="p">)</span>
+
+        <span class="n">molecule</span> <span class="o">=</span> <span class="n">MolecularData</span><span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">multiplicity</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+        <span class="n">molecule</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+        <span class="n">mol_ham</span> <span class="o">=</span> <span class="n">molecule</span><span class="o">.</span><span class="n">get_molecular_hamiltonian</span><span class="p">()</span>
+        <span class="n">jw_ham</span> <span class="o">=</span> <span class="n">jordan_wigner</span><span class="p">(</span><span class="n">mol_ham</span><span class="p">)</span>
+        <span class="n">trotterized_hamiltonian</span> <span class="o">=</span> <span class="n">trotterize_exp_qubop_to_qasm</span><span class="p">(</span>
+            <span class="n">jw_ham</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">evolution_time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">trotter_number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">trotter_order</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="k">yield</span> <span class="n">trotterized_hamiltonian</span>
+        <span class="k">del</span> <span class="n">trotterized_hamiltonian</span></div>
+
+
+<div class="viewcode-block" id="TestUtils.vlasov_n8_qsp">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.vlasov_n8_qsp">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">vlasov_n8_qsp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">N</span>      <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">k</span>      <span class="o">=</span>  <span class="mf">2.0</span>
+        <span class="n">nu</span>     <span class="o">=</span>  <span class="mf">0.0</span>
+        <span class="n">alpha</span>  <span class="o">=</span>  <span class="mf">0.6</span>
+
+        <span class="n">required_precision</span>   <span class="o">=</span> <span class="mf">1e-2</span>
+        <span class="n">timestep_of_interest</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="c1"># sim_time</span>
+
+        <span class="n">ham_string</span> <span class="o">=</span> <span class="n">vs</span><span class="o">.</span><span class="n">hamiltonian_wfn_vlasov_hermite_linear_sym_string</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+        <span class="n">qsp_H</span> <span class="o">=</span> <span class="n">pyH</span><span class="p">(</span><span class="n">ham_string</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">: --- Visual Check Hamiltonian ---&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;: qsp_H = </span><span class="si">{</span><span class="n">qsp_H</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">angles</span><span class="p">,</span> <span class="n">tolerances</span> <span class="o">=</span> <span class="n">qspFuncs</span><span class="o">.</span><span class="n">compute_hamiltonian_angles</span><span class="p">(</span><span class="n">qsp_H</span><span class="p">,</span>\
+                                        <span class="n">simtime</span><span class="o">=</span><span class="n">timestep_of_interest</span><span class="p">,</span><span class="n">req_prec</span><span class="o">=</span><span class="n">required_precision</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;legacy&quot;</span><span class="p">)</span>
+
+        <span class="n">qsp_generator</span> <span class="o">=</span> <span class="n">pQSP</span><span class="o">.</span><span class="n">QSP</span><span class="p">(</span><span class="n">phis</span><span class="o">=</span><span class="n">angles</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="o">=</span><span class="n">qsp_H</span><span class="p">,</span> <span class="n">target_size</span><span class="o">=</span><span class="n">qsp_H</span><span class="o">.</span><span class="n">problem_size</span><span class="p">)</span>
+        <span class="n">qsp_circ</span>      <span class="o">=</span> <span class="n">qsp_generator</span><span class="o">.</span><span class="n">circuit</span><span class="p">()</span>
+        <span class="n">decomposed_once_circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">align_left</span><span class="p">(</span><span class="n">circuit_decompose_once</span><span class="p">(</span><span class="n">qsp_circ</span><span class="p">))</span>
+        <span class="n">decomposed_circuit</span>      <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">align_left</span><span class="p">(</span><span class="n">circuit_decompose_once</span><span class="p">(</span><span class="n">decomposed_once_circuit</span><span class="p">))</span>
+        <span class="n">cliff_plus_T_circuit</span>    <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">align_left</span><span class="p">(</span><span class="n">clifford_plus_t_direct_transform</span><span class="p">(</span><span class="n">decomposed_circuit</span><span class="p">))</span>
+        <span class="k">yield</span> <span class="n">cliff_plus_T_circuit</span>
+        <span class="k">del</span> <span class="n">cliff_plus_T_circuit</span></div>
+
+
+
+<div class="viewcode-block" id="TestUtils.test_open_fermion_to_qasm">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_open_fermion_to_qasm">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_open_fermion_to_qasm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trotterized_hamiltonian</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This will test the util function that translates OpenFermion to OpenQASM 2.0.</span>
+<span class="sd">        It does this by simply passing in the same input every time, expecting to get the same output.&quot;&quot;&quot;</span>
+        <span class="n">jw_ham_trotterized_circuit</span> <span class="o">=</span> <span class="n">open_fermion_to_qasm</span><span class="p">(</span>
+            <span class="mi">4</span><span class="p">,</span> <span class="n">trotterized_hamiltonian</span><span class="p">,</span> <span class="n">reg_name</span><span class="o">=</span><span class="s2">&quot;reg&quot;</span>
+        <span class="p">)</span>
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">qasm_import</span><span class="o">.</span><span class="n">circuit_from_qasm</span><span class="p">(</span><span class="n">jw_ham_trotterized_circuit</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">circuit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="c1"># Let&#39;s check and make sure the circuit is the expected length</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span> <span class="o">==</span> <span class="mi">53</span>
+        <span class="c1"># Lets looks a little closer at a couple of the circuit entries, we&#39;ll use the first and last for now</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">moments</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+        <span class="c1"># Grab the cirq.NamedQubit objects from the frozenset, so we can look a little closer...</span>
+        <span class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span class="p">,</span> <span class="n">o3</span><span class="p">,</span> <span class="n">o4</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">moments</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">operations</span>
+        <span class="c1"># We should have operations in this moment in the order [H, H, Rx, Rx] so lets walk through these</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o1</span><span class="o">.</span><span class="n">gate</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">HPowGate</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o2</span><span class="o">.</span><span class="n">gate</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">HPowGate</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o3</span><span class="o">.</span><span class="n">gate</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Rx</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o4</span><span class="o">.</span><span class="n">gate</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Rx</span><span class="p">)</span>
+        <span class="c1"># for this circuit, the last element should be [52] and it should be a frozenset of 1</span>
+        <span class="c1"># we made sure the circuit was only 53 entries above, and now we will check the last entry</span>
+        <span class="c1"># to make sure it is as expected.</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">moments</span><span class="p">[</span><span class="mi">52</span><span class="p">]</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="c1"># Grab the cirq.NamedQubit object from the frozenset, so we can look a little closer...</span>
+        <span class="n">qubit</span><span class="p">,</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">moments</span><span class="p">[</span><span class="mi">52</span><span class="p">]</span><span class="o">.</span><span class="n">qubits</span>
+        <span class="k">assert</span> <span class="n">qubit</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;reg_3&quot;</span>
+        <span class="k">assert</span> <span class="n">qubit</span><span class="o">.</span><span class="n">dimension</span> <span class="o">==</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="TestUtils.test_writing_out_qasm_with_rotations">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_writing_out_qasm_with_rotations">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_writing_out_qasm_with_rotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trotterized_hamiltonian</span><span class="p">):</span>
+        <span class="n">jw_ham_trotterized_circuit</span> <span class="o">=</span> <span class="n">open_fermion_to_qasm</span><span class="p">(</span>
+            <span class="mi">4</span><span class="p">,</span> <span class="n">trotterized_hamiltonian</span><span class="p">,</span> <span class="n">reg_name</span><span class="o">=</span><span class="s2">&quot;reg&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># we generated a Trotterized Hamiltonian as an QASM string, now write it to a file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">TEST_QASM_FILE</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">jw_ham_trotterized_circuit</span><span class="p">)</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TestUtils.test_writing_out_qasm_with_decomposed_rotations">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_writing_out_qasm_with_decomposed_rotations">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_writing_out_qasm_with_decomposed_rotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trotterized_hamiltonian</span><span class="p">):</span>
+        <span class="n">jw_ham_trotterized_circuit</span> <span class="o">=</span> <span class="n">open_fermion_to_qasm</span><span class="p">(</span>
+            <span class="mi">4</span><span class="p">,</span> <span class="n">trotterized_hamiltonian</span><span class="p">,</span> <span class="n">reg_name</span><span class="o">=</span><span class="s2">&quot;reg&quot;</span><span class="p">,</span> <span class="n">decompose_rotations</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="c1"># we generated a Trotterized Hamiltonian as an QASM string, now write it to a file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">TEST_QASM_NO_ROTATIONS_FILE</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">jw_ham_trotterized_circuit</span><span class="p">)</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+    <span class="c1"># Set the range to the number of iterations you&#39;d like to run, this is good for testing the seed generator of vlasov</span>
+<div class="viewcode-block" id="TestUtils.test_to_openqasm">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_to_openqasm">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s1">&#39;execution_number&#39;</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">test_to_openqasm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vlasov_n8_qsp</span><span class="p">,</span> <span class="n">execution_number</span><span class="p">):</span>
+        <span class="n">circuit_output</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">circuit_in</span><span class="o">=</span><span class="n">vlasov_n8_qsp</span><span class="p">)])</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">circuit_output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="c1">#first 1000 chars</span>
+        <span class="n">test_output</span> <span class="o">=</span> <span class="n">circuit_output</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">]</span>
+        <span class="c1"># Something appears to have changed in the seed generator in this version of cirq-ft which caused the vlasov to be different</span>
+        <span class="c1"># so I&#39;ve commented out the old one and am using the new.</span>
+        <span class="c1"># true_output = &#39;// Generated from Cirq, Openfermion, and MIT LL\n\nOPENQASM 2.0;\ninclude &quot;qelib1.inc&quot;;\n\n// Qubits: [q(0), q(1), q(2), q(3), q(4), q(5), q(6), q(7), ctl_q9, ctl_q10, ctl_q11, ctl_q12, phs_q8, z_anc_q13, z_anc_q14, z_anc_q15, z_anc_q16]\nqreg q[17];\n\nreset q[8];\nreset q[9];\nreset q[10];\nreset q[11];\nreset q[12];\nreset q[13];\nreset q[14];\nreset q[15];\nreset q[16];\nsdg q[0];\nsdg q[1];\nsdg q[2];\nsdg q[3];\nsdg q[4];\nsdg q[5];\nsdg q[6];\nsdg q[7];\nx q[8];\nx q[9];\nx q[10];\nx q[11];\nh q[12];\nreset q[13];\nreset q[14];\nreset q[15];\nreset q[16];\nz q[12];\nsdg q[8];\nh q[13];\nh q[14];\nh q[15];\nh q[16];\nh q[12];\nh q[8];\nz q[12];\nsdg q[8];\nt q[12];\nh q[8];\nh q[12];\ns q[8];\nt q[12];\nt q[8];\nh q[12];\nt q[8];\nh q[12];\nh q[8];\nt q[12];\nt q[8];\nh q[12];\nh q[8];\nt q[12];\ns q[8];\nh q[12];\nt q[8];\nt q[12];\nh q[8];\nh q[12];\nt q[8];\nt q[12];\nh q[8];\nh q[12];\ns q[8];\ns q[12];\nt q[8];\nt q[12];\nh q[8];\nh q[12];\nt q[8];\ns q[12];\nh q[8];\nt q[12];\nt q[8];\nh q[12];\nh q[8];\nt q[12];\nt q[8];\nh q[12];\nh q[8];\ns q[12];\ns q[8\n&#39;</span>
+        <span class="n">true_output</span> <span class="o">=</span> <span class="s1">&#39;// Generated from Cirq, Openfermion, and MIT LL</span><span class="se">\n\n</span><span class="s1">OPENQASM 2.0;</span><span class="se">\n</span><span class="s1">include &quot;qelib1.inc&quot;;</span><span class="se">\n\n</span><span class="s1">// Qubits: [q(0), q(1), q(2), q(3), q(4), q(5), q(6), q(7), ctl_q9, ctl_q10, ctl_q11, ctl_q12, phs_q8, z_anc_q13, z_anc_q14, z_anc_q15, z_anc_q16]</span><span class="se">\n</span><span class="s1">qreg q[17];</span><span class="se">\n\n</span><span class="s1">reset q[8];</span><span class="se">\n</span><span class="s1">reset q[9];</span><span class="se">\n</span><span class="s1">reset q[10];</span><span class="se">\n</span><span class="s1">reset q[11];</span><span class="se">\n</span><span class="s1">reset q[12];</span><span class="se">\n</span><span class="s1">reset q[13];</span><span class="se">\n</span><span class="s1">reset q[14];</span><span class="se">\n</span><span class="s1">reset q[15];</span><span class="se">\n</span><span class="s1">reset q[16];</span><span class="se">\n</span><span class="s1">sdg q[0];</span><span class="se">\n</span><span class="s1">sdg q[1];</span><span class="se">\n</span><span class="s1">sdg q[2];</span><span class="se">\n</span><span class="s1">sdg q[3];</span><span class="se">\n</span><span class="s1">sdg q[4];</span><span class="se">\n</span><span class="s1">sdg q[5];</span><span class="se">\n</span><span class="s1">sdg q[6];</span><span class="se">\n</span><span class="s1">sdg q[7];</span><span class="se">\n</span><span class="s1">x q[8];</span><span class="se">\n</span><span class="s1">x q[9];</span><span class="se">\n</span><span class="s1">x q[10];</span><span class="se">\n</span><span class="s1">x q[11];</span><span class="se">\n</span><span class="s1">h q[12];</span><span class="se">\n</span><span class="s1">reset q[13];</span><span class="se">\n</span><span class="s1">reset q[14];</span><span class="se">\n</span><span class="s1">reset q[15];</span><span class="se">\n</span><span class="s1">reset q[16];</span><span class="se">\n</span><span class="s1">z q[12];</span><span class="se">\n</span><span class="s1">sdg q[8];</span><span class="se">\n</span><span class="s1">h q[13];</span><span class="se">\n</span><span class="s1">h q[14];</span><span class="se">\n</span><span class="s1">h q[15];</span><span class="se">\n</span><span class="s1">h q[16];</span><span class="se">\n</span><span class="s1">h q[12];</span><span class="se">\n</span><span class="s1">h q[8];</span><span class="se">\n</span><span class="s1">z q[12];</span><span class="se">\n</span><span class="s1">sdg q[8];</span><span class="se">\n</span><span class="s1">t q[12];</span><span class="se">\n</span><span class="s1">h q[8];</span><span class="se">\n</span><span class="s1">h q[12];</span><span class="se">\n</span><span class="s1">s q[8];</span><span class="se">\n</span><span class="s1">t q[12];</span><span class="se">\n</span><span class="s1">t q[8];</span><span class="se">\n</span><span class="s1">h q[12];</span><span class="se">\n</span><span class="s1">h q[8];</span><span class="se">\n</span><span class="s1">s q[12];</span><span class="se">\n</span><span class="s1">s q[8];</span><span class="se">\n</span><span class="s1">t q[12];</span><span class="se">\n</span><span class="s1">t q[8];</span><span class="se">\n</span><span class="s1">h q[12];</span><span class="se">\n</span><span class="s1">h q[8];</span><span class="se">\n</span><span class="s1">t q[12];</span><span class="se">\n</span><span class="s1">s q[8];</span><span class="se">\n</span><span class="s1">h q[12];</span><span class="se">\n</span><span class="s1">t q[8];</span><span class="se">\n</span><span class="s1">t q[12];</span><span class="se">\n</span><span class="s1">h q[8];</span><span class="se">\n</span><span class="s1">h q[12];</span><span class="se">\n</span><span class="s1">s q[8];</span><span class="se">\n</span><span class="s1">t q[12];</span><span class="se">\n</span><span class="s1">t q[8];</span><span class="se">\n</span><span class="s1">h q[12];</span><span class="se">\n</span><span class="s1">h q[8];</span><span class="se">\n</span><span class="s1">t q[12];</span><span class="se">\n</span><span class="s1">s q[8];</span><span class="se">\n</span><span class="s1">h q[12];</span><span class="se">\n</span><span class="s1">t q[8];</span><span class="se">\n</span><span class="s1">s q[12];</span><span class="se">\n</span><span class="s1">h q[8];</span><span class="se">\n</span><span class="s1">t q[12];</span><span class="se">\n</span><span class="s1">s q[8];</span><span class="se">\n</span><span class="s1">h q[12];</span><span class="se">\n</span><span class="s1">t q[8];</span><span class="se">\n</span><span class="s1">t q[12];</span><span class="se">\n</span><span class="s1">h q[8];</span><span class="se">\n</span><span class="s1">h q[12];</span><span class="se">\n</span><span class="s1">s q[8];</span><span class="se">\n</span><span class="s1">s q[12];</span><span class="se">\n</span><span class="s1">t q[8];</span><span class="se">\n</span><span class="s1">t q[12];</span><span class="se">\n</span><span class="s1">h q[8];&#39;</span>
+
+        <span class="n">test_output</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">true_output</span> <span class="o">=</span> <span class="n">true_output</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">idx</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">truth</span><span class="p">,</span><span class="n">test</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">true_output</span><span class="p">,</span><span class="n">test_output</span><span class="p">):</span>
+            <span class="n">idx</span><span class="o">+=</span><span class="mi">1</span>
+            <span class="n">truth</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;l</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">truth</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">test</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;l</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">test</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">truth</span><span class="o">==</span><span class="n">test</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestUtils.test_invalid_trotterized_hamiltonian">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_invalid_trotterized_hamiltonian">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span>
+    <span class="k">def</span> <span class="nf">test_invalid_trotterized_hamiltonian</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate an invalid hamiltonian for a system (H2 in this case),</span>
+<span class="sd">        apply jordan-wigner transform and create the trotterized hamiltonian cirq-qasm generator&quot;&quot;&quot;</span>
+        <span class="n">diatomic_bond_length</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.7414</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)),</span> <span class="p">(</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">diatomic_bond_length</span><span class="p">))]</span>
+        <span class="n">basis</span> <span class="o">=</span> <span class="s2">&quot;sto-3g&quot;</span>
+        <span class="n">multiplicity</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">charge</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">diatomic_bond_length</span><span class="p">)</span>
+
+        <span class="n">molecule</span> <span class="o">=</span> <span class="n">MolecularData</span><span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">multiplicity</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+        <span class="n">molecule</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+        <span class="n">mol_ham</span> <span class="o">=</span> <span class="n">molecule</span><span class="o">.</span><span class="n">get_molecular_hamiltonian</span><span class="p">()</span>
+        <span class="n">jw_ham</span> <span class="o">=</span> <span class="n">jordan_wigner</span><span class="p">(</span><span class="n">mol_ham</span><span class="p">)</span>
+        <span class="n">invalid_trotterized_hamiltonian</span> <span class="o">=</span> <span class="n">trotterize_exp_qubop_to_qasm</span><span class="p">(</span>
+            <span class="n">jw_ham</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">evolution_time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">trotter_number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">trotter_order</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">invalid_trotterized_hamiltonian</span> <span class="ow">is</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="TestUtils.test_is_windows_on_windows">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_is_windows_on_windows">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skipif</span><span class="p">(</span><span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;Windows&#39;</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="s2">&quot;cannot run this test on Mac or Linux&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_is_windows_on_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">isWindows</span><span class="p">()</span> <span class="o">==</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TestUtils.test_is_windows_on_mac_or_linux">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_is_windows_on_mac_or_linux">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skipif</span><span class="p">(</span><span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Windows&#39;</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="s2">&quot;cannot run this test on Windows&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_is_windows_on_mac_or_linux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">isWindows</span><span class="p">()</span> <span class="o">==</span> <span class="kc">False</span></div>
+
+    
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skipif</span><span class="p">(</span><span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;Mac&#39;</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="s2">&quot;cannot run this test on anything other than Mac&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_is_mac</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">isMac</span><span class="p">()</span> <span class="o">==</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="TestUtils.test_is_mac">
+<a class="viewcode-back" href="../../../../../docs/_modules/src.pyLIQTR.utils.tests.html#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_is_mac">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skipif</span><span class="p">(</span><span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;Linux&#39;</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="s2">&quot;cannot run this test on anything other than Linux&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_is_mac</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">isLinux</span><span class="p">()</span> <span class="o">==</span> <span class="kc">True</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

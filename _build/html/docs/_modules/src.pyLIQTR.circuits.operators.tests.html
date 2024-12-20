@@ -1,0 +1,984 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.operators.tests package &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/pyliqtr_logo.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.operators.tests package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/_modules/src.pyLIQTR.circuits.operators.tests.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-pyliqtr-circuits-operators-tests-package">
+<h1>src.pyLIQTR.circuits.operators.tests package<a class="headerlink" href="#src-pyliqtr-circuits-operators-tests-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary">
+<span id="src-pyliqtr-circuits-operators-tests-test-binarytounary-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.TestBinaryToUnaryBits">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.</span></span><span class="sig-name descname"><span class="pre">TestBinaryToUnaryBits</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_BinaryToUnary.html#TestBinaryToUnaryBits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.TestBinaryToUnaryBits" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.TestBinaryToUnaryBits.test_BinaryToUnaryBits">
+<span class="sig-name descname"><span class="pre">test_BinaryToUnaryBits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selection_index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_BinaryToUnary.html#TestBinaryToUnaryBits.test_BinaryToUnaryBits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.TestBinaryToUnaryBits.test_BinaryToUnaryBits" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate carries out the expected operation by comparing simulation output with the expected output for different values of selection_index.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.TestBinaryToUnaryBits.test_BinaryToUnaryBits_complexity">
+<span class="sig-name descname"><span class="pre">test_BinaryToUnaryBits_complexity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_bits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_BinaryToUnary.html#TestBinaryToUnaryBits.test_BinaryToUnaryBits_complexity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.TestBinaryToUnaryBits.test_BinaryToUnaryBits_complexity" title="Link to this definition"></a></dt>
+<dd><p>Tests resource costs are as expected.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.TestBinaryToUnaryBits.test_BinaryToUnaryBits_decomposes">
+<span class="sig-name descname"><span class="pre">test_BinaryToUnaryBits_decomposes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_bits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_BinaryToUnary.html#TestBinaryToUnaryBits.test_BinaryToUnaryBits_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.TestBinaryToUnaryBits.test_BinaryToUnaryBits_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.TestBinaryToUnaryBits.test_BinaryToUnaryBits_inverse">
+<span class="sig-name descname"><span class="pre">test_BinaryToUnaryBits_inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selection_index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_BinaryToUnary.html#TestBinaryToUnaryBits.test_BinaryToUnaryBits_inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.TestBinaryToUnaryBits.test_BinaryToUnaryBits_inverse" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all target bits return to zero when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.TestBinaryToUnaryBits.test_BinaryToUnaryBits_qasm">
+<span class="sig-name descname"><span class="pre">test_BinaryToUnaryBits_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_BinaryToUnary.html#TestBinaryToUnaryBits.test_BinaryToUnaryBits_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary.TestBinaryToUnaryBits.test_BinaryToUnaryBits_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard">
+<span id="src-pyliqtr-circuits-operators-tests-test-catalyticallycontrolledhadamard-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.TestCatalyticallyControlledHadamard">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.</span></span><span class="sig-name descname"><span class="pre">TestCatalyticallyControlledHadamard</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_CatalyticallyControlledHadamard.html#TestCatalyticallyControlledHadamard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.TestCatalyticallyControlledHadamard" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard">
+<span class="sig-name descname"><span class="pre">test_CatalyticallyControlledHadamard</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_CatalyticallyControlledHadamard.html#TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate carries out the expected operation by comparing simulation output with the expected output for different input values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard_decomposes">
+<span class="sig-name descname"><span class="pre">test_CatalyticallyControlledHadamard_decomposes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_CatalyticallyControlledHadamard.html#TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard_inverse">
+<span class="sig-name descname"><span class="pre">test_CatalyticallyControlledHadamard_inverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_CatalyticallyControlledHadamard.html#TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard_inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard_inverse" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard_qasm">
+<span class="sig-name descname"><span class="pre">test_CatalyticallyControlledHadamard_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_CatalyticallyControlledHadamard.html#TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard_resources">
+<span class="sig-name descname"><span class="pre">test_CatalyticallyControlledHadamard_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_CatalyticallyControlledHadamard.html#TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard.TestCatalyticallyControlledHadamard.test_CatalyticallyControlledHadamard_resources" title="Link to this definition"></a></dt>
+<dd><p>Tests resources are counted correctly. Assumes cirq default decomposition for controlled Hadamards.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_DataAndKeyCondition">
+<span id="src-pyliqtr-circuits-operators-tests-test-dataandkeycondition-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_DataAndKeyCondition module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_DataAndKeyCondition" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_DataAndKeyCondition.TestDataAndKeyCondition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_DataAndKeyCondition.</span></span><span class="sig-name descname"><span class="pre">TestDataAndKeyCondition</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_DataAndKeyCondition.html#TestDataAndKeyCondition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_DataAndKeyCondition.TestDataAndKeyCondition" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_DataAndKeyCondition.TestDataAndKeyCondition.test_DataAndKeyCondition_resolve_array">
+<span class="sig-name descname"><span class="pre">test_DataAndKeyCondition_resolve_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_DataAndKeyCondition.html#TestDataAndKeyCondition.test_DataAndKeyCondition_resolve_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_DataAndKeyCondition.TestDataAndKeyCondition.test_DataAndKeyCondition_resolve_array" title="Link to this definition"></a></dt>
+<dd><p>Tests condition resolves as expected for array type data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_DataAndKeyCondition.TestDataAndKeyCondition.test_DataAndKeyCondition_resolve_int">
+<span class="sig-name descname"><span class="pre">test_DataAndKeyCondition_resolve_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_DataAndKeyCondition.html#TestDataAndKeyCondition.test_DataAndKeyCondition_resolve_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_DataAndKeyCondition.TestDataAndKeyCondition.test_DataAndKeyCondition_resolve_int" title="Link to this definition"></a></dt>
+<dd><p>Tests condition resolves as expected for integer type data</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_EqualityTest">
+<span id="src-pyliqtr-circuits-operators-tests-test-equalitytest-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_EqualityTest module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_EqualityTest" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_EqualityTest.</span></span><span class="sig-name descname"><span class="pre">TestEqualityTest</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_EqualityTest.html#TestEqualityTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest">
+<span class="sig-name descname"><span class="pre">test_EqualityTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bitsize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_EqualityTest.html#TestEqualityTest.test_EqualityTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate carries out the expected operation by comparing simulation output with the expected output for different input values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_ValueError">
+<span class="sig-name descname"><span class="pre">test_EqualityTest_ValueError</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_EqualityTest.html#TestEqualityTest.test_EqualityTest_ValueError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_ValueError" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate raises ValueError for bitsize &lt; 2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_decomposes">
+<span class="sig-name descname"><span class="pre">test_EqualityTest_decomposes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bitsize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_EqualityTest.html#TestEqualityTest.test_EqualityTest_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_inverse">
+<span class="sig-name descname"><span class="pre">test_EqualityTest_inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bitsize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_EqualityTest.html#TestEqualityTest.test_EqualityTest_inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_inverse" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_qasm">
+<span class="sig-name descname"><span class="pre">test_EqualityTest_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_EqualityTest.html#TestEqualityTest.test_EqualityTest_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_resources">
+<span class="sig-name descname"><span class="pre">test_EqualityTest_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_EqualityTest.html#TestEqualityTest.test_EqualityTest_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_EqualityTest.TestEqualityTest.test_EqualityTest_resources" title="Link to this definition"></a></dt>
+<dd><p>Tests resources are counted correctly.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure">
+<span id="src-pyliqtr-circuits-operators-tests-test-flagzeroasfailure-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.TestFlagZeroAsFailure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.</span></span><span class="sig-name descname"><span class="pre">TestFlagZeroAsFailure</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_FlagZeroAsFailure.html#TestFlagZeroAsFailure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.TestFlagZeroAsFailure" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.TestFlagZeroAsFailure.test_FlagZeroAsFailure">
+<span class="sig-name descname"><span class="pre">test_FlagZeroAsFailure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_FlagZeroAsFailure.html#TestFlagZeroAsFailure.test_FlagZeroAsFailure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.TestFlagZeroAsFailure.test_FlagZeroAsFailure" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate carries out the expected operation by comparing simulation output with the expected output for different input values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.TestFlagZeroAsFailure.test_FlagZeroAsFailure_decomposes">
+<span class="sig-name descname"><span class="pre">test_FlagZeroAsFailure_decomposes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_FlagZeroAsFailure.html#TestFlagZeroAsFailure.test_FlagZeroAsFailure_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.TestFlagZeroAsFailure.test_FlagZeroAsFailure_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.TestFlagZeroAsFailure.test_FlagZeroAsFailure_inverse">
+<span class="sig-name descname"><span class="pre">test_FlagZeroAsFailure_inverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_FlagZeroAsFailure.html#TestFlagZeroAsFailure.test_FlagZeroAsFailure_inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.TestFlagZeroAsFailure.test_FlagZeroAsFailure_inverse" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.TestFlagZeroAsFailure.test_FlagZeroAsFailure_qasm">
+<span class="sig-name descname"><span class="pre">test_FlagZeroAsFailure_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_FlagZeroAsFailure.html#TestFlagZeroAsFailure.test_FlagZeroAsFailure_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.TestFlagZeroAsFailure.test_FlagZeroAsFailure_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.TestFlagZeroAsFailure.test_FlagZeroAsFailure_resources">
+<span class="sig-name descname"><span class="pre">test_FlagZeroAsFailure_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_FlagZeroAsFailure.html#TestFlagZeroAsFailure.test_FlagZeroAsFailure_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure.TestFlagZeroAsFailure.test_FlagZeroAsFailure_resources" title="Link to this definition"></a></dt>
+<dd><p>Tests resources are counted correctly.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation">
+<span id="src-pyliqtr-circuits-operators-tests-test-phasegradientrotation-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation.TestPhaseGradientZRotation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation.</span></span><span class="sig-name descname"><span class="pre">TestPhaseGradientZRotation</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PhaseGradientRotation.html#TestPhaseGradientZRotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation.TestPhaseGradientZRotation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation.TestPhaseGradientZRotation.test_PhaseGradientZRotation">
+<span class="sig-name descname"><span class="pre">test_PhaseGradientZRotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">br</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negative_Z_rotation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PhaseGradientRotation.html#TestPhaseGradientZRotation.test_PhaseGradientZRotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation.TestPhaseGradientZRotation.test_PhaseGradientZRotation" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate carries out the expected operation by comparing simulation output with the expected output for different input values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation.TestPhaseGradientZRotation.test_PhaseGradientZRotation_decomposes">
+<span class="sig-name descname"><span class="pre">test_PhaseGradientZRotation_decomposes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">br</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negative_Z_rotation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PhaseGradientRotation.html#TestPhaseGradientZRotation.test_PhaseGradientZRotation_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation.TestPhaseGradientZRotation.test_PhaseGradientZRotation_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation.TestPhaseGradientZRotation.test_PhaseGradientZRotation_inverse">
+<span class="sig-name descname"><span class="pre">test_PhaseGradientZRotation_inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">br</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negative_Z_rotation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PhaseGradientRotation.html#TestPhaseGradientZRotation.test_PhaseGradientZRotation_inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation.TestPhaseGradientZRotation.test_PhaseGradientZRotation_inverse" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation.TestPhaseGradientZRotation.test_PhaseGradientZRotation_qasm">
+<span class="sig-name descname"><span class="pre">test_PhaseGradientZRotation_qasm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">br</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negative_Z_rotation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PhaseGradientRotation.html#TestPhaseGradientZRotation.test_PhaseGradientZRotation_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation.TestPhaseGradientZRotation.test_PhaseGradientZRotation_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded">
+<span id="src-pyliqtr-circuits-operators-tests-test-preparemuunaryencoded-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.TestPrepareMuUnaryEncoded">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.</span></span><span class="sig-name descname"><span class="pre">TestPrepareMuUnaryEncoded</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareMuUnaryEncoded.html#TestPrepareMuUnaryEncoded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.TestPrepareMuUnaryEncoded" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded">
+<span class="sig-name descname"><span class="pre">test_PrepareMuUnaryEncoded</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareMuUnaryEncoded.html#TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate carries out the expected operation by comparing simulation output with the expected output for different input values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded_decomposes">
+<span class="sig-name descname"><span class="pre">test_PrepareMuUnaryEncoded_decomposes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareMuUnaryEncoded.html#TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded_inverse">
+<span class="sig-name descname"><span class="pre">test_PrepareMuUnaryEncoded_inverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareMuUnaryEncoded.html#TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded_inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded_inverse" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded_qasm">
+<span class="sig-name descname"><span class="pre">test_PrepareMuUnaryEncoded_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareMuUnaryEncoded.html#TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded_resources">
+<span class="sig-name descname"><span class="pre">test_PrepareMuUnaryEncoded_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareMuUnaryEncoded.html#TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded.TestPrepareMuUnaryEncoded.test_PrepareMuUnaryEncoded_resources" title="Link to this definition"></a></dt>
+<dd><p>Tests resources are counted correctly.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition">
+<span id="src-pyliqtr-circuits-operators-tests-test-preparenusuperposition-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.TestPrepareNuSuperposition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.</span></span><span class="sig-name descname"><span class="pre">TestPrepareNuSuperposition</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareNuSuperposition.html#TestPrepareNuSuperposition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.TestPrepareNuSuperposition" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.TestPrepareNuSuperposition.test_PrepareNuSuperposition">
+<span class="sig-name descname"><span class="pre">test_PrepareNuSuperposition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bitsize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareNuSuperposition.html#TestPrepareNuSuperposition.test_PrepareNuSuperposition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.TestPrepareNuSuperposition.test_PrepareNuSuperposition" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate carries out the expected operation by comparing simulation output with the expected output for different input values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.TestPrepareNuSuperposition.test_PrepareNuSuperposition_decomposes">
+<span class="sig-name descname"><span class="pre">test_PrepareNuSuperposition_decomposes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareNuSuperposition.html#TestPrepareNuSuperposition.test_PrepareNuSuperposition_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.TestPrepareNuSuperposition.test_PrepareNuSuperposition_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.TestPrepareNuSuperposition.test_PrepareNuSuperposition_inverse">
+<span class="sig-name descname"><span class="pre">test_PrepareNuSuperposition_inverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareNuSuperposition.html#TestPrepareNuSuperposition.test_PrepareNuSuperposition_inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.TestPrepareNuSuperposition.test_PrepareNuSuperposition_inverse" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.TestPrepareNuSuperposition.test_PrepareNuSuperposition_qasm">
+<span class="sig-name descname"><span class="pre">test_PrepareNuSuperposition_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareNuSuperposition.html#TestPrepareNuSuperposition.test_PrepareNuSuperposition_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.TestPrepareNuSuperposition.test_PrepareNuSuperposition_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.TestPrepareNuSuperposition.test_PrepareNuSuperposition_resources">
+<span class="sig-name descname"><span class="pre">test_PrepareNuSuperposition_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareNuSuperposition.html#TestPrepareNuSuperposition.test_PrepareNuSuperposition_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition.TestPrepareNuSuperposition.test_PrepareNuSuperposition_resources" title="Link to this definition"></a></dt>
+<dd><p>Tests resources are counted correctly.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState">
+<span id="src-pyliqtr-circuits-operators-tests-test-preparepowertwostate-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.TestPreparePowerTwoState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.</span></span><span class="sig-name descname"><span class="pre">TestPreparePowerTwoState</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PreparePowerTwoState.html#TestPreparePowerTwoState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.TestPreparePowerTwoState" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.TestPreparePowerTwoState.test_PreparePowerTwoState">
+<span class="sig-name descname"><span class="pre">test_PreparePowerTwoState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bitsize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PreparePowerTwoState.html#TestPreparePowerTwoState.test_PreparePowerTwoState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.TestPreparePowerTwoState.test_PreparePowerTwoState" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate carries out the expected operation by comparing simulation output with the expected output for different input values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.TestPreparePowerTwoState.test_PreparePowerTwoState_decomposes">
+<span class="sig-name descname"><span class="pre">test_PreparePowerTwoState_decomposes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bitsize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PreparePowerTwoState.html#TestPreparePowerTwoState.test_PreparePowerTwoState_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.TestPreparePowerTwoState.test_PreparePowerTwoState_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.TestPreparePowerTwoState.test_PreparePowerTwoState_inverse">
+<span class="sig-name descname"><span class="pre">test_PreparePowerTwoState_inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bitsize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PreparePowerTwoState.html#TestPreparePowerTwoState.test_PreparePowerTwoState_inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.TestPreparePowerTwoState.test_PreparePowerTwoState_inverse" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.TestPreparePowerTwoState.test_PreparePowerTwoState_qasm">
+<span class="sig-name descname"><span class="pre">test_PreparePowerTwoState_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PreparePowerTwoState.html#TestPreparePowerTwoState.test_PreparePowerTwoState_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.TestPreparePowerTwoState.test_PreparePowerTwoState_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.TestPreparePowerTwoState.test_PreparePowerTwoState_resources">
+<span class="sig-name descname"><span class="pre">test_PreparePowerTwoState_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PreparePowerTwoState.html#TestPreparePowerTwoState.test_PreparePowerTwoState_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState.TestPreparePowerTwoState.test_PreparePowerTwoState_resources" title="Link to this definition"></a></dt>
+<dd><p>Tests resources are counted correctly. Assumes cirq default decomposition for controlled Hadamards.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized">
+<span id="src-pyliqtr-circuits-operators-tests-test-preparet-firstquantized-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized.TestPrepareT_FirstQuantized">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized.</span></span><span class="sig-name descname"><span class="pre">TestPrepareT_FirstQuantized</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareT_FirstQuantized.html#TestPrepareT_FirstQuantized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized.TestPrepareT_FirstQuantized" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized.TestPrepareT_FirstQuantized.test_PrepareT_FirstQuantized_decomposes">
+<span class="sig-name descname"><span class="pre">test_PrepareT_FirstQuantized_decomposes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareT_FirstQuantized.html#TestPrepareT_FirstQuantized.test_PrepareT_FirstQuantized_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized.TestPrepareT_FirstQuantized.test_PrepareT_FirstQuantized_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized.TestPrepareT_FirstQuantized.test_PrepareT_FirstQuantized_inverse">
+<span class="sig-name descname"><span class="pre">test_PrepareT_FirstQuantized_inverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareT_FirstQuantized.html#TestPrepareT_FirstQuantized.test_PrepareT_FirstQuantized_inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized.TestPrepareT_FirstQuantized.test_PrepareT_FirstQuantized_inverse" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized.TestPrepareT_FirstQuantized.test_PrepareT_FirstQuantized_qasm">
+<span class="sig-name descname"><span class="pre">test_PrepareT_FirstQuantized_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareT_FirstQuantized.html#TestPrepareT_FirstQuantized.test_PrepareT_FirstQuantized_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized.TestPrepareT_FirstQuantized.test_PrepareT_FirstQuantized_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized.TestPrepareT_FirstQuantized.test_PrepareT_FirstQuantized_resources">
+<span class="sig-name descname"><span class="pre">test_PrepareT_FirstQuantized_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_PrepareT_FirstQuantized.html#TestPrepareT_FirstQuantized.test_PrepareT_FirstQuantized_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized.TestPrepareT_FirstQuantized.test_PrepareT_FirstQuantized_resources" title="Link to this definition"></a></dt>
+<dd><p>Tests resources are consistent with decomposition.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials">
+<span id="src-pyliqtr-circuits-operators-tests-test-productpauliexponentials-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.TestProductPauliExponentials">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.</span></span><span class="sig-name descname"><span class="pre">TestProductPauliExponentials</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_ProductPauliExponentials.html#TestProductPauliExponentials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.TestProductPauliExponentials" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.TestProductPauliExponentials.pytestmark">
+<span class="sig-name descname"><span class="pre">pytestmark</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[Mark(name='skip',</span> <span class="pre">args=(),</span> <span class="pre">kwargs={'reason':</span> <span class="pre">'tests</span> <span class="pre">are</span> <span class="pre">work</span> <span class="pre">in</span> <span class="pre">progress'})]</span></em><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.TestProductPauliExponentials.pytestmark" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.TestProductPauliExponentials.test_PauliProductExponentials_decomposes">
+<span class="sig-name descname"><span class="pre">test_PauliProductExponentials_decomposes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">br</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bphi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_ProductPauliExponentials.html#TestProductPauliExponentials.test_PauliProductExponentials_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.TestProductPauliExponentials.test_PauliProductExponentials_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.TestProductPauliExponentials.test_ProductPauliExponentials_qasm">
+<span class="sig-name descname"><span class="pre">test_ProductPauliExponentials_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_ProductPauliExponentials.html#TestProductPauliExponentials.test_ProductPauliExponentials_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.TestProductPauliExponentials.test_ProductPauliExponentials_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.TestProductPauliExponentials.test_ProductPauliExponentials_uncompute">
+<span class="sig-name descname"><span class="pre">test_ProductPauliExponentials_uncompute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">br</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_ProductPauliExponentials.html#TestProductPauliExponentials.test_ProductPauliExponentials_uncompute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.TestProductPauliExponentials.test_ProductPauliExponentials_uncompute" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.TestProductPauliExponentials.test_ProductPauliExponetials">
+<span class="sig-name descname"><span class="pre">test_ProductPauliExponetials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">br</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_ProductPauliExponentials.html#TestProductPauliExponentials.test_ProductPauliExponetials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials.TestProductPauliExponentials.test_ProductPauliExponetials" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate carries out the expected operation when adding/subtracting registers with different bitsizes by comparing simulation output with the expected output for different input values.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_QROMwithMeasurementUncompute">
+<span id="src-pyliqtr-circuits-operators-tests-test-qromwithmeasurementuncompute-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_QROMwithMeasurementUncompute module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_QROMwithMeasurementUncompute" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_QROMwithMeasurementUncompute.TestQROMwithMeasurementUncompute">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_QROMwithMeasurementUncompute.</span></span><span class="sig-name descname"><span class="pre">TestQROMwithMeasurementUncompute</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_QROMwithMeasurementUncompute.html#TestQROMwithMeasurementUncompute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_QROMwithMeasurementUncompute.TestQROMwithMeasurementUncompute" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_QROMwithMeasurementUncompute.TestQROMwithMeasurementUncompute.test_QROMwithMeasurementUncompute">
+<span class="sig-name descname"><span class="pre">test_QROMwithMeasurementUncompute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_QROMwithMeasurementUncompute.html#TestQROMwithMeasurementUncompute.test_QROMwithMeasurementUncompute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_QROMwithMeasurementUncompute.TestQROMwithMeasurementUncompute.test_QROMwithMeasurementUncompute" title="Link to this definition"></a></dt>
+<dd><p>Tests the method measurement_uncompute correctly uncomputes by checking all qubits return to initial state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_QROMwithMeasurementUncompute.TestQROMwithMeasurementUncompute.test_QROMwithMeasurementUncompute_decomposes">
+<span class="sig-name descname"><span class="pre">test_QROMwithMeasurementUncompute_decomposes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_QROMwithMeasurementUncompute.html#TestQROMwithMeasurementUncompute.test_QROMwithMeasurementUncompute_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_QROMwithMeasurementUncompute.TestQROMwithMeasurementUncompute.test_QROMwithMeasurementUncompute_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_RotationsQROM">
+<span id="src-pyliqtr-circuits-operators-tests-test-rotationsqrom-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_RotationsQROM module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_RotationsQROM" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.</span></span><span class="sig-name descname"><span class="pre">TestRotationsQROM</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_RotationsQROM.html#TestRotationsQROM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM.test_RotationsQROM">
+<span class="sig-name descname"><span class="pre">test_RotationsQROM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_select</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_RotationsQROM.html#TestRotationsQROM.test_RotationsQROM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM.test_RotationsQROM" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate carries out the expected operation by comparing simulation output with the expected output for different input values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM.test_RotationsQROM_decomposes">
+<span class="sig-name descname"><span class="pre">test_RotationsQROM_decomposes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_select</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_RotationsQROM.html#TestRotationsQROM.test_RotationsQROM_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM.test_RotationsQROM_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM.test_RotationsQROM_inverse">
+<span class="sig-name descname"><span class="pre">test_RotationsQROM_inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_select</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_RotationsQROM.html#TestRotationsQROM.test_RotationsQROM_inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM.test_RotationsQROM_inverse" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM.test_RotationsQROM_measurement_uncompute">
+<span class="sig-name descname"><span class="pre">test_RotationsQROM_measurement_uncompute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_select</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_RotationsQROM.html#TestRotationsQROM.test_RotationsQROM_measurement_uncompute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM.test_RotationsQROM_measurement_uncompute" title="Link to this definition"></a></dt>
+<dd><p>Tests the method measurement_uncompute correctly uncomputes by checking all qubits return to initial state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM.test_RotationsQROM_qasm">
+<span class="sig-name descname"><span class="pre">test_RotationsQROM_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_RotationsQROM.html#TestRotationsQROM.test_RotationsQROM_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM.test_RotationsQROM_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM.test_RotationsQROM_resources">
+<span class="sig-name descname"><span class="pre">test_RotationsQROM_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_RotationsQROM.html#TestRotationsQROM.test_RotationsQROM_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_RotationsQROM.TestRotationsQROM.test_RotationsQROM_resources" title="Link to this definition"></a></dt>
+<dd><p>Tests resources are counted correctly.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ">
+<span id="src-pyliqtr-circuits-operators-tests-test-uniformsuperpositionij-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ.TestUniformSuperpositionIJ">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ.</span></span><span class="sig-name descname"><span class="pre">TestUniformSuperpositionIJ</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_UniformSuperpositionIJ.html#TestUniformSuperpositionIJ"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ.TestUniformSuperpositionIJ" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ.TestUniformSuperpositionIJ.test_UniformSuperpositionIJ_decomposes">
+<span class="sig-name descname"><span class="pre">test_UniformSuperpositionIJ_decomposes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_UniformSuperpositionIJ.html#TestUniformSuperpositionIJ.test_UniformSuperpositionIJ_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ.TestUniformSuperpositionIJ.test_UniformSuperpositionIJ_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ.TestUniformSuperpositionIJ.test_UniformSuperpositionIJ_inverse">
+<span class="sig-name descname"><span class="pre">test_UniformSuperpositionIJ_inverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_UniformSuperpositionIJ.html#TestUniformSuperpositionIJ.test_UniformSuperpositionIJ_inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ.TestUniformSuperpositionIJ.test_UniformSuperpositionIJ_inverse" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ.TestUniformSuperpositionIJ.test_UniformSuperpositionIJ_qasm">
+<span class="sig-name descname"><span class="pre">test_UniformSuperpositionIJ_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_UniformSuperpositionIJ.html#TestUniformSuperpositionIJ.test_UniformSuperpositionIJ_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ.TestUniformSuperpositionIJ.test_UniformSuperpositionIJ_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ.TestUniformSuperpositionIJ.test_UniformSuperpositionIJ_resources">
+<span class="sig-name descname"><span class="pre">test_UniformSuperpositionIJ_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_UniformSuperpositionIJ.html#TestUniformSuperpositionIJ.test_UniformSuperpositionIJ_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ.TestUniformSuperpositionIJ.test_UniformSuperpositionIJ_resources" title="Link to this definition"></a></dt>
+<dd><p>Tests resources are consistent with decomposition.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_cyclic_shift">
+<span id="src-pyliqtr-circuits-operators-tests-test-cyclic-shift-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_cyclic_shift module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_cyclic_shift" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_cyclic_shift.TestTranslation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_cyclic_shift.</span></span><span class="sig-name descname"><span class="pre">TestTranslation</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_cyclic_shift.html#TestTranslation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_cyclic_shift.TestTranslation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Test functionality of cyclicShift by comparing
+circuit generated to analytical unitaries.</p>
+<p>TODO: not nearly enough test coverage</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_cyclic_shift.TestTranslation.getUnitary">
+<span class="sig-name descname"><span class="pre">getUnitary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getVector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_cyclic_shift.html#TestTranslation.getUnitary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_cyclic_shift.TestTranslation.getUnitary" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_cyclic_shift.TestTranslation.getVector">
+<span class="sig-name descname"><span class="pre">getVector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_cyclic_shift.html#TestTranslation.getVector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_cyclic_shift.TestTranslation.getVector" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_cyclic_shift.TestTranslation.testUnitaryCS">
+<span class="sig-name descname"><span class="pre">testUnitaryCS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getUnitary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getVector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_cyclic_shift.html#TestTranslation.testUnitaryCS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_cyclic_shift.TestTranslation.testUnitaryCS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring">
+<span id="src-pyliqtr-circuits-operators-tests-test-diagonal-bitstring-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring.TestDiagonalBitstring">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring.</span></span><span class="sig-name descname"><span class="pre">TestDiagonalBitstring</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_diagonal_bitstring.html#TestDiagonalBitstring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring.TestDiagonalBitstring" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Test functionality of DiagonalBitstring by comparing
+circuit generated to analytical unitaries as well as
+T counts at different depth decompositions.</p>
+<p>TODO: unoptimized (n, K) flag is not currently tested</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring.TestDiagonalBitstring.getUnitary">
+<span class="sig-name descname"><span class="pre">getUnitary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getVector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_diagonal_bitstring.html#TestDiagonalBitstring.getUnitary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring.TestDiagonalBitstring.getUnitary" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring.TestDiagonalBitstring.getVector">
+<span class="sig-name descname"><span class="pre">getVector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_diagonal_bitstring.html#TestDiagonalBitstring.getVector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring.TestDiagonalBitstring.getVector" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring.TestDiagonalBitstring.testTCount">
+<span class="sig-name descname"><span class="pre">testTCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getVector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_diagonal_bitstring.html#TestDiagonalBitstring.testTCount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring.TestDiagonalBitstring.testTCount" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring.TestDiagonalBitstring.testUnitary0">
+<span class="sig-name descname"><span class="pre">testUnitary0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getUnitary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getVector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_diagonal_bitstring.html#TestDiagonalBitstring.testUnitary0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring.TestDiagonalBitstring.testUnitary0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings">
+<span id="src-pyliqtr-circuits-operators-tests-test-hamiltonian-encodings-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.</span></span><span class="sig-name descname"><span class="pre">TestEncodings</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_hamiltonian_encodings.html#TestEncodings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.getHamiltonianAndQubits">
+<span class="sig-name descname"><span class="pre">getHamiltonianAndQubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_hamiltonian_encodings.html#TestEncodings.getHamiltonianAndQubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.getHamiltonianAndQubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.getHamiltonianAndQubits2">
+<span class="sig-name descname"><span class="pre">getHamiltonianAndQubits2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_hamiltonian_encodings.html#TestEncodings.getHamiltonianAndQubits2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.getHamiltonianAndQubits2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.getOperator">
+<span class="sig-name descname"><span class="pre">getOperator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getHamiltonianAndQubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_hamiltonian_encodings.html#TestEncodings.getOperator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.getOperator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.test_unitary_basic">
+<span class="sig-name descname"><span class="pre">test_unitary_basic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getOperator</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_hamiltonian_encodings.html#TestEncodings.test_unitary_basic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.test_unitary_basic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.test_unitary_decomp">
+<span class="sig-name descname"><span class="pre">test_unitary_decomp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getOperator</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_hamiltonian_encodings.html#TestEncodings.test_unitary_decomp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings.TestEncodings.test_unitary_decomp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_multiCZ">
+<span id="src-pyliqtr-circuits-operators-tests-test-multicz-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_multiCZ module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_multiCZ" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_multiCZ.</span></span><span class="sig-name descname"><span class="pre">TestMultiCZ</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_multiCZ.html#TestMultiCZ"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ.getQubits">
+<span class="sig-name descname"><span class="pre">getQubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_multiCZ.html#TestMultiCZ.getQubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ.getQubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ.getQubits2">
+<span class="sig-name descname"><span class="pre">getQubits2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_multiCZ.html#TestMultiCZ.getQubits2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ.getQubits2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ.test_multi_cz_basic">
+<span class="sig-name descname"><span class="pre">test_multi_cz_basic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getQubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_multiCZ.html#TestMultiCZ.test_multi_cz_basic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ.test_multi_cz_basic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ.test_multi_cz_count">
+<span class="sig-name descname"><span class="pre">test_multi_cz_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getQubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_multiCZ.html#TestMultiCZ.test_multi_cz_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ.test_multi_cz_count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ.test_multi_cz_equality">
+<span class="sig-name descname"><span class="pre">test_multi_cz_equality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getQubits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getQubits2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_multiCZ.html#TestMultiCZ.test_multi_cz_equality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ.test_multi_cz_equality" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ.test_multi_cz_toQasm">
+<span class="sig-name descname"><span class="pre">test_multi_cz_toQasm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getQubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_multiCZ.html#TestMultiCZ.test_multi_cz_toQasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_multiCZ.TestMultiCZ.test_multi_cz_toQasm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_prepare">
+<span id="src-pyliqtr-circuits-operators-tests-test-prepare-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_prepare module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_prepare" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_prepare.TestPrepare">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_prepare.</span></span><span class="sig-name descname"><span class="pre">TestPrepare</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_prepare.html#TestPrepare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_prepare.TestPrepare" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_prepare.TestPrepare.test_prepare_comparison_to_common_ops">
+<span class="sig-name descname"><span class="pre">test_prepare_comparison_to_common_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">op</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_prepare.html#TestPrepare.test_prepare_comparison_to_common_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_prepare.TestPrepare.test_prepare_comparison_to_common_ops" title="Link to this definition"></a></dt>
+<dd><p>Should be False when comparing the prepare operation to common cirq operations.
+Tests issue #9.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_prepare.get_common_gate_ops">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_prepare.</span></span><span class="sig-name descname"><span class="pre">get_common_gate_ops</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.List" title="(in Python v3.8)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">GateOperation</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_prepare.html#get_common_gate_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_prepare.get_common_gate_ops" title="Link to this definition"></a></dt>
+<dd><p>Generate a list of GateOperations from cirq’s list of common ops.</p>
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_qtAdd">
+<span id="src-pyliqtr-circuits-operators-tests-test-qtadd-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_qtAdd module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_qtAdd" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_qtAdd.</span></span><span class="sig-name descname"><span class="pre">TestqtAdd</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_qtAdd.html#TestqtAdd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_decomposes">
+<span class="sig-name descname"><span class="pre">test_qtAdd_decomposes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_qtAdd.html#TestqtAdd.test_qtAdd_decomposes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_decomposes" title="Link to this definition"></a></dt>
+<dd><p>Tests gate decomposition existence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_qasm">
+<span class="sig-name descname"><span class="pre">test_qtAdd_qasm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_qtAdd.html#TestqtAdd.test_qtAdd_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_qasm" title="Link to this definition"></a></dt>
+<dd><p>Tests qasm printing functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_with_phase_gradient">
+<span class="sig-name descname"><span class="pre">test_qtAdd_with_phase_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">br</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bphi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_qtAdd.html#TestqtAdd.test_qtAdd_with_phase_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_with_phase_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_with_zero_padding">
+<span class="sig-name descname"><span class="pre">test_qtAdd_with_zero_padding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_qtAdd.html#TestqtAdd.test_qtAdd_with_zero_padding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_with_zero_padding" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate carries out the expected operation when adding/subtracting registers with different bitsizes by comparing simulation output with the expected output for different input values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_with_zero_padding_inverse">
+<span class="sig-name descname"><span class="pre">test_qtAdd_with_zero_padding_inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_qtAdd.html#TestqtAdd.test_qtAdd_with_zero_padding_inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_with_zero_padding_inverse" title="Link to this definition"></a></dt>
+<dd><p>Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_reflect">
+<span id="src-pyliqtr-circuits-operators-tests-test-reflect-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_reflect module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_reflect" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_reflect.</span></span><span class="sig-name descname"><span class="pre">TestReflect</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_reflect.html#TestReflect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect.getAngleAndQubits">
+<span class="sig-name descname"><span class="pre">getAngleAndQubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_reflect.html#TestReflect.getAngleAndQubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect.getAngleAndQubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect.getAngleAndQubits2">
+<span class="sig-name descname"><span class="pre">getAngleAndQubits2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_reflect.html#TestReflect.getAngleAndQubits2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect.getAngleAndQubits2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect.test_reflect_basic">
+<span class="sig-name descname"><span class="pre">test_reflect_basic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getAngleAndQubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_reflect.html#TestReflect.test_reflect_basic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect.test_reflect_basic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect.test_reflect_count">
+<span class="sig-name descname"><span class="pre">test_reflect_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getAngleAndQubits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">execution_number</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_reflect.html#TestReflect.test_reflect_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect.test_reflect_count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect.test_reflect_equality">
+<span class="sig-name descname"><span class="pre">test_reflect_equality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getAngleAndQubits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getAngleAndQubits2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_reflect.html#TestReflect.test_reflect_equality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect.test_reflect_equality" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect.test_reflect_toQasm">
+<span class="sig-name descname"><span class="pre">test_reflect_toQasm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getAngleAndQubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_reflect.html#TestReflect.test_reflect_toQasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_reflect.TestReflect.test_reflect_toQasm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_selectV">
+<span id="src-pyliqtr-circuits-operators-tests-test-selectv-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_selectV module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_selectV" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_selectV.</span></span><span class="sig-name descname"><span class="pre">TestSelectV</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_selectV.html#TestSelectV"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV.getHamiltonianAndQubits">
+<span class="sig-name descname"><span class="pre">getHamiltonianAndQubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_selectV.html#TestSelectV.getHamiltonianAndQubits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV.getHamiltonianAndQubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV.getHamiltonianAndQubits2">
+<span class="sig-name descname"><span class="pre">getHamiltonianAndQubits2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_selectV.html#TestSelectV.getHamiltonianAndQubits2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV.getHamiltonianAndQubits2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV.test_childs_basic">
+<span class="sig-name descname"><span class="pre">test_childs_basic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getHamiltonianAndQubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_selectV.html#TestSelectV.test_childs_basic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV.test_childs_basic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV.test_childs_count">
+<span class="sig-name descname"><span class="pre">test_childs_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getHamiltonianAndQubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_selectV.html#TestSelectV.test_childs_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV.test_childs_count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV.test_childs_decomp">
+<span class="sig-name descname"><span class="pre">test_childs_decomp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getHamiltonianAndQubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_selectV.html#TestSelectV.test_childs_decomp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV.test_childs_decomp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV.test_equality">
+<span class="sig-name descname"><span class="pre">test_equality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getHamiltonianAndQubits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getHamiltonianAndQubits2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_selectV.html#TestSelectV.test_equality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_selectV.TestSelectV.test_equality" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.test_translation">
+<span id="src-pyliqtr-circuits-operators-tests-test-translation-module"></span><h2>src.pyLIQTR.circuits.operators.tests.test_translation module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.test_translation" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_translation.TestTranslation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.test_translation.</span></span><span class="sig-name descname"><span class="pre">TestTranslation</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_translation.html#TestTranslation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_translation.TestTranslation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Test functionality of Translation by comparing
+circuit generated to analytical unitaries</p>
+<p>TODO: more test coverage!!</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_translation.TestTranslation.getUnitary">
+<span class="sig-name descname"><span class="pre">getUnitary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getVector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_translation.html#TestTranslation.getUnitary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_translation.TestTranslation.getUnitary" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_translation.TestTranslation.getVector">
+<span class="sig-name descname"><span class="pre">getVector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_translation.html#TestTranslation.getVector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_translation.TestTranslation.getVector" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.test_translation.TestTranslation.testUnitaryCS">
+<span class="sig-name descname"><span class="pre">testUnitaryCS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getUnitary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getVector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/test_translation.html#TestTranslation.testUnitaryCS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.test_translation.TestTranslation.testUnitaryCS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests.utils">
+<span id="src-pyliqtr-circuits-operators-tests-utils-module"></span><h2>src.pyLIQTR.circuits.operators.tests.utils module<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests.utils" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.operators.tests.utils.get_partial_state">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.operators.tests.utils.</span></span><span class="sig-name descname"><span class="pre">get_partial_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state_vector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/operators/tests/utils.html#get_partial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.operators.tests.utils.get_partial_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.operators.tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.pyLIQTR.circuits.operators.tests" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

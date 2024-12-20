@@ -1,0 +1,205 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>High-level changelog (not all inclusive of all changes) &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="_static/pyliqtr_logo.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e358f374"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">High-level changelog (not all inclusive of all changes)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/changelog.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="high-level-changelog-not-all-inclusive-of-all-changes">
+<h1>High-level changelog (not all inclusive of all changes)<a class="headerlink" href="#high-level-changelog-not-all-inclusive-of-all-changes" title="Link to this heading"></a></h1>
+<section id="v1-2-0">
+<h2>v1.2.0<a class="headerlink" href="#v1-2-0" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Double Factorization improvements/tweaks (primarily to decrease resource requirements)</p>
+<ul>
+<li><p>RotationsQROM changes to support measurement based uncompute</p></li>
+<li><p>Binary to unary conversion optimization</p></li>
+<li><p>Modified to enable controlled encoding generation</p></li>
+</ul>
+</li>
+<li><p>Changes to multicontrolled gates in LinearT encoding to remove rotation and T gates unnecessarily inflating the resource counts</p></li>
+<li><p>Carleman Linearization</p></li>
+<li><p>Various tweaks to openqasm/estimate_resources and other helpers to support above</p></li>
+<li><p>Various bugfixes to include</p>
+<ul>
+<li><p><a class="reference external" href="https://github.com/isi-usc-edu/pyLIQTR/issues/9">Cannot compare prepare operation to Ry operation</a></p></li>
+<li><p><a class="reference external" href="https://github.com/isi-usc-edu/pyLIQTR/issues/11">Invalid declaration of inverse CNOTs in clifford_plus_t_direct_transform</a></p></li>
+<li><p><a class="reference external" href="https://github.com/isi-usc-edu/pyLIQTR/issues/13">Ability to generate DF block encoding without performing JW</a></p></li>
+</ul>
+</li>
+<li><p>Beginning of coverage testing push</p></li>
+<li><p>to_openqasm was deprecated in favor of our internal openqasm() because of incomplete qasm() support within cirq</p>
+<ul>
+<li><p><a class="reference external" href="https://github.com/isi-usc-edu/pyLIQTR/issues/8">to_openqasm fails for QubitizedPhaseEstimation</a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="v1-1-1">
+<h2>v1.1.1<a class="headerlink" href="#v1-1-1" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Double Factorization</p></li>
+<li><p>Migrated from cirq-ft to Qualtran v0.2 (cirq-ft deprecated/subsumed by Google)</p></li>
+<li><p>Assorted Bug Fixes</p>
+<ul>
+<li><p><a class="reference external" href="https://github.com/isi-usc-edu/pyLIQTR/issues/5">QSVT dynamics circuit produces error when asked to provide QASM string</a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="v1-0-0">
+<h2>v1.0.0<a class="headerlink" href="#v1-0-0" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Beginning mass deprecation of legacy code (primarily QSP and PhaseEstimation related, sim_methods, angle generation). Some old code may break!</p></li>
+<li><p>Beginning to leverage cirq-ft for faster resource estimation</p></li>
+<li><p>Introduction of various problem instances</p></li>
+<li><p>Introduction of various block encodings</p></li>
+<li><p>Rework of QSP circuit generation via pyLIQTR.qubitization</p></li>
+<li><p>Introduction of julia package for generating electronic structure hamiltonians</p></li>
+<li><p>Introduction of classical method package</p></li>
+<li><p>Bug Fix for <a class="reference external" href="https://github.com/isi-usc-edu/pyLIQTR/issues/4">Circuits with no rotation gates</a></p></li>
+</ul>
+</section>
+<section id="v0-3-1">
+<h2>v0.3.1<a class="headerlink" href="#v0-3-1" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Update to QASM printing to be generator based &amp; faster (see Examples/Utilities/Import_Export_and_Printing notebook)</p></li>
+<li><p>Updates to Clifford+T decomposition (see Examples/Utilities/Import_Export_and_Printing notebook)</p>
+<ul>
+<li><p>Condensed printing of rx/ry/rz gates via exporting of rx_d/ry_d/rz_d gates</p></li>
+<li><p>Randomized generation</p></li>
+</ul>
+</li>
+<li><p>Setup now only requires cirq.core</p></li>
+</ul>
+</section>
+<section id="v0-3-0">
+<h2>v0.3.0<a class="headerlink" href="#v0-3-0" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Implemented a version of GSE using Suzuki-Trotter, and provided examples</p></li>
+<li><p>Added ability to more easily generate random angles with the number of angles equal to required precision (see <code class="docutils literal notranslate"><span class="pre">compute_hamiltonain_angles</span></code> notes in the exmaple tutorials)</p></li>
+<li><p>Replaced SelectVBase implementation with a non-recursive version based off of the QROM circuit from <code class="docutils literal notranslate"><span class="pre">arxiv.org/pdf/1805.03662</span></code> (addressing a max recursion issue that sometimes occured for large problems)</p></li>
+<li><p>Changes to problem-generation/simulation related method organization (pyLIQTR.sim_methods). See examples for updates</p></li>
+<li><p>Added deprecation warning for “legacy” angle generation (to be fully replaced in future releases)</p></li>
+<li><p>Added QSP examples for more problem inputs</p></li>
+<li><p>Fixed issue related to a mpmath precision</p></li>
+<li><p>Speed up the decomposition of cirq circuits into Clifford+T gateset.</p></li>
+<li><p>Allow the input precision for gate decomposition to be any float, not just a power of 10.</p></li>
+<li><p>Allow users to input a desired decomposition accuracy for an entire circuit, instead of for each gate.</p></li>
+<li><p>Limit the precision for the gate decomposition algorithm so it cannot be smaller than the approximation error due to floating point rounding of angles contained in the cirq gates (fixes issues when decomposing rotations close to multiples of pi/4).</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

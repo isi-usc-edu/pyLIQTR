@@ -1,0 +1,989 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.clam.operator_strings &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.clam.operator_strings</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.clam.operator_strings</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">###       OPERATOR_STRINGS  -  String-based operator representations         ###</span>
+<span class="c1">###                                                                          ###</span>
+<span class="c1">################################################################################</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>                               <span class="k">as</span>  <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pyLIQTR.clam.multilinear_algebra</span>    <span class="k">as</span>  <span class="nn">mla</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">import</span> <span class="nn">pyLIQTR.clam.operators</span>        <span class="k">as</span>     <span class="nn">qo</span>    
+
+
+<span class="c1">##</span>
+<span class="c1">## Make op_strings derived from operator_strings</span>
+<span class="c1">##</span>
+
+
+
+
+<span class="c1">## CLASS op_strings(circ)</span>
+<span class="c1">## ---------------------------------------x</span>
+<span class="c1">##</span>
+<span class="c1">##  Stores LCU of operator as Pauli strings</span>
+<span class="c1">##</span>
+
+<div class="viewcode-block" id="op_strings">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings">[docs]</a>
+<span class="k">class</span> <span class="nc">op_strings</span><span class="p">():</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">N_qb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span>        <span class="o">=</span>    <span class="n">N</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N_qb</span>     <span class="o">=</span>    <span class="n">N_qb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>    <span class="o">=</span>   <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">if</span> <span class="p">((</span><span class="n">coeffs</span> <span class="o">==</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">types</span> <span class="o">==</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">indices</span> <span class="o">==</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">indices</span>  <span class="o">=</span>   <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">types</span>    <span class="o">=</span>   <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span>   <span class="o">=</span>   <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">indices</span>  <span class="o">=</span>   <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">types</span>    <span class="o">=</span>   <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">types</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span>   <span class="o">=</span>   <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span>
+
+    <span class="c1">## append(self,sites,term,coeff)</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Add string on sites of index &lt;sites&gt;</span>
+    <span class="c1">## corresponding to the Pauli operators</span>
+    <span class="c1">## &lt;term&gt;  with coefficients &lt;coeff&gt;.</span>
+    <span class="c1">## </span>
+    <span class="c1">##   Ex: append((1,3),&#39;XX&#39;,0.25)</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="op_strings.append">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.append">[docs]</a>
+    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sites</span><span class="p">,</span><span class="n">term</span><span class="p">,</span><span class="n">coeff</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">coeff</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">+=</span><span class="mi">1</span> 
+        <span class="k">return</span></div>
+
+
+
+    <span class="c1">## append_tuple(self,data)</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Add string based on &lt;data&gt;, which </span>
+    <span class="c1">## contains a tuple followin the convetions</span>
+    <span class="c1">## of append() </span>
+    <span class="c1">## </span>
+    <span class="c1">##   Ex: append(((1,3),&#39;XX&#39;,0.25))</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="op_strings.append_tuple">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.append_tuple">[docs]</a>
+    <span class="k">def</span> <span class="nf">append_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">+=</span><span class="mi">1</span> 
+        <span class="k">return</span></div>
+
+
+
+    <span class="c1">## matrix()</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Return matrix representation of the </span>
+    <span class="c1">## operator formed by this LCU.</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="op_strings.matrix">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.matrix">[docs]</a>
+    <span class="k">def</span> <span class="nf">matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">M</span> <span class="o">=</span> <span class="n">ham_from_pauli_tuples</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">M</span><span class="p">)</span></div>
+
+    
+
+    <span class="c1">## sparse_matrix()</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Return sparse matrix representation of  </span>
+    <span class="c1">## the operator formed by this LCU.</span>
+    <span class="c1">## </span>
+    
+<div class="viewcode-block" id="op_strings.sparse_matrix">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.sparse_matrix">[docs]</a>
+    <span class="k">def</span> <span class="nf">sparse_matrix</span><span class="p">():</span>
+        <span class="k">return</span><span class="p">()</span></div>
+
+    
+
+    <span class="c1">## tensor()</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Return low-rank tensor representation of  </span>
+    <span class="c1">## the operator formed by this LCU.</span>
+    <span class="c1">## </span>
+
+<div class="viewcode-block" id="op_strings.tensor">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.tensor">[docs]</a>
+    <span class="k">def</span> <span class="nf">tensor</span><span class="p">():</span>
+        <span class="k">return</span><span class="p">()</span></div>
+
+
+    <span class="c1">## print()</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Print table of Pauli strings within this</span>
+    <span class="c1">## object.</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="op_strings.print">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.print">[docs]</a>
+    <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">ps_print_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">()</span></div>
+
+
+
+
+<div class="viewcode-block" id="op_strings.set_num_qb">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.set_num_qb">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_num_qb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N_qb</span> <span class="o">=</span> <span class="n">N</span>
+        <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="op_strings.terms">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.terms">[docs]</a>
+    <span class="k">def</span> <span class="nf">terms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">do_pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">pad_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+
+        <span class="n">term_set</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">do_pad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">term_set</span> <span class="o">=</span> <span class="p">[([</span><span class="mi">0</span><span class="p">],</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="n">pad_value</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">do_pad</span><span class="p">)]</span>
+
+        <span class="n">term_set</span> <span class="o">+=</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">term_set</span><span class="p">)</span></div>
+
+
+
+    <span class="c1">## strings()</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Return tuples containing identity-padded</span>
+    <span class="c1">## Pauli strings and their coefficients</span>
+    <span class="c1">## for ingestion by circuit generation code</span>
+    <span class="c1">##</span>
+    
+<div class="viewcode-block" id="op_strings.strings">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.strings">[docs]</a>
+    <span class="k">def</span> <span class="nf">strings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">coeffs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">do_pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">pad_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">coeffs</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">pstr</span> <span class="o">=</span> <span class="n">ps_text_full_set_withzero</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> 
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">,</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">N_qb</span><span class="p">,</span>
+                                              <span class="n">coeffs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">,</span>
+                                              <span class="n">do_pad</span><span class="o">=</span><span class="n">do_pad</span><span class="p">,</span>
+                                              <span class="n">pad_value</span><span class="o">=</span><span class="n">pad_value</span> <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pstr</span> <span class="o">=</span> <span class="n">ps_text_full_set_withzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">N_qb</span><span class="p">,</span><span class="n">do_pad</span><span class="o">=</span><span class="n">do_pad</span><span class="p">)</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">pstr</span><span class="p">)</span></div>
+
+
+
+    <span class="c1">## expand_projectors()</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Expand Z eigenstate projectors from</span>
+    <span class="c1">## Pauli strings into constituent Pauli</span>
+    <span class="c1">## operators.</span>
+    <span class="c1">##</span>
+    
+<div class="viewcode-block" id="op_strings.expand_projectors">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.expand_projectors">[docs]</a>
+    <span class="k">def</span> <span class="nf">expand_projectors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">new_indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_types</span>  <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_coeffs</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">cpn</span> <span class="ow">in</span>  <span class="n">convert_projector</span><span class="p">(</span><span class="n">pair</span><span class="p">):</span>
+
+                <span class="n">new_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">new_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpn</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">new_coeffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpn</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">new_indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">types</span>   <span class="o">=</span> <span class="n">new_types</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span>  <span class="o">=</span> <span class="n">new_coeffs</span>
+
+        <span class="k">return</span><span class="p">()</span></div>
+
+
+
+    <span class="c1">## remove_zeros()</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Remove strings with coefficients of 0.0</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="op_strings.remove_zeros">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.remove_zeros">[docs]</a>
+    <span class="k">def</span> <span class="nf">remove_zeros</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">new_indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_types</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_coeffs</span>  <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">):</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">new_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">new_coeffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> 
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">new_indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">types</span>   <span class="o">=</span> <span class="n">new_types</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span>  <span class="o">=</span> <span class="n">new_coeffs</span>
+
+        <span class="k">return</span><span class="p">()</span></div>
+
+
+
+    <span class="c1">## cleanup()</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Expand projectors and remove zero terms</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="op_strings.cleanup">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.cleanup">[docs]</a>
+    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_zeros</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expand_projectors</span><span class="p">()</span>
+
+        <span class="k">return</span><span class="p">()</span></div>
+
+    
+
+    <span class="c1">## rescale_coeff_norm()</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Rescale LCU coefficients by 1-norm of</span>
+    <span class="c1">## coefficient vector and store the</span>
+    <span class="c1">## rescaling factor &lt;alpha&gt;:</span>
+    <span class="c1">##</span>
+    <span class="c1">##   \alpha = \sum_k |\alpha_k|</span>
+    <span class="c1">##</span>
+    <span class="c1">## where the LCU is:</span>
+    <span class="c1">##</span>
+    <span class="c1">##   \sum_{k} \alpha_k U_k</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="op_strings.rescale_coeff_norm">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.rescale_coeff_norm">[docs]</a>
+    <span class="k">def</span> <span class="nf">rescale_coeff_norm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">))</span>
+
+        <span class="n">new_indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_types</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_coeffs</span>  <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">)):</span>
+
+            <span class="n">new_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+            <span class="n">new_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+            <span class="n">new_coeffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">new_indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">types</span>   <span class="o">=</span> <span class="n">new_types</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span>  <span class="o">=</span> <span class="n">new_coeffs</span> 
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+
+        <span class="k">return</span><span class="p">()</span></div>
+
+        
+    
+
+    <span class="c1">## get_alpha()</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Return the LCU rescaling parameter </span>
+    <span class="c1">## &lt;alpha&gt;.</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="op_strings.get_alpha">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.get_alpha">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+ <span class="c1">#       alpha = np.sum(np.abs(self.coeffs))</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span></div>
+
+
+
+    <span class="c1">## get_coeff_norm()</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Calculate the 1-norm of the coefficient</span>
+    <span class="c1">## vector but do not rescale coefficients.</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="op_strings.get_coeff_norm">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.get_coeff_norm">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_coeff_norm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">scf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">))</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">scf</span><span class="p">)</span></div>
+
+
+
+    <span class="c1">## rescale_coeff_scalar(val)</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Rescale LCU coefficients by value</span>
+    <span class="c1">## &lt;val&gt; and store coefficient as &lt;alpha&gt;</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="op_strings.rescale_coeff_scalar">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.rescale_coeff_scalar">[docs]</a>
+    <span class="k">def</span> <span class="nf">rescale_coeff_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="p">):</span>
+
+        <span class="n">new_indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_types</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_coeffs</span>  <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">)):</span>
+
+            <span class="n">new_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+            <span class="n">new_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+            <span class="n">new_coeffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">/</span> <span class="n">val</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">new_indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">types</span>   <span class="o">=</span> <span class="n">new_types</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span>  <span class="o">=</span> <span class="n">new_coeffs</span> 
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">val</span>
+
+        <span class="k">return</span><span class="p">()</span></div>
+
+
+
+    <span class="c1">## rescale_minmax(e_min,e_max)</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Perform minmax rescaling based on </span>
+    <span class="c1">## bounds &lt;e_min&gt;, &lt;e_max&gt;</span>
+    <span class="c1">##</span>
+
+<div class="viewcode-block" id="op_strings.rescale_minmax">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.rescale_minmax">[docs]</a>
+    <span class="k">def</span> <span class="nf">rescale_minmax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">e_min</span><span class="p">,</span><span class="n">e_max</span><span class="p">):</span>
+
+        <span class="n">e_diff</span> <span class="o">=</span> <span class="n">e_max</span> <span class="o">-</span> <span class="n">e_min</span>
+
+        <span class="n">new_indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_types</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_coeffs</span>  <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">)):</span>
+
+            <span class="n">new_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+            <span class="n">new_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+            <span class="n">new_coeffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">/</span> <span class="n">e_diff</span><span class="p">)</span>
+        
+        <span class="n">new_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)))</span>
+        <span class="n">new_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">new_coeffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">e_min</span><span class="o">/</span><span class="p">(</span><span class="n">e_diff</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">new_indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">types</span>   <span class="o">=</span> <span class="n">new_types</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span>  <span class="o">=</span> <span class="n">new_coeffs</span>
+
+        <span class="k">return</span><span class="p">()</span></div>
+
+    
+
+    <span class="c1">## consolidate_strings()</span>
+    <span class="c1">## ---------------------------------------x</span>
+    <span class="c1">## Sum Pauli strings with identical </span>
+    <span class="c1">## elements</span>
+    <span class="c1">##</span>
+    
+<div class="viewcode-block" id="op_strings.consolidate_strings">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.consolidate_strings">[docs]</a>
+    <span class="k">def</span> <span class="nf">consolidate_strings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">return</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="op_strings.delete_term">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.delete_term">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tid</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">tid</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">):</span>
+
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">tid</span><span class="p">]</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">[</span><span class="n">tid</span><span class="p">]</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">tid</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-=</span><span class="mi">1</span> 
+
+        <span class="k">return</span></div>
+
+    
+
+
+    <span class="c1">## Is delete_site the best term here?</span>
+    <span class="c1">##</span>
+<div class="viewcode-block" id="op_strings.delete_site">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.delete_site">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_site</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">site</span><span class="p">):</span>
+
+        <span class="n">exist_flag</span> <span class="o">=</span> <span class="kc">False</span> 
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">site</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="n">exist_flag</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-=</span><span class="mi">1</span> 
+
+        <span class="k">return</span></div>
+
+    
+
+<div class="viewcode-block" id="op_strings.modify_type">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.modify_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">modify_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">new_type</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_type</span>
+        <span class="k">return</span></div>
+
+    
+<div class="viewcode-block" id="op_strings.modify_coeff">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.op_strings.modify_coeff">[docs]</a>
+    <span class="k">def</span> <span class="nf">modify_coeff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">new_coeff</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_coeff</span>
+        <span class="k">return</span>  </div>
+</div>
+
+    
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     convert_projector(pstr)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Converts the Z-eigenstate projectors (&#39;+&#39;,&#39;-&#39;) in the string &lt;pstr&gt;</span>
+<span class="c1">###      into their constituent Pauli operations.  Performs rescaling of</span>
+<span class="c1">###      coefficients to match.</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      pstr   =   Target Pauli string</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      new     =  Modified Pauli string</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="convert_projector">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.convert_projector">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_projector</span><span class="p">(</span><span class="n">pstr</span><span class="p">):</span>
+
+    <span class="n">proj_set</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+
+    <span class="n">new</span>      <span class="o">=</span>  <span class="p">[]</span>
+    <span class="n">indices</span>  <span class="o">=</span>  <span class="n">pstr</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>      <span class="n">opstr</span>  <span class="o">=</span>  <span class="n">pstr</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>       <span class="n">coeff</span>  <span class="o">=</span>  <span class="n">pstr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="s1">&#39;+&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opstr</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opstr</span><span class="p">)):</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pstr</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">proj_set</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="ow">in</span> <span class="n">opstr</span><span class="p">):</span>
+
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">opstr</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+
+                <span class="n">ns_1</span> <span class="o">=</span> <span class="n">opstr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">idx</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;I&#39;</span><span class="o">+</span><span class="n">opstr</span><span class="p">[(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">):]</span>
+                <span class="n">ns_2</span> <span class="o">=</span> <span class="n">opstr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">idx</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;Z&#39;</span><span class="o">+</span><span class="n">opstr</span><span class="p">[(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">):]</span>
+                
+                <span class="n">sgn</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">proj_set</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+
+                <span class="n">nsp_1</span> <span class="o">=</span> <span class="p">((</span><span class="n">indices</span><span class="p">,</span><span class="n">ns_1</span><span class="p">,(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">coeff</span><span class="p">))</span>
+                <span class="n">nsp_2</span> <span class="o">=</span> <span class="p">((</span><span class="n">indices</span><span class="p">,</span><span class="n">ns_2</span><span class="p">,</span><span class="n">sgn</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">coeff</span><span class="p">))</span>
+
+                <span class="p">[</span><span class="n">new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">convert_projector</span><span class="p">(</span><span class="n">nsp_1</span><span class="p">)]</span>
+                <span class="p">[</span><span class="n">new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">convert_projector</span><span class="p">(</span><span class="n">nsp_2</span><span class="p">)]</span>
+
+                <span class="k">break</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">new</span><span class="p">)</span></div>
+
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     ps_text_pad(string)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Pads the shorthand text string a mulit-qubit Pauli operator with</span>
+<span class="c1">###      identity elements to give an N-qubit Pauli string. That is,</span>
+<span class="c1">###      an operator described by &lt;string&gt; acting on spins/qubits</span>
+<span class="c1">###      in the tuple &lt;sites&gt; is padded by identity operators to give a string</span>
+<span class="c1">###      acting on &lt;N&gt; qubits. If &lt;sites&gt; = (0,2,3) and &lt;string&gt; = &#39;XYZ&#39; with</span>
+<span class="c1">###      N = 6, this would return XIYZII. Note that the indices in sites</span>
+<span class="c1">###      follow pythonic array indexing, while &lt;N&gt; is the absolute number of</span>
+<span class="c1">###      qubits (NOT the largest array index).</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      sites  =   Tuple containing site/qubit indices.</span>
+<span class="c1">###      string =   Text string describing the operator</span>
+<span class="c1">###      N      =</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      op      =  Matrix representation of the operator</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="ps_text_pad">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.ps_text_pad">[docs]</a>
+<span class="k">def</span> <span class="nf">ps_text_pad</span><span class="p">(</span><span class="n">sites</span><span class="p">,</span><span class="n">string</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+
+    <span class="n">padded</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="c1">## Check if we have been given a scalar or a tuple.</span>
+    <span class="c1">##</span>
+    <span class="n">is_tuple</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sites</span><span class="p">,</span> <span class="s2">&quot;__len__&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">is_tuple</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">sites</span><span class="p">):</span>
+                <span class="n">sidx</span>    <span class="o">=</span> <span class="n">sites</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="n">padded</span> <span class="o">+=</span> <span class="n">string</span><span class="p">[</span><span class="n">sidx</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">padded</span> <span class="o">+=</span> <span class="s1">&#39;I&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">padded</span> <span class="o">=</span> <span class="s1">&#39;I&#39;</span><span class="o">*</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span> <span class="o">+</span> <span class="n">string</span> <span class="o">+</span> <span class="s1">&#39;I&#39;</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="n">sites</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">padded</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     ps_text_to_ops(string)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Returns an array containing the Pauli operators represented by the</span>
+<span class="c1">###      Pauli string &lt;string&gt;, starting from the least significant element.</span>
+<span class="c1">###      This method is case insensitive.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      string  =  Pauli string consisting of X,Y,Z and I (projectors and the</span>
+<span class="c1">###                 like are not yet implemented).</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      op_set  =  Array of Pauli operators in the canonical matrix</span>
+<span class="c1">###                 representation for su(2)</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="ps_text_to_ops">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.ps_text_to_ops">[docs]</a>
+<span class="k">def</span> <span class="nf">ps_text_to_ops</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+
+    <span class="n">op_set</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">label_to_pauli</span><span class="p">(</span><span class="n">string</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">op_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">op_set</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     ps_text_to_matrix(string)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Generates a matrix representation of the operator corresponding to</span>
+<span class="c1">###      the text-based Pauli string &lt;string&gt; (example: &#39;IXXIYII&#39;).</span>
+<span class="c1">###</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      string  =  Pauli string consisting of X,Y,Z and I (projectors and the</span>
+<span class="c1">###                 like are not yet implemented).</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      op      =  Matrix representation of the operator</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="ps_text_to_matrix">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.ps_text_to_matrix">[docs]</a>
+<span class="k">def</span> <span class="nf">ps_text_to_matrix</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+
+    <span class="n">ops</span> <span class="o">=</span> <span class="n">ps_text_to_ops</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="n">M</span>   <span class="o">=</span> <span class="n">mla</span><span class="o">.</span><span class="n">mk</span><span class="p">(</span><span class="n">ops</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">M</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     ps_label_to_pauli(label)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Returns an a matrix representation of the Pauli operator corresponding</span>
+<span class="c1">###      to the label &lt;label&gt;.  This method is case insensitive.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      string  =  Text label for the Pauli; may be &#39;X&#39;, &#39;Y&#39;, &#39;Z&#39; or &#39;I&#39;</span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      op      =  Matrix representation of the operator</span>
+<span class="c1">###      -1      =  If label is not recognized.</span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<div class="viewcode-block" id="label_to_pauli">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.label_to_pauli">[docs]</a>
+<span class="k">def</span> <span class="nf">label_to_pauli</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
+
+    <span class="k">if</span>  <span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">qo</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">qo</span><span class="o">.</span><span class="n">Y</span><span class="p">)</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;z&#39;</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">qo</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;i&#39;</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">qo</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;+&#39;</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">qo</span><span class="o">.</span><span class="n">przp</span><span class="p">)</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">qo</span><span class="o">.</span><span class="n">przm</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1">## Error Condition</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">No matching Pauli operator: &quot;</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
+
+    
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   FUNCTION     ham_from_pauli_tuples(tuples,types,coeffs,N)</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   DESCRIPTION</span>
+<span class="c1">###</span>
+<span class="c1">###      Expand Pauli strings into matrix representation of Hamiltonian.</span>
+<span class="c1">###</span>
+<span class="c1">###   ARGUMENTS</span>
+<span class="c1">###</span>
+<span class="c1">###      string  = </span>
+<span class="c1">###</span>
+<span class="c1">###   RETURNS</span>
+<span class="c1">###</span>
+<span class="c1">###      op      =  </span>
+<span class="c1">###</span>
+<span class="c1">###   REQUIRES</span>
+<span class="c1">###</span>
+<span class="c1">###      numpy as np</span>
+<span class="c1">###</span>
+
+<span class="k">def</span> <span class="nf">ham_from_pauli_tuples</span><span class="p">(</span><span class="n">tuples</span><span class="p">,</span><span class="n">types</span><span class="p">,</span><span class="n">coeffs</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+
+    <span class="n">H</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">j</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tuples</span><span class="p">)):</span>
+
+        <span class="n">p_string</span> <span class="o">=</span> <span class="n">ps_text_pad</span><span class="p">(</span><span class="n">tuples</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">types</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">H</span>       <span class="o">+=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">ps_text_to_matrix</span><span class="p">(</span><span class="n">p_string</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">###</span>
+<span class="c1">###   PAULI STRING PRINTING ROUTINES</span>
+<span class="c1">###</span>
+<span class="c1">################################################################################</span>
+
+
+<div class="viewcode-block" id="ps_text_full_set">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.ps_text_full_set">[docs]</a>
+<span class="k">def</span> <span class="nf">ps_text_full_set</span><span class="p">(</span><span class="n">Sites</span><span class="p">,</span><span class="n">Strings</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">expand_projector</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+    <span class="n">Padded</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">coeffs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Sites</span><span class="p">,</span><span class="n">Strings</span><span class="p">,</span><span class="n">coeffs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">):</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">Padded</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ps_text_pad</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">N</span><span class="p">),</span><span class="n">pair</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Sites</span><span class="p">,</span><span class="n">Strings</span><span class="p">,</span><span class="n">coeffs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">):</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">Padded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ps_text_pad</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">N</span><span class="p">))</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">Padded</span><span class="p">)</span></div>
+
+
+
+    
+
+
+
+<div class="viewcode-block" id="ps_text_full_set_withzero">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.ps_text_full_set_withzero">[docs]</a>
+<span class="k">def</span> <span class="nf">ps_text_full_set_withzero</span><span class="p">(</span><span class="n">Sites</span><span class="p">,</span><span class="n">Strings</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">expand_projector</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">do_pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">pad_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+
+    <span class="n">Padded</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">coeffs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">do_pad</span><span class="p">):</span>
+            <span class="n">Padded</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ps_text_pad</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="n">N</span><span class="p">),</span><span class="n">pad_value</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Sites</span><span class="p">,</span><span class="n">Strings</span><span class="p">,</span><span class="n">coeffs</span><span class="p">):</span>
+            <span class="n">Padded</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ps_text_pad</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">N</span><span class="p">),</span><span class="n">pair</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">do_pad</span><span class="p">):</span>
+            <span class="n">Padded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ps_text_pad</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Sites</span><span class="p">,</span><span class="n">Strings</span><span class="p">):</span>
+            <span class="n">Padded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ps_text_pad</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">N</span><span class="p">))</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">Padded</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ham_from_pauli_tuples">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.ham_from_pauli_tuples">[docs]</a>
+<span class="k">def</span> <span class="nf">ham_from_pauli_tuples</span><span class="p">(</span><span class="n">tuples</span><span class="p">,</span><span class="n">types</span><span class="p">,</span><span class="n">coeffs</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+
+    <span class="n">H</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">j</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tuples</span><span class="p">)):</span>
+
+        <span class="n">p_string</span> <span class="o">=</span> <span class="n">ps_text_pad</span><span class="p">(</span><span class="n">tuples</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">types</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">H</span>       <span class="o">+=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">ps_text_to_matrix</span><span class="p">(</span><span class="n">p_string</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="ps_print_set">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.ps_print_set">[docs]</a>
+<span class="k">def</span> <span class="nf">ps_print_set</span><span class="p">(</span><span class="n">tuples</span><span class="p">,</span><span class="n">types</span><span class="p">,</span><span class="n">coeffs</span><span class="p">):</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">Sites     </span><span class="se">\t</span><span class="s2"> Type </span><span class="se">\t\t</span><span class="s2"> Coefficient</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="mi">80</span><span class="p">,</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tuples</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">),</span><span class="s2">&quot;:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">tuples</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">types</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">()</span></div>
+
+
+
+
+<div class="viewcode-block" id="ps_print_set_merged">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.clam.html#src.pyLIQTR.clam.operator_strings.ps_print_set_merged">[docs]</a>
+<span class="k">def</span> <span class="nf">ps_print_set_merged</span><span class="p">(</span><span class="n">tuples</span><span class="p">):</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Strings     </span><span class="se">\t</span><span class="s2"> Coefficients</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="mi">50</span><span class="p">,</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tuples</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tuples</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">tuples</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

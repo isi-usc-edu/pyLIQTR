@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.utils.tests package &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/pyliqtr_logo.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.utils.tests package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/_modules/src.pyLIQTR.utils.tests.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-pyliqtr-utils-tests-package">
+<h1>src.pyLIQTR.utils.tests package<a class="headerlink" href="#src-pyliqtr-utils-tests-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.utils.tests.conftest">
+<span id="src-pyliqtr-utils-tests-conftest-module"></span><h2>src.pyLIQTR.utils.tests.conftest module<a class="headerlink" href="#module-src.pyLIQTR.utils.tests.conftest" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.conftest.electronic_structure_LinearT_encoding">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.tests.conftest.</span></span><span class="sig-name descname"><span class="pre">electronic_structure_LinearT_encoding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script_loc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/conftest.html#electronic_structure_LinearT_encoding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.conftest.electronic_structure_LinearT_encoding" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.conftest.fermi_hubbard_dynamics">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.tests.conftest.</span></span><span class="sig-name descname"><span class="pre">fermi_hubbard_dynamics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/conftest.html#fermi_hubbard_dynamics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.conftest.fermi_hubbard_dynamics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.conftest.heisenberg_phase_estimation">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.tests.conftest.</span></span><span class="sig-name descname"><span class="pre">heisenberg_phase_estimation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/conftest.html#heisenberg_phase_estimation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.conftest.heisenberg_phase_estimation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.tests.test_gate_complexity">
+<span id="src-pyliqtr-utils-tests-test-gate-complexity-module"></span><h2>src.pyLIQTR.utils.tests.test_gate_complexity module<a class="headerlink" href="#module-src.pyLIQTR.utils.tests.test_gate_complexity" title="Link to this heading"></a></h2>
+<p>DISTRIBUTION STATEMENT A. Approved for public release. Distribution is unlimited.</p>
+<p>This material is based upon work supported by the Under Secretary of Defense for
+Research and Engineering under Air Force Contract No. FA8702-15-D-0001. Any opinions,
+findings, conclusions or recommendations expressed in this material are those of the
+author(s) and do not necessarily reflect the views of the Under Secretary of Defense
+for Research and Engineering.</p>
+<p>© 2022 Massachusetts Institute of Technology.</p>
+<p>The software/firmware is provided to you on an As-Is basis</p>
+<p>Delivered to the U.S. Government with Unlimited Rights, as defined in DFARS Part
+252.227-7013 or 7014 (Feb 2014). Notwithstanding any copyright notice, U.S. Government
+rights in this work are defined by DFARS 252.227-7013 or DFARS 252.227-7014 as detailed
+above. Use of this work other than as specifically authorized by the U.S. Government
+may violate any copyrights that exist in this work.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_gate_complexity.TestGateComplexity">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.tests.test_gate_complexity.</span></span><span class="sig-name descname"><span class="pre">TestGateComplexity</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_gate_complexity.html#TestGateComplexity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_gate_complexity.TestGateComplexity" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_gate_complexity.TestGateComplexity.test_gate_complexity_init">
+<span class="sig-name descname"><span class="pre">test_gate_complexity_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fermi_hubbard_dynamics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_gate_complexity.html#TestGateComplexity.test_gate_complexity_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_gate_complexity.TestGateComplexity.test_gate_complexity_init" title="Link to this definition"></a></dt>
+<dd><p>test the basic measure of a simple Fermi Hubbard Circuit</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.tests.test_printing">
+<span id="src-pyliqtr-utils-tests-test-printing-module"></span><h2>src.pyLIQTR.utils.tests.test_printing module<a class="headerlink" href="#module-src.pyLIQTR.utils.tests.test_printing" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.tests.test_printing.</span></span><span class="sig-name descname"><span class="pre">TestPrinting</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.build_circuit_repeat_different_key">
+<span class="sig-name descname"><span class="pre">build_circuit_repeat_different_key</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.build_circuit_repeat_different_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.build_circuit_repeat_different_key" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.build_circuit_rotations_qrom">
+<span class="sig-name descname"><span class="pre">build_circuit_rotations_qrom</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.build_circuit_rotations_qrom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.build_circuit_rotations_qrom" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.build_circuit_single">
+<span class="sig-name descname"><span class="pre">build_circuit_single</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.build_circuit_single"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.build_circuit_single" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.chemical_phase_estimation">
+<span class="sig-name descname"><span class="pre">chemical_phase_estimation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.chemical_phase_estimation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.chemical_phase_estimation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.electronic_structure_LinearT_encoding">
+<span class="sig-name descname"><span class="pre">electronic_structure_LinearT_encoding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script_loc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.electronic_structure_LinearT_encoding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.electronic_structure_LinearT_encoding" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.fermi_hubbard_dynamics">
+<span class="sig-name descname"><span class="pre">fermi_hubbard_dynamics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.fermi_hubbard_dynamics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.fermi_hubbard_dynamics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.heisenberg_phase_estimation">
+<span class="sig-name descname"><span class="pre">heisenberg_phase_estimation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.heisenberg_phase_estimation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.heisenberg_phase_estimation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_chemical_phase_estimation">
+<span class="sig-name descname"><span class="pre">test_chemical_phase_estimation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chemical_phase_estimation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.test_chemical_phase_estimation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_chemical_phase_estimation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_chemical_phase_estimation_context">
+<span class="sig-name descname"><span class="pre">test_chemical_phase_estimation_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chemical_phase_estimation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.test_chemical_phase_estimation_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_chemical_phase_estimation_context" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_classical_control_examples">
+<span class="sig-name descname"><span class="pre">test_classical_control_examples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">build_circuit_single</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_circuit_repeat_different_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_circuit_rotations_qrom</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.test_classical_control_examples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_classical_control_examples" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_electronic_structure_context">
+<span class="sig-name descname"><span class="pre">test_electronic_structure_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">electronic_structure_LinearT_encoding</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.test_electronic_structure_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_electronic_structure_context" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard">
+<span class="sig-name descname"><span class="pre">test_fermi_hubbard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fermi_hubbard_dynamics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.test_fermi_hubbard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard_context">
+<span class="sig-name descname"><span class="pre">test_fermi_hubbard_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fermi_hubbard_dynamics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.test_fermi_hubbard_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard_context" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard_context_error">
+<span class="sig-name descname"><span class="pre">test_fermi_hubbard_context_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fermi_hubbard_dynamics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.test_fermi_hubbard_context_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard_context_error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard_simple_context">
+<span class="sig-name descname"><span class="pre">test_fermi_hubbard_simple_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fermi_hubbard_dynamics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.test_fermi_hubbard_simple_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_fermi_hubbard_simple_context" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_get_attr_qasm">
+<span class="sig-name descname"><span class="pre">test_get_attr_qasm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fermi_hubbard_dynamics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.test_get_attr_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_get_attr_qasm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_heisenberg">
+<span class="sig-name descname"><span class="pre">test_heisenberg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">heisenberg_phase_estimation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#TestPrinting.test_heisenberg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.TestPrinting.test_heisenberg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_printing.script_loc">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.tests.test_printing.</span></span><span class="sig-name descname"><span class="pre">script_loc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_printing.html#script_loc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_printing.script_loc" title="Link to this definition"></a></dt>
+<dd><p>Return the directory of the currently running test script</p>
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.tests.test_resoure_analyze">
+<span id="src-pyliqtr-utils-tests-test-resoure-analyze-module"></span><h2>src.pyLIQTR.utils.tests.test_resoure_analyze module<a class="headerlink" href="#module-src.pyLIQTR.utils.tests.test_resoure_analyze" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.utils.tests.test_utils">
+<span id="src-pyliqtr-utils-tests-test-utils-module"></span><h2>src.pyLIQTR.utils.tests.test_utils module<a class="headerlink" href="#module-src.pyLIQTR.utils.tests.test_utils" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_utils.TestUtils">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.utils.tests.test_utils.</span></span><span class="sig-name descname"><span class="pre">TestUtils</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_utils.html#TestUtils"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_utils.TestUtils" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_utils.TestUtils.test_invalid_trotterized_hamiltonian">
+<span class="sig-name descname"><span class="pre">test_invalid_trotterized_hamiltonian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_utils.html#TestUtils.test_invalid_trotterized_hamiltonian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_invalid_trotterized_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Generate an invalid hamiltonian for a system (H2 in this case),
+apply jordan-wigner transform and create the trotterized hamiltonian cirq-qasm generator</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_utils.TestUtils.test_is_mac">
+<span class="sig-name descname"><span class="pre">test_is_mac</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_utils.html#TestUtils.test_is_mac"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_is_mac" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_utils.TestUtils.test_is_windows_on_mac_or_linux">
+<span class="sig-name descname"><span class="pre">test_is_windows_on_mac_or_linux</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_utils.html#TestUtils.test_is_windows_on_mac_or_linux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_is_windows_on_mac_or_linux" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_utils.TestUtils.test_is_windows_on_windows">
+<span class="sig-name descname"><span class="pre">test_is_windows_on_windows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_utils.html#TestUtils.test_is_windows_on_windows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_is_windows_on_windows" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_utils.TestUtils.test_open_fermion_to_qasm">
+<span class="sig-name descname"><span class="pre">test_open_fermion_to_qasm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trotterized_hamiltonian</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_utils.html#TestUtils.test_open_fermion_to_qasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_open_fermion_to_qasm" title="Link to this definition"></a></dt>
+<dd><p>This will test the util function that translates OpenFermion to OpenQASM 2.0.
+It does this by simply passing in the same input every time, expecting to get the same output.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_utils.TestUtils.test_to_openqasm">
+<span class="sig-name descname"><span class="pre">test_to_openqasm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vlasov_n8_qsp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">execution_number</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_utils.html#TestUtils.test_to_openqasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_to_openqasm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_utils.TestUtils.test_writing_out_qasm_with_decomposed_rotations">
+<span class="sig-name descname"><span class="pre">test_writing_out_qasm_with_decomposed_rotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trotterized_hamiltonian</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_utils.html#TestUtils.test_writing_out_qasm_with_decomposed_rotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_writing_out_qasm_with_decomposed_rotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_utils.TestUtils.test_writing_out_qasm_with_rotations">
+<span class="sig-name descname"><span class="pre">test_writing_out_qasm_with_rotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trotterized_hamiltonian</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_utils.html#TestUtils.test_writing_out_qasm_with_rotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_utils.TestUtils.test_writing_out_qasm_with_rotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_utils.TestUtils.trotterized_hamiltonian">
+<span class="sig-name descname"><span class="pre">trotterized_hamiltonian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_utils.html#TestUtils.trotterized_hamiltonian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_utils.TestUtils.trotterized_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Generate the hamiltonian for a system (H2 in this case),
+apply jordan-wigner transform and create the trotterized hamiltonian cirq-qasm generator</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.utils.tests.test_utils.TestUtils.vlasov_n8_qsp">
+<span class="sig-name descname"><span class="pre">vlasov_n8_qsp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/utils/tests/test_utils.html#TestUtils.vlasov_n8_qsp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.utils.tests.test_utils.TestUtils.vlasov_n8_qsp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.utils.tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.pyLIQTR.utils.tests" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

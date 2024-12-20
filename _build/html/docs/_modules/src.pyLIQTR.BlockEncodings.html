@@ -1,0 +1,709 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.BlockEncodings package &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/pyliqtr_logo.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.BlockEncodings package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/_modules/src.pyLIQTR.BlockEncodings.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-pyliqtr-blockencodings-package">
+<h1>src.pyLIQTR.BlockEncodings package<a class="headerlink" href="#src-pyliqtr-blockencodings-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.BlockEncodings.BlockEncoding">
+<span id="src-pyliqtr-blockencodings-blockencoding-module"></span><h2>src.pyLIQTR.BlockEncodings.BlockEncoding module<a class="headerlink" href="#module-src.pyLIQTR.BlockEncodings.BlockEncoding" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.BlockEncoding.</span></span><span class="sig-name descname"><span class="pre">BlockEncoding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ProblemInstance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/BlockEncoding.html#BlockEncoding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GateWithRegisters</span></code></p>
+<p>This class creates an instance of the Qualtran BlockEncoding, which is a container for gates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ProblemInstance</strong> (<a class="reference internal" href="src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance" title="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance"><em>ProblemInstance</em></a>) – an instance of the ProblemInstance class</p></li>
+<li><p><strong>control_val</strong> (<em>Any</em>) – a variable that will get passed to the BlockEncoding and used as a control value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>an instance of the BlockEncoding() class</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding" title="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding">BlockEncoding</a></p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.all_qubits">
+<span class="sig-name descname"><span class="pre">all_qubits</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.all_qubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.circuit">
+<span class="sig-name descname"><span class="pre">circuit</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.control_registers">
+<span class="sig-name descname"><span class="pre">control_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.control_registers" title="Link to this definition"></a></dt>
+<dd><p>returns the list of control registers from the circuit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.selection_registers">
+<span class="sig-name descname"><span class="pre">selection_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.selection_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.target_registers">
+<span class="sig-name descname"><span class="pre">target_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding.target_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.BlockEncoding.</span></span><span class="sig-name descname"><span class="pre">BlockEncoding_select_prepare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ProblemInstance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select_oracle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepare_oracle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_prepare</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_prepare_inverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invert_select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/BlockEncoding.html#BlockEncoding_select_prepare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding" title="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlockEncoding</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.control_registers">
+<span class="sig-name descname"><span class="pre">control_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.control_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/BlockEncoding.html#BlockEncoding_select_prepare.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.junk_registers">
+<span class="sig-name descname"><span class="pre">junk_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.junk_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.selection_registers">
+<span class="sig-name descname"><span class="pre">selection_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.selection_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.target_registers">
+<span class="sig-name descname"><span class="pre">target_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.BlockEncoding.BlockEncoding_select_prepare.target_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.BlockEncodings.CarlemanLinearization">
+<span id="src-pyliqtr-blockencodings-carlemanlinearization-module"></span><h2>src.pyLIQTR.BlockEncodings.CarlemanLinearization module<a class="headerlink" href="#module-src.pyLIQTR.BlockEncodings.CarlemanLinearization" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.CarlemanLinearization.</span></span><span class="sig-name descname"><span class="pre">Carleman_Linearization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ProblemInstance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/CarlemanLinearization.html#Carleman_Linearization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BlockEncoding</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.F_oracles">
+<span class="sig-name descname"><span class="pre">F_oracles</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.F_oracles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.control_registers">
+<span class="sig-name descname"><span class="pre">control_registers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Tuple" title="(in Python v3.8)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Register</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/CarlemanLinearization.html#Carleman_Linearization.control_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.control_registers" title="Link to this definition"></a></dt>
+<dd><p>returns the list of control registers from the circuit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DecompositionContext</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Sequence" title="(in Python v3.8)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Qid</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Operation</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">OpTree</span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/CarlemanLinearization.html#Carleman_Linearization.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.selection_registers">
+<span class="sig-name descname"><span class="pre">selection_registers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Tuple" title="(in Python v3.8)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Register</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/CarlemanLinearization.html#Carleman_Linearization.selection_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.selection_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.target_registers">
+<span class="sig-name descname"><span class="pre">target_registers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Tuple" title="(in Python v3.8)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Register</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/CarlemanLinearization.html#Carleman_Linearization.target_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.target_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.vector">
+<span class="sig-name descname"><span class="pre">vector</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.Carleman_Linearization.vector" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUCorrections">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.CarlemanLinearization.</span></span><span class="sig-name descname"><span class="pre">LCUCorrections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/CarlemanLinearization.html#LCUCorrections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUCorrections" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GateWithRegisters</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUCorrections.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DecompositionContext</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Sequence" title="(in Python v3.8)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Qid</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Operation</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">OpTree</span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/CarlemanLinearization.html#LCUCorrections.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUCorrections.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUCorrections.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUCorrections.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUCorrections.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUCorrections.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUPrep">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.CarlemanLinearization.</span></span><span class="sig-name descname"><span class="pre">LCUPrep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/CarlemanLinearization.html#LCUPrep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUPrep" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GateWithRegisters</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUPrep.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DecompositionContext</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Sequence" title="(in Python v3.8)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Qid</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Operation</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">OpTree</span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/CarlemanLinearization.html#LCUPrep.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUPrep.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUPrep.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUPrep.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUPrep.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUPrep.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUPrep.vector">
+<span class="sig-name descname"><span class="pre">vector</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.LCUPrep.vector" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.SwapCorrections">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.CarlemanLinearization.</span></span><span class="sig-name descname"><span class="pre">SwapCorrections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/CarlemanLinearization.html#SwapCorrections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.SwapCorrections" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GateWithRegisters</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.SwapCorrections.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DecompositionContext</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Sequence" title="(in Python v3.8)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Qid</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Operation</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">OpTree</span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/CarlemanLinearization.html#SwapCorrections.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.SwapCorrections.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.SwapCorrections.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.SwapCorrections.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.CarlemanLinearization.SwapCorrections.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.CarlemanLinearization.SwapCorrections.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.BlockEncodings.DoubleFactorized">
+<span id="src-pyliqtr-blockencodings-doublefactorized-module"></span><h2>src.pyLIQTR.BlockEncodings.DoubleFactorized module<a class="headerlink" href="#module-src.pyLIQTR.BlockEncodings.DoubleFactorized" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.DoubleFactorized.</span></span><span class="sig-name descname"><span class="pre">DoubleFactorized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ProblemInstance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_error_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf_error_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">br</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_gradient_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bits_rot_givens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_bitsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outer_prep_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/DoubleFactorized.html#DoubleFactorized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BlockEncoding</span></code></p>
+<p>Implements encoding from Appendix C Figure 16 of Ref [1].</p>
+<p>References:
+[1] <a class="reference external" href="https://arxiv.org/abs/2011.03494">https://arxiv.org/abs/2011.03494</a>
+[2] <a class="reference external" href="https://arxiv.org/abs/2007.14460">https://arxiv.org/abs/2007.14460</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ProblemInstance</strong> (<a class="reference internal" href="src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance" title="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance"><em>ProblemInstance</em></a>) – A pyLIQTR.ProblemInstance for the system of interest. Currently supports ChemicalHamiltonian instances.</p></li>
+<li><p><strong>df_error_threshold</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The threshold used to throw out factors from the double factorization. Truncation is carried out as described in Appendix C Section 3 of Ref [1]. This parameter corresponds to the RHS of Eq C41.</p></li>
+<li><p><strong>sf_error_threshold</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The threshold used to throw out factors from the first eigendecomposition. Terms with eigenvalues less than or equal to sf_error_threshold are thrown out. This decreases L, the rank of the two body tensor in eq C10.</p></li>
+<li><p><strong>br</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of precision bits to use for the rotation angles output by the QROM in step 2 and used in step 3a)iv on page 52 of Ref [1]. Note, this is not used in step 1a which does not currently use a phase gradient rotation.</p></li>
+<li><p><strong>phase_gradient_eps</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Overall error in gradient state preparation, ie each rotation done to prepare the phase gradient state will be performed with error phase_gradient_eps/bits_rot_givens</p></li>
+<li><p><strong>energy_error</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The allowable error in phase estimation energy. Used to set bits_rot_givens, keep_bitsize, and outer_prep_eps if step_error is not passed as input.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Optional inputs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>step_error</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Error in spectral norm of walk operator. Corresponds to epsilon in eq C24 of Ref [1]. Used to set bits_rot_givens, keep_bitsize, and outer_prep_eps if those are not passed as inputs.</p></li>
+<li><p><strong>bits_rot_givens</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of precision bits to use for the Givens rotations in step 4 on page 53 of Ref [1]. Called $eth$ in Ref [1].</p></li>
+<li><p><strong>keep_bitsize</strong> (<em>innt</em>) – Number of precision bits to use for preparing the coefficients on the second selection register (p). N2 in Eq C31 of Ref [1].</p></li>
+<li><p><strong>outer_prep_eps</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Precision of normalized coefficients prepared on first selection register (l). Used to set N1 in Eq C27 of Ref [1].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>an instance of the DoubleFactorized() class</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized" title="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized">DoubleFactorized</a></p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.alpha" title="Link to this definition"></a></dt>
+<dd><p>returns the double factorized Hamiltonian norm.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.compute_data_l">
+<span class="sig-name descname"><span class="pre">compute_data_l</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/DoubleFactorized.html#DoubleFactorized.compute_data_l"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.compute_data_l" title="Link to this definition"></a></dt>
+<dd><p>returns the data to be loaded using a qrom.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.control_registers">
+<span class="sig-name descname"><span class="pre">control_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.control_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/DoubleFactorized.html#DoubleFactorized.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.extra_registers">
+<span class="sig-name descname"><span class="pre">extra_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.extra_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.get_givens_angles">
+<span class="sig-name descname"><span class="pre">get_givens_angles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/DoubleFactorized.html#DoubleFactorized.get_givens_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.get_givens_angles" title="Link to this definition"></a></dt>
+<dd><p>returns the Givens rotation angles in binary form for the basis transformation rotations.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.inner_prep_extra_registers">
+<span class="sig-name descname"><span class="pre">inner_prep_extra_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.inner_prep_extra_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.outer_prep_extra_registers">
+<span class="sig-name descname"><span class="pre">outer_prep_extra_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.outer_prep_extra_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.selection_registers">
+<span class="sig-name descname"><span class="pre">selection_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.selection_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.target_registers">
+<span class="sig-name descname"><span class="pre">target_registers</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.DoubleFactorized.target_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.DoubleFactorized.approx_angles_as_ints_with_br_bits">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.DoubleFactorized.</span></span><span class="sig-name descname"><span class="pre">approx_angles_as_ints_with_br_bits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/1.23/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Any" title="(in Python v3.8)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/1.23/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.23)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">br</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/DoubleFactorized.html#approx_angles_as_ints_with_br_bits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.DoubleFactorized.approx_angles_as_ints_with_br_bits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.BlockEncodings.FirstQuantized">
+<span id="src-pyliqtr-blockencodings-firstquantized-module"></span><h2>src.pyLIQTR.BlockEncodings.FirstQuantized module<a class="headerlink" href="#module-src.pyLIQTR.BlockEncodings.FirstQuantized" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.FirstQuantized.</span></span><span class="sig-name descname"><span class="pre">FirstQuantized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ProblemInstance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometry_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bits_rot_aa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_M</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_R</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/FirstQuantized.html#FirstQuantized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BlockEncoding_select_prepare</span></code></p>
+<p>Implements encoding from Section II of the reference.</p>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://arxiv.org/abs/2105.12767">Fault-Tolerant Quantum Simulations of Chemistry in First Quantization</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ProblemInstance</strong> (<a class="reference internal" href="src.pyLIQTR.ProblemInstances.html#src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance" title="src.pyLIQTR.ProblemInstances.ProblemInstance.ProblemInstance"><em>ProblemInstance</em></a>) – A pyLIQTR.ProblemInstance for the system of interest. Currently supports <code class="xref py py-class docutils literal notranslate"><span class="pre">MoleculeParameters</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">ElectronicStructure</span></code> instances.</p></li>
+<li><p><strong>geometry_file</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – File containing the atomic coordinates for the system of interest. Only needed if ProblemInstance is <code class="xref py py-class docutils literal notranslate"><span class="pre">ElectronicStructure</span></code>.</p></li>
+<li><p><strong>num_bit_rot_aa</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of precision bits used for rotating the ancilla qubit used for amplitude amplification in the uniform superpostion subroutine, equivalent to <span class="math notranslate nohighlight">\(b_r\)</span> in the reference.</p></li>
+<li><p><strong>eps_M</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The allowable error in the estimated energy due to imprecise preparation of the state with amplitudes <span class="math notranslate nohighlight">\(1/||\nu||\)</span></p></li>
+<li><p><strong>eps_R</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The allowable error in energies due to the finite precision of the atomic positions.</p></li>
+<li><p><strong>eps_T</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Allowable error in energies due to the finite precision in the rotation of the qubit selecting between T and U + V.</p></li>
+<li><p><strong>n_M</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of bits used in the inequality testing to prepare a state with amplitudes <span class="math notranslate nohighlight">\(1/||\nu||\)</span>, equivalent to <span class="math notranslate nohighlight">\(n_{\mathcal{M}}\)</span> in the reference.</p></li>
+<li><p><strong>n_T</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of bits used for rotating the ancilla qubit used to select between T and U+V, equivalent to <span class="math notranslate nohighlight">\(n_T\)</span> in the reference.</p></li>
+<li><p><strong>n_R</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of bits used to store each component of the atomic position, equivalent to <span class="math notranslate nohighlight">\(n_R\)</span> in the reference.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.Peq">
+<span class="sig-name descname"><span class="pre">Peq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/FirstQuantized.html#FirstQuantized.Peq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.Peq" title="Link to this definition"></a></dt>
+<dd><p>Calculates state preparation success probability based on eq 63 of the reference.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.get_n_M">
+<span class="sig-name descname"><span class="pre">get_n_M</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/FirstQuantized.html#FirstQuantized.get_n_M"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.get_n_M" title="Link to this definition"></a></dt>
+<dd><p>Calculates n_M based on eq 132 of the reference.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.get_n_R">
+<span class="sig-name descname"><span class="pre">get_n_R</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/FirstQuantized.html#FirstQuantized.get_n_R"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.get_n_R" title="Link to this definition"></a></dt>
+<dd><p>Calculates n_R based on eq 133 of the reference.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.get_n_T">
+<span class="sig-name descname"><span class="pre">get_n_T</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/FirstQuantized.html#FirstQuantized.get_n_T"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.get_n_T" title="Link to this definition"></a></dt>
+<dd><p>Calculates n_T based on eq 134 of the reference.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.lam">
+<span class="sig-name descname"><span class="pre">lam</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.lam" title="Link to this definition"></a></dt>
+<dd><p>Calculates value of lambda based on eq 127 of the reference.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.lam_Tp">
+<span class="sig-name descname"><span class="pre">lam_Tp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/FirstQuantized.html#FirstQuantized.lam_Tp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.lam_Tp" title="Link to this definition"></a></dt>
+<dd><p>Calculates lambda_T’ based on eq 71 of the reference.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.lam_U">
+<span class="sig-name descname"><span class="pre">lam_U</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/FirstQuantized.html#FirstQuantized.lam_U"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.lam_U" title="Link to this definition"></a></dt>
+<dd><p>Calculates lambda_U based on eq 25 of the reference.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.lam_V">
+<span class="sig-name descname"><span class="pre">lam_V</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/FirstQuantized.html#FirstQuantized.lam_V"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.lam_V" title="Link to this definition"></a></dt>
+<dd><p>Calculates lambda_V based on eq 25 of the reference.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.FirstQuantized.FirstQuantized.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.BlockEncodings.LinearT">
+<span id="src-pyliqtr-blockencodings-lineart-module"></span><h2>src.pyLIQTR.BlockEncodings.LinearT module<a class="headerlink" href="#module-src.pyLIQTR.BlockEncodings.LinearT" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.LinearT.</span></span><span class="sig-name descname"><span class="pre">Fermionic_LinearT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ProblemInstance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approx_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/LinearT.html#Fermionic_LinearT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BlockEncoding_select_prepare</span></code></p>
+<p>Implements encoding from section IV of <a class="reference external" href="https://arxiv.org/pdf/1805.03662.pdf">https://arxiv.org/pdf/1805.03662.pdf</a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT.alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT.getT_array">
+<span class="sig-name descname"><span class="pre">getT_array</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT.getT_array" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT.getU_array">
+<span class="sig-name descname"><span class="pre">getU_array</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT.getU_array" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT.getV_array">
+<span class="sig-name descname"><span class="pre">getV_array</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT.getV_array" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT.get_approx_error">
+<span class="sig-name descname"><span class="pre">get_approx_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_error</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">digits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/LinearT.html#Fermionic_LinearT.get_approx_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT.get_approx_error" title="Link to this definition"></a></dt>
+<dd><p>calculates upper bound on approx_error given desired precision of estimated energy spectra (energy_error). Based on Eq. 36 in <a class="reference external" href="https://arxiv.org/pdf/1805.03662.pdf">https://arxiv.org/pdf/1805.03662.pdf</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.LinearT.Fermionic_LinearT.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.BlockEncodings.PauliStringLCU">
+<span id="src-pyliqtr-blockencodings-paulistringlcu-module"></span><h2>src.pyLIQTR.BlockEncodings.PauliStringLCU module<a class="headerlink" href="#module-src.pyLIQTR.BlockEncodings.PauliStringLCU" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.PauliStringLCU.PauliStringLCU">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.PauliStringLCU.</span></span><span class="sig-name descname"><span class="pre">PauliStringLCU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ProblemInstance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepare_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probability_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/PauliStringLCU.html#PauliStringLCU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.PauliStringLCU.PauliStringLCU" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BlockEncoding_select_prepare</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.PauliStringLCU.PauliStringLCU.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.PauliStringLCU.PauliStringLCU.alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.PauliStringLCU.PauliStringLCU.getTerms">
+<span class="sig-name descname"><span class="pre">getTerms</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.PauliStringLCU.PauliStringLCU.getTerms" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.PauliStringLCU.PauliStringLCU.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.PauliStringLCU.PauliStringLCU.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding">
+<span id="src-pyliqtr-blockencodings-fermi-hubbard-square-encoding-module"></span><h2>src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding module<a class="headerlink" href="#module-src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding.fermi_hubbard_square_encoding">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding.</span></span><span class="sig-name descname"><span class="pre">fermi_hubbard_square_encoding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ProblemInstance</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/fermi_hubbard_square_encoding.html#fermi_hubbard_square_encoding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding.fermi_hubbard_square_encoding" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BlockEncoding_select_prepare</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding.fermi_hubbard_square_encoding.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding.fermi_hubbard_square_encoding.alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding.fermi_hubbard_square_encoding.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.fermi_hubbard_square_encoding.fermi_hubbard_square_encoding.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.BlockEncodings.getEncoding">
+<span id="src-pyliqtr-blockencodings-getencoding-module"></span><h2>src.pyLIQTR.BlockEncodings.getEncoding module<a class="headerlink" href="#module-src.pyLIQTR.BlockEncodings.getEncoding" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.getEncoding.getEncoding">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.getEncoding.</span></span><span class="sig-name descname"><span class="pre">getEncoding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.pyLIQTR.BlockEncodings.VALID_ENCODINGS" title="src.pyLIQTR.BlockEncodings.VALID_ENCODINGS"><span class="pre">VALID_ENCODINGS</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepare_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings/getEncoding.html#getEncoding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.getEncoding.getEncoding" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.BlockEncodings">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.pyLIQTR.BlockEncodings" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.VALID_ENCODINGS">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.BlockEncodings.</span></span><span class="sig-name descname"><span class="pre">VALID_ENCODINGS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/BlockEncodings.html#VALID_ENCODINGS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.VALID_ENCODINGS" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.8/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.CarlemanLinearization">
+<span class="sig-name descname"><span class="pre">CarlemanLinearization</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.CarlemanLinearization" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.DoubleFactorized">
+<span class="sig-name descname"><span class="pre">DoubleFactorized</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.DoubleFactorized" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.FermiHubbardSquare">
+<span class="sig-name descname"><span class="pre">FermiHubbardSquare</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.FermiHubbardSquare" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.Fermionic">
+<span class="sig-name descname"><span class="pre">Fermionic</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.Fermionic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.FirstQuantized">
+<span class="sig-name descname"><span class="pre">FirstQuantized</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.FirstQuantized" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.LinearT">
+<span class="sig-name descname"><span class="pre">LinearT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.LinearT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.PauliLCU">
+<span class="sig-name descname"><span class="pre">PauliLCU</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#src.pyLIQTR.BlockEncodings.VALID_ENCODINGS.PauliLCU" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

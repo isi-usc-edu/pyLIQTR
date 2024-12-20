@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits.operators.tests.test_qtAdd &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits.operators.tests.test_qtAdd</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.circuits.operators.tests.test_qtAdd</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.arithmetic.addition</span> <span class="kn">import</span> <span class="n">Add</span> <span class="k">as</span> <span class="n">qtAdd</span>
+<span class="kn">from</span> <span class="nn">qualtran.cirq_interop.testing</span> <span class="kn">import</span> <span class="n">assert_circuit_inp_out_cirqsim</span>
+<span class="kn">from</span> <span class="nn">qualtran.cirq_interop.bit_tools</span> <span class="kn">import</span> <span class="n">iter_bits_twos_complement</span>
+<span class="kn">from</span> <span class="nn">qualtran._infra.data_types</span> <span class="kn">import</span> <span class="n">QUInt</span>
+<span class="kn">from</span>  <span class="nn">pyLIQTR.utils.global_ancilla_manager</span> <span class="kn">import</span> <span class="n">gam</span> <span class="k">as</span> <span class="n">gam</span>
+<span class="kn">from</span>  <span class="nn">pyLIQTR.utils.printing</span> <span class="kn">import</span> <span class="n">openqasm</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.PhaseGradientRotation</span> <span class="kn">import</span> <span class="n">approx_angle_with_br_bits</span>
+<span class="kn">from</span> <span class="nn">qualtran.bloqs.rotations.phase_gradient</span> <span class="kn">import</span> <span class="n">PhaseGradientState</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.tests.utils</span> <span class="kn">import</span> <span class="n">get_partial_state</span>
+
+<div class="viewcode-block" id="TestqtAdd">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd">[docs]</a>
+<span class="k">class</span> <span class="nc">TestqtAdd</span><span class="p">:</span>
+
+<div class="viewcode-block" id="TestqtAdd.test_qtAdd_with_zero_padding">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_with_zero_padding">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;int_x,int_y&quot;</span><span class="p">,[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),(</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">),(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">),(</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)])</span>
+    <span class="k">def</span> <span class="nf">test_qtAdd_with_zero_padding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">int_x</span><span class="p">,</span><span class="n">int_y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests the gate carries out the expected operation when adding/subtracting registers with different bitsizes by comparing simulation output with the expected output for different input values.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># create registers</span>
+        <span class="n">nb_x</span> <span class="o">=</span> <span class="n">int_x</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">nb_y</span> <span class="o">=</span> <span class="n">int_y</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">nout</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nb_x</span><span class="p">,</span><span class="n">nb_y</span><span class="p">)</span>
+        <span class="n">zero_pad</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nout</span><span class="o">-</span><span class="n">nb_x</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;zero&#39;</span><span class="p">)</span>
+        <span class="n">in_x</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nb_x</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+        <span class="n">out_y</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nout</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+        <span class="c1"># addition circuit</span>
+        <span class="n">add_circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">qtAdd</span><span class="p">(</span><span class="n">a_dtype</span><span class="o">=</span><span class="n">QUInt</span><span class="p">(</span><span class="n">nout</span><span class="p">))</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">zero_pad</span><span class="o">+</span><span class="n">in_x</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">out_y</span><span class="p">))</span>
+        <span class="c1"># subtraction circuit</span>
+        <span class="n">subtract_circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+        <span class="n">subtract_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on_each</span><span class="p">(</span><span class="o">*</span><span class="n">out_y</span><span class="p">))</span>
+        <span class="n">subtract_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qtAdd</span><span class="p">(</span><span class="n">a_dtype</span><span class="o">=</span><span class="n">QUInt</span><span class="p">(</span><span class="n">nout</span><span class="p">))</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">zero_pad</span><span class="o">+</span><span class="n">in_x</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">out_y</span><span class="p">))</span>
+        <span class="n">subtract_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on_each</span><span class="p">(</span><span class="o">*</span><span class="n">out_y</span><span class="p">))</span>
+        <span class="c1"># input states</span>
+        <span class="n">int_out_add</span> <span class="o">=</span> <span class="n">int_x</span><span class="o">+</span><span class="n">int_y</span>
+        <span class="n">int_out_sub</span> <span class="o">=</span> <span class="n">int_y</span><span class="o">-</span><span class="n">int_x</span>
+        <span class="n">init_state</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iter_bits_twos_complement</span><span class="p">(</span><span class="n">int_x</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="n">nb_x</span><span class="p">))</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">iter_bits_twos_complement</span><span class="p">(</span><span class="n">int_y</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="n">nout</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">zero_pad</span><span class="p">)</span>
+        <span class="c1"># output states</span>
+        <span class="n">out_state_add</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iter_bits_twos_complement</span><span class="p">(</span><span class="n">int_x</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="n">nb_x</span><span class="p">))</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">iter_bits_twos_complement</span><span class="p">(</span><span class="n">int_out_add</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="n">nout</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">zero_pad</span><span class="p">)</span>
+        <span class="n">out_state_sub</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iter_bits_twos_complement</span><span class="p">(</span><span class="n">int_x</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="n">nb_x</span><span class="p">))</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">iter_bits_twos_complement</span><span class="p">(</span><span class="n">int_out_sub</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="n">nout</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">zero_pad</span><span class="p">)</span>
+        <span class="c1"># verify simulated results</span>
+        <span class="n">qubit_order</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">in_x</span><span class="p">,</span><span class="o">*</span><span class="n">out_y</span><span class="p">,</span><span class="o">*</span><span class="n">zero_pad</span><span class="p">]</span>
+        <span class="n">assert_circuit_inp_out_cirqsim</span><span class="p">(</span><span class="n">add_circuit</span><span class="p">,</span><span class="n">qubit_order</span><span class="o">=</span><span class="n">qubit_order</span><span class="p">,</span><span class="n">inputs</span><span class="o">=</span><span class="n">init_state</span><span class="p">,</span><span class="n">outputs</span><span class="o">=</span><span class="n">out_state_add</span><span class="p">)</span>
+        <span class="n">assert_circuit_inp_out_cirqsim</span><span class="p">(</span><span class="n">subtract_circuit</span><span class="p">,</span><span class="n">qubit_order</span><span class="o">=</span><span class="n">qubit_order</span><span class="p">,</span><span class="n">inputs</span><span class="o">=</span><span class="n">init_state</span><span class="p">,</span><span class="n">outputs</span><span class="o">=</span><span class="n">out_state_sub</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestqtAdd.test_qtAdd_with_phase_gradient">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_with_phase_gradient">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;test_angle,br,bphi&quot;</span><span class="p">,[(</span><span class="mf">6.24857</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),(</span><span class="o">-</span><span class="mf">2.63212</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),(</span><span class="o">-</span><span class="mf">1.73161</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mf">0.79874</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)])</span>
+    <span class="k">def</span> <span class="nf">test_qtAdd_with_phase_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">test_angle</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span><span class="n">br</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span><span class="n">bphi</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">br</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;angle&#39;</span><span class="p">)</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">bphi</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;phi&#39;</span><span class="p">)</span>
+        <span class="n">zero_pad</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">bphi</span><span class="o">-</span><span class="n">br</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;zero&#39;</span><span class="p">)</span>
+
+        <span class="n">create_phase_grad_state</span> <span class="o">=</span> <span class="n">PhaseGradientState</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">bphi</span><span class="p">)</span>
+
+        <span class="n">binary_angle</span> <span class="o">=</span> <span class="n">approx_angle_with_br_bits</span><span class="p">(</span><span class="n">test_angle</span><span class="p">,</span><span class="n">br</span><span class="p">)</span>
+
+        <span class="n">add_circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+        <span class="n">sub_circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+        <span class="c1"># prepare angle register</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">bit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">angle</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">binary_angle</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">add_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">bit</span><span class="p">))</span>
+                <span class="n">sub_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">bit</span><span class="p">))</span>
+
+        <span class="c1"># prepare phase gradient state</span>
+        <span class="n">add_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">create_phase_grad_state</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">phi</span><span class="p">))</span>
+        <span class="n">sub_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">create_phase_grad_state</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">phi</span><span class="p">))</span>
+        <span class="c1"># flip phi for subtraction</span>
+        <span class="n">sub_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on_each</span><span class="p">(</span><span class="o">*</span><span class="n">phi</span><span class="p">))</span>
+
+        <span class="n">add_gate</span> <span class="o">=</span> <span class="n">qtAdd</span><span class="p">(</span><span class="n">a_dtype</span><span class="o">=</span><span class="n">QUInt</span><span class="p">(</span><span class="n">bphi</span><span class="p">))</span>
+        <span class="n">add_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">add_gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">zero_pad</span><span class="o">+</span><span class="n">angle</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">phi</span><span class="p">))</span>
+        <span class="n">sub_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">add_gate</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">zero_pad</span><span class="o">+</span><span class="n">angle</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">phi</span><span class="p">))</span>
+        <span class="c1"># unflip phi for subtraction</span>
+        <span class="n">sub_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on_each</span><span class="p">(</span><span class="o">*</span><span class="n">phi</span><span class="p">))</span>
+
+        <span class="c1"># expected outputs are phase gradient state coefficients with an additional phase based on the test angle (represented as integer ell)</span>
+        <span class="n">ell</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">binary_angle</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">add_expected_out</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">bphi</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">ell</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bphi</span><span class="p">)))</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">bphi</span><span class="p">)]),</span><span class="mi">8</span><span class="p">)</span>
+        <span class="n">sub_expected_out</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">bphi</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="n">ell</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bphi</span><span class="p">)))</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">bphi</span><span class="p">)]),</span><span class="mi">8</span><span class="p">)</span>
+
+        <span class="c1"># isolate the state output on the phi register</span>
+        <span class="n">add_res</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">add_circuit</span><span class="p">)</span>
+        <span class="n">sub_res</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">sub_circuit</span><span class="p">)</span>
+        <span class="n">add_partial_state</span> <span class="o">=</span> <span class="n">get_partial_state</span><span class="p">(</span><span class="n">add_res</span><span class="o">.</span><span class="n">final_state_vector</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">br</span><span class="p">,</span><span class="n">br</span><span class="o">+</span><span class="n">bphi</span><span class="p">))</span>
+        <span class="n">sub_partial_state</span> <span class="o">=</span> <span class="n">get_partial_state</span><span class="p">(</span><span class="n">sub_res</span><span class="o">.</span><span class="n">final_state_vector</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">br</span><span class="p">,</span><span class="n">br</span><span class="o">+</span><span class="n">bphi</span><span class="p">))</span>
+
+        <span class="k">assert</span> <span class="n">cirq</span><span class="o">.</span><span class="n">allclose_up_to_global_phase</span><span class="p">(</span><span class="n">add_partial_state</span><span class="p">,</span> <span class="n">add_expected_out</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">cirq</span><span class="o">.</span><span class="n">allclose_up_to_global_phase</span><span class="p">(</span><span class="n">sub_partial_state</span><span class="p">,</span> <span class="n">sub_expected_out</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestqtAdd.test_qtAdd_with_zero_padding_inverse">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_with_zero_padding_inverse">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;int_x,int_y&quot;</span><span class="p">,[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),(</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">),(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">),(</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)])</span>
+    <span class="k">def</span> <span class="nf">test_qtAdd_with_zero_padding_inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">int_x</span><span class="p">,</span><span class="n">int_y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests the gate inverse correctly uncomputes by checking all qubits return to initial state when gate*(gate)**(-1) is applied.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># create registers</span>
+        <span class="n">nb_x</span> <span class="o">=</span> <span class="n">int_x</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">nb_y</span> <span class="o">=</span> <span class="n">int_y</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">nout</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nb_x</span><span class="p">,</span><span class="n">nb_y</span><span class="p">)</span>
+        <span class="n">zero_pad</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nout</span><span class="o">-</span><span class="n">nb_x</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;zero&#39;</span><span class="p">)</span>
+        <span class="n">in_x</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nb_x</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+        <span class="n">out_y</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nout</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+        <span class="c1"># addition identity circuit</span>
+        <span class="n">add_circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">qtAdd</span><span class="p">(</span><span class="n">a_dtype</span><span class="o">=</span><span class="n">QUInt</span><span class="p">(</span><span class="n">nout</span><span class="p">))</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">zero_pad</span><span class="o">+</span><span class="n">in_x</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">out_y</span><span class="p">))</span>
+        <span class="n">add_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">qtAdd</span><span class="p">(</span><span class="n">a_dtype</span><span class="o">=</span><span class="n">QUInt</span><span class="p">(</span><span class="n">nout</span><span class="p">))</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">zero_pad</span><span class="o">+</span><span class="n">in_x</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">out_y</span><span class="p">)))</span>
+        <span class="c1"># subtraction identity circuit</span>
+        <span class="n">subtract_circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">()</span>
+        <span class="n">subtract_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on_each</span><span class="p">(</span><span class="o">*</span><span class="n">out_y</span><span class="p">))</span>
+        <span class="n">subtract_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">add_circuit</span><span class="p">)</span>
+        <span class="n">subtract_circuit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">on_each</span><span class="p">(</span><span class="o">*</span><span class="n">out_y</span><span class="p">))</span>
+        <span class="c1"># input states</span>
+        <span class="n">int_out_add</span> <span class="o">=</span> <span class="n">int_x</span><span class="o">+</span><span class="n">int_y</span>
+        <span class="n">int_out_sub</span> <span class="o">=</span> <span class="n">int_y</span><span class="o">-</span><span class="n">int_x</span>
+        <span class="n">init_state</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iter_bits_twos_complement</span><span class="p">(</span><span class="n">int_x</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="n">nb_x</span><span class="p">))</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">iter_bits_twos_complement</span><span class="p">(</span><span class="n">int_y</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="n">nout</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">zero_pad</span><span class="p">)</span>
+        <span class="c1"># output states equal input</span>
+        <span class="c1"># verify simulated results</span>
+        <span class="n">qubit_order</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">in_x</span><span class="p">,</span><span class="o">*</span><span class="n">out_y</span><span class="p">,</span><span class="o">*</span><span class="n">zero_pad</span><span class="p">]</span>
+        <span class="n">assert_circuit_inp_out_cirqsim</span><span class="p">(</span><span class="n">add_circuit</span><span class="p">,</span><span class="n">qubit_order</span><span class="o">=</span><span class="n">qubit_order</span><span class="p">,</span><span class="n">inputs</span><span class="o">=</span><span class="n">init_state</span><span class="p">,</span><span class="n">outputs</span><span class="o">=</span><span class="n">init_state</span><span class="p">)</span>
+        <span class="n">assert_circuit_inp_out_cirqsim</span><span class="p">(</span><span class="n">subtract_circuit</span><span class="p">,</span><span class="n">qubit_order</span><span class="o">=</span><span class="n">qubit_order</span><span class="p">,</span><span class="n">inputs</span><span class="o">=</span><span class="n">init_state</span><span class="p">,</span><span class="n">outputs</span><span class="o">=</span><span class="n">init_state</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestqtAdd.test_qtAdd_decomposes">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_decomposes">[docs]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;int_x,int_y&quot;</span><span class="p">,[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),(</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">),(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">),(</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)])</span>
+    <span class="k">def</span> <span class="nf">test_qtAdd_decomposes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">int_x</span><span class="p">,</span><span class="n">int_y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests gate decomposition existence.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">nb_x</span> <span class="o">=</span> <span class="n">int_x</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">nb_y</span> <span class="o">=</span> <span class="n">int_y</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">nout</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nb_x</span><span class="p">,</span><span class="n">nb_y</span><span class="p">)</span>
+        <span class="n">zero_pad</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nout</span><span class="o">-</span><span class="n">nb_x</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;zero&#39;</span><span class="p">)</span>
+        <span class="n">in_x</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nb_x</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+        <span class="n">out_y</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nout</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+        <span class="n">operation</span> <span class="o">=</span> <span class="n">qtAdd</span><span class="p">(</span><span class="n">a_dtype</span><span class="o">=</span><span class="n">QUInt</span><span class="p">(</span><span class="n">nout</span><span class="p">))</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">zero_pad</span><span class="o">+</span><span class="n">in_x</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">out_y</span><span class="p">)</span>
+        <span class="c1"># check decompose_once raises no error</span>
+        <span class="n">decomposed_once</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+        <span class="c1"># check decompose returns decomposition not equal to operation itself</span>
+        <span class="n">decomposed</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">([</span><span class="n">operation</span><span class="p">]</span> <span class="o">!=</span> <span class="n">decomposed</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestqtAdd.test_qtAdd_qasm">
+<a class="viewcode-back" href="../../../../../../docs/_modules/src.pyLIQTR.circuits.operators.tests.html#src.pyLIQTR.circuits.operators.tests.test_qtAdd.TestqtAdd.test_qtAdd_qasm">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_qtAdd_qasm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests qasm printing functionality.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">gam</span><span class="p">)</span>
+        <span class="n">int_x</span> <span class="o">=</span> <span class="mi">6</span>
+        <span class="n">int_y</span> <span class="o">=</span> <span class="mi">9</span>
+        <span class="n">nb_x</span> <span class="o">=</span> <span class="n">int_x</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">nb_y</span> <span class="o">=</span> <span class="n">int_y</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+        <span class="n">nout</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nb_x</span><span class="p">,</span><span class="n">nb_y</span><span class="p">)</span>
+        <span class="n">zero_pad</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nout</span><span class="o">-</span><span class="n">nb_x</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;zero&#39;</span><span class="p">)</span>
+        <span class="n">in_x</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nb_x</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+        <span class="n">out_y</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">NamedQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">nout</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+        <span class="n">operation</span> <span class="o">=</span> <span class="n">qtAdd</span><span class="p">(</span><span class="n">a_dtype</span><span class="o">=</span><span class="n">QUInt</span><span class="p">(</span><span class="n">nout</span><span class="p">))</span><span class="o">.</span><span class="n">on_registers</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">zero_pad</span><span class="o">+</span><span class="n">in_x</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">out_y</span><span class="p">)</span>
+
+        <span class="n">qasm</span> <span class="o">=</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">operation</span><span class="p">,</span><span class="n">rotation_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">qasm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

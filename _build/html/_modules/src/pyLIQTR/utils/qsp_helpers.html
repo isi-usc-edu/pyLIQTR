@@ -1,0 +1,419 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.utils.qsp_helpers &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.utils.qsp_helpers</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.utils.qsp_helpers</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="count_qubits">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.count_qubits">[docs]</a>
+<span class="k">def</span> <span class="nf">count_qubits</span><span class="p">(</span><span class="n">circuit</span><span class="p">):</span>
+    
+    <span class="c1"># Get qubit info</span>
+    <span class="n">ttl_qubits</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">()))</span>
+
+    <span class="n">anc_qubits</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ctl_qubits</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">qb</span> <span class="ow">in</span> <span class="n">circuit</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;anc&#39;</span> <span class="ow">in</span> <span class="n">qb</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">anc_qubits</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;ctl&#39;</span> <span class="ow">in</span> <span class="n">qb</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> 
+                <span class="n">ctl_qubits</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">ttl_qubits</span><span class="p">,</span> <span class="n">ctl_qubits</span><span class="p">,</span> <span class="n">anc_qubits</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="time_step_comparison_mpe">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.time_step_comparison_mpe">[docs]</a>
+<span class="k">def</span> <span class="nf">time_step_comparison_mpe</span><span class="p">(</span><span class="n">clscl</span><span class="p">,</span> <span class="n">gtbs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+    <span class="n">mpe</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">N</span>   <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">clscl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gtbs</span><span class="p">)):</span>
+        <span class="n">mean_clscl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">clscl</span><span class="p">[</span><span class="n">i</span><span class="p">,:]))</span>
+        <span class="n">mpe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">clscl</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">gtbs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">mean_clscl</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">mpe</span></div>
+
+
+<div class="viewcode-block" id="get_state_vector">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.get_state_vector">[docs]</a>
+<span class="k">def</span> <span class="nf">get_state_vector</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">lsb_first</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">lsb_first</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">state</span>
+    
+    <span class="n">sz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">)))</span>
+    <span class="n">new_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span><span class="n">amp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">bin</span><span class="p">(</span><span class="n">idx</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="n">sz</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">new_state</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">amp</span>
+    <span class="k">return</span> <span class="n">new_state</span></div>
+
+       
+
+<div class="viewcode-block" id="circuit_compare">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.circuit_compare">[docs]</a>
+<span class="k">def</span> <span class="nf">circuit_compare</span><span class="p">(</span><span class="n">circuit1</span><span class="p">,</span><span class="n">circuit2</span><span class="p">,</span><span class="n">ignoreLen</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">align_left</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">([</span><span class="n">op</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">circuit1</span><span class="o">.</span><span class="n">all_operations</span><span class="p">()]))</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">align_left</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">([</span><span class="n">op</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">circuit2</span><span class="o">.</span><span class="n">all_operations</span><span class="p">()]))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ignoreLen</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">c2</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Lens not the same </span><span class="si">{}</span><span class="s2"> != </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">c2</span><span class="p">)))</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">isSame</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,(</span><span class="n">mom1</span><span class="p">,</span><span class="n">mom2</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span><span class="n">c2</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cirq</span><span class="o">.</span><span class="n">equal_up_to_global_phase</span><span class="p">(</span><span class="n">mom1</span><span class="p">,</span><span class="n">mom2</span><span class="p">):</span>
+            <span class="c1">#double check...</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">cirq</span><span class="o">.</span><span class="n">allclose_up_to_global_phase</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">unitary</span><span class="p">(</span><span class="n">mom1</span><span class="p">),</span><span class="n">cirq</span><span class="o">.</span><span class="n">unitary</span><span class="p">(</span><span class="n">mom2</span><span class="p">)):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@idx = </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">mom1</span><span class="si">}</span><span class="se">\n</span><span class="s2">????</span><span class="se">\n</span><span class="si">{</span><span class="n">mom2</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">isSame</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">isSame</span></div>
+
+
+<div class="viewcode-block" id="snorm">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.snorm">[docs]</a>
+<span class="k">def</span> <span class="nf">snorm</span><span class="p">(</span><span class="n">a</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span><span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">b</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">b</span><span class="p">)])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">b</span><span class="p">)])</span></div>
+
+
+<div class="viewcode-block" id="splitInPairs">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.splitInPairs">[docs]</a>
+<span class="k">def</span> <span class="nf">splitInPairs</span><span class="p">(</span><span class="n">inList</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Given [a,b,c,d,e,f,....]</span>
+<span class="sd">    Return [(a,b),(c,d),(e,f),....]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">aV</span> <span class="o">=</span> <span class="p">[</span><span class="n">inList</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">inList</span><span class="p">),</span><span class="mi">2</span><span class="p">)]</span>
+    <span class="n">bV</span> <span class="o">=</span> <span class="p">[</span><span class="n">inList</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">inList</span><span class="p">),</span><span class="mi">2</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="p">[(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">aV</span><span class="p">,</span><span class="n">bV</span><span class="p">)]</span></div>
+
+    
+<div class="viewcode-block" id="splitIn2">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.splitIn2">[docs]</a>
+<span class="k">def</span> <span class="nf">splitIn2</span><span class="p">(</span><span class="n">list_in</span><span class="p">:</span><span class="n">List</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Given [a,b,c,d,e,f]</span>
+<span class="sd">    Return ([a,b,c],[d,e,f])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">mid_point</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">list_in</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">first_list</span> <span class="o">=</span> <span class="n">list_in</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">mid_point</span><span class="p">]</span>
+    <span class="n">second_list</span> <span class="o">=</span> <span class="n">list_in</span><span class="p">[</span><span class="n">mid_point</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">first_list</span><span class="p">,</span> <span class="n">second_list</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="first_two_items">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.first_two_items">[docs]</a>
+<span class="k">def</span> <span class="nf">first_two_items</span><span class="p">(</span><span class="n">in_list</span> <span class="p">:</span> <span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
+    <span class="c1"># Doing this out of abundance of caution:</span>
+    <span class="n">use_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">in_list</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span> 
+        <span class="k">return</span> <span class="p">[[],</span> <span class="n">use_list</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">use_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">use_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">use_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">use_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">],</span> <span class="n">use_list</span><span class="p">)</span></div>
+
+
+<span class="c1"># Can use a better name:</span>
+<div class="viewcode-block" id="getLineQubitIndexMap">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.getLineQubitIndexMap">[docs]</a>
+<span class="k">def</span> <span class="nf">getLineQubitIndexMap</span><span class="p">(</span><span class="n">qubit_line</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">tuple</span><span class="p">]:</span>
+    <span class="n">out_map</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qubit_line</span><span class="p">)):</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">ii</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">out_map</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out_map</span></div>
+
+
+<span class="c1"># Same - could use a better name...</span>
+<div class="viewcode-block" id="getQubitFromMap">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.getQubitFromMap">[docs]</a>
+<span class="k">def</span> <span class="nf">getQubitFromMap</span><span class="p">(</span><span class="n">tuple_in</span><span class="p">,</span> <span class="n">ctl_q</span><span class="p">,</span> <span class="n">tgt_q</span><span class="p">,</span> <span class="n">anc_q</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">tuple_in</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ctl&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ctl_q</span><span class="p">[</span><span class="n">tuple_in</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="k">elif</span> <span class="n">tuple_in</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;tgt&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tgt_q</span><span class="p">[</span><span class="n">tuple_in</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="k">elif</span> <span class="n">tuple_in</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;anc&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">anc_q</span><span class="p">[</span><span class="n">tuple_in</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Problem with Reflect algorithm...&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="decompose_CCZ">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.decompose_CCZ">[docs]</a>
+<span class="k">def</span> <span class="nf">decompose_CCZ</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">decomposed_gates</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">circuit</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt;&gt; circuit op = </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;CCZ&#39;</span><span class="p">)):</span>
+                <span class="n">decomp_ccz</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+                <span class="n">decomposed_gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">decomp_ccz</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt;&gt; CCZ Decomposed into </span><span class="si">{</span><span class="n">decomp_ccz</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="c1"># for dc in decomp_ccz:</span>
+                <span class="c1">#     print(f&#39;&gt;&gt;&gt; DC = {dc}&#39;)</span>
+                <span class="c1">#     if &quot;**-1&quot; in str(dc):</span>
+                <span class="c1">#         print(f&#39;&gt;&gt; new circuit op (did an inverse)= {cirq.inverse(dc)}&#39;)</span>
+                <span class="c1">#         decomposed_gates.append(cirq.inverse(dc))</span>
+                <span class="c1">#     else:</span>
+                <span class="c1">#         decomposed_gates.append(dc) </span>
+                <span class="c1">#         print(f&#39;&gt;&gt; new circuit op = {dc}&#39;)              </span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">decomposed_gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">decomposed_gates</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="n">cirq</span><span class="o">.</span><span class="n">InsertStrategy</span><span class="o">.</span><span class="n">NEW</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="circuit_decompose_once">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.circuit_decompose_once">[docs]</a>
+<span class="k">def</span> <span class="nf">circuit_decompose_once</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">new_qubits</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">()</span>
+    <span class="n">decomposed_gates</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">circuit</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt;&gt; circuit op = </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s1">&#39;reset&#39;</span><span class="p">,</span><span class="s1">&#39;Rx&#39;</span><span class="p">,</span><span class="s1">&#39;Ry&#39;</span><span class="p">,</span><span class="s1">&#39;Rz&#39;</span><span class="p">,</span>\
+                <span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">,</span>\
+                <span class="s1">&#39;CX&#39;</span><span class="p">,</span><span class="s1">&#39;CZ&#39;</span><span class="p">,</span><span class="s1">&#39;CCZ&#39;</span><span class="p">,</span><span class="s1">&#39;CCX&#39;</span><span class="p">,</span>\
+                <span class="s1">&#39;TOFFOLI&#39;</span><span class="p">,</span> <span class="s1">&#39;CCXi&#39;</span><span class="p">,</span> <span class="s1">&#39;ccxi&#39;</span><span class="p">,</span> <span class="s1">&#39;cirq.Measure&#39;</span><span class="p">))):</span>
+                <span class="k">if</span> <span class="s2">&quot;**-1.0&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)</span> <span class="ow">and</span> \
+                    <span class="p">((</span><span class="s2">&quot;TOFFOLI&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">))</span> \
+                     <span class="ow">or</span> <span class="p">(</span><span class="s2">&quot;CNOT&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">))):</span>
+                    <span class="n">decomposed_gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">op</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">decomposed_gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">tmp_gates</span>    <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+                <span class="n">decomp_gates</span> <span class="o">=</span> <span class="p">[]</span>
+
+                <span class="c1"># Note: If this decomposes into a MatrixGate, </span>
+                <span class="c1">#  lets decompose it once more so its not </span>
+                <span class="c1">#  a MatrixGate</span>
+                <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">tmp_gates</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;[[&#39;</span><span class="p">):</span>
+                        <span class="n">decomp_gates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">decompose_once</span><span class="p">(</span><span class="n">gate</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">decomp_gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&gt;&gt; ops = </span><span class="si">{</span><span class="n">decomp_gates</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">decomposed_gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">decomp_gates</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+                <span class="k">raise</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">decomposed_gates</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="n">cirq</span><span class="o">.</span><span class="n">InsertStrategy</span><span class="o">.</span><span class="n">NEW</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QSPFilesIO">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.QSPFilesIO">[docs]</a>
+<span class="k">class</span> <span class="nc">QSPFilesIO</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class for reading and writing QSP relevant files.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    None</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">    --------</span>
+<span class="sd">    readHaml(fileName) -&gt; List[Tuple[str, float]]</span>
+<span class="sd">        Reads in a .haml file and outputs a list.</span>
+
+<span class="sd">    readAngles(fileName) -&gt; List[float]</span>
+<span class="sd">        Reads in a .angles file and outputs a list.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="QSPFilesIO.readHaml">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.QSPFilesIO.readHaml">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">readHaml</span><span class="p">(</span><span class="n">fileName</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads in a .haml file and outputs a list.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            fileName : str</span>
+<span class="sd">                The name of the file, with path if necessary</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            outList: List[Tuple[str, float]]</span>
+<span class="sd">                The list of 2-tuples containing Hamiltonian info</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">outList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fileIn</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fileIn</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="n">outList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">outList</span></div>
+
+
+<div class="viewcode-block" id="QSPFilesIO.readAngles">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.qsp_helpers.QSPFilesIO.readAngles">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">readAngles</span><span class="p">(</span><span class="n">fileName</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Readds in a .angles file and outputs a list.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            fileName : str</span>
+<span class="sd">                The name of the file, with path if necessary.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            outList : List[float]</span>
+<span class="sd">                The list of phi angles in [radians?].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">outList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fileIn</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fileIn</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="n">outList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">outList</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

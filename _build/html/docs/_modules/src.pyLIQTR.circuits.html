@@ -1,0 +1,936 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.circuits package &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/pyliqtr_logo.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.circuits package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/_modules/src.pyLIQTR.circuits.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-pyliqtr-circuits-package">
+<h1>src.pyLIQTR.circuits package<a class="headerlink" href="#src-pyliqtr-circuits-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html">src.pyLIQTR.circuits.operators package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html">src.pyLIQTR.circuits.operators.tests package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary">src.pyLIQTR.circuits.operators.tests.test_BinaryToUnary module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard">src.pyLIQTR.circuits.operators.tests.test_CatalyticallyControlledHadamard module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_DataAndKeyCondition">src.pyLIQTR.circuits.operators.tests.test_DataAndKeyCondition module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_EqualityTest">src.pyLIQTR.circuits.operators.tests.test_EqualityTest module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure">src.pyLIQTR.circuits.operators.tests.test_FlagZeroAsFailure module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation">src.pyLIQTR.circuits.operators.tests.test_PhaseGradientRotation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded">src.pyLIQTR.circuits.operators.tests.test_PrepareMuUnaryEncoded module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition">src.pyLIQTR.circuits.operators.tests.test_PrepareNuSuperposition module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState">src.pyLIQTR.circuits.operators.tests.test_PreparePowerTwoState module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized">src.pyLIQTR.circuits.operators.tests.test_PrepareT_FirstQuantized module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials">src.pyLIQTR.circuits.operators.tests.test_ProductPauliExponentials module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_QROMwithMeasurementUncompute">src.pyLIQTR.circuits.operators.tests.test_QROMwithMeasurementUncompute module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_RotationsQROM">src.pyLIQTR.circuits.operators.tests.test_RotationsQROM module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ">src.pyLIQTR.circuits.operators.tests.test_UniformSuperpositionIJ module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_cyclic_shift">src.pyLIQTR.circuits.operators.tests.test_cyclic_shift module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring">src.pyLIQTR.circuits.operators.tests.test_diagonal_bitstring module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings">src.pyLIQTR.circuits.operators.tests.test_hamiltonian_encodings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_multiCZ">src.pyLIQTR.circuits.operators.tests.test_multiCZ module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_prepare">src.pyLIQTR.circuits.operators.tests.test_prepare module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_qtAdd">src.pyLIQTR.circuits.operators.tests.test_qtAdd module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_reflect">src.pyLIQTR.circuits.operators.tests.test_reflect module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_selectV">src.pyLIQTR.circuits.operators.tests.test_selectV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.test_translation">src.pyLIQTR.circuits.operators.tests.test_translation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests.utils">src.pyLIQTR.circuits.operators.tests.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.tests.html#module-src.pyLIQTR.circuits.operators.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.AddMod">src.pyLIQTR.circuits.operators.AddMod module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.Add"><code class="docutils literal notranslate"><span class="pre">Add</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.Add.a_dtype"><code class="docutils literal notranslate"><span class="pre">Add.a_dtype</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.Add.b_dtype"><code class="docutils literal notranslate"><span class="pre">Add.b_dtype</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.Add.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">Add.decompose_from_registers()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.AddMod"><code class="docutils literal notranslate"><span class="pre">AddMod</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.AddMod.add_val"><code class="docutils literal notranslate"><span class="pre">AddMod.add_val</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.AddMod.bitsize"><code class="docutils literal notranslate"><span class="pre">AddMod.bitsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.AddMod.cvs"><code class="docutils literal notranslate"><span class="pre">AddMod.cvs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.AddMod.mod"><code class="docutils literal notranslate"><span class="pre">AddMod.mod</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.AddMod.num_qubits"><code class="docutils literal notranslate"><span class="pre">AddMod.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.AddMod.signature"><code class="docutils literal notranslate"><span class="pre">AddMod.signature</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.debugPrint"><code class="docutils literal notranslate"><span class="pre">debugPrint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.AddMod.two_complement"><code class="docutils literal notranslate"><span class="pre">two_complement()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.BinaryToUnary">src.pyLIQTR.circuits.operators.BinaryToUnary module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary"><code class="docutils literal notranslate"><span class="pre">BinaryToUnary</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.control_registers"><code class="docutils literal notranslate"><span class="pre">BinaryToUnary.control_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.controlled"><code class="docutils literal notranslate"><span class="pre">BinaryToUnary.controlled</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">BinaryToUnary.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.extra_registers"><code class="docutils literal notranslate"><span class="pre">BinaryToUnary.extra_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.make_on"><code class="docutils literal notranslate"><span class="pre">BinaryToUnary.make_on()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.nth_operation"><code class="docutils literal notranslate"><span class="pre">BinaryToUnary.nth_operation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.num_qubits"><code class="docutils literal notranslate"><span class="pre">BinaryToUnary.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.selection_registers"><code class="docutils literal notranslate"><span class="pre">BinaryToUnary.selection_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.selection_regs"><code class="docutils literal notranslate"><span class="pre">BinaryToUnary.selection_regs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnary.target_registers"><code class="docutils literal notranslate"><span class="pre">BinaryToUnary.target_registers</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnaryBits"><code class="docutils literal notranslate"><span class="pre">BinaryToUnaryBits</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnaryBits.build_call_graph"><code class="docutils literal notranslate"><span class="pre">BinaryToUnaryBits.build_call_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnaryBits.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">BinaryToUnaryBits.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnaryBits.make_on"><code class="docutils literal notranslate"><span class="pre">BinaryToUnaryBits.make_on()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnaryBits.n_bits"><code class="docutils literal notranslate"><span class="pre">BinaryToUnaryBits.n_bits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnaryBits.num_qubits"><code class="docutils literal notranslate"><span class="pre">BinaryToUnaryBits.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BinaryToUnary.BinaryToUnaryBits.signature"><code class="docutils literal notranslate"><span class="pre">BinaryToUnaryBits.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.BitwiseZRotation">src.pyLIQTR.circuits.operators.BitwiseZRotation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BitwiseZRotation.BitwiseZRotation"><code class="docutils literal notranslate"><span class="pre">BitwiseZRotation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BitwiseZRotation.BitwiseZRotation.br"><code class="docutils literal notranslate"><span class="pre">BitwiseZRotation.br</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BitwiseZRotation.BitwiseZRotation.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">BitwiseZRotation.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BitwiseZRotation.BitwiseZRotation.num_qubits"><code class="docutils literal notranslate"><span class="pre">BitwiseZRotation.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BitwiseZRotation.BitwiseZRotation.signature"><code class="docutils literal notranslate"><span class="pre">BitwiseZRotation.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.BitwiseZRotation.BitwiseZRotation.theta_sign"><code class="docutils literal notranslate"><span class="pre">BitwiseZRotation.theta_sign</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.CatalyticallyControlledHadamard">src.pyLIQTR.circuits.operators.CatalyticallyControlledHadamard module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.CatalyticallyControlledHadamard.CatalyticallyControlledHadamard"><code class="docutils literal notranslate"><span class="pre">CatalyticallyControlledHadamard</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.CatalyticallyControlledHadamard.CatalyticallyControlledHadamard.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">CatalyticallyControlledHadamard.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.CatalyticallyControlledHadamard.CatalyticallyControlledHadamard.num_qubits"><code class="docutils literal notranslate"><span class="pre">CatalyticallyControlledHadamard.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.CatalyticallyControlledHadamard.CatalyticallyControlledHadamard.pretty_name"><code class="docutils literal notranslate"><span class="pre">CatalyticallyControlledHadamard.pretty_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.CatalyticallyControlledHadamard.CatalyticallyControlledHadamard.signature"><code class="docutils literal notranslate"><span class="pre">CatalyticallyControlledHadamard.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.ControlledUniformSuperposition">src.pyLIQTR.circuits.operators.ControlledUniformSuperposition module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ControlledUniformSuperposition.ControlledPrepareUniformSuperposition"><code class="docutils literal notranslate"><span class="pre">ControlledPrepareUniformSuperposition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ControlledUniformSuperposition.ControlledPrepareUniformSuperposition.bphi"><code class="docutils literal notranslate"><span class="pre">ControlledPrepareUniformSuperposition.bphi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ControlledUniformSuperposition.ControlledPrepareUniformSuperposition.br"><code class="docutils literal notranslate"><span class="pre">ControlledPrepareUniformSuperposition.br</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ControlledUniformSuperposition.ControlledPrepareUniformSuperposition.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">ControlledPrepareUniformSuperposition.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ControlledUniformSuperposition.ControlledPrepareUniformSuperposition.n_Xi"><code class="docutils literal notranslate"><span class="pre">ControlledPrepareUniformSuperposition.n_Xi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ControlledUniformSuperposition.ControlledPrepareUniformSuperposition.num_qubits"><code class="docutils literal notranslate"><span class="pre">ControlledPrepareUniformSuperposition.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ControlledUniformSuperposition.ControlledPrepareUniformSuperposition.signature"><code class="docutils literal notranslate"><span class="pre">ControlledPrepareUniformSuperposition.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.DF_InnerPrepare">src.pyLIQTR.circuits.operators.DF_InnerPrepare module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare"><code class="docutils literal notranslate"><span class="pre">InnerPrepare</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.alt_data"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.alt_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.alt_signs_data"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.alt_signs_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.bphi"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.bphi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.br"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.br</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.extra_registers"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.extra_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.from_Tf_arrays"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.from_Tf_arrays()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.keep_bitsize"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.keep_bitsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.keep_data"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.keep_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.n_LXi"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.n_LXi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.n_Xi"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.n_Xi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.num_qubits"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.selection_registers"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.selection_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.signature"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_InnerPrepare.InnerPrepare.signs_data"><code class="docutils literal notranslate"><span class="pre">InnerPrepare.signs_data</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.DF_OuterPrepare">src.pyLIQTR.circuits.operators.DF_OuterPrepare module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare"><code class="docutils literal notranslate"><span class="pre">OuterPrepare</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.alt"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.alt</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.alternates_bitsize"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.alternates_bitsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.junk_registers"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.junk_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.keep"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.keep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.keep_bitsize"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.keep_bitsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.l1_norm_of_coeffs"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.l1_norm_of_coeffs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.mu"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.mu</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.num_qubits"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.qrom_bloq"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.qrom_bloq</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.selection_bitsize"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.selection_bitsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.selection_registers"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.selection_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.sigma_mu_bitsize"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.sigma_mu_bitsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_OuterPrepare.OuterPrepare.sum_of_lcu_coeffs"><code class="docutils literal notranslate"><span class="pre">OuterPrepare.sum_of_lcu_coeffs</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.DF_RotationsBlock">src.pyLIQTR.circuits.operators.DF_RotationsBlock module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_RotationsBlock.RotationsBlock"><code class="docutils literal notranslate"><span class="pre">RotationsBlock</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_RotationsBlock.RotationsBlock.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">RotationsBlock.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_RotationsBlock.RotationsBlock.num_data_bits"><code class="docutils literal notranslate"><span class="pre">RotationsBlock.num_data_bits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_RotationsBlock.RotationsBlock.num_qubits"><code class="docutils literal notranslate"><span class="pre">RotationsBlock.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_RotationsBlock.RotationsBlock.num_target_bits"><code class="docutils literal notranslate"><span class="pre">RotationsBlock.num_target_bits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_RotationsBlock.RotationsBlock.phase_gradient_bits"><code class="docutils literal notranslate"><span class="pre">RotationsBlock.phase_gradient_bits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_RotationsBlock.RotationsBlock.precision_bits"><code class="docutils literal notranslate"><span class="pre">RotationsBlock.precision_bits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_RotationsBlock.RotationsBlock.signature"><code class="docutils literal notranslate"><span class="pre">RotationsBlock.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.DF_RotationsBlock.RotationsBlock.uncompute"><code class="docutils literal notranslate"><span class="pre">RotationsBlock.uncompute</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.EqualityTest">src.pyLIQTR.circuits.operators.EqualityTest module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.EqualityTest.EqualityTest"><code class="docutils literal notranslate"><span class="pre">EqualityTest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.EqualityTest.EqualityTest.build_call_graph"><code class="docutils literal notranslate"><span class="pre">EqualityTest.build_call_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.EqualityTest.EqualityTest.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">EqualityTest.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.EqualityTest.EqualityTest.num_qubits"><code class="docutils literal notranslate"><span class="pre">EqualityTest.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.EqualityTest.EqualityTest.signature"><code class="docutils literal notranslate"><span class="pre">EqualityTest.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.ExampleFMatrices">src.pyLIQTR.circuits.operators.ExampleFMatrices module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F0_operator"><code class="docutils literal notranslate"><span class="pre">F0_operator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F0_operator.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">F0_operator.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F0_operator.num_qubits"><code class="docutils literal notranslate"><span class="pre">F0_operator.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F0_operator.signature"><code class="docutils literal notranslate"><span class="pre">F0_operator.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F0_operator.vector"><code class="docutils literal notranslate"><span class="pre">F0_operator.vector</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F1_operator"><code class="docutils literal notranslate"><span class="pre">F1_operator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F1_operator.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">F1_operator.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F1_operator.num_qubits"><code class="docutils literal notranslate"><span class="pre">F1_operator.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F1_operator.signature"><code class="docutils literal notranslate"><span class="pre">F1_operator.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F1_operator.vector"><code class="docutils literal notranslate"><span class="pre">F1_operator.vector</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F2_operator"><code class="docutils literal notranslate"><span class="pre">F2_operator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F2_operator.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">F2_operator.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F2_operator.num_qubits"><code class="docutils literal notranslate"><span class="pre">F2_operator.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F2_operator.signature"><code class="docutils literal notranslate"><span class="pre">F2_operator.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ExampleFMatrices.F2_operator.vector"><code class="docutils literal notranslate"><span class="pre">F2_operator.vector</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.FixupTableQROM">src.pyLIQTR.circuits.operators.FixupTableQROM module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.DataAndKeyCondition"><code class="docutils literal notranslate"><span class="pre">DataAndKeyCondition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.DataAndKeyCondition.get_condition_format_string"><code class="docutils literal notranslate"><span class="pre">DataAndKeyCondition.get_condition_format_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.DataAndKeyCondition.keys"><code class="docutils literal notranslate"><span class="pre">DataAndKeyCondition.keys</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.DataAndKeyCondition.qasm"><code class="docutils literal notranslate"><span class="pre">DataAndKeyCondition.qasm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.DataAndKeyCondition.replace_key"><code class="docutils literal notranslate"><span class="pre">DataAndKeyCondition.replace_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.DataAndKeyCondition.resolve"><code class="docutils literal notranslate"><span class="pre">DataAndKeyCondition.resolve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.FixupTableQROM"><code class="docutils literal notranslate"><span class="pre">FixupTableQROM</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.FixupTableQROM.control_registers"><code class="docutils literal notranslate"><span class="pre">FixupTableQROM.control_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.FixupTableQROM.nth_operation"><code class="docutils literal notranslate"><span class="pre">FixupTableQROM.nth_operation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.FixupTableQROM.num_qubits"><code class="docutils literal notranslate"><span class="pre">FixupTableQROM.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.FixupTableQROM.selection_registers"><code class="docutils literal notranslate"><span class="pre">FixupTableQROM.selection_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.FixupTableQROM.signature"><code class="docutils literal notranslate"><span class="pre">FixupTableQROM.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FixupTableQROM.FixupTableQROM.target_registers"><code class="docutils literal notranslate"><span class="pre">FixupTableQROM.target_registers</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.FlagZeroAsFailure">src.pyLIQTR.circuits.operators.FlagZeroAsFailure module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FlagZeroAsFailure.FlagZeroAsFailure"><code class="docutils literal notranslate"><span class="pre">FlagZeroAsFailure</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FlagZeroAsFailure.FlagZeroAsFailure.build_call_graph"><code class="docutils literal notranslate"><span class="pre">FlagZeroAsFailure.build_call_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FlagZeroAsFailure.FlagZeroAsFailure.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">FlagZeroAsFailure.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FlagZeroAsFailure.FlagZeroAsFailure.num_qubits"><code class="docutils literal notranslate"><span class="pre">FlagZeroAsFailure.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FlagZeroAsFailure.FlagZeroAsFailure.pretty_name"><code class="docutils literal notranslate"><span class="pre">FlagZeroAsFailure.pretty_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FlagZeroAsFailure.FlagZeroAsFailure.signature"><code class="docutils literal notranslate"><span class="pre">FlagZeroAsFailure.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition">src.pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition.FlaggedPrepareUniformSuperposition"><code class="docutils literal notranslate"><span class="pre">FlaggedPrepareUniformSuperposition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition.FlaggedPrepareUniformSuperposition.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">FlaggedPrepareUniformSuperposition.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition.FlaggedPrepareUniformSuperposition.num_qubits"><code class="docutils literal notranslate"><span class="pre">FlaggedPrepareUniformSuperposition.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition.FlaggedPrepareUniformSuperposition.signature"><code class="docutils literal notranslate"><span class="pre">FlaggedPrepareUniformSuperposition.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.PhaseGradientRotation">src.pyLIQTR.circuits.operators.PhaseGradientRotation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PhaseGradientRotation.PhaseGradientZRotation"><code class="docutils literal notranslate"><span class="pre">PhaseGradientZRotation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PhaseGradientRotation.PhaseGradientZRotation.bphi"><code class="docutils literal notranslate"><span class="pre">PhaseGradientZRotation.bphi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PhaseGradientRotation.PhaseGradientZRotation.br"><code class="docutils literal notranslate"><span class="pre">PhaseGradientZRotation.br</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PhaseGradientRotation.PhaseGradientZRotation.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">PhaseGradientZRotation.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PhaseGradientRotation.PhaseGradientZRotation.do_negative_z_rotation"><code class="docutils literal notranslate"><span class="pre">PhaseGradientZRotation.do_negative_z_rotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PhaseGradientRotation.PhaseGradientZRotation.make_on"><code class="docutils literal notranslate"><span class="pre">PhaseGradientZRotation.make_on()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PhaseGradientRotation.PhaseGradientZRotation.num_qubits"><code class="docutils literal notranslate"><span class="pre">PhaseGradientZRotation.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PhaseGradientRotation.PhaseGradientZRotation.signature"><code class="docutils literal notranslate"><span class="pre">PhaseGradientZRotation.signature</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PhaseGradientRotation.approx_angle_with_br_bits"><code class="docutils literal notranslate"><span class="pre">approx_angle_with_br_bits()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.PrepareMuUnaryEncoded">src.pyLIQTR.circuits.operators.PrepareMuUnaryEncoded module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareMuUnaryEncoded.PrepareMuUnaryEncoded"><code class="docutils literal notranslate"><span class="pre">PrepareMuUnaryEncoded</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareMuUnaryEncoded.PrepareMuUnaryEncoded.build_call_graph"><code class="docutils literal notranslate"><span class="pre">PrepareMuUnaryEncoded.build_call_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareMuUnaryEncoded.PrepareMuUnaryEncoded.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">PrepareMuUnaryEncoded.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareMuUnaryEncoded.PrepareMuUnaryEncoded.num_qubits"><code class="docutils literal notranslate"><span class="pre">PrepareMuUnaryEncoded.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareMuUnaryEncoded.PrepareMuUnaryEncoded.pretty_name"><code class="docutils literal notranslate"><span class="pre">PrepareMuUnaryEncoded.pretty_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareMuUnaryEncoded.PrepareMuUnaryEncoded.signature"><code class="docutils literal notranslate"><span class="pre">PrepareMuUnaryEncoded.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.PrepareNu">src.pyLIQTR.circuits.operators.PrepareNu module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.PrepareNuState"><code class="docutils literal notranslate"><span class="pre">PrepareNuState</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.PrepareNuState.build_call_graph"><code class="docutils literal notranslate"><span class="pre">PrepareNuState.build_call_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.PrepareNuState.build_composite_bloq"><code class="docutils literal notranslate"><span class="pre">PrepareNuState.build_composite_bloq()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.PrepareNuState.m_param"><code class="docutils literal notranslate"><span class="pre">PrepareNuState.m_param</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.PrepareNuState.num_bits_p"><code class="docutils literal notranslate"><span class="pre">PrepareNuState.num_bits_p</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.PrepareNuState.pretty_name"><code class="docutils literal notranslate"><span class="pre">PrepareNuState.pretty_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.PrepareNuState.signature"><code class="docutils literal notranslate"><span class="pre">PrepareNuState.signature</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.TestNuInequality"><code class="docutils literal notranslate"><span class="pre">TestNuInequality</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.TestNuInequality.adjoint"><code class="docutils literal notranslate"><span class="pre">TestNuInequality.adjoint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.TestNuInequality.build_call_graph"><code class="docutils literal notranslate"><span class="pre">TestNuInequality.build_call_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.TestNuInequality.is_adjoint"><code class="docutils literal notranslate"><span class="pre">TestNuInequality.is_adjoint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.TestNuInequality.num_bits_m"><code class="docutils literal notranslate"><span class="pre">TestNuInequality.num_bits_m</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.TestNuInequality.num_bits_p"><code class="docutils literal notranslate"><span class="pre">TestNuInequality.num_bits_p</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.TestNuInequality.pretty_name"><code class="docutils literal notranslate"><span class="pre">TestNuInequality.pretty_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNu.TestNuInequality.signature"><code class="docutils literal notranslate"><span class="pre">TestNuInequality.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.PrepareNuSuperposition">src.pyLIQTR.circuits.operators.PrepareNuSuperposition module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNuSuperposition.PrepareNuSuperposition"><code class="docutils literal notranslate"><span class="pre">PrepareNuSuperposition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNuSuperposition.PrepareNuSuperposition.build_call_graph"><code class="docutils literal notranslate"><span class="pre">PrepareNuSuperposition.build_call_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNuSuperposition.PrepareNuSuperposition.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">PrepareNuSuperposition.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNuSuperposition.PrepareNuSuperposition.num_qubits"><code class="docutils literal notranslate"><span class="pre">PrepareNuSuperposition.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNuSuperposition.PrepareNuSuperposition.pretty_name"><code class="docutils literal notranslate"><span class="pre">PrepareNuSuperposition.pretty_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareNuSuperposition.PrepareNuSuperposition.signature"><code class="docutils literal notranslate"><span class="pre">PrepareNuSuperposition.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.PreparePowerTwoState">src.pyLIQTR.circuits.operators.PreparePowerTwoState module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PreparePowerTwoState.PreparePowerTwoState"><code class="docutils literal notranslate"><span class="pre">PreparePowerTwoState</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PreparePowerTwoState.PreparePowerTwoState.build_call_graph"><code class="docutils literal notranslate"><span class="pre">PreparePowerTwoState.build_call_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PreparePowerTwoState.PreparePowerTwoState.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">PreparePowerTwoState.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PreparePowerTwoState.PreparePowerTwoState.num_qubits"><code class="docutils literal notranslate"><span class="pre">PreparePowerTwoState.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PreparePowerTwoState.PreparePowerTwoState.pretty_name"><code class="docutils literal notranslate"><span class="pre">PreparePowerTwoState.pretty_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PreparePowerTwoState.PreparePowerTwoState.signature"><code class="docutils literal notranslate"><span class="pre">PreparePowerTwoState.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.PrepareT_FirstQuantized">src.pyLIQTR.circuits.operators.PrepareT_FirstQuantized module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareT_FirstQuantized.PrepareT_FirstQuantized"><code class="docutils literal notranslate"><span class="pre">PrepareT_FirstQuantized</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareT_FirstQuantized.PrepareT_FirstQuantized.build_call_graph"><code class="docutils literal notranslate"><span class="pre">PrepareT_FirstQuantized.build_call_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareT_FirstQuantized.PrepareT_FirstQuantized.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">PrepareT_FirstQuantized.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareT_FirstQuantized.PrepareT_FirstQuantized.num_qubits"><code class="docutils literal notranslate"><span class="pre">PrepareT_FirstQuantized.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareT_FirstQuantized.PrepareT_FirstQuantized.pretty_name"><code class="docutils literal notranslate"><span class="pre">PrepareT_FirstQuantized.pretty_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareT_FirstQuantized.PrepareT_FirstQuantized.signature"><code class="docutils literal notranslate"><span class="pre">PrepareT_FirstQuantized.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.PrepareUV_FirstQuantized">src.pyLIQTR.circuits.operators.PrepareUV_FirstQuantized module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareUV_FirstQuantized.PrepareUVFirstQuantization"><code class="docutils literal notranslate"><span class="pre">PrepareUVFirstQuantization</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareUV_FirstQuantized.PrepareUVFirstQuantization.build_call_graph"><code class="docutils literal notranslate"><span class="pre">PrepareUVFirstQuantization.build_call_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareUV_FirstQuantized.PrepareUVFirstQuantization.eta"><code class="docutils literal notranslate"><span class="pre">PrepareUVFirstQuantization.eta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareUV_FirstQuantized.PrepareUVFirstQuantization.lambda_zeta"><code class="docutils literal notranslate"><span class="pre">PrepareUVFirstQuantization.lambda_zeta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareUV_FirstQuantized.PrepareUVFirstQuantization.m_param"><code class="docutils literal notranslate"><span class="pre">PrepareUVFirstQuantization.m_param</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareUV_FirstQuantized.PrepareUVFirstQuantization.num_atoms"><code class="docutils literal notranslate"><span class="pre">PrepareUVFirstQuantization.num_atoms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareUV_FirstQuantized.PrepareUVFirstQuantization.num_bits_nuc_pos"><code class="docutils literal notranslate"><span class="pre">PrepareUVFirstQuantization.num_bits_nuc_pos</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareUV_FirstQuantized.PrepareUVFirstQuantization.num_bits_p"><code class="docutils literal notranslate"><span class="pre">PrepareUVFirstQuantization.num_bits_p</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareUV_FirstQuantized.PrepareUVFirstQuantization.pretty_name"><code class="docutils literal notranslate"><span class="pre">PrepareUVFirstQuantization.pretty_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.PrepareUV_FirstQuantized.PrepareUVFirstQuantization.signature"><code class="docutils literal notranslate"><span class="pre">PrepareUVFirstQuantization.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.ProductPauliExponentials">src.pyLIQTR.circuits.operators.ProductPauliExponentials module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ProductPauliExponentials.ProductPauliExponentials"><code class="docutils literal notranslate"><span class="pre">ProductPauliExponentials</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ProductPauliExponentials.ProductPauliExponentials.bphi"><code class="docutils literal notranslate"><span class="pre">ProductPauliExponentials.bphi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ProductPauliExponentials.ProductPauliExponentials.br"><code class="docutils literal notranslate"><span class="pre">ProductPauliExponentials.br</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ProductPauliExponentials.ProductPauliExponentials.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">ProductPauliExponentials.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ProductPauliExponentials.ProductPauliExponentials.num_qubits"><code class="docutils literal notranslate"><span class="pre">ProductPauliExponentials.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ProductPauliExponentials.ProductPauliExponentials.signature"><code class="docutils literal notranslate"><span class="pre">ProductPauliExponentials.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.ProductPauliExponentials.ProductPauliExponentials.uncompute"><code class="docutils literal notranslate"><span class="pre">ProductPauliExponentials.uncompute</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.QROMwithMeasurementUncompute">src.pyLIQTR.circuits.operators.QROMwithMeasurementUncompute module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.QROMwithMeasurementUncompute.QROMwithMeasurementUncompute"><code class="docutils literal notranslate"><span class="pre">QROMwithMeasurementUncompute</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.QROMwithMeasurementUncompute.QROMwithMeasurementUncompute.measurement_uncompute"><code class="docutils literal notranslate"><span class="pre">QROMwithMeasurementUncompute.measurement_uncompute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.QROMwithMeasurementUncompute.QROMwithMeasurementUncompute.num_qubits"><code class="docutils literal notranslate"><span class="pre">QROMwithMeasurementUncompute.num_qubits()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.RotationsQROM">src.pyLIQTR.circuits.operators.RotationsQROM module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.RotationsQROM.RotationsQROM"><code class="docutils literal notranslate"><span class="pre">RotationsQROM</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.RotationsQROM.RotationsQROM.nth_operation_callgraph"><code class="docutils literal notranslate"><span class="pre">RotationsQROM.nth_operation_callgraph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.RotationsQROM.RotationsQROM.num_qubits"><code class="docutils literal notranslate"><span class="pre">RotationsQROM.num_qubits()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.UniformSuperpositionIJ">src.pyLIQTR.circuits.operators.UniformSuperpositionIJ module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.UniformSuperpositionIJ.UniformSuperpositionIJFirstQuantization"><code class="docutils literal notranslate"><span class="pre">UniformSuperpositionIJFirstQuantization</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.UniformSuperpositionIJ.UniformSuperpositionIJFirstQuantization.build_call_graph"><code class="docutils literal notranslate"><span class="pre">UniformSuperpositionIJFirstQuantization.build_call_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.UniformSuperpositionIJ.UniformSuperpositionIJFirstQuantization.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">UniformSuperpositionIJFirstQuantization.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.UniformSuperpositionIJ.UniformSuperpositionIJFirstQuantization.num_qubits"><code class="docutils literal notranslate"><span class="pre">UniformSuperpositionIJFirstQuantization.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.UniformSuperpositionIJ.UniformSuperpositionIJFirstQuantization.signature"><code class="docutils literal notranslate"><span class="pre">UniformSuperpositionIJFirstQuantization.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.cascading_translation">src.pyLIQTR.circuits.operators.cascading_translation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cascading_translation.CascadingTranslation"><code class="docutils literal notranslate"><span class="pre">CascadingTranslation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cascading_translation.CascadingTranslation.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">CascadingTranslation.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cascading_translation.CascadingTranslation.num_qubits"><code class="docutils literal notranslate"><span class="pre">CascadingTranslation.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cascading_translation.CascadingTranslation.signature"><code class="docutils literal notranslate"><span class="pre">CascadingTranslation.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cascading_translation.CascadingTranslation.vector"><code class="docutils literal notranslate"><span class="pre">CascadingTranslation.vector</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cascading_translation.CascadingUnary"><code class="docutils literal notranslate"><span class="pre">CascadingUnary</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cascading_translation.CascadingUnary.control_registers"><code class="docutils literal notranslate"><span class="pre">CascadingUnary.control_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cascading_translation.CascadingUnary.nth_operation"><code class="docutils literal notranslate"><span class="pre">CascadingUnary.nth_operation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cascading_translation.CascadingUnary.num_qubits"><code class="docutils literal notranslate"><span class="pre">CascadingUnary.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cascading_translation.CascadingUnary.selection_registers"><code class="docutils literal notranslate"><span class="pre">CascadingUnary.selection_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cascading_translation.CascadingUnary.target_registers"><code class="docutils literal notranslate"><span class="pre">CascadingUnary.target_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cascading_translation.CascadingUnary.vector"><code class="docutils literal notranslate"><span class="pre">CascadingUnary.vector</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.cyclic_shift">src.pyLIQTR.circuits.operators.cyclic_shift module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cyclic_shift.CyclicShiftPermutation"><code class="docutils literal notranslate"><span class="pre">CyclicShiftPermutation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cyclic_shift.CyclicShiftPermutation.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">CyclicShiftPermutation.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cyclic_shift.CyclicShiftPermutation.num_qubits"><code class="docutils literal notranslate"><span class="pre">CyclicShiftPermutation.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cyclic_shift.CyclicShiftPermutation.signature"><code class="docutils literal notranslate"><span class="pre">CyclicShiftPermutation.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.cyclic_shift.CyclicShiftPermutation.vector"><code class="docutils literal notranslate"><span class="pre">CyclicShiftPermutation.vector</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.diagonal_bitstring">src.pyLIQTR.circuits.operators.diagonal_bitstring module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.diagonal_bitstring.DiagonalBitstring"><code class="docutils literal notranslate"><span class="pre">DiagonalBitstring</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.diagonal_bitstring.DiagonalBitstring.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">DiagonalBitstring.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.diagonal_bitstring.DiagonalBitstring.num_qubits"><code class="docutils literal notranslate"><span class="pre">DiagonalBitstring.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.diagonal_bitstring.DiagonalBitstring.signature"><code class="docutils literal notranslate"><span class="pre">DiagonalBitstring.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.diagonal_bitstring.DiagonalBitstring.vector"><code class="docutils literal notranslate"><span class="pre">DiagonalBitstring.vector</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.hamiltonian_encodings">src.pyLIQTR.circuits.operators.hamiltonian_encodings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.hamiltonian_encodings.SzegedyWalkOperator"><code class="docutils literal notranslate"><span class="pre">SzegedyWalkOperator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.hamiltonian_encodings.UnitaryBlockEncode"><code class="docutils literal notranslate"><span class="pre">UnitaryBlockEncode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.hamiltonian_encodings.UnitaryBlockEncode.count_exact"><code class="docutils literal notranslate"><span class="pre">UnitaryBlockEncode.count_exact()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.hamiltonian_encodings.UnitaryBlockEncode.num_qubits"><code class="docutils literal notranslate"><span class="pre">UnitaryBlockEncode.num_qubits()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.multiCZ">src.pyLIQTR.circuits.operators.multiCZ module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.multiCZ.MultiCZ"><code class="docutils literal notranslate"><span class="pre">MultiCZ</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.multiCZ.MultiCZ.num_qubits"><code class="docutils literal notranslate"><span class="pre">MultiCZ.num_qubits()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.prepare">src.pyLIQTR.circuits.operators.prepare module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare"><code class="docutils literal notranslate"><span class="pre">Prepare</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.alpha_prep"><code class="docutils literal notranslate"><span class="pre">Prepare.alpha_prep()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.alphas"><code class="docutils literal notranslate"><span class="pre">Prepare.alphas</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.ctrlOp"><code class="docutils literal notranslate"><span class="pre">Prepare.ctrlOp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.disentangle_recursion"><code class="docutils literal notranslate"><span class="pre">Prepare.disentangle_recursion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.disentangle_recursive"><code class="docutils literal notranslate"><span class="pre">Prepare.disentangle_recursive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.expOp"><code class="docutils literal notranslate"><span class="pre">Prepare.expOp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.multiplex_aux"><code class="docutils literal notranslate"><span class="pre">Prepare.multiplex_aux()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.multiplexor"><code class="docutils literal notranslate"><span class="pre">Prepare.multiplexor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.num_qubits"><code class="docutils literal notranslate"><span class="pre">Prepare.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.pp_com"><code class="docutils literal notranslate"><span class="pre">Prepare.pp_com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.pp_ctl"><code class="docutils literal notranslate"><span class="pre">Prepare.pp_ctl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.pp_exp"><code class="docutils literal notranslate"><span class="pre">Prepare.pp_exp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.prepare_angles"><code class="docutils literal notranslate"><span class="pre">Prepare.prepare_angles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.reg_qubits"><code class="docutils literal notranslate"><span class="pre">Prepare.reg_qubits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare.Prepare.split_angles"><code class="docutils literal notranslate"><span class="pre">Prepare.split_angles()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.prepare_FirstQuantized">src.pyLIQTR.circuits.operators.prepare_FirstQuantized module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.build_composite_bloq"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.build_composite_bloq()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.eta"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.eta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.junk_registers"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.junk_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.lambda_zeta"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.lambda_zeta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.m_param"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.m_param</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.num_atoms"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.num_atoms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.num_bits_nuc_pos"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.num_bits_nuc_pos</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.num_bits_p"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.num_bits_p</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.num_bits_rot_aa"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.num_bits_rot_aa</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.num_bits_t"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.num_bits_t</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.num_qubits"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.pretty_name"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.pretty_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_FirstQuantized.PrepareFirstQuantization.selection_registers"><code class="docutils literal notranslate"><span class="pre">PrepareFirstQuantization.selection_registers</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.prepare_LinearT">src.pyLIQTR.circuits.operators.prepare_LinearT module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.FermionicPrepare_LinearT"><code class="docutils literal notranslate"><span class="pre">FermionicPrepare_LinearT</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.FermionicPrepare_LinearT.alternates_bitsize"><code class="docutils literal notranslate"><span class="pre">FermionicPrepare_LinearT.alternates_bitsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.FermionicPrepare_LinearT.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">FermionicPrepare_LinearT.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.FermionicPrepare_LinearT.junk_registers"><code class="docutils literal notranslate"><span class="pre">FermionicPrepare_LinearT.junk_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.FermionicPrepare_LinearT.keep_bitsize"><code class="docutils literal notranslate"><span class="pre">FermionicPrepare_LinearT.keep_bitsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.FermionicPrepare_LinearT.num_qubits"><code class="docutils literal notranslate"><span class="pre">FermionicPrepare_LinearT.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.FermionicPrepare_LinearT.selection_registers"><code class="docutils literal notranslate"><span class="pre">FermionicPrepare_LinearT.selection_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.FermionicPrepare_LinearT.signature"><code class="docutils literal notranslate"><span class="pre">FermionicPrepare_LinearT.signature</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.D"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.D</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.M_vals"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.M_vals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.alt"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.alt</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.alternates_bitsize"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.alternates_bitsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.from_TUV_arrays"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.from_TUV_arrays()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.junk_registers"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.junk_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.keep"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.keep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.keep_bitsize"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.keep_bitsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.logM_vals"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.logM_vals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.mu"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.mu</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.num_qubits"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.selection_bitsize"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.selection_bitsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.selection_registers"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.selection_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.signature"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.theta"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.theta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_LinearT.Subprepare_LinearT.theta_alt"><code class="docutils literal notranslate"><span class="pre">Subprepare_LinearT.theta_alt</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu">src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.FermionPrePrepare"><code class="docutils literal notranslate"><span class="pre">FermionPrePrepare</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.FermionPrePrepare.num_qubits"><code class="docutils literal notranslate"><span class="pre">FermionPrePrepare.num_qubits()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.FermionPrepare"><code class="docutils literal notranslate"><span class="pre">FermionPrepare</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.FermionPrepare.num_qubits"><code class="docutils literal notranslate"><span class="pre">FermionPrepare.num_qubits()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.PrepareOracle"><code class="docutils literal notranslate"><span class="pre">PrepareOracle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.alpha_prep"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.alpha_prep()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.alphas"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.alphas</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.ctrlOp"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.ctrlOp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.disentangle_recursion"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.disentangle_recursion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.disentangle_recursive"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.disentangle_recursive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.expOp"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.expOp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.multiplex_aux"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.multiplex_aux()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.multiplexor"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.multiplexor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.num_qubits"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.pp_com"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.pp_com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.pp_ctl"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.pp_ctl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.pp_exp"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.pp_exp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.prepare_angles"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.prepare_angles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.reg_qubits"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.reg_qubits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.QSP_Prepare.split_angles"><code class="docutils literal notranslate"><span class="pre">QSP_Prepare.split_angles()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.gen_pre_prepare"><code class="docutils literal notranslate"><span class="pre">gen_pre_prepare()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.prepare_oracle_pauli_lcu.multi_ccx"><code class="docutils literal notranslate"><span class="pre">multi_ccx()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.reflect">src.pyLIQTR.circuits.operators.reflect module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.reflect.Reflect"><code class="docutils literal notranslate"><span class="pre">Reflect</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.reflect.Reflect.num_qubits"><code class="docutils literal notranslate"><span class="pre">Reflect.num_qubits()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.selectV">src.pyLIQTR.circuits.operators.selectV module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.selectV.ChildsSelectV"><code class="docutils literal notranslate"><span class="pre">ChildsSelectV</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.selectV.ChildsSelectV.num_qubits"><code class="docutils literal notranslate"><span class="pre">ChildsSelectV.num_qubits()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.selectV.QROMSelectV"><code class="docutils literal notranslate"><span class="pre">QROMSelectV</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.selectV.QROMSelectV.num_qubits"><code class="docutils literal notranslate"><span class="pre">QROMSelectV.num_qubits()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.selectVutils">src.pyLIQTR.circuits.operators.selectVutils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.selectVutils.applyAndStep"><code class="docutils literal notranslate"><span class="pre">applyAndStep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.selectVutils.applyAndWalk"><code class="docutils literal notranslate"><span class="pre">applyAndWalk()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.selectVutils.constructBooleanTree"><code class="docutils literal notranslate"><span class="pre">constructBooleanTree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.selectVutils.convert_hamiltonian_terms_to_operators"><code class="docutils literal notranslate"><span class="pre">convert_hamiltonian_terms_to_operators()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.selectVutils.incrementBooleanTree"><code class="docutils literal notranslate"><span class="pre">incrementBooleanTree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.selectVutils.stepRight"><code class="docutils literal notranslate"><span class="pre">stepRight()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.selectVutils.toffoli"><code class="docutils literal notranslate"><span class="pre">toffoli()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.selectVutils.walkDown"><code class="docutils literal notranslate"><span class="pre">walkDown()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.select_LinearT">src.pyLIQTR.circuits.operators.select_LinearT module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_LinearT.FermionicSelect_LinearT"><code class="docutils literal notranslate"><span class="pre">FermionicSelect_LinearT</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_LinearT.FermionicSelect_LinearT.control_registers"><code class="docutils literal notranslate"><span class="pre">FermionicSelect_LinearT.control_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_LinearT.FermionicSelect_LinearT.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">FermionicSelect_LinearT.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_LinearT.FermionicSelect_LinearT.num_qubits"><code class="docutils literal notranslate"><span class="pre">FermionicSelect_LinearT.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_LinearT.FermionicSelect_LinearT.selection_registers"><code class="docutils literal notranslate"><span class="pre">FermionicSelect_LinearT.selection_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_LinearT.FermionicSelect_LinearT.signature"><code class="docutils literal notranslate"><span class="pre">FermionicSelect_LinearT.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_LinearT.FermionicSelect_LinearT.target_registers"><code class="docutils literal notranslate"><span class="pre">FermionicSelect_LinearT.target_registers</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu">src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.FermionSelect"><code class="docutils literal notranslate"><span class="pre">FermionSelect</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.FermionSelect.num_qubits"><code class="docutils literal notranslate"><span class="pre">FermionSelect.num_qubits()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.SelVBase"><code class="docutils literal notranslate"><span class="pre">SelVBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.SelVBase.num_qubits"><code class="docutils literal notranslate"><span class="pre">SelVBase.num_qubits()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.SelectOracle"><code class="docutils literal notranslate"><span class="pre">SelectOracle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.UnaryIterate"><code class="docutils literal notranslate"><span class="pre">UnaryIterate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.UnaryIterate.num_qubits"><code class="docutils literal notranslate"><span class="pre">UnaryIterate.num_qubits()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.applyAndStep"><code class="docutils literal notranslate"><span class="pre">applyAndStep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.applyAndWalk"><code class="docutils literal notranslate"><span class="pre">applyAndWalk()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.constructBooleanTree"><code class="docutils literal notranslate"><span class="pre">constructBooleanTree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.convert_hamiltonian_terms_to_operators"><code class="docutils literal notranslate"><span class="pre">convert_hamiltonian_terms_to_operators()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.incrementBooleanTree"><code class="docutils literal notranslate"><span class="pre">incrementBooleanTree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.stepRight"><code class="docutils literal notranslate"><span class="pre">stepRight()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.toffoli"><code class="docutils literal notranslate"><span class="pre">toffoli()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_oracle_pauli_lcu.walkDown"><code class="docutils literal notranslate"><span class="pre">walkDown()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.select_prepare_pauli">src.pyLIQTR.circuits.operators.select_prepare_pauli module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_prepare_pauli.prepare_pauli_lcu"><code class="docutils literal notranslate"><span class="pre">prepare_pauli_lcu</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_prepare_pauli.prepare_pauli_lcu.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">prepare_pauli_lcu.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_prepare_pauli.prepare_pauli_lcu.num_qubits"><code class="docutils literal notranslate"><span class="pre">prepare_pauli_lcu.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.select_prepare_pauli.prepare_pauli_lcu.signature"><code class="docutils literal notranslate"><span class="pre">prepare_pauli_lcu.signature</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.swap_network">src.pyLIQTR.circuits.operators.swap_network module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.swap_network.SwapNetwork"><code class="docutils literal notranslate"><span class="pre">SwapNetwork</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.swap_network.SwapNetwork.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">SwapNetwork.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.swap_network.SwapNetwork.num_qubits"><code class="docutils literal notranslate"><span class="pre">SwapNetwork.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.swap_network.SwapNetwork.signature"><code class="docutils literal notranslate"><span class="pre">SwapNetwork.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.swap_network.SwapNetwork.vector"><code class="docutils literal notranslate"><span class="pre">SwapNetwork.vector</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.swap_network.SwapUnary"><code class="docutils literal notranslate"><span class="pre">SwapUnary</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.swap_network.SwapUnary.control_registers"><code class="docutils literal notranslate"><span class="pre">SwapUnary.control_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.swap_network.SwapUnary.nth_operation"><code class="docutils literal notranslate"><span class="pre">SwapUnary.nth_operation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.swap_network.SwapUnary.num_qubits"><code class="docutils literal notranslate"><span class="pre">SwapUnary.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.swap_network.SwapUnary.selection_registers"><code class="docutils literal notranslate"><span class="pre">SwapUnary.selection_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.swap_network.SwapUnary.target_registers"><code class="docutils literal notranslate"><span class="pre">SwapUnary.target_registers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.swap_network.SwapUnary.vector"><code class="docutils literal notranslate"><span class="pre">SwapUnary.vector</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators.translation">src.pyLIQTR.circuits.operators.translation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.translation.Translation"><code class="docutils literal notranslate"><span class="pre">Translation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.translation.Translation.decompose_from_registers"><code class="docutils literal notranslate"><span class="pre">Translation.decompose_from_registers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.translation.Translation.num_qubits"><code class="docutils literal notranslate"><span class="pre">Translation.num_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.translation.Translation.signature"><code class="docutils literal notranslate"><span class="pre">Translation.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#src.pyLIQTR.circuits.operators.translation.Translation.vector"><code class="docutils literal notranslate"><span class="pre">Translation.vector</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.operators.html#module-src.pyLIQTR.circuits.operators">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html">src.pyLIQTR.circuits.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#module-src.pyLIQTR.circuits.tests.test_pyLCircuit">src.pyLIQTR.circuits.tests.test_pyLCircuit module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit"><code class="docutils literal notranslate"><span class="pre">TestPylCircuit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.hundred_gates"><code class="docutils literal notranslate"><span class="pre">TestPylCircuit.hundred_gates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.single_gate"><code class="docutils literal notranslate"><span class="pre">TestPylCircuit.single_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.ten_gates"><code class="docutils literal notranslate"><span class="pre">TestPylCircuit.ten_gates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.test_hundred_gate_resources"><code class="docutils literal notranslate"><span class="pre">TestPylCircuit.test_hundred_gate_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.test_pylcircuit_init"><code class="docutils literal notranslate"><span class="pre">TestPylCircuit.test_pylcircuit_init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.test_single_gate_depth"><code class="docutils literal notranslate"><span class="pre">TestPylCircuit.test_single_gate_depth()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.test_single_gate_resources"><code class="docutils literal notranslate"><span class="pre">TestPylCircuit.test_single_gate_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.test_ten_gate_resources"><code class="docutils literal notranslate"><span class="pre">TestPylCircuit.test_ten_gate_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.test_thousand_gate_resources"><code class="docutils literal notranslate"><span class="pre">TestPylCircuit.test_thousand_gate_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLCircuit.TestPylCircuit.thousand_gates"><code class="docutils literal notranslate"><span class="pre">TestPylCircuit.thousand_gates()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#module-src.pyLIQTR.circuits.tests.test_pyLOperator">src.pyLIQTR.circuits.tests.test_pyLOperator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLOperator.TestPyLOperator"><code class="docutils literal notranslate"><span class="pre">TestPyLOperator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLOperator.TestPyLOperator.single_gate"><code class="docutils literal notranslate"><span class="pre">TestPyLOperator.single_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#src.pyLIQTR.circuits.tests.test_pyLOperator.TestPyLOperator.test_base_class_pyloperator_creation"><code class="docutils literal notranslate"><span class="pre">TestPyLOperator.test_base_class_pyloperator_creation()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.pyLIQTR.circuits.tests.html#module-src.pyLIQTR.circuits.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.circuits.pyLCircuit">
+<span id="src-pyliqtr-circuits-pylcircuit-module"></span><h2>src.pyLIQTR.circuits.pyLCircuit module<a class="headerlink" href="#module-src.pyLIQTR.circuits.pyLCircuit" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.RESOURCE_ANALYSIS_MODE">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.pyLCircuit.</span></span><span class="sig-name descname"><span class="pre">RESOURCE_ANALYSIS_MODE</span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLCircuit.html#RESOURCE_ANALYSIS_MODE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.RESOURCE_ANALYSIS_MODE" title="Link to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">ResourceAnalysisMode</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.get_T_counts_from_rotations">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.pyLCircuit.</span></span><span class="sig-name descname"><span class="pre">get_T_counts_from_rotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_rotation_gates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLCircuit.html#get_T_counts_from_rotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.get_T_counts_from_rotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.pyLCircuit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.pyLCircuit.</span></span><span class="sig-name descname"><span class="pre">pyLCircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLCircuit.html#pyLCircuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Circuit</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.clear_resources">
+<span class="sig-name descname"><span class="pre">clear_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLCircuit.html#pyLCircuit.clear_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.clear_resources" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.decomp_level">
+<span class="sig-name descname"><span class="pre">decomp_level</span></span><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.decomp_level" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.decompose">
+<span class="sig-name descname"><span class="pre">decompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLCircuit.html#pyLCircuit.decompose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.decompose" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.get_decomp_levels">
+<span class="sig-name descname"><span class="pre">get_decomp_levels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLCircuit.html#pyLCircuit.get_decomp_levels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.get_decomp_levels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLCircuit.html#pyLCircuit.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.load" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.resourceAnalyze">
+<span class="sig-name descname"><span class="pre">resourceAnalyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation_gate_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ResourceAnalysisMode.Exact</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decompose_rotations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLCircuit.html#pyLCircuit.resourceAnalyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.resourceAnalyze" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.resources">
+<span class="sig-name descname"><span class="pre">resources</span></span><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.resources" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLCircuit.html#pyLCircuit.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.save" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.to_openqasm">
+<span class="sig-name descname"><span class="pre">to_openqasm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_rotation_decomp_gates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLCircuit.html#pyLCircuit.to_openqasm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.to_openqasm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.view_decomp_levels">
+<span class="sig-name descname"><span class="pre">view_decomp_levels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLCircuit.html#pyLCircuit.view_decomp_levels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLCircuit.pyLCircuit.view_decomp_levels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.pyLOperator">
+<span id="src-pyliqtr-circuits-pyloperator-module"></span><h2>src.pyLIQTR.circuits.pyLOperator module<a class="headerlink" href="#module-src.pyLIQTR.circuits.pyLOperator" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLOperator.fakeOperator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.pyLOperator.</span></span><span class="sig-name descname"><span class="pre">fakeOperator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decomp_level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLOperator.html#fakeOperator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLOperator.fakeOperator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.pyLIQTR.circuits.pyLOperator.pyLOperator" title="src.pyLIQTR.circuits.pyLOperator.pyLOperator"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyLOperator</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLOperator.fakeOperator.count_exact">
+<span class="sig-name descname"><span class="pre">count_exact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLOperator.html#fakeOperator.count_exact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLOperator.fakeOperator.count_exact" title="Link to this definition"></a></dt>
+<dd><p>This provides a default implementation of the count exact method</p>
+<p>NOTE: This should be overriden if the operator level is &gt;2</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLOperator.fakeOperator.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.circuits.pyLOperator.fakeOperator.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLOperator.pyLOperator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.pyLOperator.</span></span><span class="sig-name descname"><span class="pre">pyLOperator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLOperator.html#pyLOperator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLOperator.pyLOperator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Gate</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLOperator.pyLOperator.count_exact">
+<span class="sig-name descname"><span class="pre">count_exact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/typing.html#typing.Dict" title="(in Python v3.8)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/pyLOperator.html#pyLOperator.count_exact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.pyLOperator.pyLOperator.count_exact" title="Link to this definition"></a></dt>
+<dd><p>This provides a default implementation of the count exact method</p>
+<p>NOTE: This should be overriden if the operator level is &gt;2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.pyLOperator.pyLOperator.total_decomp">
+<span class="sig-name descname"><span class="pre">total_decomp</span></span><a class="headerlink" href="#src.pyLIQTR.circuits.pyLOperator.pyLOperator.total_decomp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits.qsp">
+<span id="src-pyliqtr-circuits-qsp-module"></span><h2>src.pyLIQTR.circuits.qsp module<a class="headerlink" href="#module-src.pyLIQTR.circuits.qsp" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.qsp.generate_QSP_circuit">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.qsp.</span></span><span class="sig-name descname"><span class="pre">generate_QSP_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hamiltonian</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/qsp.html#generate_QSP_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.qsp.generate_QSP_circuit" title="Link to this definition"></a></dt>
+<dd><p>Returns a pyLIQTR Circuit object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.circuits.qsp.generate_qubits_from_size">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.circuits.qsp.</span></span><span class="sig-name descname"><span class="pre">generate_qubits_from_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hamiltonian</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/circuits/qsp.html#generate_qubits_from_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.circuits.qsp.generate_qubits_from_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.circuits">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.pyLIQTR.circuits" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

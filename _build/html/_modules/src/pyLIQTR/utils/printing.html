@@ -1,0 +1,464 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.utils.printing &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/pyliqtr_logo.png"/>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.utils.printing</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.pyLIQTR.utils.printing</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 Massachusetts Institute of Technology </span>
+<span class="sd">SPDX-License-Identifier: BSD-2-Clause</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">GeneratorType</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.rotation_gates</span> <span class="kn">import</span> <span class="n">decomp_mixin</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.utils.circuit_decomposition</span> <span class="kn">import</span> <span class="n">generator_decompose</span><span class="p">,</span> <span class="n">keep</span><span class="p">,</span> <span class="n">test_for_bad_gate_op</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">FrozenSet</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">cirq.type_workarounds</span> <span class="kn">import</span> <span class="n">NotImplementedType</span>
+<span class="kn">from</span> <span class="nn">pyLIQTR.gate_decomp.cirq_transforms</span> <span class="kn">import</span> <span class="n">clifford_plus_t_direct_transform</span><span class="p">,</span> <span class="n">determine_gate_precision</span><span class="p">,</span> <span class="n">_perop_clifford_plus_t_direct_transform</span>
+
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
+
+<span class="kn">from</span> <span class="nn">pyLIQTR.circuits.operators.AddMod</span> <span class="kn">import</span> <span class="n">AddMod</span> <span class="k">as</span> <span class="n">pyLAM</span>
+<span class="kn">import</span> <span class="nn">qualtran</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">pyLIQTR.utils.global_ancilla_manager</span> <span class="k">as</span> <span class="nn">gam</span>
+
+
+
+<span class="k">def</span> <span class="nf">_build_qasm_qubit_map</span><span class="p">(</span><span class="n">circuit_in</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">QasmArgs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Internal class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">str_out</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;// Qubits: [&#39;</span>
+    <span class="n">qubits_</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">circuit_in</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">())</span>
+    <span class="n">qubits_</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">qubit_map</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">qubit_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">qubits_</span><span class="p">):</span>
+        
+        <span class="n">qubit_map</span><span class="p">[(</span><span class="n">qubit_</span><span class="p">)]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;q[</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">]&#39;</span>
+        
+        <span class="k">if</span> <span class="n">idx</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">str_out</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">qubit_</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">str_out</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;, </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">qubit_</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">str_out</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;]</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="n">str_out</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;qreg q[</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">qubits_</span><span class="p">)</span><span class="si">}</span><span class="s1">];</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+
+    <span class="n">qubit_map</span> <span class="o">=</span> <span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">qubit_map</span><span class="p">))</span>
+    <span class="n">qasm_args</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">QasmArgs</span><span class="p">(</span><span class="n">qubit_id_map</span><span class="o">=</span><span class="n">qubit_map</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">qasm_args</span><span class="p">,</span><span class="n">qubit_map</span><span class="p">,</span><span class="n">str_out</span>
+    
+<div class="viewcode-block" id="QASMInfo">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.printing.QASMInfo">[docs]</a>
+<span class="k">class</span> <span class="nc">QASMInfo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Internal class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit_in</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">measurement_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit_in</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">):</span>
+            <span class="n">qubits_</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">circuit_in</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit_in</span><span class="p">,</span><span class="n">GeneratorType</span><span class="p">):</span>
+            <span class="c1">#if its a generator, we need to go through each thing and </span>
+            <span class="c1">#get the qubits involved :\</span>
+            <span class="n">qubits_</span>  <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">circuit_in</span><span class="p">:</span>
+                <span class="n">qubits_</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">_check_for_measurement</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">measurement_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">qubits_</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">qubits_</span><span class="p">)</span>
+        <span class="n">qubits_</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    
+        <span class="n">str_out</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;// Qubits: [&#39;</span>
+        <span class="n">qubit_map</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxq</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">qubit_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">qubits_</span><span class="p">):</span>
+            
+            <span class="n">qubit_map</span><span class="p">[(</span><span class="n">qubit_</span><span class="p">)]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;q[</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">]&#39;</span>
+            
+            <span class="k">if</span> <span class="n">idx</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">str_out</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">qubit_</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">str_out</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;, </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">qubit_</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxq</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">qubits_</span><span class="p">)</span>
+        <span class="n">str_out</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;]</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">str_out</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;qreg q[</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">qubits_</span><span class="p">)</span><span class="si">}</span><span class="s1">];</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">str_out</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;creg c[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">measurement_count</span><span class="si">}</span><span class="s1">];</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+
+        <span class="n">qubit_map</span> <span class="o">=</span> <span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">qubit_map</span><span class="p">))</span>
+        <span class="n">qasm_args</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">QasmArgs</span><span class="p">(</span><span class="n">qubit_id_map</span><span class="o">=</span><span class="n">qubit_map</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qasm_args</span> <span class="o">=</span> <span class="n">qasm_args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span> <span class="o">=</span> <span class="n">qubit_map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">str_out</span> <span class="o">=</span> <span class="n">header</span><span class="o">+</span><span class="n">str_out</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">measurement_result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">measurement_counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="QASMInfo.update_info">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.printing.QASMInfo.update_info">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">):</span>
+            <span class="n">qubits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span><span class="n">GeneratorType</span><span class="p">):</span>
+            <span class="c1">#if its a generator, we need to go through each thing and </span>
+            <span class="c1">#get the qubits involved :\</span>
+            <span class="n">qubits</span>  <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">circuit</span><span class="p">:</span>
+                <span class="n">qubits</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">_check_for_measurement</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">measurement_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">qubits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">qubits</span><span class="p">)</span>
+        <span class="n">qubits</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">didAdd</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">qubit_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">qubit_</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span><span class="p">:</span>
+                <span class="n">didAdd</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span><span class="p">[</span><span class="n">qubit_</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;q[</span><span class="si">{</span><span class="n">idx</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">maxq</span><span class="si">}</span><span class="s1">]&#39;</span>
+        
+        <span class="k">if</span> <span class="n">didAdd</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qasm_args</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">QasmArgs</span><span class="p">(</span><span class="n">qubit_id_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span><span class="p">)</span></div>
+
+        <span class="c1">#no need to modify str_out</span>
+
+<div class="viewcode-block" id="QASMInfo.add_measurement_result">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.printing.QASMInfo.add_measurement_result">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_measurement_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">result</span><span class="p">,</span><span class="n">bits</span><span class="p">,</span><span class="n">doClear</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">single_op</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">bit_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="n">bits</span><span class="p">)</span>
+        <span class="n">mbit</span> <span class="o">=</span> <span class="s2">&quot;c[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">measurement_counter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">measurement_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="k">if</span> <span class="n">single_op</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">bit_name</span>
+            <span class="n">doClear</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">measurement_result</span><span class="p">)</span> <span class="ow">or</span> <span class="n">doClear</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">measurement_result</span><span class="p">[</span><span class="n">result</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mbit</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">measurement_result</span><span class="p">[</span><span class="n">result</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mbit</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mbit</span></div>
+
+
+<div class="viewcode-block" id="QASMInfo.get_measurement_result">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.printing.QASMInfo.get_measurement_result">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_measurement_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">result</span><span class="p">,</span><span class="n">doClear</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">measurement_result</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Did not find </span><span class="si">{}</span><span class="s2"> in </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">measurement_result</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">measurement_result</span><span class="p">[</span><span class="n">result</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="QASMInfo.sanitize_meas_name">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.printing.QASMInfo.sanitize_meas_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">sanitize_meas_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">measname</span><span class="p">):</span>
+        <span class="n">keys_as_strings</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">measname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">measurement_result</span> \
+                <span class="ow">and</span> <span class="p">(</span><span class="n">measname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">or</span> <span class="n">measname</span> <span class="ow">in</span> <span class="n">keys_as_strings</span><span class="p">))</span> \
+            <span class="ow">or</span> <span class="n">measname</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">measname</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
+                <span class="n">qn</span> <span class="o">=</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">):</span><span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+                <span class="k">return</span> <span class="s2">&quot;b[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qn</span><span class="p">[</span><span class="n">measname</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;b[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span><span class="p">[</span><span class="n">measname</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">measname</span></div>
+</div>
+
+    
+<span class="k">def</span> <span class="nf">_check_for_measurement</span><span class="p">(</span><span class="n">op</span> <span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;cirq.MeasurementGate&quot;</span><span class="p">)</span>
+    
+            
+<span class="n">myQASMInfo</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">myOp</span> <span class="o">=</span> <span class="kc">None</span>
+<div class="viewcode-block" id="openqasm">
+<a class="viewcode-back" href="../../../../docs/_modules/src.pyLIQTR.utils.html#src.pyLIQTR.utils.printing.openqasm">[docs]</a>
+<span class="k">def</span> <span class="nf">openqasm</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">AbstractCircuit</span><span class="p">,</span>
+             <span class="n">gate_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+             <span class="n">circuit_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+             <span class="n">skip_header</span> <span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+             <span class="n">context</span> <span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+             <span class="n">rotation_allowed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">on_stuck_raise</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="ne">Exception</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+             <span class="n">use_random_decomp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+             <span class="n">max_decomposition_passes</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function is an extension and wrapper around Cirq&#39;s existing decomposition and openqasm printing workflow, and the primary intent is to address short-comings and usability that accompanies using the default cirq openqasm workflow.</span>
+
+<span class="sd">    This function is a generator, and yields a string which corresponds to QASM output.</span>
+
+<span class="sd">    NOTE: For the most part, this function requires that any operation has a &#39;&#39;&#39;_qasm_&#39;&#39;&#39; defined, otherwise you will receive errors on output (with some small execptions).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        circuit: A cirq circuit that you wish to output as QASM</span>
+<span class="sd">        gate_precision: Union[int, float, None]</span>
+<span class="sd">            Used to determine the maximum approximation error for each gate decomposition.</span>
+<span class="sd">            If given an int, the decomposition returned by the function will be within a</span>
+<span class="sd">            distance of 10^{-precision} of the given rotation in the operator norm, whereas</span>
+<span class="sd">            if given a float the max error in the operator norm will simply be gate_precision.</span>
+<span class="sd">        circuit_precision: Union[int, float, None]</span>
+<span class="sd">            If not None, the approximation error for each gate will be bounded by either</span>
+<span class="sd">            `circuit_precision` divided by the number of rotation gates (if given a float),</span>
+<span class="sd">            or 10^{-circuit_precision} (if given an int).</span>
+<span class="sd">        skip_header: bool</span>
+<span class="sd">            Whether or not to output the QASM header</span>
+<span class="sd">        rotation_allowed: bool</span>
+<span class="sd">            Whether or not to allow rotations (Rx/Ry/Rz) to remain in the circuit.</span>
+<span class="sd">            If set to false, we make use a of a Clifford+T representation outlined in https://arxiv.org/pdf/0806.3834.pdf </span>
+<span class="sd">            (and further discussed in https://arxiv.org/pdf/1312.6584.pdf and http://www.cs.umd.edu/~amchilds/qa/qa.pdf, </span>
+<span class="sd">            as potentially easier to digest forms).</span>
+
+<span class="sd">            When rotation_allowed=False, we introduce the &quot;rx_d/ry_d/rz_d gate&quot;, followed by a line of the form:</span>
+
+<span class="sd">            // (leading_T, gate_sequence, sequence_length, clifford_part)</span>
+<span class="sd">            leading_T : A bool indicating whether or not there is a T gate at the start of the sequence</span>
+<span class="sd">            gate_sequence: An int whose binary representation encodes a sequence of H, S, and T gates</span>
+<span class="sd">            sequence_length: The number of T gates in the sequence (note if leading_T is true, the total number of </span>
+<span class="sd">                gates is sequence_length+1)</span>
+<span class="sd">            clifford_part: A List[str] of clifford gates that come at the end of the H,S,T sequence.</span>
+<span class="sd">            Note that when rotation_allowed=False, you may also want to specify a level of precision by </span>
+<span class="sd">                passing gate_precision or circuit_precision to pyLIQTR.utils.printing.openqasm</span>
+<span class="sd">        on_stuck_raise:  Union[Exception, None]</span>
+<span class="sd">            See cirq.decompose documentation for this</span>
+<span class="sd">        use_random_decomp: bool</span>
+<span class="sd">            Used if rotation_allowed==False. By default this is set true in the interest of time, and assumes</span>
+<span class="sd">            a heuristic for how rotations are decomposed into Clifford+T. NOTE: Unless you need the circuit to be</span>
+<span class="sd">            to implement the correct unitary, you should leave this False for the interest of speed (resource counts,</span>
+<span class="sd">            parallelism, etc) will all be of the right order</span>
+
+<span class="sd">            The heuristic for determining the length of the sequence depends on the given precision.</span>
+<span class="sd">            For a precision of ε, the T count is sampled from a normal distribution with</span>
+<span class="sd">            a mean of 3.02 * log2(1/ε) + 0.77 and a standard deviation of 2.06 (these</span>
+<span class="sd">            numbers were obtained from decomposing 1000 random angles at varying</span>
+<span class="sd">            precisions).</span>
+<span class="sd">        max_decomposition_passes: Union[int,None]</span>
+<span class="sd">            This sets how many decomposition passes to do before outputting to QASM (None implies until we stop) </span>
+
+<span class="sd">        </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#This function always will decompose to 1-3Q gates</span>
+    <span class="k">global</span> <span class="n">myQASMInfo</span>
+    <span class="c1">#Provide custom context if one is not provided</span>
+    <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">DecompositionContext</span><span class="p">(</span><span class="n">gam</span><span class="o">.</span><span class="n">gam</span><span class="p">)</span>
+    <span class="c1">#Determine gate precision if necessary. NOTE: Num_rotations cannot be found without looking through</span>
+    <span class="c1">#entire circuit</span>
+    <span class="c1">#This decomposes+does clifford transform</span>
+    <span class="k">def</span> <span class="nf">convertMe</span><span class="p">(</span><span class="n">circuit</span><span class="p">):</span>
+        <span class="c1">#A deep copy MUST be done here in order to keep qubit naming conventions consistent.</span>
+        <span class="n">tcontext</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">generator_decompose</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="n">keep</span><span class="p">,</span> <span class="n">on_stuck_raise</span> <span class="o">=</span> <span class="n">on_stuck_raise</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">tcontext</span><span class="p">,</span><span class="n">max_decomposition_passes</span><span class="o">=</span><span class="n">max_decomposition_passes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">rotation_allowed</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">cptdt_op</span> <span class="ow">in</span> <span class="n">_perop_clifford_plus_t_direct_transform</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">use_rotation_decomp_gates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>\
+                                                    <span class="n">use_random_decomp</span><span class="o">=</span><span class="n">use_random_decomp</span><span class="p">,</span>\
+                                                    <span class="n">gate_precision</span><span class="o">=</span><span class="n">gate_precision</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="n">cptdt_op</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">op</span>
+    <span class="n">gate_precision</span> <span class="o">=</span> <span class="n">determine_gate_precision</span><span class="p">(</span><span class="n">convertMe</span><span class="p">(</span><span class="n">circuit</span><span class="p">),</span> <span class="n">gate_precision</span><span class="p">,</span> <span class="n">circuit_precision</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    
+
+    <span class="n">str_out</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">skip_header</span><span class="p">):</span>
+        <span class="n">str_out</span> <span class="o">=</span>  <span class="s1">&#39;// Generated from Cirq, Openfermion, and MIT LL</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        <span class="n">str_out</span> <span class="o">+=</span> <span class="s1">&#39;OPENQASM 2.0;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">str_out</span> <span class="o">+=</span> <span class="s1">&#39;include </span><span class="se">\&quot;</span><span class="s1">qelib1.inc</span><span class="se">\&quot;</span><span class="s1">;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        
+        
+        <span class="n">myQASMInfo</span> <span class="o">=</span> <span class="n">QASMInfo</span><span class="p">(</span><span class="n">convertMe</span><span class="p">(</span><span class="n">circuit</span><span class="p">),</span><span class="n">str_out</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">myQASMInfo</span><span class="o">.</span><span class="n">update_info</span><span class="p">(</span><span class="n">convertMe</span><span class="p">(</span><span class="n">circuit</span><span class="p">))</span>
+    <span class="n">qubit_map_str2key</span> <span class="o">=</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">):</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">myQASMInfo</span><span class="o">.</span><span class="n">qubit_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_header</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">myQASMInfo</span><span class="o">.</span><span class="n">str_out</span>
+    <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">convertMe</span><span class="p">(</span><span class="n">circuit</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;qualtran.bloqs.basic_gates&quot;</span> <span class="ow">in</span> <span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="vm">__module__</span><span class="p">:</span>
+                    <span class="n">op</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="o">.</span><span class="n">cirq_gate</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">_gate</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">GlobalPhaseGate</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">test_op</span> <span class="o">=</span> <span class="n">test_for_bad_gate_op</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">test_op</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1">#does not handle XPowGates properly if rotation_allowed=False...</span>
+                <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">qasm</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="n">myQASMInfo</span><span class="o">.</span><span class="n">qasm_args</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">cirq</span><span class="o">.</span><span class="n">qasm</span><span class="p">(</span><span class="n">test_op</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">myQASMInfo</span><span class="o">.</span><span class="n">qasm_args</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_check_for_measurement</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">:</span>
+                    <span class="n">meas_name</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">_measurement_key_name_</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">meas_name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                        <span class="n">meas_name</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span>
+                    <span class="k">elif</span> <span class="n">meas_name</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+                        <span class="n">meas_name</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span>
+                    <span class="n">meas_result</span> <span class="o">=</span> <span class="n">myQASMInfo</span><span class="o">.</span><span class="n">add_measurement_result</span><span class="p">(</span><span class="n">meas_name</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">myQASMInfo</span><span class="o">.</span><span class="n">qubit_map</span><span class="p">[</span><span class="n">q</span><span class="p">]),</span>\
+                                                                    <span class="n">single_op</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">))</span>
+
+                    <span class="k">yield</span> <span class="s1">&#39;measure </span><span class="si">{}</span><span class="s1"> -&gt; </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">myQASMInfo</span><span class="o">.</span><span class="n">qubit_map</span><span class="p">[</span><span class="n">q</span><span class="p">],</span><span class="n">meas_result</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">ClassicallyControlledOperation</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">cirq</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">controlled_operation</span><span class="o">.</span><span class="n">ControlledOperation</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">classical_controls</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cant handle more than one classical control&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+                <span class="n">newstr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">for</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">op</span><span class="o">.</span><span class="n">classical_controls</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">!=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">KeyCondition</span><span class="p">:</span>
+                        <span class="c1">#This works with the type that we implement</span>
+                        <span class="c1">#We require a &quot;get_condition_format_string&quot; be provided...</span>
+                        <span class="n">keys</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">keys</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span><span class="o">!=</span><span class="mi">1</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Need to update to support additional keys&quot;</span><span class="p">)</span>
+                        <span class="n">sanitized_keys</span> <span class="o">=</span> <span class="p">[]</span>
+                        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                            <span class="n">key</span> <span class="o">=</span> <span class="n">myQASMInfo</span><span class="o">.</span><span class="n">sanitize_meas_name</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                            <span class="n">meas_result</span> <span class="o">=</span> <span class="n">myQASMInfo</span><span class="o">.</span><span class="n">get_measurement_result</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                            <span class="n">meas_result</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">meas_result</span><span class="p">)</span>
+                        <span class="n">newstr</span><span class="o">+=</span><span class="s2">&quot;if (</span><span class="si">{}</span><span class="s2">) &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">get_condition_format_string</span><span class="p">()</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">meas_result</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1">#This works with default cirq.value.condition.KeyCondition</span>
+                        <span class="n">tmp</span> <span class="o">=</span> <span class="n">myQASMInfo</span><span class="o">.</span><span class="n">sanitize_meas_name</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+                        <span class="n">meas_result</span> <span class="o">=</span> <span class="n">myQASMInfo</span><span class="o">.</span><span class="n">get_measurement_result</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+
+                        <span class="n">checkVal</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">meas_result</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">])</span>
+                        <span class="n">checkResult</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">meas_result</span><span class="p">)</span>
+                        <span class="n">newstr</span><span class="o">+=</span><span class="s2">&quot;if (</span><span class="si">{}</span><span class="s2">==</span><span class="si">{}</span><span class="s2">) &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">checkResult</span><span class="p">,</span><span class="n">checkVal</span><span class="p">)</span>
+                <span class="n">newstr</span><span class="o">+=</span><span class="n">cirq</span><span class="o">.</span><span class="n">qasm</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">_sub_operation</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="n">myQASMInfo</span><span class="o">.</span><span class="n">qasm_args</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="n">newstr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;AddConstantMod&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;ModAddK&#39;</span><span class="p">)):</span>
+                <span class="c1">#this is an op that needs to be casted to </span>
+                <span class="n">qbs</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">qubits</span>
+                <span class="n">top</span> <span class="o">=</span> <span class="n">pyLAM</span><span class="p">(</span><span class="n">bitsize</span><span class="o">=</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">bitsize</span><span class="p">,</span> <span class="n">add_val</span><span class="o">=</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">add_val</span><span class="p">,</span> \
+                           <span class="n">mod</span><span class="o">=</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">mod</span><span class="p">,</span><span class="n">cvs</span><span class="o">=</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">cvs</span><span class="p">)</span><span class="o">.</span>\
+                        <span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">qbs</span><span class="p">)</span>
+                <span class="k">yield from</span> <span class="n">openqasm</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">top</span><span class="p">),</span><span class="n">skip_header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span><span class="n">rotation_allowed</span><span class="o">=</span><span class="n">rotation_allowed</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">qubit_map_str2key</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">((</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">myQASMInfo</span><span class="o">.</span><span class="n">qasm_args</span><span class="o">.</span><span class="n">qubit_id_map</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Issue with either decomposing or generating qasm with </span><span class="si">{}</span><span class="s1"> (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">),</span><span class="nb">type</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">gate</span><span class="p">)))</span>
+                <span class="nb">dir</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">e</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

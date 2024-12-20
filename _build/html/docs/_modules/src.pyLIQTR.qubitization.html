@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.pyLIQTR.qubitization package &mdash; pyLIQTR 1.3.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/pyliqtr_logo.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e358f374"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/thebelab-helper.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyLIQTR
+              <img src="../../_static/pyliqtr_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../document.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release.html">Release strategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice.html">Best Practices</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">pyLIQTR API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api-internal.html">Internal API reference, for users customizing behavior</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/pyLIQTR.html">pyLIQTR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyLIQTR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.pyLIQTR.qubitization package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/_modules/src.pyLIQTR.qubitization.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-pyliqtr-qubitization-package">
+<h1>src.pyLIQTR.qubitization package<a class="headerlink" href="#src-pyliqtr-qubitization-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.pyLIQTR.qubitization.phase_estimation">
+<span id="src-pyliqtr-qubitization-phase-estimation-module"></span><h2>src.pyLIQTR.qubitization.phase_estimation module<a class="headerlink" href="#module-src.pyLIQTR.qubitization.phase_estimation" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.qubitization.phase_estimation.</span></span><span class="sig-name descname"><span class="pre">QubitizedPhaseEstimation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_encoding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_control_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/phase_estimation.html#QubitizedPhaseEstimation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GateWithRegisters</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.all_qubits">
+<span class="sig-name descname"><span class="pre">all_qubits</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.all_qubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.circuit">
+<span class="sig-name descname"><span class="pre">circuit</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.control_registers">
+<span class="sig-name descname"><span class="pre">control_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.control_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/phase_estimation.html#QubitizedPhaseEstimation.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.junk_registers">
+<span class="sig-name descname"><span class="pre">junk_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.junk_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.selection_registers">
+<span class="sig-name descname"><span class="pre">selection_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.selection_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.target_registers">
+<span class="sig-name descname"><span class="pre">target_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.phase_estimation.QubitizedPhaseEstimation.target_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.qubitization.qsvt">
+<span id="src-pyliqtr-qubitization-qsvt-module"></span><h2>src.pyLIQTR.qubitization.qsvt module<a class="headerlink" href="#module-src.pyLIQTR.qubitization.qsvt" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSP_fourier_response">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.qubitization.qsvt.</span></span><span class="sig-name descname"><span class="pre">QSP_fourier_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_encoding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qsvt.html#QSP_fourier_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSP_fourier_response" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract" title="src.pyLIQTR.qubitization.qsvt.QSVT_abstract"><code class="xref py py-class docutils literal notranslate"><span class="pre">QSVT_abstract</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSP_fourier_response.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qsvt.html#QSP_fourier_response.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSP_fourier_response.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSP_fourier_response.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSP_fourier_response.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_abstract">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.qubitization.qsvt.</span></span><span class="sig-name descname"><span class="pre">QSVT_abstract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_encoding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_convention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'R'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_control_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qsvt.html#QSVT_abstract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GateWithRegisters</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_abstract.all_qubits">
+<span class="sig-name descname"><span class="pre">all_qubits</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract.all_qubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_abstract.circuit">
+<span class="sig-name descname"><span class="pre">circuit</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract.circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_abstract.control_registers">
+<span class="sig-name descname"><span class="pre">control_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract.control_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_abstract.junk_registers">
+<span class="sig-name descname"><span class="pre">junk_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract.junk_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_abstract.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_abstract.num_qubits_in_registers">
+<span class="sig-name descname"><span class="pre">num_qubits_in_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qsvt.html#QSVT_abstract.num_qubits_in_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract.num_qubits_in_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_abstract.phase_registers">
+<span class="sig-name descname"><span class="pre">phase_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract.phase_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_abstract.selection_registers">
+<span class="sig-name descname"><span class="pre">selection_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract.selection_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_abstract.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_abstract.target_registers">
+<span class="sig-name descname"><span class="pre">target_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract.target_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.qubitization.qsvt.</span></span><span class="sig-name descname"><span class="pre">QSVT_real_polynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_encoding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qsvt.html#QSVT_real_polynomial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.pyLIQTR.qubitization.qsvt.QSVT_abstract" title="src.pyLIQTR.qubitization.qsvt.QSVT_abstract"><code class="xref py py-class docutils literal notranslate"><span class="pre">QSVT_abstract</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qsvt.html#QSVT_real_polynomial.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.qubitization.qsvt.</span></span><span class="sig-name descname"><span class="pre">QSVT_real_polynomial_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_encoding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctl_s_gate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctl_z_gate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctl_h_gate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qsvt.html#QSVT_real_polynomial_sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GateWithRegisters</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.all_qubits">
+<span class="sig-name descname"><span class="pre">all_qubits</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.all_qubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.circuit">
+<span class="sig-name descname"><span class="pre">circuit</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.control_registers">
+<span class="sig-name descname"><span class="pre">control_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.control_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qsvt.html#QSVT_real_polynomial_sum.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.junk_registers">
+<span class="sig-name descname"><span class="pre">junk_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.junk_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.n_phis">
+<span class="sig-name descname"><span class="pre">n_phis</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.n_phis" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.phase_registers">
+<span class="sig-name descname"><span class="pre">phase_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.phase_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.selection_registers">
+<span class="sig-name descname"><span class="pre">selection_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.selection_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.target_registers">
+<span class="sig-name descname"><span class="pre">target_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt.QSVT_real_polynomial_sum.target_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.qubitization.qsvt_dynamics">
+<span id="src-pyliqtr-qubitization-qsvt-dynamics-module"></span><h2>src.pyLIQTR.qubitization.qsvt_dynamics module<a class="headerlink" href="#module-src.pyLIQTR.qubitization.qsvt_dynamics" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt_dynamics.qsvt_dynamics">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.qubitization.qsvt_dynamics.</span></span><span class="sig-name descname"><span class="pre">qsvt_dynamics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qsvt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'optimization'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_sets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_rescale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qsvt_dynamics.html#qsvt_dynamics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt_dynamics.qsvt_dynamics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qsvt_dynamics.simulation_phases">
+<span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.qubitization.qsvt_dynamics.</span></span><span class="sig-name descname"><span class="pre">simulation_phases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qsvt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qsvt_dynamics.html#simulation_phases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qsvt_dynamics.simulation_phases" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.qubitization.qubitized_gates">
+<span id="src-pyliqtr-qubitization-qubitized-gates-module"></span><h2>src.pyLIQTR.qubitization.qubitized_gates module<a class="headerlink" href="#module-src.pyLIQTR.qubitization.qubitized_gates" title="Link to this heading"></a></h2>
+<p>Copyright (c) 2024 Massachusetts Institute of Technology
+SPDX-License-Identifier: BSD-2-Clause</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedReflection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.qubitization.qubitized_gates.</span></span><span class="sig-name descname"><span class="pre">QubitizedReflection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_controls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_gate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">cirq.Z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_control_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qubitized_gates.html#QubitizedReflection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedReflection" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GateWithRegisters</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedReflection.all_qubits">
+<span class="sig-name descname"><span class="pre">all_qubits</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedReflection.all_qubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedReflection.circuit">
+<span class="sig-name descname"><span class="pre">circuit</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedReflection.circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedReflection.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qubitized_gates.html#QubitizedReflection.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedReflection.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedReflection.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedReflection.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedReflection.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedReflection.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedRotation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.qubitization.qubitized_gates.</span></span><span class="sig-name descname"><span class="pre">QubitizedRotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_controls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rads=1.5707963267948966</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_target_gate=cirq.X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_gate=&lt;class</span> <span class="pre">'cirq.ops.common_gates.Rz'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_control_val=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_target_val=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_control_val=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_val=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_control_qubit=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qubitized_gates.html#QubitizedRotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedRotation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GateWithRegisters</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedRotation.all_qubits">
+<span class="sig-name descname"><span class="pre">all_qubits</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedRotation.all_qubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedRotation.circuit">
+<span class="sig-name descname"><span class="pre">circuit</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedRotation.circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedRotation.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qubitized_gates.html#QubitizedRotation.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedRotation.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedRotation.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedRotation.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedRotation.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedRotation.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.pyLIQTR.qubitization.qubitized_gates.</span></span><span class="sig-name descname"><span class="pre">QubitizedWalkOperator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_encoding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_control_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qubitized_gates.html#QubitizedWalkOperator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GateWithRegisters</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.all_qubits">
+<span class="sig-name descname"><span class="pre">all_qubits</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.all_qubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.circuit">
+<span class="sig-name descname"><span class="pre">circuit</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.control_registers">
+<span class="sig-name descname"><span class="pre">control_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.control_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.decompose_from_registers">
+<span class="sig-name descname"><span class="pre">decompose_from_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">quregs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/src/pyLIQTR/qubitization/qubitized_gates.html#QubitizedWalkOperator.decompose_from_registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.decompose_from_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.junk_registers">
+<span class="sig-name descname"><span class="pre">junk_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.junk_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.num_qubits">
+<span class="sig-name descname"><span class="pre">num_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.num_qubits" title="Link to this definition"></a></dt>
+<dd><p>The number of qubits this gate acts on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.selection_registers">
+<span class="sig-name descname"><span class="pre">selection_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.selection_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.signature">
+<span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.signature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.target_registers">
+<span class="sig-name descname"><span class="pre">target_registers</span></span><a class="headerlink" href="#src.pyLIQTR.qubitization.qubitized_gates.QubitizedWalkOperator.target_registers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.pyLIQTR.qubitization">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.pyLIQTR.qubitization" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MIT Lincoln Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
