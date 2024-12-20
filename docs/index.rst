@@ -9,6 +9,14 @@ Welcome to pyLIQTR's documentation!
 **pyLIQTR** is a MIT Lincoln Laboratory built library for building quantum circuits derived from quantum algorithms and generating Clifford+T resource estimates.
 
 
+Citation
+===================================
+
+Please use this DOI number reference, published on [Zenodo](https://zenodo.org), when citing the software:
+
+[![DOI](image.png)](https://doi.org/10.5281/zenodo.7221272)
+
+
 User Documentation
 ===================================
 
