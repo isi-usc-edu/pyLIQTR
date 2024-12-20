@@ -12,9 +12,7 @@ Welcome to pyLIQTR's documentation!
 Citation
 ===================================
 
-Please use this DOI number reference, published on [Zenodo](https://zenodo.org), when citing the software:
-
-[![DOI](image.png)](https://doi.org/10.5281/zenodo.7221272)
+Please use this DOI number reference, published on Zenodo (https://zenodo.org), when citing the software: https://doi.org/10.5281/zenodo.7221272
 
 
 User Documentation
