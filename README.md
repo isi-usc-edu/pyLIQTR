@@ -116,7 +116,7 @@ Notebooks showcasing features are organized as follows in the /Examples director
 
 Please use this DOI number reference, published on [Zenodo](https://zenodo.org), when citing the software:
 
-![DOI](image.png)
+[![DOI](image.png)](https://doi.org/10.5281/zenodo.7221272)
 
 ---
 
