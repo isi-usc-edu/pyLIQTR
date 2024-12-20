@@ -5,7 +5,7 @@
 
 git init
 git config --local user.email 'robert.rood@ll.mit.edu'
-git config --local user.name 'rroodll'
+git config --local user.name 'rrood'
 git config --local --add safe.directory '*'
 git add .
 git commit -m "Deploy docs to GitHub Pages"
