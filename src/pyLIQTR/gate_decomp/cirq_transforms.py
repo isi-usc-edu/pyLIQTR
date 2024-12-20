@@ -25,6 +25,7 @@ Section 3)
 """
 
 import math
+import copy
 import random
 import re
 import warnings
@@ -45,7 +46,7 @@ from pyLIQTR.gate_decomp.rotation_gates import (
     T_COUNT_SLOPE,
     T_COUNT_STD_DEV,
     check_common_angles,
-    clifford_gates,
+    CLIFFORD_GATES,
     clifford_plus_T_ops,
     rx_decomp,
     ry_decomp,
@@ -237,7 +238,7 @@ def _perop_clifford_plus_t_direct_transform(
         else:
             new_gates = decompose_cirq_directCpT(op)
 
-        operations.append(new_gates)
+        operations += new_gates
     elif (
         len(op.qubits) != 1
         or is_gate_clifford_plus_T(op.without_classical_controls())
@@ -281,15 +282,13 @@ def _perop_clifford_plus_t_direct_transform(
                                 ).on(qubit)
                             )
                     else:
-                        operations.append(
-                            decompose_diagonal_cirq(
+                        operations += decompose_diagonal_cirq(
                                 mpfr(gate_tuple[1]),
                                 gate_precision,
                                 qubit,
                                 classical_controls,
                                 use_random_decomp,
                             )
-                        )
                 # if Y gate, can approximate with RY(θ) = (SH)RZ(θ)(SH)dag
                 # = (SH)RZ(θ)(HSdag)
                 if gate_tuple[0] == "y":
@@ -315,15 +314,13 @@ def _perop_clifford_plus_t_direct_transform(
                     else:
                         operations.append(cirq.S(qubit) ** -1)
                         operations.append(cirq.H(qubit))
-                        operations.append(
-                            decompose_diagonal_cirq(
+                        operations += decompose_diagonal_cirq(
                                 mpfr(gate_tuple[1]),
                                 gate_precision,
                                 qubit,
                                 classical_controls,
                                 use_random_decomp,
                             )
-                        )
                         operations.append(cirq.H(qubit))
                         operations.append(cirq.S(qubit))
                 # if X gate, can approximate with RX(θ) = H RZ(θ) H
@@ -349,15 +346,13 @@ def _perop_clifford_plus_t_direct_transform(
                             )
                     else:
                         operations.append(cirq.H(qubit))
-                        operations.append(
-                            decompose_diagonal_cirq(
+                        operations += decompose_diagonal_cirq(
                                 mpfr(gate_tuple[1]),
                                 gate_precision,
                                 qubit,
                                 classical_controls,
                                 use_random_decomp,
                             )
-                        )
                         operations.append(cirq.H(qubit))
     
     return operations
@@ -451,14 +446,16 @@ def clifford_plus_t_direct_transform(
         A new circuit where the single qubit rotations have been replaced by approximations
         using the gates listed in the list clifford_plus_T_ops above
     """
-    gate_precision = determine_gate_precision(
-        circuit, gate_precision, circuit_precision, num_rotation_gates
-    )
-    operations = []
-    for moment in circuit:
-        for op in moment:
-            operations += _perop_clifford_plus_t_direct_transform(op,gate_precision,use_rotation_decomp_gates,use_random_decomp)
-    return cirq.Circuit(operations)
+    with cirq.with_debug(False):
+        gate_precision = determine_gate_precision(
+            circuit, gate_precision, circuit_precision, num_rotation_gates
+        )
+        operations = []
+        for moment in circuit:
+            for op in moment:
+                operations += _perop_clifford_plus_t_direct_transform(op,gate_precision,use_rotation_decomp_gates,use_random_decomp)
+        return cirq.Circuit(operations)
+
 
 
 def determine_gate_precision(
@@ -602,7 +599,6 @@ def parse_gate(
     return [(axis, angle)]
 
 
-@lru_cache
 def decompose_diagonal_cirq(
     angle: mpfr,
     precision: float,
@@ -678,7 +674,7 @@ def is_filtered_gate(op: cirq.Operation) -> bool:
 
 
 def random_decomp(eps: mpfr):
-    gates = clifford_gates[random.randint(0, 23)]
+    gates = copy.copy(CLIFFORD_GATES[random.randint(0, 23)])
     sequence_length = int(
         random.gauss(
             T_COUNT_SLOPE * math.log2(1 / eps) + T_COUNT_CONST,

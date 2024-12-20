@@ -63,19 +63,6 @@ class Reflect(pyLOperator):
                       ancilla_qubits=self.__anc_q).\
                       on(*([self.__phs_q] + self.__ctl_q + self.__anc_q)))
         
-    def __eq__(self, other):
-        """
-        Checks to see if another pyLOperator is equal to this instantiation.
-        """
-        if self.__class__ != other.__class__:
-            return False
-        else:
-            return (
-                (self.__phs_q == other.__phs_q) and \
-                (self.__ctl_q == other.__ctl_q) and \
-                (self.__anc_q == other.__anc_q)
-            )
-            
     def _get_as_circuit(self):
         return cirq.Circuit(self.on(*self.allQ))
     

@@ -34,18 +34,6 @@ class UnitaryBlockEncode(pyLO.pyLOperator):
             qStr = ",".join([str(x) for x in allQ])
             return "{} {}".format(self.__strName, qStr)
 
-        def __eq__(self, other):
-            if self.__class__ != other.__class__:
-                return False
-            else:
-                return ((self.__hamiltonian == other.__hamiltonian) and \
-                    (self.__phs_q == other.__phs_q) and \
-                    (self.__ctl_q == other.__ctl_q)and \
-                    (self.__tgt_q == other.__tgt_q) and \
-                    (self.__anc_q == other.__anc_q) and \
-                    (self.__selOracle == other.__selOracle) and \
-                    (self.__prepOracle == other.__prepOracle)
-                )
         def _circuit_diagram_info_(self, args) -> List[str]:
             return [self.__strName] * self.num_qubits()
         
