@@ -36,8 +36,9 @@ class ChemicalHamiltonian(ProblemInstance):
         juliapkg.resolve()
         
         # Now start the real initialization
-        self._mol_ham   =  mol_ham
-        self._mol_name  =  mol_name
+        self._mol_ham    =  mol_ham
+        self._mol_name   =  mol_name
+        self._df_cutoffs =  dict()
 
         super(ProblemInstance, self).__init__(**kwargs)
 
@@ -52,11 +53,6 @@ class ChemicalHamiltonian(ProblemInstance):
 
     def n_qubits(self):
         return self._mol_ham.n_qubits
-
-    
-#  #   @property
-#     def n_terms(self,**kwargs):
-#         return len(list(self._terms_jw))
 
     @cached_property
     def terms_jw(self):
@@ -110,14 +106,29 @@ class ChemicalHamiltonian(ProblemInstance):
 
         return {'h0':h0, 'one_body_tensor':one_body_tensor, 'two_body_tensor':two_body_tensor}
 
+    @cached_property
+    def obt_fragment(self):
+        from pyLIQTR.utils.df_utils import to_OBF
+        _, obt, _ = self.hamiltonian_tensors.values()
+        obt_frag = to_OBF(obt)
+        return obt_frag
+
     def DF_fragments(self,sf_error_threshold):
         from pyLIQTR.utils.df_utils import DF_decomposition
         h0, one_body_tensor, two_body_tensor = self.hamiltonian_tensors.values()            
         return DF_decomposition(h0, one_body_tensor, two_body_tensor,tol=sf_error_threshold)
     
-    def get_alpha(self,encoding:str='PauliLCU',df_error_threshold=None,sf_error_threshold=None):
+    def df_cutoffs(self,df_error_threshold:float=1e-3,sf_error_threshold:float=1e-10):
+        error_pair = (df_error_threshold,sf_error_threshold)
+        if error_pair in self._df_cutoffs:
+            return self._df_cutoffs[error_pair]
+        else:
+            __,__,__,__ = self.yield_DF_Info(df_error_threshold=df_error_threshold,sf_error_threshold=sf_error_threshold)
+            return self._df_cutoffs[error_pair]
+
+    def get_alpha(self,encoding:str='PauliLCU',sf_error_threshold:float=1e-10,df_error_threshold:float=None,df_cutoffs:list=None):
         if encoding == 'PauliLCU':
-            return(self._ops.get_alpha())
+            return(self._ops.get_coeff_norm())
         elif encoding == 'DF':
             from pyLIQTR.utils.df_utils import to_OBF
             if 'sphinx' not in sys.modules:
@@ -126,15 +137,24 @@ class ChemicalHamiltonian(ProblemInstance):
                 jl.seval('Pkg.add("QuantumMAMBO")')
                 jl.seval("using QuantumMAMBO")
                 mambo = jl.QuantumMAMBO
+            
+            if df_cutoffs is None:
+                if df_error_threshold is None:
+                    df_cutoffs = self.df_cutoffs(df_error_threshold=1e-3,sf_error_threshold=sf_error_threshold)
+                else:
+                    df_cutoffs = self.df_cutoffs(df_error_threshold=df_error_threshold,sf_error_threshold=sf_error_threshold)
+            else:
+                if df_error_threshold is not None:
+                    raise ValueError("provide only df_error_threshold or df_cutoffs")
+
             _, one_body_tensor, two_body_tensor = self.hamiltonian_tensors.values()            
             DF_frags = self.DF_fragments(sf_error_threshold)
             one_body_correction = 2*sum([two_body_tensor[:,:,r,r] for r in range(two_body_tensor.shape[0])])
             one_body_fragment = to_OBF(one_body_tensor + one_body_correction)
             lambdaTprime = mambo.OBF_L1(one_body_fragment)
             lambdaDF = 0.0
-            for frag in DF_frags:
-                lambdaDF += mambo.DF_L1(frag)
-            # TODO: lambdaDF should exclude terms based on error threshold
+            for l,frag in enumerate(DF_frags):
+                lambdaDF += 0.5 * abs(frag.coeff) * ((sum(np.abs(frag.C.λ[:df_cutoffs[l]])))**2)
             return lambdaTprime + lambdaDF
 
         
@@ -176,7 +196,7 @@ class ChemicalHamiltonian(ProblemInstance):
             
     
     def yield_DF_Info(self, df_error_threshold: float,sf_error_threshold:float=1e-10):
-        from pyLIQTR.utils.df_utils import to_OBF, U_to_Givens, calc_xi
+        from pyLIQTR.utils.df_utils import U_to_Givens, calc_xi
 
         _, obt, tbt = self.hamiltonian_tensors.values()   
 
@@ -187,7 +207,7 @@ class ChemicalHamiltonian(ProblemInstance):
         mus_mat = np.zeros(shape = (num_frags + 1, num_orbs))
         thetas_tsr = np.zeros(shape = (num_frags + 1, num_orbs, num_orbs - 1))
         
-        obt_frag = to_OBF(obt)
+        obt_frag = self.obt_fragment
         for i in range(len(obt_frag.C.λ)):
             mus_mat[0][i] = obt_frag.C.λ[i]
     
@@ -228,9 +248,9 @@ class ChemicalHamiltonian(ProblemInstance):
                 f_p_vals.append(abs(k))
             f_p_full.append([f_p_signs, f_p_vals])
 
-        xi = calc_xi(f_p_abs, df_error_threshold)
+        self._df_cutoffs[(df_error_threshold,sf_error_threshold)] = calc_xi(f_p_abs, df_error_threshold)
 
-        return T_prime_full, f_p_full, xi, thetas_tsr
+        return T_prime_full, f_p_full, self._df_cutoffs[(df_error_threshold,sf_error_threshold)], thetas_tsr
     
     
         

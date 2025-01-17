@@ -103,7 +103,7 @@ class DoubleFactorized(BlockEncoding):
     @cached_property
     def alpha(self):
         """returns the double factorized Hamiltonian norm."""
-        return self.PI.get_alpha(encoding='DF',df_error_threshold=self.df_error_threshold,sf_error_threshold=self.sf_error_threshold)
+        return self.PI.get_alpha(encoding='DF',df_cutoffs=self.Xi_l_data)
     
     @cached_property
     def control_registers(self) -> Tuple[Register]:
