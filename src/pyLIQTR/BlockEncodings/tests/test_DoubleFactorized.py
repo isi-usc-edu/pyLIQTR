@@ -12,6 +12,7 @@ from pyLIQTR.utils.printing import openqasm
 from pyLIQTR.utils.resource_analysis import estimate_resources
 from openfermion import InteractionOperator
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason = "pyscf not supported on Windows")
 class TestDoubleFactorizedEncoding:
 
     @pytest.fixture(scope="class")

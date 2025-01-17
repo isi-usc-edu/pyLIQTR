@@ -3,10 +3,12 @@ Copyright (c) 2024 Massachusetts Institute of Technology
 SPDX-License-Identifier: BSD-2-Clause
 """
 import pytest
+import platform
 import numpy as np
 from openfermion import InteractionOperator
 from pyLIQTR.ProblemInstances.getInstance import *
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason = "pyscf not supported on Windows")
 class TestChemicalHamiltonian:
 
     @pytest.fixture(scope="class")
