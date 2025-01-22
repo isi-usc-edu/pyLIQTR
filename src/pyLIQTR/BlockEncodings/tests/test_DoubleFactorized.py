@@ -93,6 +93,13 @@ class TestDoubleFactorizedEncoding:
     def df_encoding(self, h2_instance):
         return getEncoding(instance=h2_instance, encoding=VALID_ENCODINGS.DoubleFactorized,df_error_threshold=1e-2,br=4,step_error=1e-1)
 
+    def test_DoubleFactorized_alpha(self, h2_instance):
+        '''
+        Tests alpha is calculated without raising errors.
+        '''
+        encoding = getEncoding(instance=h2_instance, encoding=VALID_ENCODINGS.DoubleFactorized,df_error_threshold=1e-2,br=4, sf_error_threshold=1e-2)
+        norm = encoding.alpha
+    
     def test_DoubleFactorized_decomposes(self, df_encoding):
         '''
         Tests gate decomposition existence.
