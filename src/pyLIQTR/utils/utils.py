@@ -66,7 +66,7 @@ def open_fermion_to_qasm(n_qubits:int, ofq_str, reg_name:str='reg', include_head
 
         elif gate in qasm_convert_two_qubit_gates:
 
-            qubit_ids = [int(x) for x in moment_split[1:]]
+            qubit_ids = [int(x) for x in moment_split[1:3]]
             str_out += f'{qasm_convert_two_qubit_gates[gate]} {reg_name}[{qubit_ids[0]}],{reg_name}[{qubit_ids[1]}];\n'
 
         elif gate in qasm_convert_rotation_gates:
