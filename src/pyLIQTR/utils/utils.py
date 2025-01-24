@@ -9,6 +9,7 @@ from cirq   import LineQubit
 import cirq
 #from pyLIQTR.
 from pyLIQTR.circuits.pyLCircuit import get_T_counts_from_rotations
+from io import StringIO
 
 
 qasm_convert_one_qubit_gates = {
@@ -42,44 +43,44 @@ def open_fermion_to_qasm(n_qubits:int, ofq_str, reg_name:str='reg', include_head
         decompose_rotations: Boolean, if you want to decompose rotation gates to Clifford+T
 
     Returns:
-        str_out : a string containing the OpenQASM 2.0 circuit
+        a string containing the OpenQASM 2.0 circuit
     """
+    strio_out = StringIO()
     if include_heading:
-        str_out =  '// Generated from Cirq, Openfermion, and MIT LL\n\n'
-        str_out += 'OPENQASM 2.0;\n'
-        str_out += 'include \"qelib1.inc\";\n\n'
-        str_out += f'qreg {reg_name}[{n_qubits}];\n\n'
-    else:
-        str_out = ''
-        
+        strio_out.write('// Generated from Cirq, Openfermion, and MIT LL\n\n')
+        strio_out.write('OPENQASM 2.0;\n')
+        strio_out.write('include \"qelib1.inc\";\n\n')
+        strio_out.write(f'qreg {reg_name}[{n_qubits}];\n\n')
+
     for moment_str in ofq_str:
-        
+
+        moment_split = moment_str.split(' ')
+
         # split the string and grab the gate:
-        gate = moment_str.split(' ')[0]
-       
+        gate = moment_split[0]
+
         if gate in qasm_convert_one_qubit_gates:
-            
-            qubit_id = int(moment_str.split(' ')[-1])
-            str_out += f'{qasm_convert_one_qubit_gates[gate]} {reg_name}[{qubit_id}];\n'
+
+            qubit_id = int(moment_split[-1])
+            strio_out.write(f'{qasm_convert_one_qubit_gates[gate]} {reg_name}[{qubit_id}];\n')
 
         elif gate in qasm_convert_two_qubit_gates:
-            
-            qubit_ids = [int(x) for x in moment_str.split(' ')[1:]]
-            str_out += f'{qasm_convert_two_qubit_gates[gate]} {reg_name}[{qubit_ids[0]}],{reg_name}[{qubit_ids[1]}];\n'
+
+            qubit_ids = [int(x) for x in moment_split[1:3]]
+            strio_out.write(f'{qasm_convert_two_qubit_gates[gate]} {reg_name}[{qubit_ids[0]}],{reg_name}[{qubit_ids[1]}];\n')
 
         elif gate in qasm_convert_rotation_gates:
-            
-            rotation = float(moment_str.split(' ')[1])/np.pi
-            qubit_id = int(moment_str.split(' ')[-1])
+
+            rotation = float(moment_split[1])/np.pi
+            qubit_id = int(moment_split[-1])
             if decompose_rotations:
-                str_out += f'{get_T_counts_from_rotations(gate)} {reg_name}[{qubit_id}];\n'
+                strio_out.write(f'{get_T_counts_from_rotations(gate)} {reg_name}[{qubit_id}];\n')
             else:
-                str_out += f'{qasm_convert_rotation_gates[gate]}(pi*{rotation}) {reg_name}[{qubit_id}];\n'
+                strio_out.write(f'{qasm_convert_rotation_gates[gate]}(pi*{rotation}) {reg_name}[{qubit_id}];\n')
         else:
             print(f'> Gate = {gate} not in gate tables')
-        
-    
-    return str_out
+
+    return strio_out.getvalue()
 
 def count_T_gates(circuit):
     '''
