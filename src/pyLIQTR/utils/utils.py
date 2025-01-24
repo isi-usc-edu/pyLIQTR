@@ -51,24 +51,24 @@ def open_fermion_to_qasm(n_qubits:int, ofq_str, reg_name:str='reg', include_head
         str_out += f'qreg {reg_name}[{n_qubits}];\n\n'
     else:
         str_out = ''
-        
+
     for moment_str in ofq_str:
-        
+
         # split the string and grab the gate:
         gate = moment_str.split(' ')[0]
-       
+
         if gate in qasm_convert_one_qubit_gates:
-            
+
             qubit_id = int(moment_str.split(' ')[-1])
             str_out += f'{qasm_convert_one_qubit_gates[gate]} {reg_name}[{qubit_id}];\n'
 
         elif gate in qasm_convert_two_qubit_gates:
-            
+
             qubit_ids = [int(x) for x in moment_str.split(' ')[1:]]
             str_out += f'{qasm_convert_two_qubit_gates[gate]} {reg_name}[{qubit_ids[0]}],{reg_name}[{qubit_ids[1]}];\n'
 
         elif gate in qasm_convert_rotation_gates:
-            
+
             rotation = float(moment_str.split(' ')[1])/np.pi
             qubit_id = int(moment_str.split(' ')[-1])
             if decompose_rotations:
@@ -77,8 +77,7 @@ def open_fermion_to_qasm(n_qubits:int, ofq_str, reg_name:str='reg', include_head
                 str_out += f'{qasm_convert_rotation_gates[gate]}(pi*{rotation}) {reg_name}[{qubit_id}];\n'
         else:
             print(f'> Gate = {gate} not in gate tables')
-        
-    
+
     return str_out
 
 def count_T_gates(circuit):
