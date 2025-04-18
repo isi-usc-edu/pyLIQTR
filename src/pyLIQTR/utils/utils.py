@@ -10,6 +10,7 @@ import cirq
 #from pyLIQTR.
 from pyLIQTR.circuits.pyLCircuit import get_T_counts_from_rotations
 from io import StringIO
+import struct
 
 
 qasm_convert_one_qubit_gates = {
@@ -181,3 +182,16 @@ def isLinux() -> bool:
         False otherwise
     """
     return platform.system() == 'Linux'
+
+def float_array_to_fixed_width_int(float_array, width_bits=32):
+    """Converts an array of floats to a fixed-width integer."""
+
+    # Pack the float into a binary representation
+    packed = struct.pack('%sf' % len(float_array), *float_array)
+
+    # Unpack the binary representation as an integer
+    integer = int.from_bytes(packed, byteorder='big', signed=False)
+
+    # Mask the integer to the desired width
+    mask = (1 << width_bits) - 1
+    return integer & mask

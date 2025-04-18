@@ -12,3 +12,8 @@ Demonstrates how derived instances of the ProblemInstance class can be used to f
 ### qsvt_and_qsp.ipynb
 Provides additional context for our QSP/QET/QSVT tools, including their use with arbitrary Hamiltonians.
 
+### scheduling_example.ipynb
+Demonstrates how we build a Quantum Circuit and then use our internal Scheduler to create time-accurate, resource reliant circuit execution and advanced parallelism analysis.
+
+### hardware_resource_estimation.ipynb
+Demonstrates how we take a Hamiltonian Circuit and perform both logical and hardware profile specific resource estimation. We use Microsoft's Azure|trade| to perform the Hardware Estimate.

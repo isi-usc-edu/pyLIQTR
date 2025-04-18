@@ -14,7 +14,7 @@ class PrepareNuSuperposition(GateWithRegisters):
     """Prepares the superposition state
 
     .. math::
-        \\frac{1}{ \\sqrt{2^{n_p + 2}} } \\sum_{\\mu=2}^{n_p+1} \\sum_{\\nu_x,\\nu_y,\\nu_z=(-2^{\\mu-1}-1),-0}^{2^{\\mu-1}-1} \frac{1}{2^{\\mu}} |\\mu\\rangle |\\nu_x\\rangle |\\nu_y\\rangle |\\nu_z\\rangle ,
+        \\frac{1}{ \\sqrt{2^{n_p + 2}} } \\sum_{\\mu=2}^{n_p+1} \\sum_{\\nu_x,\\nu_y,\\nu_z=(-2^{\\mu-1}-1),-0}^{2^{\\mu-1}-1} \\frac{1}{2^{\\mu}} |\\mu\\rangle |\\nu_x\\rangle |\\nu_y\\rangle |\\nu_z\\rangle ,
 
     where the :math:`-0` indicates the sum includes the state representing negative zero since the signed integer representation is being used. This is done using 6 Hadamards and 3*(bitsize+1) catalytically controlled Hadamards. This assumes :math:`|\\mu\\rangle` is given in the state 
 
@@ -24,6 +24,8 @@ class PrepareNuSuperposition(GateWithRegisters):
     which can be prepared using :class:`PrepareMuUnaryEncoded`.
 
     Registers:
+
+    .. line-block::
         mu: The register used to control the Hadamards.
         nu: The target register for the state preparation.
         catalytic: The catalytic state for controlled Hadamards.

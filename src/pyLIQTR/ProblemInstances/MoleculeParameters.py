@@ -41,7 +41,7 @@ class MoleculeParameters(ProblemInstance):
             self.num_atoms, self.num_electrons, self.sum_atomic_num = self.get_params_from_geometry_file(geometry_file=geometry_file)
         
         if lengths is not None:
-            assert np.prod(lengths) == cell_volume
+            assert abs(np.prod(lengths) - cell_volume) <= 1e-5
             self.num_plane_waves = self.get_num_plane_waves(E_cut_off=E_cut_off,lengths=lengths)
 
         self._model = "MoleculeParameters"

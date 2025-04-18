@@ -20,7 +20,7 @@ import random
 from pyLIQTR.utils.Hamiltonian             import Hamiltonian as pyH
 from pyLIQTR.utils.qsp_helpers             import circuit_decompose_once
 #utils
-from pyLIQTR.utils.utils import isWindows, open_fermion_to_qasm
+from pyLIQTR.utils.utils import isWindows, isLinux, open_fermion_to_qasm
 from pyLIQTR.utils.printing import openqasm
 from pyLIQTR.gate_decomp.cirq_transforms import clifford_plus_t_direct_transform
 

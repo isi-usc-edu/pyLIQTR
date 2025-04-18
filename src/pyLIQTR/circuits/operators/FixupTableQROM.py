@@ -10,7 +10,8 @@ from functools import cached_property
 from cirq.value.condition import Condition
 from qualtran.bloqs.multiplexers.unary_iteration_bloq import UnaryIterationGate
 from qualtran._infra.registers import Signature, Register
-from qualtran._infra.data_types import BoundedQUInt, QBit
+from qualtran._infra.gate_with_registers import total_bits
+from qualtran._infra.data_types import BoundedQUInt, QBit, QAny
 
 class FixupTableQROM(UnaryIterationGate):
     '''
@@ -26,24 +27,23 @@ class FixupTableQROM(UnaryIterationGate):
     Args:
         - data_to_uncompute: Array of classical data to be uncomputed. data_to_uncompute[l] will be uncomputed when the orgiinal selection register stores index l.
         - measurement_key: The string used as the key to store the x basis measurement of the data register
-        - controlled: If True a controlled version of the gate is constructed.
+        - num_controls: The number of controls to instantiate a controlled version of this gate.
 
     References:
     [1] [Qubitization of Arbitrary Basis Quantum Chemistry Leveraging Sparsity and Low Rank Factorization](https://arxiv.org/abs/1902.02134)
     '''
 
-    def __init__(self, data_to_uncompute:NDArray, measurement_key:str, max_uncompute_bits:int, controlled = False):
+    def __init__(self, data_to_uncompute:NDArray, measurement_key:str, max_uncompute_bits:int, num_controls = 0):
         self.data_to_uncompute = data_to_uncompute
         self.measurement_key = measurement_key
-        self.controlled = controlled
+        self.num_controls = num_controls
         self.nSelect = (len(data_to_uncompute)-1).bit_length() - 1
 
         self.max_uncompute_bits = max_uncompute_bits
 
     @cached_property
-    def control_registers(self) -> Tuple[Register]:
-        register = () if not self.controlled else (Register('control', QBit()),)
-        return register
+    def control_registers(self) -> Tuple[Register, ...]:
+        return () if not self.num_controls else (Register('control', QAny(self.num_controls)),)
 
     @cached_property
     def selection_registers(self) -> Tuple[Register]:
@@ -64,22 +64,15 @@ class FixupTableQROM(UnaryIterationGate):
         selection_idx = kwargs['selection']
         u_ancilla = kwargs['u']
         q_bit = kwargs['q']
-        if not self.controlled:
-            yield cirq.CX(control,*u_ancilla).with_classical_controls(DataAndKeyCondition(key=self.measurement_key,data=self.data_to_uncompute[2*selection_idx],\
-                                                                                          max_meas_bits=self.max_uncompute_bits))
-            try:
-                yield cirq.CX(control,*q_bit).with_classical_controls(DataAndKeyCondition(key=self.measurement_key,data=self.data_to_uncompute[2*selection_idx+1],\
-                                                                                           max_meas_bits=self.max_uncompute_bits))
-            except IndexError:
-                pass
-        else:
-            raise NotImplementedError
+
+        yield cirq.CX(control,*u_ancilla).with_classical_controls(DataAndKeyCondition(key=self.measurement_key,data=self.data_to_uncompute[2*selection_idx],max_meas_bits=self.max_uncompute_bits))
+        try:
+            yield cirq.CX(control,*q_bit).with_classical_controls(DataAndKeyCondition(key=self.measurement_key,data=self.data_to_uncompute[2*selection_idx+1],max_meas_bits=self.max_uncompute_bits))
+        except IndexError:
+            pass
 
     def _circuit_diagram_info_(self, _) -> cirq.CircuitDiagramInfo:
-        if self.controlled:
-            wire_symbols = ["@"]
-        else:
-            wire_symbols = []
+        wire_symbols  = ["@"] * total_bits(self.control_registers)
         wire_symbols += ["In"] * self.nSelect
         wire_symbols += ["FixupTableQROM"]*2
         return cirq.CircuitDiagramInfo(wire_symbols=wire_symbols)

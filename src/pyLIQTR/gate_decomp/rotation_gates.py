@@ -43,6 +43,7 @@ from pyLIQTR.gate_decomp.gate_approximation import (
 T_COUNT_SLOPE = 3.02
 T_COUNT_CONST = 0.77
 T_COUNT_STD_DEV = 2.06
+# not the optimal decomposition subroutine as of 2025 (but that's ok for now)
 
 
 clifford_plus_T_ops = [cirq.S, cirq.S**-1, cirq.H, cirq.X, cirq.Y, cirq.Z, cirq.T]
@@ -143,8 +144,9 @@ def _cliff_plus_t_decomp(
 
 class decomp_mixin(cirq.Gate):
     def __init__(
-        self, rads, precision=1e-10, use_random_decomp=False, *args, **kwargs
+        self, rads, precision=1e-10, use_random_decomp=False, mismatch_counts=False, *args, **kwargs
     ) -> None:
+        self.mismatch = mismatch_counts
         eps = mpfr(precision)
         gmpy2.get_context().precision = max(
             int(gmpy2.ceil(gmpy2.log2(10 ** (2.5 * precision + 15)))), 100
@@ -183,7 +185,6 @@ class decomp_mixin(cirq.Gate):
             self.gate_sequence = random.getrandbits(self.sequence_length)
             self.clifford_part = copy.copy(CLIFFORD_GATES[random.randint(0, 23)])
 
-
         self.num_T_gates = int(self.leading_T) + self.sequence_length
         self.num_Clifford_gates = len(self.clifford_part) + \
                                     self.sequence_length + \
@@ -210,7 +211,10 @@ class decomp_mixin(cirq.Gate):
         return {"T count": self.num_T_gates, "Clifford count":self.num_Clifford_gates}
 
     def get_T_count(self) -> int:
-        return self.num_T_gates
+        if self.mismatch == True:
+            return 1.15 * math.log2(1 / self.precision) + 9.2
+        else:
+            return self.num_T_gates
 
     def get_Clifford_count(self) -> int:
         return self.num_Clifford_gates

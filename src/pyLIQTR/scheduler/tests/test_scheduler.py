@@ -3,8 +3,8 @@ import math
 import numpy as np
 import cirq
 import rustworkx as rx
-from pyLIQTR.scheduler.scheduler import Scheduler, schedule_circuit
-from pyLIQTR.scheduler.Instruction import Instruction
+from pyLIQTR.scheduler.scheduler import Scheduler, schedule_circuit, decomposition_protocol
+from pyLIQTR.scheduler.Instruction import Instruction, CirqInstruction
 from pyLIQTR.scheduler.DAG import DAG
 from qualtran.bloqs.arithmetic.comparison import LessThanConstant as ltc
 from pyLIQTR.circuits.operators                     import *
@@ -15,6 +15,10 @@ from    pyLIQTR.clam.lattice_definitions                      import   CubicLatt
 from    pyLIQTR.BlockEncodings.getEncoding                    import   getEncoding, VALID_ENCODINGS
 from qualtran._infra.gate_with_registers import get_named_qubits
 from qualtran import Register, Signature, QAny
+
+#Cant disable UserWarning caused by scheduler, so putting this in for now
+import warnings
+warnings.filterwarnings("ignore")
 
 class TestScheduler:
 
@@ -57,8 +61,8 @@ class TestScheduler:
         
         qubits = cirq.LineQubit.range(2)
         resources = {qubits[0]: 1, qubits[1]: 1}
-        inst1 = Instruction(cirq.X(qubits[0]))
-        inst2 = Instruction(cirq.CX(qubits[1], qubits[0]))
+        inst1 = CirqInstruction(cirq.X(qubits[0]))
+        inst2 = CirqInstruction(cirq.CX(qubits[1], qubits[0]))
         scheduler = Scheduler(arch_description=resources)
         time1 = scheduler.assign_execution_time(inst1)
         time2 = scheduler.assign_execution_time(inst2)
@@ -72,7 +76,7 @@ class TestScheduler:
         qbs = canonical_basic_instance[1]
         insts = []
         for inst in canonical_insts:
-            instruction = Instruction(inst)
+            instruction = CirqInstruction(inst)
             insts.append(instruction)
             dag.add_dependency(instruction)
         dag.finish()
@@ -103,7 +107,7 @@ class TestScheduler:
         qbs = canonical_basic_instance[1]
         insts = []
         for inst in canonical_insts:
-            instruction = Instruction(inst)
+            instruction = CirqInstruction(inst)
             insts.append(instruction)
             dag.add_dependency(instruction)
         dag.finish()
@@ -134,7 +138,7 @@ class TestScheduler:
         canonical_insts = canonical_basic_instance[0]
         qbs = canonical_basic_instance[1]
         for inst in canonical_insts:
-            instruction = Instruction(inst)
+            instruction = CirqInstruction(inst)
             dag.add_dependency(instruction)
         dag.finish()
 
@@ -180,11 +184,13 @@ class TestScheduler:
             'CX': 49,
             'CZ': 6,
             'Pauli (X, Y, Z)': 4,
-            'Rotation': 1
+            'Rotation': 1,
+            'Toffoli':0
         }
 
         assert full_decomp_gate_counts == no_decomp_gate_counts == actual_gate_counts
 
+    @pytest.mark.filterwarnings("ignore::UserWarning")  
     def test_recursion_gate_counts_carleman(self):
 
         n = 2
@@ -208,7 +214,7 @@ class TestScheduler:
         carlemanLinearization = Carleman_Linearization(FOperators(n, K, (a0_in, a1, a2_in, a2_out), (alpha0, alpha1, alpha2)), K)
         circuit = cirq.Circuit(carlemanLinearization.on_registers(**registers))
 
-        no_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level=0)
+        no_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level=0, decomposition_protocol=decomposition_protocol.recursive)
         no_decomp_gate_counts = no_decomp_result['Gate profile']
 
         full_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level='Full')
@@ -226,7 +232,7 @@ class TestScheduler:
         block_encoding    =  getEncoding(VALID_ENCODINGS.FermiHubbardSquare)(model)
         circuit = block_encoding.circuit
 
-        no_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level=0)
+        no_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level=0, decomposition_protocol=decomposition_protocol.recursive)
         no_decomp_gate_counts = no_decomp_result['Gate profile']
 
         full_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level='Full')
@@ -245,7 +251,7 @@ class TestScheduler:
         circuit.append(op)
         circuit.append(rot)
 
-        no_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level=0)
+        no_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level=0, decomposition_protocol=decomposition_protocol.recursive)
         no_decomp_qubit_count = no_decomp_result['Number of qubits used']
 
         full_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level='Full')

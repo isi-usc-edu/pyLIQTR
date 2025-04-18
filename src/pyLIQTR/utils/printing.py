@@ -259,6 +259,8 @@ def openqasm(circuit: cirq.AbstractCircuit,
             try:
                 if "qualtran.bloqs.basic_gates" in op._gate.__module__:
                     op = op._gate.cirq_gate.on(*op.qubits)
+                elif str(op._gate).startswith(('Ry_d(','Rx_d(','Rz_d(')):
+                    op = op._gate.get_gate().on(*op.qubits)
             except:
                 pass
             if isinstance(op._gate,cirq.GlobalPhaseGate):
@@ -317,10 +319,25 @@ def openqasm(circuit: cirq.AbstractCircuit,
                            mod=op.gate.mod,cvs=op.gate.cvs).\
                         on(*qbs)
                 yield from openqasm(cirq.Circuit(top),skip_header=True,context=context,rotation_allowed=rotation_allowed)
+            elif "qualtran.cirq_interop._bloq_to_cirq" in op._gate.__module__:
+                gates = [
+                    'bloq.Toffoli'
+                ]
+                skip_gates = [
+                    'bloq.Allocate','bloq.Free'
+                ]
+                cirq_gates = [cirq.CCX]
+                bloq2cirq = {g:cg for g,cg in zip(gates, cirq_gates)}
+                if str(op.gate) in skip_gates:
+                    continue
+                elif str(op.gate) not in bloq2cirq:
+                    raise NotImplementedError("Uncpatured bloq2cirq conversion {}".format(str(op.gate)))
+                else:
+                    yield cirq.qasm(bloq2cirq[str(op._gate)].on(*op.qubits),args=myQASMInfo.qasm_args).strip()
+            
             else:
                 for k,v in qubit_map_str2key.items():
                     print((k,v))
                 print(myQASMInfo.qasm_args.qubit_id_map)
                 print('Issue with either decomposing or generating qasm with {} ({})'.format(str(op),type(op.gate)))
-                dir(op)
                 raise e

@@ -117,7 +117,7 @@ class ChemicalHamiltonian(ProblemInstance):
         from pyLIQTR.utils.df_utils import DF_decomposition
         h0, one_body_tensor, two_body_tensor = self.hamiltonian_tensors.values()            
         return DF_decomposition(h0, one_body_tensor, two_body_tensor,tol=sf_error_threshold)
-    
+
     def df_cutoffs(self,df_error_threshold:float=1e-3,sf_error_threshold:float=1e-10):
         error_pair = (df_error_threshold,sf_error_threshold)
         if error_pair in self._df_cutoffs:
@@ -137,7 +137,7 @@ class ChemicalHamiltonian(ProblemInstance):
                 jl.seval('Pkg.add("QuantumMAMBO")')
                 jl.seval("using QuantumMAMBO")
                 mambo = jl.QuantumMAMBO
-            
+
             if df_cutoffs is None:
                 if df_error_threshold is None:
                     df_cutoffs = self.df_cutoffs(df_error_threshold=1e-3,sf_error_threshold=sf_error_threshold)

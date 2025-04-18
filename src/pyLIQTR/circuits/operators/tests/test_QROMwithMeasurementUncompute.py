@@ -7,6 +7,7 @@ import cirq
 import numpy as np
 
 from qualtran.cirq_interop.testing import assert_circuit_inp_out_cirqsim
+from qualtran.cirq_interop.testing import GateHelper
 from qualtran.bloqs.state_preparation.prepare_uniform_superposition import PrepareUniformSuperposition
 from pyLIQTR.circuits.operators.QROMwithMeasurementUncompute import QROMwithMeasurementUncompute
 
@@ -83,6 +84,42 @@ class TestQROMwithMeasurementUncompute:
         ## measurement uncompute
         circuit.append([
             qrom_gate.measurement_uncompute(selection=sel_reg,data=data_reg)
+        ])
+        decomposed = cirq.decompose(circuit)
+        assert decomposed is not None
+
+    @pytest.mark.parametrize("data",[[2,3,4,8]])
+    def test_QROMwithMeasurementUncompute_controlled_decomposes(self,data):
+        '''
+        Tests gate decomposition existence.
+        '''
+        # create registers
+        nData = (max(data)).bit_length()
+        sel_bitsize = (len(data)-1).bit_length()
+        # initialilze operator
+        qrom_gate = QROMwithMeasurementUncompute(
+            [np.array(data)],
+            selection_bitsizes=(sel_bitsize,),
+            target_bitsizes=(nData,),
+            num_controls=1
+            )
+        helper = GateHelper(qrom_gate)
+        sel_reg = helper.quregs['selection']
+        data_reg = helper.quregs['target0_']
+        control_reg = helper.quregs['control']
+        assert len(control_reg) > 0
+        operation = qrom_gate.on_registers(selection=sel_reg,target0_=data_reg,control=control_reg)
+        # check decompose_once raises no error
+        decomposed_once = cirq.decompose_once(operation)
+        # check decompose of circuit with uncompute
+        circuit = cirq.Circuit()
+        ## prepare select in superposition
+        circuit.append(cirq.H.on_each(*sel_reg))
+        ## qrom writing data
+        circuit.append(operation)
+        ## measurement uncompute
+        circuit.append([
+            qrom_gate.measurement_uncompute(selection=sel_reg,data=data_reg,control=control_reg)
         ])
         decomposed = cirq.decompose(circuit)
         assert decomposed is not None

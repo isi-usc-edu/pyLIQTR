@@ -29,6 +29,7 @@ class OuterPrepare(StatePreparationAliasSampling):
                 sigma_mu=self.sigma_mu_bitsize,
                 alt=self.alternates_bitsize,
                 keep=self.keep_bitsize,
+                rot_ancilla=1,
                 less_than_equal=1,
                 success = 1
             )
@@ -43,10 +44,10 @@ class OuterPrepare(StatePreparationAliasSampling):
 
         selection, less_than_equal = quregs['selection'], quregs['less_than_equal']
         sigma_mu, alt, keep = quregs.get('sigma_mu', ()), quregs['alt'], quregs.get('keep', ())
-        success = quregs['success']
+        success, rot_ancilla = quregs['success'], quregs['rot_ancilla']
         N = self.selection_registers[0].iteration_length
 
-        yield FlaggedPrepareUniformSuperposition(N).on_registers(target=selection,success=success,less_than_ancilla=less_than_equal,rot_ancilla=alt[0])
+        yield FlaggedPrepareUniformSuperposition(N).on_registers(target=selection,success=success,less_than_ancilla=less_than_equal,rot_ancilla=rot_ancilla)
 
         yield cirq.H.on_each(*sigma_mu)
 

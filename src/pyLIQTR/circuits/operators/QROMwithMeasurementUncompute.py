@@ -22,6 +22,11 @@ class QROMwithMeasurementUncompute(QROM):
         This is a method that implements the phase fixup measurement based uncomputation described in Appendix C of https://arxiv.org/pdf/1902.02134.pdf.
 
         Note, if this method is used twice in the same circuit, different measurement_key strings should be used.
+
+        Registers:
+            selection: Selection register storing the index of the data to load/unload.
+            data: Register with data to be uncomputed.
+            control: Optional register for controlling the whole uncompute operation.
         '''
 
         if context is None:
@@ -42,6 +47,10 @@ class QROMwithMeasurementUncompute(QROM):
         q_bit = original_select[-1]
         u_bit = context.qubit_manager.qalloc(1)
         data_reg = split_qubits(self.target_registers,quregs['data'])[original_target_key]
+        if 'control' in quregs:
+            control_reg = split_qubits(self.control_registers,quregs['control'])['control']
+        else:
+            control_reg = ()
 
         # prep q and u
         yield [
@@ -58,8 +67,8 @@ class QROMwithMeasurementUncompute(QROM):
         ]
 
         # compute and apply fixup table
-        fixup = FixupTableQROM(data_to_uncompute=self.data[0],measurement_key=measurement_key,max_uncompute_bits=len(data_reg))
-        yield fixup.on_registers(selection=new_select,u=u_bit,q=q_bit)
+        fixup = FixupTableQROM(data_to_uncompute=self.data[0],measurement_key=measurement_key,max_uncompute_bits=len(data_reg),num_controls=self.num_controls)
+        yield fixup.on_registers(selection=new_select,u=u_bit,q=q_bit,control=control_reg)
 
         # data qubits are now free, reset to |0>
         yield [cirq.reset(q) for q in data_reg]

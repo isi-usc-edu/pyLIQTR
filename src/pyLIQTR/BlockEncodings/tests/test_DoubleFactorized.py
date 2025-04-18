@@ -99,7 +99,7 @@ class TestDoubleFactorizedEncoding:
         '''
         encoding = getEncoding(instance=h2_instance, encoding=VALID_ENCODINGS.DoubleFactorized,df_error_threshold=1e-2,br=4, sf_error_threshold=1e-2)
         norm = encoding.alpha
-    
+
     def test_DoubleFactorized_decomposes(self, df_encoding):
         '''
         Tests gate decomposition existence.

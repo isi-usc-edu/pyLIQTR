@@ -9,11 +9,12 @@ from  pyLIQTR.utils.global_ancilla_manager import gam
 
 from functools import cached_property
 from numpy.typing import NDArray
-from typing import List
+from typing import List, Set
 
 from qualtran import GateWithRegisters, Signature
 from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiTargetCNOT
-from qualtran.bloqs.arithmetic import Add
+from qualtran.bloqs.arithmetic import Add, AddK
+from qualtran.bloqs.basic_gates import XGate
 from qualtran.cirq_interop.bit_tools import iter_bits_fixed_point
 from qualtran._infra.data_types import QUInt
 
@@ -27,33 +28,46 @@ def approx_angle_with_br_bits(angle:float,br:int=8):
 @attrs.frozen
 class PhaseGradientZRotation(GateWithRegisters):
     '''
-    Uses addition into a br-qubit phase gradient state |phi> to apply a single qubit Z rotation to |rotation_target> where the rotation angle is provided on a br-qubit register |angle>.
+    Uses addition into a :math:`b_\\phi`-qubit phase gradient state :math:`|\\phi\\rangle` to apply a single qubit Z rotation to |rotation_target> where the rotation angle is provided on a :math:`b_r`-qubit register |angle>.
 
-    Specifically, for the exact rotation angle theta in [0,2*pi] and theta_N = theta/(2*pi) % 1, 
-    |angle> will encode the br-bit approximation theta_N = sum_{b=0}^{br-1} theta_b/2^(1+b) where each theta_b value is stored on the bth qubit of |angle>. In other words, |angle> encodes the two's complement of theta_N.
+    Specifically, for the exact rotation angle :math:`\\theta \in [0,2\\pi]` and :math:`\\theta_N = \\theta/(2\\pi)\\mod{1}`, 
+    |angle> will encode the :math:`b_r`-bit approximation :math:`\\theta_N = \\sum_{b=0}^{b_r-1} \\theta_b/2^{(1+b)}` where each :math:`\\theta_b` value is stored on the :math:`b`-th qubit of |angle>. In other words, |angle> encodes the two's complement of :math:`\\theta_N`.
 
-    For example, let k = sum_{b=0}^{br-1} theta_b*2^{1+b} be the integer representation of the normalized rotation angle, then the rotation applied to |rotation_target> is exp(iZt), where t = pi*k/(2^(br-1)). ie, let |rotation_target> = A|0> + B|1>. Then, this gate implements
+    For example, let :math:`k = \\sum_{b=0}^{b_r-1} \\theta_b 2^{(1+b)}` be the integer representation of the normalized rotation angle, then the rotation applied to |rotation_target> is :math:`\\exp(iZt)`, where :math:`t = \\pi k/(2^{(b_r-1)})`. ie, let |rotation_target> = A|0> + B|1>. Then, this gate implements
 
-     U(A|0> + B|1>)|k>|phi> -> ( A*exp(i2pi*k/(2^br))|0> + B*exp(-i2pi*k/(2^br))|1> )|k>|phi> 
+    .. math::
+        U(A|0\\rangle + B|1\\rangle)|k\\rangle|\\phi\\rangle \\rightarrow \\left( A\\exp(i2\\pi k/2^{b_r})|0\\rangle + B\\exp(-i2\\pi k/2^{b_r})|1\\rangle \\right)|k\\rangle|\\phi\\rangle 
      
-    using 4*(br-1) T-gates which is the cost of the addition.
+    using :math:`4(b_r-1)` T-gates which is the cost of the addition.
 
     The overall sign in the exponent is set by the argument do_negative_z_rotation as follows,
-    do_negative_z_rotation=True -> exp(-iZt)
-    do_negative_z_rotation=False -> exp(iZt)
-    Note, cirq.Rz(t) = exp(-iZt/2).
 
-    See https://arxiv.org/abs/2007.07391 Appendix A for details.
+    .. line-block::
+        do_negative_z_rotation=True -> exp(-iZt)
+        do_negative_z_rotation=False -> exp(iZt)
+        Note, cirq.Rz(t) = exp(-iZt/2).
+
+    References:
+        `Compilation of Fault-Tolerant Quantum Heuristics for Combinatorial Optimization <https://arxiv.org/abs/2007.07391>`_
+        Appendix A
+
+    :param int br: number of precision bits for rotation angle
+    :param int bphi: bitsize of phase gradient state
+    :param bool do_negative_z_rotation: set to True for exp(-iZt), false for exp(iZt) -- determines value of rotation_target to control on.
+    :param bool classical_angle: set to True to provide the angle classically rather than previously loaded on a quantum register. Default is False.
+    :param float angle: The value of the rotation angle in radians. Only needed when classical_angle=True.
     '''
 
-    br: int # number of precision bits for rotation angle
-    bphi: int # bitsize of phase gradient state
-    do_negative_z_rotation: bool = False #set to true for exp(-iZt), false for exp(iZt) -- determines value of rotation_target to control on
+    br: int 
+    bphi: int 
+    do_negative_z_rotation: bool = False 
+    classical_angle: bool = False
+    angle: float = None
 
     @classmethod
     def make_on(cls,angle_data_qubits:List[cirq.Qid],phase_gradient_state:List[cirq.Qid],rotation_target_qubit:List[cirq.Qid],do_negative_z_rotation: bool = False):
         '''
-        Automatically determines br and bphi from number of qubits passed in
+        Automatically determines br and bphi from number of qubits passed in. Assumes angle is preloaded on angle_data_qubits.
         '''
         assert(len(angle_data_qubits)<=len(phase_gradient_state))
 
@@ -61,11 +75,34 @@ class PhaseGradientZRotation(GateWithRegisters):
 
     @cached_property
     def signature(self) -> Signature:
-        return Signature.build(
-            rotation_target=1,
-            phi=self.bphi,
-            angle=self.br,
-        ) 
+        if not self.classical_angle:
+            return Signature.build(
+                rotation_target=1,
+                phi=self.bphi,
+                angle=self.br,
+            )
+        else:
+            return Signature.build(
+                rotation_target=1,
+                phi=self.bphi
+            )
+
+    def approx_angle_as_br_int(self):
+        '''
+        Returns the classicaly provided angle as an integer approximated with br bits.
+        '''
+        assert self.angle is not None
+        # normalize angle
+        angle_norm = self.angle / (2*np.pi) % 1
+        # approximate to br bits and express in binary
+        binary_angle = []
+        for _ in range(self.br):
+            angle_norm = angle_norm * 2
+            out_bit = np.floor(angle_norm)
+            angle_norm = angle_norm - out_bit
+            binary_angle.append(int(out_bit))
+        integer_angle = QUInt(self.br).from_bits(binary_angle)
+        return integer_angle
 
     def decompose_from_registers(
         self,
@@ -74,38 +111,35 @@ class PhaseGradientZRotation(GateWithRegisters):
         **quregs: NDArray[cirq.Qid],
     ) -> cirq.OP_TREE:
 
-        # set decomp context to use pyLIQTR global ancilla manager
-        if context is None:
-            context=cirq.DecompositionContext(gam)
-
         phase_gradient_state = quregs['phi']
         rotation_target = quregs['rotation_target']
-        angle = quregs['angle']
-        zero_padding = context.qubit_manager.qalloc(self.bphi - self.br)
+        angle = quregs.get('angle',())
 
         if self.do_negative_z_rotation:
-            yield cirq.X.on(*rotation_target)
+            yield XGate().on(*rotation_target)
 
         # apply CNOT to phi register so that |1> part of rotation_target will store subtraction (for self.do_negative_z_rotation=False, |0> for True)
         yield MultiTargetCNOT(self.bphi).on_registers(control=rotation_target,targets=phase_gradient_state)
 
         # in place addition -- result is output on phase_gradient_state
         # TODO: optimize addition, see: https://arxiv.org/abs/2007.07391 Appendix D2 Figure 18 for details
-        yield Add(a_dtype=QUInt(self.bphi)).on_registers(a=list(zero_padding)+list(angle),b=phase_gradient_state)
+        if not self.classical_angle:
+            yield Add(a_dtype=QUInt(self.br),b_dtype=QUInt(self.bphi)).on_registers(a=angle,b=phase_gradient_state)
+        else:
+            int_angle = self.approx_angle_as_br_int()
+            yield AddK(bitsize=self.bphi,k=int_angle).on_registers(x=phase_gradient_state)
 
         # apply CNOT to register storing phi+angle
         yield MultiTargetCNOT(self.bphi).on_registers(control=rotation_target,targets=phase_gradient_state)
 
         if self.do_negative_z_rotation:
-            yield cirq.X.on(*rotation_target)
+            yield XGate().on(*rotation_target)
 
-        context.qubit_manager.qfree(zero_padding)
+    def build_call_graph(self, ssa: 'SympySymbolAllocator') -> Set['BloqCountT']:
+        if self.do_negative_z_rotation: X_counts = {(XGate(),2)}
+        else: X_counts = set()
 
-    def _num_qubits_(self):
-        n_ancilla = self.bphi - self.br
-        # TODO count ancilla used in Add and CNOT
-        return sum(reg.total_bits() for reg in self.signature)+n_ancilla
+        if self.classical_angle: adder = AddK(bitsize=self.bphi,k=self.approx_angle_as_br_int())
+        else: adder = Add(a_dtype=QUInt(self.br),b_dtype=QUInt(self.bphi))
 
-    def _qid_shape_(self):
-        num_qb_in_sig = sum(reg.total_bits() for reg in self.signature)
-        return (2,)*num_qb_in_sig
+        return {(MultiTargetCNOT(self.bphi),2),(adder,1)} | X_counts

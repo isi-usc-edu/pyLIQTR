@@ -17,6 +17,8 @@ class FlagZeroAsFailure(GateWithRegisters):
         bitsize: the number of bits in the :math:`\\nu` register.
 
     Registers:
+
+    .. line-block::
         nu: The register being checked for the minus zero state.
         flag_dim: Qubits flagging occurence of minus zero for each dimension of :math:`\\nu`.
         flag_minus_zero: Qubit flagging occurence of minus zero overall.

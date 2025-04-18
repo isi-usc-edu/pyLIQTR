@@ -38,10 +38,8 @@ class TestEqualityTest:
         '''
         Tests the gate raises ValueError for bitsize < 2.
         '''
-        try:
-            gate = EqualityTest(bitsize=1)
-        except ValueError:
-            pass       
+        with pytest.raises(ValueError, match='bitsize must be greater than 2'):
+            gate = EqualityTest(bitsize=1)  
 
     @pytest.mark.parametrize("bitsize",[4,7])
     def test_EqualityTest_inverse(self,bitsize):

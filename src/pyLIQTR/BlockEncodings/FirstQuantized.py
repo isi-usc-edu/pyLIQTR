@@ -2,10 +2,13 @@
 Copyright (c) 2024 Massachusetts Institute of Technology 
 SPDX-License-Identifier: BSD-2-Clause
 """
+import cirq
 import numpy as np
 from functools import cached_property
+from typing import Optional, Union, Sequence, Callable, Tuple, Dict, Set
 
-from qualtran.bloqs.chemistry.pbc.first_quantization import SelectFirstQuantization
+# from qualtran.bloqs.chemistry.pbc.first_quantization import SelectFirstQuantization
+from pyLIQTR.circuits.operators.select_FirstQuantized import SelectFirstQuantizationPYL
 from pyLIQTR.circuits.operators.prepare_FirstQuantized import PrepareFirstQuantization
 
 from pyLIQTR.BlockEncodings import *
@@ -64,7 +67,7 @@ class FirstQuantized(BlockEncoding_select_prepare):
         else:
             self.n_R = n_R
 
-        self._select_gate = SelectFirstQuantization(num_bits_p=self.num_bits_p,eta=self.eta,num_atoms=self.L,lambda_zeta=self.lambda_zeta,m_param=self.M_param,num_bits_nuc_pos=self.n_R,num_bits_t=self.n_T,num_bits_rot_aa=self.num_bits_rot_aa)
+        self._select_gate = SelectFirstQuantizationPYL(num_bits_p=self.num_bits_p,eta=self.eta,num_atoms=self.L,lambda_zeta=self.lambda_zeta,m_param=self.M_param,num_bits_nuc_pos=self.n_R,num_bits_t=self.n_T,num_bits_rot_aa=self.num_bits_rot_aa)
 
         self._prepare_gate = PrepareFirstQuantization(num_bits_p=self.num_bits_p,eta=self.eta,num_atoms=self.L,lambda_zeta=self.lambda_zeta,m_param=self.M_param,num_bits_nuc_pos=self.n_R,num_bits_t=self.n_T,num_bits_rot_aa=self.num_bits_rot_aa)
 
@@ -132,4 +135,59 @@ class FirstQuantized(BlockEncoding_select_prepare):
             return n*(factor1**2 + factor2)/pow_logn
 
         return Ps(3,8)*Ps(self.eta+2*self.lambda_zeta,self.num_bits_rot_aa)*(Ps(self.eta,self.num_bits_rot_aa))**2
+
+    def build_call_graph(self, ssa: 'SympySymbolAllocator') -> Set['BloqCountT']:
+        if ( self._do_prepare ):
+            prep_count = {(self._prepare_gate,1),}
+        else:
+            prep_count = set()
+
+        if self._invert_select:
+            select_count = {(cirq.inverse(self._select_gate),1),}
+        else:
+            select_count = {(self._select_gate,1),}
+
+        if ( self._do_prepare_inverse):
+            prep_inverse_count = {(cirq.inverse(self._prepare_gate),1),}
+        else:
+            prep_inverse_count = set()
+
+        return prep_count | select_count | prep_inverse_count
+
+    def call_graph(
+        self,
+        generalizer: Optional[Union['GeneralizerT', Sequence['GeneralizerT']]] = None,
+        keep: Optional[Callable[['Bloq'], bool]] = None,
+        max_depth: Optional[int] = None,
+    ) -> Tuple['nx.DiGraph', Dict['Bloq', Union[int, 'sympy.Expr']]]:
+        """Get the bloq call graph and call totals. For this bloq, the default call graph treats measurements and classically controlled operations as leaf nodes.
+
+        The call graph has edges from a parent bloq to each of the bloqs that it calls in its decomposition. The number of times it is called is stored as an edge attribute. To specify the bloq call counts for a specific node, override `Bloq.build_call_graph()`.
+
+        Args:
+            generalizer: If provided, run this function on each (sub)bloq to replace attributes that do not affect resource estimates with generic sympy symbols. If the function returns `None`, the bloq is omitted from the counts graph. If a sequence of generalizers is provided, each generalizer will be run in order.
+            keep: If this function evaluates to True for the current bloq, keep the bloq as a leaf node in the call graph instead of recursing into it.
+            max_depth: If provided, build a call graph with at most this many layers.
+
+        Returns:
+            g: A directed graph where nodes are (generalized) bloqs and edge attribute 'n' reports
+                the number of times successor bloq is called via its predecessor.
+            sigma: Call totals for "leaf" bloqs. We keep a bloq as a leaf in the call graph
+                according to `keep` and `max_depth` (if provided) or if a bloq cannot be
+                decomposed.
+        """
+        from qualtran.resource_counting import get_bloq_call_graph
+
+        if keep is None:
+            # we treat measurements and classically controlled operations as leaf nodes
+            def keep_measurements(op):
+                if isinstance(op,cirq.MeasurementGate):
+                    return True
+                elif isinstance(op,cirq.ClassicallyControlledOperation):
+                    return True
+                return False
+
+            keep = keep_measurements
+
+        return get_bloq_call_graph(self, generalizer=generalizer, keep=keep, max_depth=max_depth)
 

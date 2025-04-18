@@ -151,6 +151,7 @@ class DoubleFactorized(BlockEncoding):
             alt_l = self.nL,
             keep_l = self.keep_bitsize_outer,
             sigma_l = self.keep_bitsize_outer,
+            rot_ancilla_outer = 1
         ))
 
     @cached_property
@@ -224,7 +225,7 @@ class DoubleFactorized(BlockEncoding):
         phase_gradient_state = quregs['phi']
         rot_aa_ancilla, sigma = quregs['rot_ancilla'], quregs['sigma']
         sigma_l, alt_l, keep_l = quregs['sigma_l'], quregs['alt_l'], quregs['keep_l']
-        less_than_equal_ancilla = quregs['less_than_equal_ancilla']
+        less_than_equal_ancilla, rot_ancilla_outer = quregs['less_than_equal_ancilla'], quregs['rot_ancilla_outer']
 
         # prepare phase gradient state
         # TODO what should eps be for preparing phase gradient state (eps is overall error in gradient state preparation, ie each rotation will be performed with error eps/bgrad where here bgrad = bits_rot_givens)
@@ -234,7 +235,7 @@ class DoubleFactorized(BlockEncoding):
         # calculate outer coeffs. First element should be l=0 term (ie sum(Tpq)), then l=1 to L terms correspond to sum_p(fp^l)
         outer_coefficients = np.concatenate(([sum(self.one_body_mags)],np.sum(self.two_body_mags,axis=1)))
         outer_prep = OuterPrepare.from_lcu_probs(lcu_probabilities=outer_coefficients,probability_epsilon=self.outer_prep_eps) #epsilon should be consistent with keep_bitsize_outer
-        yield outer_prep.on_registers(success=succ_l,selection=l_reg,sigma_mu=sigma_l,alt=alt_l,keep=keep_l,less_than_equal=less_than_equal_ancilla)
+        yield outer_prep.on_registers(success=succ_l,selection=l_reg,sigma_mu=sigma_l,alt=alt_l,keep=keep_l,less_than_equal=less_than_equal_ancilla,rot_ancilla=rot_ancilla_outer)
 
         # load l != 0, Xi^l (truncation), offset, and rot (amplitude amplification) data
         l_neq_0_data,Xi_l_data_with_1B,offset_data,rot_data = self.compute_data_l()

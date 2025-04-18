@@ -245,6 +245,8 @@ def _perop_clifford_plus_t_direct_transform(
         or "Measurement" in str(op)
     ):
         operations.append(op)
+    elif str(op.gate).startswith('Ry_d('):
+        return cirq.decompose(op.gate.get_gate().on(*op.qubits))
     else:
         classical_controls = None
         if isinstance(op, cirq.ClassicallyControlledOperation):

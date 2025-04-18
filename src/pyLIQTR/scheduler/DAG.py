@@ -1,7 +1,7 @@
 import rustworkx as rx
 from rustworkx.visualization import graphviz_draw
 
-from pyLIQTR.scheduler.Instruction import Instruction, DependencyEdge
+from pyLIQTR.scheduler.Instruction import Instruction, DependencyEdge, CirqInstruction, OQInstruction
 import time
 
 class DAG:
@@ -26,6 +26,7 @@ class DAG:
         self.loop_catcher = []
         self.dag_cycle = 0
         
+        
     
     def __eq__(self,other):
         """
@@ -40,7 +41,7 @@ class DAG:
             return rx.is_isomorphic(self.dag,other.dag)
 
     
-    def add_dependency(self,inst:Instruction, forceAdd = True):
+    def add_dependency(self,inst, forceAdd = True):
         '''
         Add an instruction to the DAG along with each of its dependencies.
         '''
@@ -50,7 +51,7 @@ class DAG:
             self._link(dep,dependencies[dep],inst) #link current inst and dependency
 
     
-    def _link(self, dependency, dependency_type:str, instruction:Instruction):
+    def _link(self, dependency, dependency_type:str, instruction):
         '''
         For each dependency an instruction has, follow these steps:
         1.  If the instruction does not yet exist as a node, add a node to the DAG with instruction attached. 
@@ -85,6 +86,7 @@ class DAG:
         if instruction.index is None:
             inst_idx = self.dag.add_node(instruction)
             instruction.index = inst_idx
+        
         else:
             inst_idx = instruction.index
         qubit = dependency
@@ -134,7 +136,7 @@ class DAG:
             list of free instructions. If there are still one or more incoming edges to the child node,
             pass it over.
         """
-        if type(instruction) != Instruction:
+        if type(instruction) != CirqInstruction and type(instruction) != OQInstruction:
             inst_idx = self.qubit_node_idx[instruction]
         else:
             inst_idx = instruction.index
@@ -152,7 +154,9 @@ class DAG:
             in_edges = self.dag.in_edges(child)
             if len(in_edges) == 0:
                 child_instruction = self.dag.get_node_data(child)
-                self.free_instructions.append(child_instruction)
+                if child_instruction.free == False:
+                    self.free_instructions.append(child_instruction)
+                    child_instruction.free = True
             else:
                 pass
         
@@ -161,43 +165,21 @@ class DAG:
         """
         Return current list of nodes with no incoming edges.     
         """
-        if self.insts_in_dag <= 0:
+        if len(self.dag.node_indices()) <= 0:
             return "End"
         else:
-            if len(self.loop_catcher) < 10:
-                self.loop_catcher.append(len(self.free_instructions))
-            else:
-                self.loop_catcher.remove(self.loop_catcher[0])
-                self.loop_catcher.append(len(self.free_instructions)) 
-
-            stuck = True
-            for val in self.loop_catcher:
-                if val != 0:
-                    stuck = False
-                else:
-                    pass
-            if stuck:
-                if len(self.dag.node_indices()) == 0:
-                    return "End"
-    
-                search_idx = 0
-                while len(self.free_instructions) == 0:
-                    node = self.dag.node_indices()[search_idx]
+            if len(self.free_instructions) == 0:
+                for i in range(self.insts_in_dag):
+                    node = self.dag.node_indices()[i]
                     in_degree = self.dag.in_degree(node)
                     if in_degree == 0:
-                        if type(self.dag.get_node_data(node)) == Instruction:
-                            if self.dag.get_node_data(node).ready == True:
-                                self._remove_dependency(self.dag.get_node_data(node))
-                            else:
-                                self.free_instructions.append(self.dag.get_node_data(node))
-                        else:
-                            self.free_instructions.append(self.dag.get_node_data(node))
-                    else:
-                        search_idx += 1
-    
+                        self.free_instructions.append(self.dag.get_node_data(node))
+
             return self.free_instructions
+            
     
-    def _remove_dependency(self, inst: Instruction):
+    
+    def _remove_dependency(self, inst):
         '''
         Wrap around _unlink.
         '''
@@ -224,6 +206,7 @@ class DAG:
                         parent_idx = p_inst.index
                         child_idx = c_inst.index
                         self.dag.add_edge(parent_idx, child_idx, DependencyEdge(qubit, self.dependency_log[qubit][1][0]))
+
 
     def full(self):
         return self.insts_in_dag > self.max_moments

@@ -2,12 +2,12 @@
 import cirq
 import rustworkx as rx
 from pyLIQTR.scheduler.DAG import DAG
-from pyLIQTR.scheduler.Instruction import Instruction, DependencyEdge
+from pyLIQTR.scheduler.Instruction import CirqInstruction, OQInstruction, DependencyEdge
 
 def dag_creation(circuit):
     dag = DAG(max_moments=100)
     for op in circuit.all_operations():
-        inst = Instruction(op)
+        inst = CirqInstruction(op)
         dag.add_dependency(inst)
     dag.finish()
     return dag
@@ -16,7 +16,7 @@ def get_instruction2node_map(graph,ops,qubits):
     graph.clear()
     ops_to_nodes = {}
     for op in ops:
-        ops_to_nodes[op] = graph.add_node(Instruction(op))
+        ops_to_nodes[op] = graph.add_node(CirqInstruction(op))
     
     qubits_to_nodes = {}
     for q in qubits:
