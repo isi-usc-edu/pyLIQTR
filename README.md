@@ -67,9 +67,9 @@ Change directory to the location of setup.py, then perform the following command
 - Create and activate the environment:
 
         on Windows use:
-        conda create -n <Environment Name> "python>=3.8,<=3.11.5"
+        conda create -n <Environment Name> "python>=3.8,<=3.12.2"
         on Mac use:
-        conda create -n <Environment Name> python'>=3.8,<=3.11.5'
+        conda create -n <Environment Name> python'>=3.8,<=3.12.2'
 
         conda activate <Environment Name>
 
@@ -78,7 +78,7 @@ Change directory to the location of setup.py, then perform the following command
         pip install .
 
 - If you are working as a developer (for all platforms and shells):
-
+<a id="developer-install"></a>
         on Windows use:
         pip install -e .[dev]
         on Mac use:

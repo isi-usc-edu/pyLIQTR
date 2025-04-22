@@ -13,7 +13,7 @@ qualtran==0.4.0
 ipykernel
 numpy
 pandas
-scipy<1.13.0
+scipy
 matplotlib
 tqdm
 openfermion
@@ -24,5 +24,6 @@ networkx
 juliacall
 juliapkg
 rustworkx
-# Removed the following from the install because it is not yet available on Windows
-# openfermionpyscf
+pydot
+graphviz
+openfermionpyscf; sys_platform == 'linux'
