@@ -11,6 +11,7 @@ pylint
 pytest
 pytest-cov
 pytest-pep8
+testbook # package used for testing Jupyter Notebooks
 
 # Generating documentation
 nbsphinx
