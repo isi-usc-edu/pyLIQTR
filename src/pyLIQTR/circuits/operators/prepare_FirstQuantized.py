@@ -19,7 +19,7 @@ from qualtran import (
     SoquetT,
     Side
 )
-from qualtran.bloqs.block_encoding.lcu_select_and_prepare import PrepareOracle
+from qualtran.bloqs.state_preparation import PrepareOracle
 from qualtran.bloqs.basic_gates import Hadamard
 
 from pyLIQTR.circuits.operators.PrepareTUVSuperpositions import PrepareTUVSuperpositions

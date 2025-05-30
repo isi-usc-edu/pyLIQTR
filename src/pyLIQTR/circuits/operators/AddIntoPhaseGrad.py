@@ -94,7 +94,7 @@ class AddIntoPhaseGradwithDecompose(AddIntoPhaseGrad):
         elif self.x_bitsize == 2:
             if self.sign==-1:
                 yield OnEach(self.phase_bitsize, XGate()).on_registers(q=output_bits)
-            yield CZPowGate(exponent=1.0,global_shift=0.0).on(input_bits[0],output_bits[0]) 
+            yield CZPowGate(exponent=1.0).on(input_bits[0],output_bits[0])
             yield CNOT().on(input_bits[0],output_bits[0])
             yield ZGate().on(input_bits[-1])
             if self.sign==-1:
@@ -115,7 +115,7 @@ class AddIntoPhaseGradwithDecompose(AddIntoPhaseGrad):
         yield CNOT().on(ancillas[self.phase_bitsize - 3], input_bits[self.phase_bitsize - 2])
         yield CNOT().on(ancillas[self.phase_bitsize - 3], output_bits[self.phase_bitsize - 2])
         yield ZGate().on(ancillas[-1])
-        yield CZPowGate(exponent=1.0,global_shift=0.0).on(input_bits[self.phase_bitsize - 2],output_bits[self.phase_bitsize - 2])
+        yield CZPowGate(exponent=1.0).on(input_bits[self.phase_bitsize - 2],output_bits[self.phase_bitsize - 2])
         yield CNOT().on(ancillas[self.phase_bitsize - 3], input_bits[self.phase_bitsize - 2])
         yield CNOT().on(input_bits[self.phase_bitsize - 2],output_bits[self.phase_bitsize - 2])
         yield ZGate().on(input_bits[-1])
@@ -138,10 +138,10 @@ class AddIntoPhaseGradwithDecompose(AddIntoPhaseGrad):
         if self.x_bitsize==1:
             return {(ZGate(),1)}
         elif self.x_bitsize==2:
-            return {(CZPowGate(exponent=1.0,global_shift=0.0),1),(CNOT(),1),(ZGate(),1)} | sign_counts
+            return {(CZPowGate(exponent=1.0),1),(CNOT(),1),(ZGate(),1)} | sign_counts
         else:
             num_toffoli = self.phase_bitsize - 2
-            return {(And(), num_toffoli),(And().adjoint(), num_toffoli), (CNOT(),6*(num_toffoli-1) + 5),(ZGate(),2),(CZPowGate(exponent=1.0,global_shift=0.0),1)} | sign_counts
+            return {(And(), num_toffoli),(And().adjoint(), num_toffoli), (CNOT(),6*(num_toffoli-1) + 5),(ZGate(),2),(CZPowGate(exponent=1.0),1)} | sign_counts
 
     def adjoint(self) -> 'Bloq':
         return AddIntoPhaseGradwithDecompose(

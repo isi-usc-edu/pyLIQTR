@@ -175,5 +175,5 @@ class BinaryToUnaryBits(GateWithRegisters):
 
     def _t_complexity_(self,adjoint=False) -> TComplexity:
         num_ands = self.n_bits-1
-        resources_per_and = And(cv1=0,cv2=0,uncompute=adjoint)._t_complexity_()
+        resources_per_and = And(cv1=0,cv2=0,uncompute=adjoint).t_complexity()
         return TComplexity(t=resources_per_and.t*num_ands,clifford=resources_per_and.clifford*num_ands+self.n_bits)

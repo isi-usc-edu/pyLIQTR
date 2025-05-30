@@ -13,7 +13,7 @@ from qualtran.bloqs.mcmt.and_bloq import And
 from qualtran import QBit, QAny, Register, Signature, GateWithRegisters
 from qualtran.cirq_interop.t_complexity_protocol import TComplexity
 from pyLIQTR.utils.global_ancilla_manager import GlobalQubitManager as manager
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli as mcmtp
+from qualtran.bloqs.mcmt import MultiControlPauli as mcmtp
 
 class DiagonalBitstring(GateWithRegisters):
     """
