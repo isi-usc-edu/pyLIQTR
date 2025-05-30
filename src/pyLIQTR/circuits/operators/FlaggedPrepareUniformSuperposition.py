@@ -13,8 +13,9 @@ from numpy.typing import NDArray
 from qualtran import GateWithRegisters, Signature
 from qualtran.bloqs.mcmt.and_bloq import And, MultiAnd
 from qualtran.bloqs.arithmetic import LessThanConstant
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli
-from qualtran.bloqs.basic_gates import XGate, Hadamard, CZPowGate, CNOT, Ry, OnEach
+from qualtran.bloqs.mcmt import MultiControlPauli
+from qualtran.bloqs.basic_gates import XGate, Hadamard, CZPowGate, CNOT, Ry, OnEach, ZGate
+
 
 class FlaggedPrepareUniformSuperposition(GateWithRegisters):
     '''
@@ -110,4 +111,4 @@ class FlaggedPrepareUniformSuperposition(GateWithRegisters):
         if not logL:
             return{(OnEach(self.nd_bits, Hadamard()), 1),(XGate(),1)}
         rotation_angle = 2*np.arcsin(np.sqrt(2**(logL)/(4*l)))
-        return {(OnEach(self.nd_bits+1, Hadamard()), 1),(OnEach(logL+1, Hadamard()),2), (LessThanConstant(logL,l),4),(Ry(angle=rotation_angle),1),(Ry(angle=-rotation_angle),1),(XGate(),4),(CZPowGate(),1),(MultiControlPauli(cvs=(0,)*logL,target_gate=cirq.Z),1), (CNOT(),1)}
+        return {(OnEach(self.nd_bits+1, Hadamard()), 1),(OnEach(logL+1, Hadamard()),2), (LessThanConstant(logL,l),4),(Ry(angle=rotation_angle),1),(Ry(angle=-rotation_angle),1),(XGate(),4),(CZPowGate(),1),(MultiControlPauli(cvs=(0,)*logL,target_bloq=ZGate()),1), (CNOT(),1)}

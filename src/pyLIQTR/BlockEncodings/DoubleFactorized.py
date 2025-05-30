@@ -19,11 +19,10 @@ from pyLIQTR.circuits.operators.DF_RotationsBlock import RotationsBlock
 from pyLIQTR.circuits.operators.RotationsQROM import RotationsQROM
 
 from qualtran.linalg.lcu_util import _differences, _partial_sums
-from qualtran.cirq_interop.bit_tools import iter_bits_fixed_point
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli
+from qualtran.bloqs.mcmt import MultiControlPauli
 from qualtran.bloqs.rotations.phase_gradient import PhaseGradientState
 from qualtran.bloqs.data_loading import QROM
-from qualtran._infra.data_types import BoundedQUInt, QUInt, QBit
+from qualtran import BoundedQUInt, QUInt, QBit
 from qualtran import Register, Signature, Side
 
 class DoubleFactorized(BlockEncoding):

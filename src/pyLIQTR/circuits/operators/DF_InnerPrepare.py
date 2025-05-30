@@ -10,7 +10,7 @@ import cirq
 import qualtran as qt
 import numpy as np
 from functools import cached_property
-from qualtran.linalg.lcu_util import preprocess_lcu_coefficients_for_reversible_sampling
+from qualtran.linalg.lcu_util import preprocess_probabilities_for_reversible_sampling
 from qualtran.bloqs.data_loading import QROM
 from qualtran._infra.data_types import BoundedQUInt
 from pyLIQTR.circuits.operators.ControlledUniformSuperposition import ControlledPrepareUniformSuperposition
@@ -60,7 +60,7 @@ class InnerPrepare(qt.GateWithRegisters):
         # if all coeffs are 0, don't compute alt vals
         if sum(T_coeffs):
             eps = 2**(-keep_bitsize)/len(T_coeffs)
-            alt_data, keep_data, _ = preprocess_lcu_coefficients_for_reversible_sampling(lcu_coefficients=T_coeffs, epsilon=eps)
+            alt_data, keep_data, _ = preprocess_probabilities_for_reversible_sampling(unnormalized_probabilities=T_coeffs, epsilon=eps)
             alt_signs = [T_signs[i] for i in alt_data]
         else:
             alt_data = [0]*len(T_coeffs)
@@ -74,7 +74,7 @@ class InnerPrepare(qt.GateWithRegisters):
             f_signs = fpl_signs[l][:Xi_l]
 
             eps_l = 2**(-keep_bitsize)/len(f_coeffs)
-            alt_l, keep_l, _ = preprocess_lcu_coefficients_for_reversible_sampling(lcu_coefficients=f_coeffs,epsilon=eps_l)
+            alt_l, keep_l, _ = preprocess_probabilities_for_reversible_sampling(unnormalized_probabilities=f_coeffs,epsilon=eps_l)
             alt_signs_l = [f_signs[i] for i in alt_l]
 
             alt_data.extend(alt_l)

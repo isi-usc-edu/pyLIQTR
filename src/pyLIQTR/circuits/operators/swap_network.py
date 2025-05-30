@@ -10,7 +10,7 @@ import numpy as np
 from typing import Tuple, Sequence
 from functools import cached_property
 from qualtran import QBit, QAny, BoundedQUInt, Signature, GateWithRegisters, Register
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli as mcmtp
+from qualtran.bloqs.mcmt import MultiControlPauli as mcmtp
 from qualtran.bloqs.multiplexers.unary_iteration_bloq import UnaryIterationGate
 from pyLIQTR.utils.global_ancilla_manager import GlobalQubitManager as manager
 

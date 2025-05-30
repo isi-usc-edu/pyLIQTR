@@ -23,7 +23,7 @@ from pyLIQTR.utils.resource_analysis import pylqt_t_complexity as t_complexity
 
 
 
-class QubitizedPhaseEstimation(qt._infra.gate_with_registers.GateWithRegisters):
+class QubitizedPhaseEstimation(qt.GateWithRegisters):
     
 
     ##

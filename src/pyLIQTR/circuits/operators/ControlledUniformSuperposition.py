@@ -13,7 +13,7 @@ from numpy.typing import NDArray
 from qualtran import GateWithRegisters, Signature
 from qualtran.bloqs.mcmt.and_bloq import And, MultiAnd
 from qualtran.bloqs.arithmetic import LessThanEqual
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli
+from qualtran.bloqs.mcmt import MultiControlPauli
 
 from pyLIQTR.circuits.operators.BinaryToUnary import BinaryToUnaryBits
 from pyLIQTR.circuits.operators.PhaseGradientRotation import PhaseGradientZRotation

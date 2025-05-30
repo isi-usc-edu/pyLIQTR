@@ -8,7 +8,6 @@ import numpy as np
 
 from qualtran.bloqs.arithmetic.addition import Add as qtAdd
 from qualtran.cirq_interop.testing import assert_circuit_inp_out_cirqsim
-from qualtran.cirq_interop.bit_tools import iter_bits_twos_complement
 from qualtran._infra.data_types import QUInt
 from  pyLIQTR.utils.global_ancilla_manager import gam as gam
 from  pyLIQTR.utils.printing import openqasm

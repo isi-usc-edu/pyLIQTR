@@ -290,7 +290,7 @@ class QSVT_real_polynomial(QSVT_abstract):
 
 
 
-class QSVT_real_polynomial_sum(qt._infra.gate_with_registers.GateWithRegisters):
+class QSVT_real_polynomial_sum(qt.GateWithRegisters):
     
     def __init__( self, 
                   block_encoding, 
