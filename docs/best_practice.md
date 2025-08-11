@@ -23,7 +23,6 @@ In general, decompositions require operators to have decompositions defined. All
 
  All examples shown in `pyLIQTR` should support decomposition into "basic gates" (1-2Q gates + Toffolis), and an easy test is feeding your circuit of choice into `pyLIQTR.utils.printing.openqasm` and verifying that you can loop through the circuit to completion.
 
- For further analysis of small to mid-sized circuits, `pyLIQTR` also features an 'advanced' decomposition tool in `pyLIQTR.scheduler.advanced_decomposition`. This tool allows for circuits to be decomposed efficiently while performing some specified analysis on each operator. Existing classes support decomposition of a circuit into a custom set of gates and/or decomposition to a specified level with information about sub-gate counts or scheduling included. This tool is designed to be extendable to custom use cases. See the `Decompose()` class for details about building your own analysis class with this tool. An example of as-is use of this tool can be found in `Examples/Algorithms_and_Infrastructure/advanced_decomposition_examples`.
 
 #### LIQTR Like 👍 : Export of circuits to OpenQASM
 Export of circuits can be done using a provided `pyLIQTR` utility (`pyLIQTR.utils.printing.openqasm`) that wraps `cirq`'s native openQASM export. This is introduced since some new cirq-ft operators do not yet have a decomposition in terms of gates defined, or `cirq` has begun to use features (mid-circuit measurement, classical control, etc) not supported by OpenQASM2.

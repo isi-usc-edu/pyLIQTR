@@ -97,7 +97,6 @@ Gate Decomposition
    :toctree: generated/
 
    pyLIQTR.gate_decomp.cirq_transforms
-   pyLIQTR.scheduler.advanced_decomposition.advanced_decompose
 
 Qubitization
 ''''''''''''

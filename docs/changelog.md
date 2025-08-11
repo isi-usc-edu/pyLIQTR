@@ -1,4 +1,11 @@
 # High-level changelog (not all inclusive of all changes)
+## v1.4.1
+* First quantization block encodings and circuits
+* Scheduler updates to support more verbose descriptions of resource factories
+* QBI plot notebooks
+* Bugfixes related to scheduler/decomp and ancilla management
+* General bug fixes
+
 ## v1.4.0
 * Adds circuit decompositions for the first quantized block encoding
 * Adds implementations of CFD matrices
