@@ -1,5 +1,5 @@
 # High-level changelog (not all inclusive of all changes)
-## v1.4.0
+## v1.3.10
 * Adds circuit decompositions for the first quantized block encoding
 * Adds implementations of CFD matrices
 * Adds scheduler handling of bloq.Allocate, bloq.Free, and bloq.Toffoli
