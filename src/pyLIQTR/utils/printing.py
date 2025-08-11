@@ -153,6 +153,7 @@ def _check_for_measurement(op : cirq.Operation):
     
             
 myQASMInfo = None
+recursionLvl = 0
 myOp = None
 def openqasm(circuit: cirq.AbstractCircuit,
              gate_precision: Union[int, float, None] = 10,
@@ -220,9 +221,12 @@ def openqasm(circuit: cirq.AbstractCircuit,
     """
     #This function always will decompose to 1-3Q gates
     global myQASMInfo
+    global recursionLvl
     #Provide custom context if one is not provided
     if context is None:
         context = cirq.DecompositionContext(gam.gam)
+
+    right_context = isinstance(context.qubit_manager, gam.GlobalQubitManager)
     #Determine gate precision if necessary. NOTE: Num_rotations cannot be found without looking through
     #entire circuit
     #This decomposes+does clifford transform
@@ -318,7 +322,13 @@ def openqasm(circuit: cirq.AbstractCircuit,
                 top = pyLAM(bitsize=op.gate.bitsize, add_val=op.gate.add_val, \
                            mod=op.gate.mod,cvs=op.gate.cvs).\
                         on(*qbs)
+                recursionLvl += 1
+                if right_context:
+                    context.qubit_manager.reserve_qubits(qbs, level=recursionLvl)
                 yield from openqasm(cirq.Circuit(top),skip_header=True,context=context,rotation_allowed=rotation_allowed)
+                if right_context:
+                    context.qubit_manager.unlock_qubits(level=recursionLvl)
+                recursionLvl -= 1
             elif "qualtran.cirq_interop._bloq_to_cirq" in op._gate.__module__:
                 gates = [
                     'bloq.Toffoli'

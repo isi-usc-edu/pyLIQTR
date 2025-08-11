@@ -76,24 +76,24 @@ def _controlled_decompose_dfs(current_pass:int, max_decomposition_passes: int,\
                     if isinstance(op,list):
                         for oop in op:
                             if isinstance(oop.gate,cirq.MatrixGate):
-                                yield cirq.decompose(oop)
+                                yield cirq.decompose(oop, context=args.context)
                             else:
                                 yield oop
                     else:
                         if isinstance(op.gate,cirq.MatrixGate):
-                            yield cirq.decompose(op)
+                            yield cirq.decompose(op, context=args.context)
                         else:
                             yield op
             else:
                 if isinstance(val,list):
                     for vval in val:
                         if isinstance(vval.gate,cirq.MatrixGate):
-                            yield cirq.decompose(vval)
+                            yield cirq.decompose(vval, context=args.context)
                         else:
                             yield vval
                 else:
                     if isinstance(val.gate,cirq.MatrixGate):
-                        yield cirq.decompose(val)
+                        yield cirq.decompose(val, context=args.context)
                     else:
                         yield val
             
@@ -197,8 +197,8 @@ def generator_decompose(
             if "qualtran.bloqs.basic_gates" in op._gate.__module__:
                 yield op._gate.cirq_gate.on(*op.qubits)
             elif "qualtran.cirq_interop._bloq_to_cirq" in op._gate.__module__:
-                gates = ['bloq.CNOT','bloq.XGate','bloq.YGate','bloq.ZGate','bloq.HGate','bloq.H','bloq.SGate','bloq.TGate','bloq.T']
-                cirq_gates = [cirq.CNOT,cirq.X,cirq.Y,cirq.Z,cirq.H,cirq.H,cirq.S,cirq.T,cirq.T]
+                gates = ['bloq.CNOT','bloq.XGate','bloq.YGate','bloq.ZGate','bloq.HGate','bloq.H','bloq.SGate','bloq.TGate','bloq.T','bloq.T†']
+                cirq_gates = [cirq.CNOT,cirq.X,cirq.Y,cirq.Z,cirq.H,cirq.H,cirq.S,cirq.T,cirq.T,cirq.inverse(cirq.T)]
                 gate2cirq = {g:cg for g,cg in zip(gates,cirq_gates)}
                 if (str(op._gate) not in gate2cirq):
                     #Annoying, there are some 'non basic' gates mixed in with these -_-
@@ -210,6 +210,8 @@ def generator_decompose(
                     yield gate2cirq[str(op._gate)].on(*op.qubits)
             else:
                 raise NotImplementedError('Uncaught/bad qualtran -> cirq conversion')
+        elif isinstance(op.gate,qualtran.cirq_interop._cirq_to_bloq.CirqGateAsBloq):
+            yield op.gate.gate.on(*op.qubits)
         else:
             yield op
     sys.setrecursionlimit(reclim)

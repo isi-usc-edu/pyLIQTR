@@ -92,6 +92,7 @@ class BlockEncoding_select_prepare(BlockEncoding):
 
         self._select_gate         =  select_oracle
         self._prepare_gate        =  prepare_oracle
+        self._inverse_prepare_workaround = None
 
         self._invert_select       =  invert_select
 
@@ -137,7 +138,11 @@ class BlockEncoding_select_prepare(BlockEncoding):
         select_cost   =  t_complexity(self._select_gate)
 
         if (self._do_prepare and self._do_prepare_inverse):
-            total_cost = 2*prepare_cost + select_cost
+            if self._inverse_prepare_workaround is not None:
+                inv_prepare_cost  =  t_complexity(self._inverse_prepare_workaround)
+                total_cost = prepare_cost+inv_prepare_cost + select_cost
+            else:
+                total_cost = 2*prepare_cost + select_cost
         else:
             total_cost = prepare_cost + select_cost
 
@@ -156,5 +161,8 @@ class BlockEncoding_select_prepare(BlockEncoding):
             yield  self._select_gate.on_registers(**quregs)
 
         if ( self._do_prepare_inverse):
-            yield cirq.inverse(self._prepare_gate.on_registers(**quregs))
+            if self._inverse_prepare_workaround is not None:
+                yield self._inverse_prepare_workaround.on_registers(**quregs)
+            else:
+                yield cirq.inverse(self._prepare_gate.on_registers(**quregs))
 

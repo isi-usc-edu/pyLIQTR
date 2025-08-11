@@ -150,12 +150,11 @@ class TestFermiHubbardNNN:
         resources = estimate_resources(lt_encoding.circuit)
 
     def test_LinearT_scheduling(self, lt_encoding):
-        context = cirq.DecompositionContext(cirq.SimpleQubitManager())
-        res = schedule_circuit(lt_encoding.circuit, full_profile=True, decomp_level=0,context=context)
+        res = schedule_circuit(lt_encoding.circuit, full_profile=True, decomp_level=0)
         for r in res:
             pass
 
-        res = schedule_circuit(lt_encoding.circuit, full_profile=True, decomp_level='Full',context=context)
+        res = schedule_circuit(lt_encoding.circuit, full_profile=True, decomp_level='Full')
         for r in res:
             pass
 

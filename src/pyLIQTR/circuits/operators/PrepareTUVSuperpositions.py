@@ -46,10 +46,14 @@ class PrepareTUVSuperpositions(GateWithRegisters):
         pg 17-18, Eq. 61
     """
 
-    def __init__(self, num_bits_t:int, eta:int, lambda_zeta:int, theta:float=np.pi):
+    def __init__(self, num_bits_t:int, eta:int, lambda_zeta:int,bphi:int=None, theta:float=np.pi):
         self.num_bits_t = num_bits_t
         self.eta = eta
         self.lambda_zeta = lambda_zeta
+        if bphi is None:
+            self.bphi = self.num_bits_t
+        else:
+            self.bphi = bphi
         self.theta = theta
         self.n_eta_zeta = bit_length(self.eta + 2 * self.lambda_zeta - 1)
 
@@ -63,7 +67,7 @@ class PrepareTUVSuperpositions(GateWithRegisters):
                 Register("flag_prep_success", QBit()),
                 Register("flag_inequality", QBit()),
                 Register("superposition_state", QAny(bitsize=self.n_eta_zeta)),
-                Register("phase_gradient_state", QAny(bitsize=self.num_bits_t)),
+                Register("phase_gradient_state", QAny(bitsize=self.bphi)),
             ]
         )
 
@@ -85,7 +89,7 @@ class PrepareTUVSuperpositions(GateWithRegisters):
         # rotate tuv into the state cos(theta)|0> + sin(theta)|1>
         yield Hadamard().on(*tuv)
         
-        yield PhaseGradientZRotation(br=self.num_bits_t,bphi=self.num_bits_t,do_negative_z_rotation=True,classical_angle=True,angle=self.theta).on_registers(rotation_target=tuv,phi=phase_gradient_state)
+        yield PhaseGradientZRotation(br=self.num_bits_t,bphi=self.bphi,do_negative_z_rotation=True,classical_angle=True,angle=self.theta).on_registers(rotation_target=tuv,phi=phase_gradient_state)
 
         yield [Hadamard().on(*tuv), SGate().on(*tuv)]
         # tuv = |0> indicates T, |1> indicates U/V
@@ -107,4 +111,4 @@ class PrepareTUVSuperpositions(GateWithRegisters):
 
 
     def build_call_graph(self, ssa: 'SympySymbolAllocator') -> Set['BloqCountT']:
-        return {(Hadamard(),2),(SGate(),1),(PhaseGradientZRotation(br=self.num_bits_t,bphi=self.num_bits_t,do_negative_z_rotation=True,classical_angle=True,angle=self.theta),1),(FlaggedPrepareUniformSuperposition(d=self.eta + 2 * self.lambda_zeta),1),(LessThanConstant(self.n_eta_zeta,less_than_val=self.eta),1),(And(cv1=1,cv2=1),1),(XGate(),1)}
+        return {(Hadamard(),2),(SGate(),1),(PhaseGradientZRotation(br=self.num_bits_t,bphi=self.bphi,do_negative_z_rotation=True,classical_angle=True,angle=self.theta),1),(FlaggedPrepareUniformSuperposition(d=self.eta + 2 * self.lambda_zeta),1),(LessThanConstant(self.n_eta_zeta,less_than_val=self.eta),1),(And(cv1=1,cv2=1),1),(XGate(),1)}

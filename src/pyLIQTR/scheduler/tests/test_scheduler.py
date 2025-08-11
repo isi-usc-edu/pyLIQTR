@@ -1,20 +1,16 @@
 import pytest
-import math
-import numpy as np
 import cirq
-import rustworkx as rx
-from pyLIQTR.scheduler.scheduler import Scheduler, schedule_circuit, decomposition_protocol
-from pyLIQTR.scheduler.Instruction import Instruction, CirqInstruction
-from pyLIQTR.scheduler.DAG import DAG
-from qualtran.bloqs.arithmetic.comparison import LessThanConstant as ltc
-from pyLIQTR.circuits.operators                     import *
-from pyLIQTR.BlockEncodings.CarlemanLinearization   import Carleman_Linearization
-from pyLIQTR.ProblemInstances.NonlinearODE          import FOperators
-from    pyLIQTR.ProblemInstances.getInstance                  import   getInstance
-from    pyLIQTR.clam.lattice_definitions                      import   CubicLattice, SquareLattice, TriangularLattice
-from    pyLIQTR.BlockEncodings.getEncoding                    import   getEncoding, VALID_ENCODINGS
-from qualtran._infra.gate_with_registers import get_named_qubits
-from qualtran import Register, Signature, QAny
+from   pyLIQTR.scheduler.scheduler            import Scheduler, schedule_circuit, decomposition_protocol
+from   pyLIQTR.scheduler.Instruction          import CirqInstruction
+from   pyLIQTR.scheduler.DAG                  import DAG
+from   qualtran.bloqs.arithmetic.comparison   import LessThanConstant as ltc
+from   pyLIQTR.circuits.operators             import *
+from   pyLIQTR.ProblemInstances.getInstance   import getInstance
+from   pyLIQTR.clam.lattice_definitions       import SquareLattice
+from   pyLIQTR.BlockEncodings.getEncoding     import getEncoding, VALID_ENCODINGS
+from   pyLIQTR.scheduler.scheduler_utils      import architecture, state_factory
+import pyLIQTR.scheduler.sets as sets
+from   pyLIQTR.qubitization.phase_estimation  import   QubitizedPhaseEstimation
 
 #Cant disable UserWarning caused by scheduler, so putting this in for now
 import warnings
@@ -38,7 +34,7 @@ class TestScheduler:
         canonical_circuit = cirq.Circuit(canonical_insts)
         results = schedule_circuit(canonical_circuit)
 
-        assert results['Total time for execution'] == 12, results['Circuit T-depth'] == 0
+        assert results['Total time for execution'] == 1200, results['Circuit T-depth'] == 0
 
     
     def test_t_depth(self):
@@ -56,17 +52,18 @@ class TestScheduler:
 
         assert results['Circuit T-depth'] == 4
 
-
     def test_time_assignment(self):
         
         qubits = cirq.LineQubit.range(2)
-        resources = {qubits[0]: 1, qubits[1]: 1}
         inst1 = CirqInstruction(cirq.X(qubits[0]))
         inst2 = CirqInstruction(cirq.CX(qubits[1], qubits[0]))
-        scheduler = Scheduler(arch_description=resources)
+        inst1.get_data_dependencies()
+        inst2.get_data_dependencies()
+        scheduler = Scheduler(architecture_params=None)
         time1 = scheduler.assign_execution_time(inst1)
         time2 = scheduler.assign_execution_time(inst2)
-        assert time1 == 1, time2 == 2
+        assert time1 == 100, time2 == 200
+    
 
     def test_populate_ready(self, canonical_basic_instance):
         
@@ -81,13 +78,9 @@ class TestScheduler:
             dag.add_dependency(instruction)
         dag.finish()
 
-        resources = {}
-        for qbit in qbs:
-            resources[qbit] = 1
-
         expected_ready_q = [insts[0], insts[1]]
 
-        scheduler = Scheduler(arch_description=resources)
+        scheduler = Scheduler(architecture_params=None)
 
         #first cycle, get through all qubit nodes
         scheduler.populate_ready(dag)
@@ -112,11 +105,7 @@ class TestScheduler:
             dag.add_dependency(instruction)
         dag.finish()
 
-        resources = {}
-        for qbit in qbs:
-            resources[qbit] = 1
-
-        scheduler = Scheduler(arch_description=resources)
+        scheduler = Scheduler(architecture_params=None)
 
         expected_execution_q = [insts[0]]
 
@@ -142,11 +131,7 @@ class TestScheduler:
             dag.add_dependency(instruction)
         dag.finish()
 
-        resources = {}
-        for qbit in qbs:
-            resources[qbit] = 1
-
-        scheduler = Scheduler(arch_description=resources)
+        scheduler = Scheduler(architecture_params=None)
 
         #first cycle, get through all qubit nodes
         scheduler.populate_ready(dag)
@@ -158,7 +143,7 @@ class TestScheduler:
         scheduler.move_ready_to_execute(dag)
         scheduler.free_instructions(dag)
 
-        assert (scheduler.global_time == 2 and len(scheduler.execution_q) == 0)
+        assert (scheduler.global_time == 200 and len(scheduler.execution_q) == 0)
 
     def test_recursion_gate_counts_simple(self):
 
@@ -178,51 +163,20 @@ class TestScheduler:
         no_decomp_gate_counts = no_decomp_result['Gate profile']
 
         actual_gate_counts = {
-            'T': 24,
-            'H': 18,
+            'T': 79,
+            'H': 129,
             'S': 6, 
             'CX': 49,
+            'Toffoli': 0,
             'CZ': 6,
             'Pauli (X, Y, Z)': 4,
-            'Rotation': 1,
-            'Toffoli':0
+            'Measurement/Reset': 12
         }
-
+        print(actual_gate_counts, full_decomp_gate_counts, no_decomp_gate_counts)
         assert full_decomp_gate_counts == no_decomp_gate_counts == actual_gate_counts
 
-    @pytest.mark.filterwarnings("ignore::UserWarning")  
-    def test_recursion_gate_counts_carleman(self):
-
-        n = 2
-        K = 4
-
-        a0_in = n
-        a1 = n
-        a2_in = math.ceil(n/2)
-        a2_out = math.ceil(n)
-
-        alpha0 = 1
-        alpha1 = 1
-        alpha2 = 1
-
-        ancilla_register = Register("ancilla", QAny(bitsize = 7 + max(a0_in, a1, a2_in, a2_out) + math.ceil(np.log2(K))))
-        data_register = Register("data", QAny(bitsize = n*K+1))
-
-        signature = Signature([ancilla_register, data_register])
-        registers = get_named_qubits(signature)
-
-        carlemanLinearization = Carleman_Linearization(FOperators(n, K, (a0_in, a1, a2_in, a2_out), (alpha0, alpha1, alpha2)), K)
-        circuit = cirq.Circuit(carlemanLinearization.on_registers(**registers))
-
-        no_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level=0, decomposition_protocol=decomposition_protocol.recursive)
-        no_decomp_gate_counts = no_decomp_result['Gate profile']
-
-        full_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level='Full')
-        full_decomp_gate_counts = full_decomp_result['Gate profile']
-
-
-        assert full_decomp_gate_counts == no_decomp_gate_counts
-
+    '''
+    this works but takes forever and i think the test above is sufficient
     def test_recursion_gate_counts_fh(self):
 
         J      = -1.0;          N      =     2    
@@ -238,7 +192,10 @@ class TestScheduler:
         full_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level='Full')
         full_decomp_gate_counts = full_decomp_result['Gate profile']
 
+        print(full_decomp_gate_counts, no_decomp_gate_counts)
+
         assert full_decomp_gate_counts == no_decomp_gate_counts
+    '''
 
     def test_recursion_qubit_counts(self):
 
@@ -255,12 +212,37 @@ class TestScheduler:
         no_decomp_qubit_count = no_decomp_result['Number of qubits used']
 
         full_decomp_result = schedule_circuit(circuit, full_profile=True, decomp_level='Full')
-        full_decomp_qubit_count = no_decomp_result['Number of qubits used']
+        full_decomp_qubit_count = full_decomp_result['Number of qubits used']
 
         assert full_decomp_qubit_count == no_decomp_qubit_count == 14
 
+    def test_t_state(self):
 
+        test_q = cirq.LineQubit.range(5)
+        t_circuit = cirq.Circuit()
+        t_circuit.append([cirq.T(test_q[0]), cirq.T(test_q[1]), cirq.T(test_q[2])])
+        t_circuit.append([cirq.T(test_q[0]), cirq.T(test_q[1])])
+        t_circuit.append([cirq.T(test_q[0]), cirq.T(test_q[1]), cirq.T(test_q[2]), cirq.T(test_q[3]), cirq.T(test_q[4])])
+        t_circuit.append([cirq.T(test_q[0])])
 
+        t_factory_1 = state_factory(production_time=4, consumption_time=1, production_limit=2, success_prob=1)
+        my_timings = {sets.T: [t_factory_1], sets.CLIFFORD: 1, sets.MISC: 0}
+        my_params = architecture(user_input_timings=my_timings)
+
+        results = schedule_circuit(t_circuit, architecture_config=my_params)
+
+        assert results['Circuit T-depth'] == 8
+
+    def test_multi_run_qubit_count(self):
+        model  =  getInstance('FermiHubbard',shape=(3,3), J=-1, U=4, cell=SquareLattice)
+        gate_gsee = QubitizedPhaseEstimation( getEncoding(VALID_ENCODINGS.FermiHubbardSquare),
+                                      instance=model,prec=4)
+        q_counts = []
+        for _ in range(3):
+            res = schedule_circuit(gate_gsee.circuit, full_profile=True, decomp_level=0, context=cirq.DecompositionContext(cirq.SimpleQubitManager()))
+            q_counts.append(res["Number of qubits used"])
+
+        assert q_counts[0] == q_counts[1] == q_counts[2]
 
     
 

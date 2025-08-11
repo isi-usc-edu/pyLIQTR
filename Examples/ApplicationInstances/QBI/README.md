@@ -1,0 +1,1 @@
+The notebooks in this directory walk through the resource estimation workflow for applications relevant to the Quantum Benchmarking Initiative. Each notebook provides a brief description of the application followed by the code to produce the baseline logical resource estimates. These estimates can be exported to a json file which can be directly input to the QB Plot Tool.

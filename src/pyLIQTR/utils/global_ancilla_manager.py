@@ -6,6 +6,7 @@ class GlobalQubitManager(QubitManager):
         self._clean_set = set()
         self._dirty_set = set()
         self._inuse_set = set()
+        self._locked_qubits = dict()
         self._clean_id = 0
         self._dirty_id = 0
         self._prefix = prefix
@@ -16,6 +17,51 @@ class GlobalQubitManager(QubitManager):
         self._inuse_set = set()
         self._clean_id = 0
         self._dirty_id = 0
+
+    def __repr__(self) -> str:
+        outStr = f"GAM : {self._prefix}\n"
+        outStr += "Clean set\n\t"
+        outStr += str(self._clean_set)
+        outStr += "\nDirty set\n\t"
+        outStr += str(self._dirty_set)
+        outStr += "\nInuse set\n\t"
+        outStr += str(self._inuse_set)
+        outStr += "\nLocked set\n\t"
+        outStr += str(self._locked_qubits)
+        outStr += "\n"
+        return outStr
+
+    def reserve_qubits(self, qubits : List['cirq.Qid'], level:int):
+        if level not in self._locked_qubits:
+            self._locked_qubits[level] = set()
+
+        for q in qubits:
+            if isinstance(q, CleanQubit):
+                self._locked_qubits[level].add(('clean',q))
+            elif isinstance(q, BorrowableQubit):
+                self._locked_qubits[level].add(('dirty',q))
+    
+    def unlock_qubits(self, level:int):
+        q2free = list(self._locked_qubits[level])
+        self._locked_qubits[level] = set()
+        for (type,q) in q2free:
+            #make sure the qubit isnt in another level. only the parent can fully clear.
+            doAllow = True
+            for lvl,lqs in self._locked_qubits.items():
+                if lvl == level:
+                    continue
+                tmp = set([q[1] for q in lqs])
+                if q in tmp:
+                    doAllow=False
+                    break
+            if not doAllow:
+                continue
+            if type == 'clean':
+                self._clean_set.add(q)
+            elif type == 'dirty':
+                self._dirty_set.add(q)
+            if q in self._inuse_set:
+                self._inuse_set.remove(q)
 
     def qalloc(self, n: int, dim: int = 2) -> List['cirq.Qid']:
         if len(self._clean_set) < n:
@@ -48,7 +94,15 @@ class GlobalQubitManager(QubitManager):
         return qubits2use
 
     def qfree(self, qubits: Iterable['cirq.Qid']) -> None:
+        keep_locked_qubits = set()
+        for __,lq in self._locked_qubits.items():
+            tmp = set([q[1] for q in lq])
+            keep_locked_qubits = keep_locked_qubits.union(tmp)
+
         for q in qubits:
+            if q in keep_locked_qubits:
+                continue
+                
             assert(q in self._inuse_set)
             if isinstance(q,CleanQubit):
                 assert(q.id < self._clean_id)

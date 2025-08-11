@@ -48,9 +48,9 @@ class QubitizedPhaseEstimation(qt._infra.gate_with_registers.GateWithRegisters):
                                                           encoding=self._block_encoding._encoding_type, 
                                                           control_val=1 )
 
-        alpha = self._block_encoding.alpha
 
         if (eps is not None):
+            alpha = self._block_encoding.alpha
             self._prec  =  int(np.ceil( np.log2( (np.sqrt(2.0)*np.pi*alpha) / (2*eps) ) ))         
         else:
             self._prec  =  prec

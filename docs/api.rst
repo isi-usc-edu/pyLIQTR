@@ -54,13 +54,6 @@ Classical Simulation Methods
    pyLIQTR.clam.operator_lattice
    pyLIQTR.clam.lattice_definitions
 
-Gate Decomposition
-''''''''''''''''''
-
-.. autosummary::
-   :toctree: generated/
-
-   pyLIQTR.gate_decomp.cirq_transforms
    
 Phase Factors
 '''''''''''''''
@@ -104,6 +97,7 @@ Gate Decomposition
    :toctree: generated/
 
    pyLIQTR.gate_decomp.cirq_transforms
+   pyLIQTR.scheduler.advanced_decomposition.advanced_decompose
 
 Qubitization
 ''''''''''''

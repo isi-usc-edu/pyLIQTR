@@ -18,21 +18,17 @@ class Instruction:
         self.cached_schedule = None
         self.free = False 
         self.custom_gateset = None
+        self.gateset = None
+        self.resources = {}
+
     
     
     def resource_counts(self):
         '''
-        Return a dictionary of the form {resourceX: # required, resourceY: # required, ...} with, at minimum, an entry for each qubit the instruction acts on. Resources could also include how many of a particular type of gate are required for the instruction tobe performed.
+        Return a dictionary of the form {resourceX: # required, resourceY: # required, ...} with, at minimum, an entry for each qubit the instruction acts on. Resources could also include how many of a particular type of gate are required for the instruction to be performed.
         '''
-        resources = {}
-        for qubit in self.qubits:
-            resources[qubit] = 1
-
-        first_two = self.__str__()[:2]
-        if first_two in sets.T:
-            resources['T'] = 1
-
-        return resources
+        
+        return self.resources
 
     def get_data_dependencies(self):
         """
@@ -44,9 +40,10 @@ class Instruction:
             for cbit in self._op.classical_controls:
                 dependencies[cirq.MeasurementKey(f'{cbit}')] = 'All'
         first_two = self.__str__()[:2]
+        self.assign_gateset(first_two=first_two)
         if self.custom_gateset is not None:
             for set in self.custom_gateset:
-                if first_two in set:
+                if set.in_gateset(first_two):
                     for q in self.qubits:
                         dependencies[q] = 'All'
             if len(dependencies) == 0:
@@ -56,30 +53,30 @@ class Instruction:
             return dependencies
 
 
-        if first_two in sets.CX:
+        if sets.CX.in_gateset(first_two):
             ctl_q = self.qubits[0]
             tgt_q = self.qubits[1]
             dependencies[ctl_q] = 'Z'
             dependencies[tgt_q] = 'X'
-        elif first_two in sets.CCX:
+        elif sets.CCX.in_gateset(first_two):
             ctl_q0 = self.qubits[0]
             ctl_q1 = self.qubits[1]
             tgt_q = self.qubits[2]
             dependencies[ctl_q0] = 'Z'
             dependencies[ctl_q1] = 'Z'
             dependencies[tgt_q] = 'X'
-        elif first_two in sets.CZ:
+        elif sets.CZ.in_gateset(first_two):
             ctl_q = self.qubits[0]
             tgt_q = self.qubits[1]
             dependencies[ctl_q] = 'Z'
             dependencies[tgt_q] = 'Z'
-        elif first_two in sets.X:
+        elif sets.X.in_gateset(first_two):
             qubit = self.qubits[0]
             dependencies[qubit] = 'X'
-        elif first_two in sets.Z:
+        elif sets.Z.in_gateset(first_two):
             qubit = self.qubits[0]
             dependencies[qubit] = 'Z'
-        elif first_two in sets.ALL or first_two in sets.ALL_CIRQ:
+        elif sets.ALL.in_gateset(first_two) or sets.ALL_CIRQ.in_gateset(first_two):
             if first_two == 'ci':
                 cbit = cirq.MeasurementKey(f'{self.qubits[0]}')
                 qubit = self.qubits[0]
@@ -88,6 +85,7 @@ class Instruction:
             else:
                 for qubit in self.qubits:
                     dependencies[qubit] = 'All'
+
         else:
             qubits = self.qubits
             for q in qubits:
@@ -101,6 +99,35 @@ class Instruction:
     def set_execution_time(self,start_time,execution_time):
         self.start_time = start_time
         self.finish_time = self.start_time+execution_time
+
+    def assign_gateset(self, first_two):
+        if sets.ROT.in_gateset(first_two):
+            self.gateset = sets.ROT
+            self.resources['Rotation'] = 1
+        elif sets.CX.in_gateset(first_two):
+            self.gateset = sets.CX
+            self.resources['CX'] = 1
+        elif sets.CCX.in_gateset(first_two):
+            self.gateset = sets.CCX
+            self.resources['Toffoli'] = 1
+        elif sets.CZ.in_gateset(first_two):
+            self.gateset = sets.CZ
+            self.resources['CZ'] = 1
+        elif sets.H.in_gateset(first_two):
+            self.gateset = sets.H
+            self.resources['H'] = 1
+        elif sets.S.in_gateset(first_two):
+            self.gateset = sets.S
+            self.resources['S'] = 1
+        elif sets.T.in_gateset(first_two):
+            self.gateset = sets.T
+            self.resources['T'] = 1
+        elif sets.PAULI.in_gateset(first_two):
+            self.gateset = sets.PAULI
+            self.resources['Pauli (X, Y, Z)'] = 1
+        elif sets.MISC.in_gateset(first_two):
+            self.gateset = sets.MISC
+            self.resources['Measurement/Reset'] = 1
 
 class DependencyEdge:
     '''
@@ -128,10 +155,21 @@ class CirqInstruction(Instruction):
         self.qubits = self._op.qubits
         self.custom_gateset = custom_gateset
 
+        for qubit in self.qubits:
+            self.resources[qubit] = 1
+
+        first_two = self.__str__()[:2]
+        if sets.T.in_gateset(first_two):
+            self.resources['T'] = 1
+
+        elif sets.ROT.in_gateset(first_two):
+            self.resources['Rotation'] = 1
+
     def __str__(self):
-        if str(self._op).startswith('bloq'):
+        op_str = str(self._op)
+        if op_str.startswith('bloq'):
             return str(self._op)[5:]
-        return self._op.__str__()
+        return op_str
     
     def __eq__(self, other):
 
@@ -163,24 +201,24 @@ class CirqInstruction(Instruction):
         if self.custom_gateset is not None:
             found = False
             for set in self.custom_gateset:
-                if first_two in set:
+                if set.in_gateset(first_two):
                     self.complex = False
                     found = True
             if found == False:
                 self.complex = True
 
         else:
-            if first_two in sets.CX:
+            if sets.CX.in_gateset(first_two):
                 self.complex = False
-            elif first_two in sets.CCX:
+            elif sets.CCX.in_gateset(first_two):
                 self.complex = False
-            elif first_two in sets.CZ:
+            elif sets.CZ.in_gateset(first_two):
                 self.complex = False
-            elif first_two in sets.X_CIRQ:
+            elif sets.X_CIRQ.in_gateset(first_two):
                 self.complex = False
-            elif first_two in sets.Z_CIRQ:
+            elif sets.Z_CIRQ.in_gateset(first_two):
                 self.complex = False
-            elif first_two in sets.ALL_CIRQ:
+            elif sets.ALL_CIRQ.in_gateset(first_two):
                 self.complex = False
             else:
                 self.complex = True

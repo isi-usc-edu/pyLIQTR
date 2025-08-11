@@ -2,21 +2,18 @@
 Copyright (c) 2024 Massachusetts Institute of Technology 
 SPDX-License-Identifier: BSD-2-Clause
 """
-import cirq
 import numpy as np
 from functools import cached_property
-from numpy.typing import NDArray
-from typing import Set, Dict, Tuple
-from qualtran import Bloq, GateWithRegisters, Signature, Register, QIntOnesComp, QInt, QUInt,Side, BloqBuilder, SoquetT
-from qualtran.bloqs.basic_gates import Toffoli, CNOT
+from typing import Set, Dict
+from qualtran import Bloq, Signature, Register, QIntOnesComp, QInt, QUInt,Side, BloqBuilder, SoquetT, QAny
+from qualtran.bloqs.basic_gates import CNOT
 from qualtran.bloqs.arithmetic.addition import Add
 
 class SignedIntegerToTwosComplement(Bloq):
     """Convert a register storing the signed integer representation to two's complement inplace.
 
     Registers:
-        x: input signed integer (ones' complement) register.
-        y: output signed integer register in two's complement.
+        x: represents signed integer (ones' complement) on input and is output in two's complement.
 
     References:
         [Fault-Tolerant Quantum Simulations of Chemistry in First Quantization](https://arxiv.org/abs/2105.12767).
@@ -32,8 +29,7 @@ class SignedIntegerToTwosComplement(Bloq):
     def signature(self) -> Signature:
         return Signature(
             [
-                Register('x', QIntOnesComp(self.bitsize), side=Side.LEFT),
-                Register('y', QInt(self.bitsize), side=Side.RIGHT),
+                Register('x', QAny(self.bitsize))
             ]
         )
 
@@ -51,7 +47,7 @@ class SignedIntegerToTwosComplement(Bloq):
         sign_bit, new_x = bb.add(Add(a_dtype=QUInt(1),b_dtype=QUInt(self.bitsize-1)),a=sign_bit,b=bb.join(xs[1:]))
         new_xs = bb.split(new_x)
 
-        return {'y':bb.join(np.insert(new_xs,0,sign_bit))}
+        return {'x':bb.join(np.insert(new_xs,0,sign_bit))}
 
     def build_call_graph(self, ssa: 'SympySymbolAllocator') -> Set['BloqCountT']:
         return {(Add(a_dtype=QUInt(1),b_dtype=QUInt(self.bitsize-1)), 1),(CNOT(),self.bitsize-1)}

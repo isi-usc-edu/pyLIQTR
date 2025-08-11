@@ -12,6 +12,27 @@ from pyLIQTR.circuits.pyLCircuit import get_T_counts_from_rotations
 from io import StringIO
 import struct
 
+from importlib.metadata import version
+def version_newer(pkg_name:str, check_version:str):
+    def get_maj_min_rev(vrs):
+        maj = int(vrs.split('.')[0])
+        min = int(vrs.split('.')[1])
+        rev = int(vrs.split('.')[2])
+        return maj, min, rev
+    
+    mj,mn,rv = get_maj_min_rev(version(pkg_name))
+    chk_mj, chk_mn, chk_rv = get_maj_min_rev(check_version)
+    if mj > chk_mj:
+        return True
+    elif mj == chk_mj:
+        if mn > chk_mn:
+            return True
+        elif mn == chk_mn:
+            return rv > chk_rv
+        else:
+            return False
+    else:
+        return False
 
 qasm_convert_one_qubit_gates = {
     'H': 'h',

@@ -13,6 +13,7 @@ import  qualtran.bloqs.chemistry.hubbard_model.qubitization as  qt_hm
 
 from    pyLIQTR.BlockEncodings                 import   VALID_ENCODINGS
 from    pyLIQTR.BlockEncodings.BlockEncoding   import   BlockEncoding_select_prepare
+from    pyLIQTR.circuits.operators.prepare_FermiHubbard import PrepareHubbardPYL,PrepareHubbardPYL_invert_workaround
 
 
 
@@ -36,7 +37,11 @@ class fermi_hubbard_square_encoding(BlockEncoding_select_prepare):
                                                        y_dim=self.dims[1], 
                                                        control_val=self._control_val )
    
-        self._prepare_gate   =  qt_hm.PrepareHubbard( x_dim=self.dims[0], 
+        self._prepare_gate   =  PrepareHubbardPYL( x_dim=self.dims[0], 
+                                                        y_dim=self.dims[1], 
+                                                        t=-ProblemInstance.J,
+                                                        u=ProblemInstance.U )
+        self._inverse_prepare_workaround = PrepareHubbardPYL_invert_workaround( x_dim=self.dims[0], 
                                                         y_dim=self.dims[1], 
                                                         t=-ProblemInstance.J,
                                                         u=ProblemInstance.U )

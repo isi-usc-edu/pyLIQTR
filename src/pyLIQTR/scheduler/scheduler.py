@@ -5,13 +5,15 @@ import warnings
 from tqdm import tqdm
 import numpy as np
 import warnings
+import json
 
-from pyLIQTR.utils.circuit_decomposition import circuit_decompose_multi
+from pyLIQTR.utils.circuit_decomposition import circuit_decompose_multi, generator_decompose
 from pyLIQTR.gate_decomp.rotation_gates import T_COUNT_CONST, T_COUNT_SLOPE, T_COUNT_STD_DEV
 from pyLIQTR.scheduler.Instruction import CirqInstruction, OQInstruction, Instruction
 from pyLIQTR.scheduler.DAG import DAG
 import pyLIQTR.scheduler.sets as sets
 from pyLIQTR.scheduler.sets import op_to_openqasm
+from pyLIQTR.scheduler.scheduler_utils import architecture, state_factory
 from rustworkx.visualization import graphviz_draw
 from pyLIQTR.utils.printing import keep
 import pyLIQTR.utils.global_ancilla_manager as gam
@@ -21,6 +23,7 @@ from pyLIQTR.gate_decomp.cirq_transforms import determine_gate_precision
 import copy
 
 from pyLIQTR.utils.resource_analysis import pylqt_t_complexity as t_complexity
+from pyLIQTR.circuits.operators.AddMod import AddMod as pyLAM
     
 
 from enum import Enum
@@ -33,82 +36,74 @@ class Scheduler:
     A class for 'scheduling' a given circuit and returning execution time and a number of other gate and circuit analysis metrics. 
     """
     
-    def __init__(self,arch_description: dict, precision=1e-10, recursion_level=0, custom_gateset=None, decomposition_protocol=decomposition_protocol.recursive, context=None, qasm_input=False, qasm_output=False):
+    def __init__(self, architecture_params: architecture, precision=5e-6, recursion_level=0, decomposition_protocol=decomposition_protocol.recursive, context=None, qasm_input=False, qasm_output=False):
 
         '''
         :param int global_time: tracks time as instructions execute and finish.
-        :param dict arch_description: a dictionary with gate resource entries either of the form {'Max T': # available to be executed simultaneously} or {gate type (cirq.Gate object or similar): desired execution time}. Should also include an entry for each qubit in the circuit of the form {qX: 1}.
+        :param dict architecture_params: an architecture class object.
         :param list ready_q: list of instructions most recently pulled from the DAG. These instructions could potentially be executed but have not yet been checked for qubit/resource availability.
         :param list execution_q: list of instructions that will be next to execute. These instructions have been checked for qubit/resource availability.
         :param list free_q: list of instructions most recently executed.
         :param int cycle: Denotes the number of 'scheduler cycles' completed: [instructions pulled from the DAG, instructions executed, instructions freed] is one cycle.
         :param int t_depth: keeps track of the number of timesteps which include a T-gate.
         :param dict t_width: a distribution of the number of T-gates occuring within a single timestep.
+        :param dict t_proportion: a distribution of the proportion of T-gates to all other gates within a single timestep.
+        :param dict step_tracking: the number of Clifford gates and number of T-gates in each scheduler cycle.
         :param list qubits: list of all qubits which have been encountered during scheduling. This includes ancilla generated during recursion.
         :param dict active_qubits: a distrubtion of the number of qubits being acted on within a single timestep.
         :param float precision: decomposition precision used to decompose rotation gates into T gates.
-        :param int t_time: how many timesteps a single T-gate takes to execute.
         :param dict gate_profile: a dictionary tracking each type of gate to be counted and how many times it occurs.
         :param dict op_cache: if hierarchical or recursive decomposition is being used, this dictionary caches the execution time, gate counts, qubit counts, etc. for individual operators to be used when the operator is encountered again.
         :param int recursion_level: how many levels down from the defined top level the recursive decomposition has gone. Only applicable when recursive decomposition is being used.
-        :param list custom_gateset: a user-input list defining which gates should be decomposed and which should be treated as ground-level operations and counted in gate_profile. If None, the default gateset will be used.
         :param bool rotations_allowed: if True, rotations will not be deocomposed into T-gates, but rather counted in the 'Rotation' entry of gate_profile. If False, rotations will be decomposed using rotations_to_t.
         :param cirq.DecompositionContext context: cirq decomposition context.
         '''
         self.global_time = 0
-        self.arch = arch_description
+        self.arch = architecture_params
+        self.arch_copy = copy.deepcopy(architecture_params)
         self.ready_q = []
         self.execution_q = []
         self.free_q = []
         self.cycle = 0
         self.t_depth = 0
         self.t_width = {}
-        self.qubits = []
+        self.t_proportions = {}
+        self.step_tracking = {}
+        self.qubits = {}
         self.active_qubits = {}
+        self.idle_qubits = {}
+        self.idles = 0
         self.precision = precision
-        self.t_time = 1
-        self.toffoli_time = 3
         self.gate_profile = {}
         self.op_cache = {}
         self.recursion_level = recursion_level
         self.decomposition_protocol = decomposition_protocol
-        self.custom_gateset = custom_gateset
-        self.rotations_allowed = True
+        self.rotations_allowed = False
         self.qasm_input = qasm_input
         self.qasm_output = qasm_output
         self.context = context
         if self.context is None:
-            self.context = cirq.DecompositionContext(gam.gam)
-
-        self.t = 0
+            new_gam = gam.gam
+            new_gam.reset()
+            self.context = cirq.DecompositionContext(new_gam)
         
         #initialize gate counting dict
-        if self.custom_gateset is not None:
-            for set in self.custom_gateset:
-                self.gate_profile[set[-1]] = 0
-        else:
-            self.gate_profile = {
-                'T': 0,
-                'H': 0,
-                'S': 0,
-                'CX': 0,
-                'CZ': 0,
-                'Pauli (X, Y, Z)': 0,
-                'Rotation': 0,
-                'Toffoli': 0 
-            }
+        if self.arch is None:
+            self.arch = architecture()
+    
+        for set in self.arch.gateset:
+            self.gate_profile[set.name()] = 0
+        if sets.ROT in self.arch.gateset:
+            self.rotations_allowed = True
 
         if self.qasm_input == True:
             self.gate_profile['Other'] = 0
             self.gate_profile['CY'] = 0
             self.gate_profile['CS'] = 0
 
+        self.arch.precision = self.precision
+    
 
-        #check if there's a limit on simultaneous T gates
-        if 'Max T' in self.arch:
-            self.t_allowance = self.arch['Max T']
-        else:
-            self.t_allowance = None
 
 
 
@@ -131,16 +126,9 @@ class Scheduler:
             circuit = cirq.Circuit(inst._op)
 
             r_DAG = DAG(max_moments=1000000)
-
-            all_resource_config = {}
-            for qubit in circuit.all_qubits():
-                all_resource_config[qubit] = 1
-            if 'Execution Times' in self.arch:
-                all_resource_config['Execution Times'] = self.arch['Execution Times']
-            if 'Max T' in self.arch:
-                all_resource_config['Max T'] = self.arch['Max T']
-                
-            r_Sched = Scheduler(all_resource_config, recursion_level=(self.recursion_level+1), custom_gateset=self.custom_gateset, context=self.context, decomposition_protocol=self.decomposition_protocol)
+            r_arch = copy.deepcopy(self.arch_copy)
+            right_context = isinstance(self.context.qubit_manager, gam.GlobalQubitManager)
+            r_Sched = Scheduler(architecture_params=r_arch, recursion_level=(self.recursion_level+1), context=self.context, decomposition_protocol=self.decomposition_protocol)
                 
             def convertMe(circuit, decomp_level=None):
                 #A deep copy MUST be done here in order to keep qubit naming conventions consistent.
@@ -149,12 +137,15 @@ class Scheduler:
             #assuming op is in defined gateset, whether default or custom:
             try:
                 for q in circuit.all_qubits():
-                    r_Sched.qubits.append(q)
+                    r_Sched.qubits[q] = 1
                 try:
                     for op in convertMe(circuit, decomp_level=1):
                         for q in op.qubits:
                             if q not in r_Sched.qubits:
-                                r_Sched.qubits.append(q)  
+                                r_Sched.qubits[q] = 1  
+                        #we must reserve qubits if theyre ancilla, so they dont get reused and cause duplicate qid errors
+                        if right_context:
+                            self.context.qubit_manager.reserve_qubits(op.qubits, level=(self.recursion_level+1))
                         if r_DAG.full():
                             r_DAG.finish()
                             while r_Sched.schedule(r_DAG):
@@ -162,16 +153,19 @@ class Scheduler:
                             global_time += r_Sched.global_time
                             r_DAG.dependency_log.clear()
                             r_DAG.dag_cycle += 1
-                        r_DAG.add_dependency(CirqInstruction(op, custom_gateset=self.custom_gateset))
+                        r_DAG.add_dependency(CirqInstruction(op, custom_gateset=self.arch.gateset))
 
                     r_DAG.finish()
                     while r_Sched.schedule(r_DAG):
                         pass
-    
+
+                    if right_context:
+                        self.context.qubit_manager.unlock_qubits(level=(self.recursion_level+1))
                     results_dict = {
                     'Execution time': r_Sched.global_time,
                     'T-depth': r_Sched.t_depth,
                     'T-width': r_Sched.t_width,
+                    'T-proportion': r_Sched.t_proportions,
                     'Gates': r_Sched.gate_profile,
                     'Qubits': r_Sched.qubits,
                     'Active Qubits': r_Sched.active_qubits,
@@ -181,7 +175,7 @@ class Scheduler:
                     self.op_cache[inst] = [results_dict, 1]
                     for q in results_dict['Qubits']:
                         if q not in self.qubits:
-                            self.qubits.append(q)
+                            self.qubits[q] = 1
                     for op in results_dict['Cache']:
                         if op not in self.op_cache:
                             self.op_cache[op] = results_dict['Cache'][op]
@@ -201,6 +195,7 @@ class Scheduler:
 
     def hierarchy_routine(self, inst:CirqInstruction):
         #check if it's in the cache already
+        
         found = False
         for op in self.op_cache:
             if found == False:
@@ -215,17 +210,10 @@ class Scheduler:
             circuit = cirq.Circuit(inst._op)
 
             #pull in all of the resource configuration parameters from the top-level scheduler
-            all_resource_config = {}
-            for qubit in circuit.all_qubits():
-                all_resource_config[qubit] = 1
-            if 'Execution Times' in self.arch:
-                all_resource_config['Execution Times'] = self.arch['Execution Times']
-            if 'Max T' in self.arch:
-                all_resource_config['Max T'] = self.arch['Max T']
-
             #initialize DAG, scheduler, and context
             r_DAG = DAG(max_moments=1000000)
-            r_Sched = Scheduler(arch_description=all_resource_config, recursion_level=0, custom_gateset=self.custom_gateset, context=self.context, decomposition_protocol=self.decomposition_protocol)
+            r_arch = architecture
+            r_Sched = Scheduler(architecture_params=self.arch, recursion_level=0, context=self.context, decomposition_protocol=self.decomposition_protocol)
 
             #same procedure as a full decomposition at the top level to get circuit in terms of basic gates
             level = 0
@@ -235,21 +223,21 @@ class Scheduler:
                 circuit = circuit_decompose_multi(circuit, 1, context=self.context)
                 for q in circuit.all_qubits():
                     if q not in r_Sched.qubits:
-                        r_Sched.qubits.append(q)
+                        r_Sched.qubits[q] = 1
                 level += 1
 
             #same procedure as schedule_circuit
             for op in circuit.all_operations():
                 for q in op.qubits:
                     if q not in r_Sched.qubits:
-                        r_Sched.qubits.append(q)  
+                        r_Sched.qubits[q] = 1  
                 if r_DAG.full():
                     r_DAG.finish()
                     while r_Sched.schedule(r_DAG):
                         pass
                     r_DAG.dependency_log.clear()
                     r_DAG.dag_cycle += 1
-                r_DAG.add_dependency(CirqInstruction(op, custom_gateset=self.custom_gateset))
+                r_DAG.add_dependency(CirqInstruction(op, custom_gateset=self.arch.gateset))
 
             r_DAG.finish()
             while r_Sched.schedule(r_DAG):
@@ -259,6 +247,7 @@ class Scheduler:
                 'Execution time': r_Sched.global_time,
                 'T-depth': r_Sched.t_depth,
                 'T-width': r_Sched.t_width,
+                'T-proportion': r_Sched.t_proportions,
                 'Gates': r_Sched.gate_profile,
                 'Qubits': r_Sched.qubits,
                 'Active Qubits': r_Sched.active_qubits,
@@ -268,7 +257,7 @@ class Scheduler:
             self.op_cache[inst] = [results_dict, 1]
             for q in results_dict['Qubits']:
                 if q not in self.qubits:
-                    self.qubits.append(q)
+                    self.qubits[q] = 1
             #throw all of our results for this op into our overall cache
             setattr(inst, 'cached_schedule', results_dict)
             return inst.cached_schedule['Execution time']
@@ -283,30 +272,33 @@ class Scheduler:
         '''
         
         #if it's a rotation, we assume user just wants rotations decomposed into T gates
-        if str(inst)[:2] in sets.ROT:
+
+        inst_str = str(inst)
+        if inst.gateset == sets.ROT:
             inst.complex = False
             self.rotations_allowed = False
-            if inst.get_clifford_t() == (None,None):
-                sub_gates = self.rotation_to_t(self.precision)
-            else:
-                sub_gates = inst.get_clifford_t()[0]
-            return sub_gates*self.t_time
+            sub_gates = self.rotation_to_t(inst, self.precision)
+            cliff_time = self.arch.__getitem__('H', global_time=self.global_time)
+            t_time = self.arch.__getitem__('T', global_time=self.global_time)
+            total_rotation_time = (cliff_time * sub_gates[0]) + (t_time * sub_gates[1])
+
+            return total_rotation_time
         
-         #check if it's one of our common excepted bloqs
-        if str(inst).startswith("Allocate") or str(inst).startswith('Free'):
+        #check if it's one of our common excepted bloqs
+        if inst_str.startswith("Allocate") or inst_str.startswith('Free'):
             results_dict = {
                     'Execution time': 0,
                     'T-depth': 0,
                     'T-width': {},
+                    'T-proportion': {},
                     'Gates': {'T': 0,
-                            'Rotation': 0,
                             'H': 0,
                             'S': 0, 
                             'CX': 0,
                             'CZ': 0,
                             'Toffoli': 0,
                             'Pauli (X, Y, Z)': 0,
-                            'Unknown': 0},
+                            'Measurement/Reset': 0},
                     'Qubits': inst.qubits,
                     'Executions': {},
                     'Cache': {}
@@ -317,34 +309,41 @@ class Scheduler:
                     
         #check if it's a basic instruction that was left out of a custom gateset
         basic = False
-        for set in [sets.T, sets.H, sets.S, sets.CX, sets.CZ, sets.PAULI, sets.CCX, sets.MISC]:
-            if str(inst)[:2] in set:
-                basic = True
+        if inst.gateset is not None:
+            basic = True
         #if it's not a basic instruction, then it either doesn't have a decomposition (not the user's fault) and/or it wasn't included in the custom gateset (user's fault)
         if basic==False:
             #if there's a custom gateset definied, we can't use our t complexity method because the custom gateset might not be in terms of t-rot-cliff. tell the user to fix it
-            if self.custom_gateset is not None:
+            if self.arch.gateset != [sets.T, sets.H, sets.S, sets.CX, sets.CCX, sets.CZ, sets.PAULI, sets.MISC]:
                 raise TypeError(f'{inst._op} does not have a defined decomposition and is not included in custom gateset.')
+            
+            if inst_str.startswith('ModAddK'):
+                qbs = inst._op.qubits
+                replacement_op = pyLAM(bitsize=inst._op.gate.bitsize, add_val=inst._op.gate.add_val, \
+                           mod=inst._op.gate.mod,cvs=inst._op.gate.cvs).on(*qbs)
+                inst._op = replacement_op
+                ex_time = self.recursion_routine(inst)
+                return ex_time
             #otherwise, we're gonna try to fix it
-            warnings.warn(f'{inst._op} does not have a defined decomposition- defaulting to defined T-Complexity. Scheduling results will not represent the most efficient circuit possible.')
+            #warnings.warn(f'{inst._op} does not have a defined decomposition- defaulting to defined T-Complexity. Scheduling results will not represent the most efficient circuit possible.')
             #basically the procedure here is grab the t-complexity (which ideally exists but we'll check for that), use those counts to sub for our gate counts and execution time, cache that result so we don't have to go through this again, and move on. 
             counts = t_complexity(inst._op)
             #oh no!!! qualtran didn't define a t_complexity for this operator??? shocker. set everything to 0, warn the user that the results aren't gonna be right, and move on.
             if counts.clifford<=0 and counts.rotations<=0 and counts.t<=0:
-                warnings.warn(f'{inst._op} does not have a defined T-Complexity. Operator will be skipped.')
+                #warnings.warn(f'{inst._op} does not have a defined T-Complexity. Operator will be skipped.')
                 results_dict = {
                     'Execution time': 0,
                     'T-depth': 0,
                     'T-width': {},
+                    'T-proportion': {},
                     'Gates': {'T': 0,
-                            'Rotation': 0,
                             'H': 0,
                             'S': 0, 
                             'CX': 0,
                             'CZ': 0,
                             'Toffoli': 0,
                             'Pauli (X, Y, Z)': 0,
-                            'Unknown': 0},
+                            'Measurement/Reset': 0},
                     'Qubits': inst.qubits,
                     'Executions': {},
                     'Cache': {}
@@ -353,40 +352,30 @@ class Scheduler:
                 inst.cached_schedule = results_dict
                 return 0
 
+            sub_gates = self.rotation_to_t(inst, precision=self.precision)
+
             gate_profile = {
-                'T': counts.t,
-                'Rotation': counts.rotations,
-                'H': 0,
+                'T': counts.t + (sub_gates[1] * counts.rotations),
+                'H': counts.clifford + (sub_gates[0] * counts.rotations),
                 'S': 0, 
                 'CX': 0,
                 'CZ': 0,
                 'Toffoli': 0,
-                'Pauli (X, Y, Z)': counts.clifford,
-                'Unknown': 0
+                'Pauli (X, Y, Z)': 0,
+                'Measurement/Reset': 0
             }
 
-            t_time = 0
-            rot_time = 0
-            cliff_time = 0
-            if 'Execution Times' in self.arch:
-                time_dict = self.arch['Execution Times']
-                if 'T' in time_dict:
-                    t_time = time_dict['T']
-                if 'Rx' in time_dict or 'Ry' in time_dict or 'Rz' in time_dict:
-                    rot_time = time_dict['Rx']
-                if 'X' in time_dict or 'Y' in time_dict or 'Z' in time_dict:
-                    cliff_time = time_dict['X']
-            else:
-                t_time = 3
-                rot_time = 2
-                cliff_time = 1
-            ex_time = (t_time * gate_profile['T']) + (rot_time * gate_profile['Rotation']) + (cliff_time * gate_profile['Pauli (X, Y, Z)'])    
+            
+            t_time = self.arch.__getitem__('T', global_time=self.global_time)
+            cliff_time = self.arch.__getitem__('H', global_time=self.global_time)
+            ex_time = (t_time * gate_profile['T']) + (cliff_time * gate_profile['H'])    
 
             inst.complex = True
             results_dict = {
                     'Execution time': ex_time,
                     'T-depth': gate_profile['T'],
                     'T-width': {},
+                    'T-proportion': {},
                     'Gates': gate_profile,
                     'Qubits': inst.qubits,
                     'Executions': {},
@@ -406,6 +395,10 @@ class Scheduler:
         Given the instruction, assign an execution time for it. 
         """
         # is this a basic instruction or one that needs to be broken down?
+        if inst.gateset is not None:
+            time = self.arch.__getitem__(inst.gateset.name(), self.global_time)
+            return time
+        
         if inst.complex:
             if self.decomposition_protocol == decomposition_protocol.recursive:
                 ex_time = self.recursion_routine(inst)
@@ -413,30 +406,6 @@ class Scheduler:
                 ex_time = self.hierarchy_routine(inst)
             return ex_time
         
-        #now we're out of all the complex instruction stuff, everything below here is for basic instructions only.
-        # did the user define execution times for certain types of gates?
-        if 'Execution Times' in self.arch:
-            time_dict = self.arch['Execution Times']
-            for set in time_dict:
-                for type in set:
-                    if type in str(inst):
-                        if str(inst)[:2] in sets.T:
-                            self.t_time = time_dict[set]
-                        return time_dict[set]
-                    else:
-                        first_two = str(inst)[:2]
-                        if first_two in sets.T:
-                            return self.t_time
-            return len(inst.qubits)
-        # if they didn't, execution time is pretty arbitrary so we're just gonna generate some numbers
-        else:
-            first_two = str(inst)[:2]
-            if first_two in sets.T:
-                return self.t_time
-            elif first_two in sets.CCX:
-                return self.toffoli_time
-        
-            return len(inst.qubits)
     
 
     def resource_available(self, inst):
@@ -449,11 +418,29 @@ class Scheduler:
         # check each resource needed against the resources we've defined as available
         # if it's available or undefined(unlimited), return true
         for resource_type in resources_needed:
-            if resource_type in self.arch:
-                if self.arch[resource_type] >= resources_needed[resource_type]:
+            if resource_type in self.arch.limits:
+                if resource_type == 'Rotation':
+                    if 'Clifford' in self.arch.limits:
+                        cliff_type = 'Clifford'
+                    elif 'H' in self.arch.limits:
+                        cliff_type = 'H'
+                    if (self.arch.limits['T'] >= resources_needed[resource_type]) and (self.arch.limits[cliff_type] >= resources_needed[resource_type]):
+                        pass
+                    else:
+                        return False
+                else:
+                    if self.arch.limits[resource_type] >= resources_needed[resource_type]:
+                        pass
+                    else:
+                        return False
+            else:
+                if type(resource_type) == str:
                     pass
                 else:
-                    return False
+                    if self.qubits[resource_type] >= resources_needed[resource_type]:
+                        pass
+                    else:
+                        return False
         
         return availability
 
@@ -462,11 +449,21 @@ class Scheduler:
         Given an instruction, if the resources are available, remove them from the common pool. This essentially reserves them for the instruction's use until it has finished executing.
         """
         resources_needed = inst.resource_counts()
-        if self.resource_available(inst):
-            #if a resource is available, take it out of the available resources while in use.
-            for resource_type in resources_needed:
-                if resource_type in self.arch:
-                    self.arch[resource_type] -= resources_needed[resource_type]
+        for resource_type in resources_needed:
+            if resource_type in self.arch.limits:
+                if resource_type == 'Rotation':
+                    self.arch.limits['T'] -= resources_needed[resource_type]
+                    if 'Clifford' in self.arch.limits:
+                        self.arch.limits['Clifford'] -= resources_needed[resource_type]
+                    elif 'H' in self.arch.limits:
+                        self.arch.limits['H'] -= resources_needed[resource_type]
+                else:
+                    self.arch.limits[resource_type] -= resources_needed[resource_type]
+            else:
+                if type(resource_type) == str:
+                    pass
+                else:
+                    self.qubits[resource_type] -= resources_needed[resource_type]
 
 
 
@@ -475,10 +472,22 @@ class Scheduler:
         Given an instruction, determine which resources were being used by it during execution and return them to the common pool.
         """
         resources_used = inst.resource_counts()
+        #for each resource used by a completed instruction, re-add it to the available pool.
         for resource_type in resources_used:
-            #for each resource used by a completed instruction, re-add it to the available pool.
-            if resource_type in self.arch:
-                self.arch[resource_type] += resources_used[resource_type]
+            if resource_type in self.arch.limits:
+                if resource_type == 'Rotation':
+                    self.arch.limits['T'] += resources_used[resource_type]
+                    if 'Clifford' in self.arch.limits:
+                        self.arch.limits['Clifford'] += resources_used[resource_type]
+                    elif 'H' in self.arch.limits:
+                        self.arch.limits['H'] += resources_used[resource_type]
+                else:
+                    self.arch.limits[resource_type] += resources_used[resource_type]
+            else:
+                if type(resource_type) == str:
+                    pass
+                else:
+                    self.qubits[resource_type] += resources_used[resource_type]
 
 
     def populate_ready(self,dag: DAG):
@@ -497,7 +506,7 @@ class Scheduler:
                 pass
             else:
                 if node not in self.qubits:
-                    self.qubits.append(node)
+                    self.qubits[node] = 1
         
 
         for node in free_nodes:
@@ -532,7 +541,7 @@ class Scheduler:
                                         execution_time = self.assign_execution_time(inst))
                     self.execution_q.append(inst)
                     removed_insts.append(inst)
-
+        t = 0
         #clear ready queue
         for inst in removed_insts:
             self.ready_q.remove(inst)
@@ -581,7 +590,7 @@ class Scheduler:
                     for qubit in inst.qubits:
                         idx = self.qubits.index(qubit)
                         qubit_idxs.append(f'q[{idx}]')
-                    if str(inst)[:2] in sets.ROT:
+                    if inst.gateset == sets.ROT:
                         rotation_angle = (str(inst).split('(')[1]).split(')')[0]
                     else:
                         rotation_angle = None
@@ -603,54 +612,82 @@ class Scheduler:
         For each instruction that has just executed, determine how many qubits it used and update the active_qubits distribution. Determine how many T-gates were used and update T-width and T-depth accordingly.
         '''
         # gathering parallelism data
+        idle_qubits = 0
         active_qubits = 0
         for inst in insts:
             if type(inst) == CirqInstruction or type(inst) == OQInstruction:
                 qubits = len(inst.qubits)
                 active_qubits += qubits
-        if self.cycle ==0:
+                idle_qubits += (len(self.qubits) - qubits)
+
+        if self.cycle == 0:
             pass
         elif active_qubits in self.active_qubits:
             self.active_qubits[active_qubits] += 1
         else:
             self.active_qubits[active_qubits] = 1
 
+        if self.cycle == 0:
+            pass
+        elif idle_qubits in self.idle_qubits:
+            self.idle_qubits[idle_qubits] += 1
+        else:
+            self.idle_qubits[idle_qubits] = 1
+
         
         t_depth = [0] 
         t_width = 0
+        cliff_width = 0
+        t_from_rotation_total = 0
+        num_rotations = 0
         for inst in insts:
-            # complex?
-            if getattr(inst, 'complex', False):
-                #pull t-depth and t-width from cache
-                t_depth.append(inst.cached_schedule['T-depth'])
-                self.t_width.update(inst.cached_schedule['T-width'])
-            # not complex?
-            elif getattr(inst, '_op', False):
-                first_two = str(inst)[:2]
-                # if op is a rotation, break down into t-gates, update t-depth and t-width accordingly
-                if first_two in sets.ROT and self.rotations_allowed == False:
-                    t_width += 1
-                    # if we have a restriciton on how many t-gates can execute simultaneously, add all t-gates
-                    # to t-depth.
-                    if self.t_allowance is not None:
-                        if inst.get_clifford_t() == (None,None):
-                            t_per_rot = self.rotation_to_t(self.precision)
-                        else:
-                            t_per_rot = inst.get_clifford_t()[0]
-                        t_depth.append(int(t_per_rot))
-                    # if there's no restriciton on t-gates, just add one to t-depth.
-                    else:
+            if getattr(inst, '_op', False):
+                if inst.gateset is not None:
+                    if inst.gateset == sets.ROT and self.rotations_allowed == False:
+                        t_width += 1
+                        # if we have a restriciton on how many t-gates can execute simultaneously, add all t-gates
+                        # to t-depth.
+                        t_per_rot = self.rotation_to_t(inst,self.precision)
+                        t_from_rotation_total += int(t_per_rot[1])
+                        num_rotations += 1
+                    # if op is a t-gate, add one to t-depth and t-width.
+                    elif inst.gateset == sets.T:
                         t_depth.append(1)
-                # if op is a t-gate, add one to t-depth and t-width.
-                elif first_two in sets.T:
-                    t_depth.append(1)
-                    t_width += 1
+                        t_width += 1
+                    else:
+                        cliff_width += 1
+                # complex?
+                elif getattr(inst, 'complex', False) :
+                    #pull t-depth and t-width from cache
+                    t_depth.append(inst.cached_schedule['T-depth'])
+                    self.t_proportions.update(inst.cached_schedule['T-proportion'])
+                    self.t_width.update(inst.cached_schedule['T-width'])
+        
             self.execution_q.remove(inst)
         self.t_depth += np.max(t_depth)
+
+        if num_rotations != 0:
+            depth_from_rotations = t_from_rotation_total / self.arch.limits['T']
+            if depth_from_rotations >= t_from_rotation_total / num_rotations:
+                self.t_depth += (depth_from_rotations - np.max(t_depth))
+            else:
+                self.t_depth += ((t_from_rotation_total / num_rotations) - np.max(t_depth))
+
         if t_width in self.t_width:
             self.t_width[t_width] += 1
         else:
             self.t_width[t_width] = 1
+
+        if (t_width + cliff_width) != 0:
+            t_proportion = round(t_width/(t_width + cliff_width), 2)
+        else:
+            t_proportion = 0
+        if t_proportion in self.t_proportions:
+            self.t_proportions[t_proportion] += 1
+        else:
+            self.t_proportions[t_proportion] = 1
+        
+        self.step_tracking[self.cycle] = (cliff_width, t_width)
 
 
         
@@ -658,73 +695,56 @@ class Scheduler:
         '''
         For each instruction that has just executed, either pull its cached gate counts and add them to the total or classify it as one of the gates in the defined gateset.
         '''
+        total_qubits_used = 0
         for inst in insts:
             # is it an op?
             if getattr(inst, '_op', False):
+                total_qubits_used += len(inst.qubits)
                 # is it a basic or complex op?
-                if inst.complex:
-                    # pull gate counts for complex op from its cache
-                    for type in self.gate_profile:
-                        self.gate_profile[type] += inst.cached_schedule['Gates'][type]
-
-                # not complex:
-                else:
+                if inst.gateset is not None:
                     op = inst._op
                     if isinstance(op, cirq.ClassicallyControlledOperation):
                         op = op.without_classical_controls()
                     first_two = str(inst)[:2]
                     # classify op into one of the basic gate sets, add to count
                     # check if rotations are allowed or need to be decomposed
-                    if first_two in sets.ROT:
+                    if inst.gateset == sets.ROT:
                         if self.rotations_allowed:
                             self.gate_profile['Rotation'] += 1
                         else:
-                            if inst.get_clifford_t() == (None,None):
-                                sub_t = self.rotation_to_t(self.precision)
-                                clifford = None
-                            else:
-                                sub_t = inst.get_clifford_t()[0]
-                                clifford = inst.get_clifford_t()[1]
-                            if clifford is None:
-                                self.gate_profile['T'] += sub_t
+                            sub_gates = self.rotation_to_t(inst, precision=self.precision)
+                            self.gate_profile['T'] += sub_gates[1]
+                            try:
+                                self.gate_profile['H'] += sub_gates[0]
+                            except KeyError:
                                 try:
-                                    self.gate_profile['H'] += 2*sub_t + 1
+                                    self.gate_profile['Clifford'] += sub_gates[0]
                                 except KeyError:
-                                    try:
-                                        self.gate_profile['Clifford'] += 2*sub_t + 1
-                                    except KeyError:
-                                        raise TypeError('Either a general "Clifford" category or individual Clifford-type categories must be included in this gateset in order to properly decompose rotations.')
-                            else:
-                                if 'Clifford' not in self.gate_profile:
-                                    self.gate_profile['Clifford'] = 0
-                                self.gate_profile['Clifford'] += clifford
-
-                            
+                                    raise TypeError('Either a general "Clifford" category or individual Clifford-type categories must be included in this gateset in order to properly decompose rotations.')
+                                
                     else:
                         # this 'added' flag is so that, in the event that an op could be classified into two of the sets in a custom gateset,
                         #ex: if CX and CLIFFORD are specified, it only gets counted for the first set listed
                         added = False
                         #custom gateset
-                        if self.custom_gateset is not None:
-                            for set in self.custom_gateset:
-                                if added == False:
-                                    if first_two in set:
-                                        self.gate_profile[set[-1]] += 1
-                                        added = True
-                        
-                        #default gateset        
-                        else: 
-                            if self.qasm_input == False:       
-                                for set in [sets.T, sets.H, sets.S, sets.CX, sets.CCX, sets.CZ, sets.PAULI]:
-                                    if first_two in set:
-                                        if set == sets.CCX:
-                                            warnings.warn("Scheduler assumes unlimited Toffoli usage. Realistic Toffoli generation will be added soon.")
-                                        self.gate_profile[set[-1]] += 1
-                            else:
-                                for set in [sets.T, sets.H, sets.S, sets.CX, sets.CY, sets.CZ, sets.CS, sets.PAULI, sets.CCX, sets.QASMMISC, sets.ROT]:
-                                    if first_two in set:
-                                        self.gate_profile[set[-1]] += 1
+                        for set in self.arch.gateset:
+                            if added == False:
+                                if set.in_gateset(first_two):
+                                    self.gate_profile[set.name()] += 1
+                                    added = True
 
+                elif inst.complex:
+                    # pull gate counts for complex op from its cache
+                    for type in self.gate_profile:
+                        self.gate_profile[type] += inst.cached_schedule['Gates'][type]
+
+                            
+                    
+
+        num_idles = len(self.qubits) - total_qubits_used
+        self.idles += num_idles
+                        
+                            
         
     def schedule(self,dag: DAG):
         """
@@ -758,43 +778,48 @@ class Scheduler:
         while len(self.execution_q) != 0:
             self.free_instructions(dag)
 
+        self.arch.reset()
+
         #if the DAG has pulled all it can from the circuit, this will return False
         return self.populate_ready(dag)
     
 
-    def rotation_to_t(self, precision):
+    def rotation_to_t(self, inst, precision):
         '''
         Decompose rotations into T-gates at a given precision.
         '''
-        random.seed(0)
-        T_from_single_rotation = int(random.gauss(
-                T_COUNT_SLOPE * np.log2(1 / precision) + T_COUNT_CONST,
-                T_COUNT_STD_DEV,
-            ))
-        return T_from_single_rotation
+        if str(inst).startswith(('Rx_d', 'Ry_d', 'Rz_d')):
+            cliff = inst._op.gate.get_gate().get_Clifford_count()
+            t = inst._op.gate.get_gate().get_T_count()
+            return (cliff, t)
+
+        else:
+            random.seed(0)
+            t = int(random.gauss(
+                    T_COUNT_SLOPE * np.log2(1 / precision) + T_COUNT_CONST,
+                    T_COUNT_STD_DEV,
+                ))
+            cliff = (t * 2) + 1
+            return (cliff, t)
         
 
 
 import time
 
-def schedule_circuit(circuit, architecture_config:dict = None, full_profile=False, \
-					decomp_level = 0, context = None, custom_gateset = None, rotation_gate_precision = 1e-3, decomposition_protocol=decomposition_protocol.recursive, qasm_output=False, display_op_cache=False):
+def schedule_circuit(circuit, architecture_config:architecture = None, full_profile=False, \
+					decomp_level = 0, context = None, rotation_gate_precision = 5e-6, decomposition_protocol=decomposition_protocol.recursive, qasm_output=False, display_op_cache=False, instance_name=None, json_output_filename=None):
     '''
     This function is the main interface with the Scheduler, DAG, and Instruction classes. 
     
     :param cirq.Circuit circuit: a cirq.Circuit object to be scheduled. (Other circuit formats will be supported in the future.)
 
-    :param dict architecture_config: a dictionary specifying timing for various gate types and restrictions on how many T gates can operate simultaneously. This dictionary must be of the form 
-        `{'Execution Times': {('Gate 1',): Time X, ('Gate 2', 'Gate 3'): Time Y}, 'Max T': Z # of simultaneous T-gates allowed}`.
+    :param dict architecture_config: an architecture class object.
 
     :param bool full_profile: bool specifying whether results should include gate counts and (if applicable) parallelism analysis. If False, only circuit execution time, T-depth, and total number of qubits used will be included in results.
 
     :param int decomp_level: levels of decomposition implemented before scheduling. If set to `0`, each operator will be decomposed to one/two-qubit gates only on its first occurance and cached for each future occurance. If set to `'Full'`, entire circuit will be decomposed to one/two-qubit gates before scheduling.
 
     :param cirq.DecompositionContext context: cirq decomposition context to be used.
-
-    :param list custom_gateset: a list specifying which gates to include in analysis. This list must be of the form
-            `['first two characters of gate 1', 'first two characters of gate 2', ... 'Name of gateset']`. We recommend checking 'scheduling_examples.ipynb' for further details on this feature.
     
     :param float rotation_gate_precision: precision used to decompose rotations into T-gates.
 
@@ -804,9 +829,13 @@ def schedule_circuit(circuit, architecture_config:dict = None, full_profile=Fals
 
     :param bool display_op_cache: whether details about cached operators and their occurrances should be printed to screen.
 
+    :param str instance_name: if set, results dictionary will include an 'Instance name' key.
+
+    :param str json_output_filename: if set, results will write to JSON file named according to input string.
+
     Returns:
 
-    :param dict results: a dictionary including 'Total time for execution', 'Circuit T-depth', and 'Number of qubits used'. If `full_profile` == True, this dictionary will also include 'Gate profile'. If `full_profile` == True AND `decomp_level` == 'Full', 'Active qubit distribution' and 'T-widths' will be included as well.
+    :param dict results: a dictionary including 'Total time for execution', 'Circuit T-depth', and 'Number of qubits used'. If `full_profile` == True, this dictionary will also include 'Gate profile'. If `full_profile` == True AND `decomp_level` == 'Full', 'Active qubit distribution', 'T-widths', 'T-proportion', and 'Clifford/T ratio' will be included as well.
         
     '''
 
@@ -815,19 +844,18 @@ def schedule_circuit(circuit, architecture_config:dict = None, full_profile=Fals
 
         if type(circuit) == str:
             circuit = circuit.splitlines()
+
+        mySched = Scheduler(architecture_params=None, qasm_input=True, qasm_output=qasm_output)
         
-        resource_config = {}
-        if architecture_config:
-            resource_config.update(architecture_config)
         myDAG = DAG(max_moments=1000000)
         for op in circuit:
             inst = OQInstruction(operation=op)
             for qubit in inst.qubits:
-                resource_config[qubit] = 1
+                mySched.qubits[qubit] = 1
             myDAG.add_dependency(inst)
 
         myDAG.finish()
-        mySched = Scheduler(arch_description=resource_config, qasm_input=True, qasm_output=qasm_output)
+        
         while mySched.schedule(myDAG):
             pass
         
@@ -837,7 +865,8 @@ def schedule_circuit(circuit, architecture_config:dict = None, full_profile=Fals
         'Number of qubits used': len(mySched.qubits),
         'Gate profile': mySched.gate_profile,
         'Active qubit distribution': mySched.active_qubits,
-        'T-widths': mySched.t_width
+        'T-widths': mySched.t_width,
+        'T-proportion': mySched.t_proportions
         }
 
         return results_dict
@@ -845,9 +874,12 @@ def schedule_circuit(circuit, architecture_config:dict = None, full_profile=Fals
 
     elif type(circuit) == cirq.Circuit:
 
+        
         if context is None:
             #context = cirq.DecompositionContext(cirq.SimpleQubitManager())
-            context = cirq.DecompositionContext(gam.gam)
+            new_gam = gam.gam
+            new_gam.reset()
+            context = cirq.DecompositionContext(new_gam)
     
         rotation_allowed = True
         def convertMe(circuit, decomp_level=None):
@@ -856,32 +888,35 @@ def schedule_circuit(circuit, architecture_config:dict = None, full_profile=Fals
             for op in generator_decompose(circuit, keep=keep, on_stuck_raise = None, context=tcontext,max_decomposition_passes=decomp_level):
                 yield op
     
-        #compile config dict from user input and all circuit qubits
-        all_resource_config = {}
-        for qubit in circuit.all_qubits():
-            all_resource_config[qubit] = 1
-        if architecture_config:
-            all_resource_config.update(architecture_config)
+
+        if (decomposition_protocol == decomposition_protocol.recursive) and not (isinstance(context.qubit_manager,gam.GlobalQubitManager) or isinstance(context.qubit_manager, cirq.SimpleQubitManager)):
+            raise ValueError('Due to the nature of the recursive scheduling, we need additional control over the ancilla management. Therefore, you must use the global qubit manager (pyLIQTR.utils.global_ancilla_manager) or simple qubit manager (cirq.SimpleQubitManager)')
+        elif isinstance(context.qubit_manager,gam.GlobalQubitManager):
+            context.qubit_manager.reset()
 
         #initialize scheduler
-        mySched = Scheduler(all_resource_config, custom_gateset=custom_gateset, precision=rotation_gate_precision, decomposition_protocol=decomposition_protocol, qasm_output=qasm_output)
-        if custom_gateset is not None:
-            decomp_level = 0
+        mySched = Scheduler(architecture_params=architecture_config, precision=rotation_gate_precision, decomposition_protocol=decomposition_protocol, qasm_output=qasm_output, context=context)
 
         #if decomp is full, we decompose BEFORE scheduling    
         parallelism_results = False
         if decomp_level == 'Full':
             level = 0
             prev_decomp = None
+            """
             while circuit != prev_decomp:
                 prev_decomp = circuit
                 circuit = circuit_decompose_multi(circuit, 1, context=context)
                 for q in circuit.all_qubits():
                     if q not in mySched.qubits:
-                        mySched.qubits.append(q)
+                        mySched.qubits[q] = 1
                 level += 1
 
             print(f"Decomposition levels to basic gates: {level}.")
+            """
+            circuit = cirq.Circuit([op for op in generator_decompose(circuit, keep=keep, on_stuck_raise = None, context=context)])
+            for q in circuit.all_qubits():
+                if q not in mySched.qubits:
+                    mySched.qubits[q] = 1
             decomp_level = 0
             parallelism_results = True
     
@@ -893,7 +928,7 @@ def schedule_circuit(circuit, architecture_config:dict = None, full_profile=Fals
         for op in convertMe(circuit, decomp_level=decomp_level):
             for q in op.qubits:
                 if q not in mySched.qubits:
-                    mySched.qubits.append(q)
+                    mySched.qubits[q] = 1
             if myDAG.full():
                 myDAG.finish()
                 while mySched.schedule(myDAG):
@@ -901,7 +936,7 @@ def schedule_circuit(circuit, architecture_config:dict = None, full_profile=Fals
                 global_time += mySched.global_time
                 myDAG.dependency_log.clear()
                 myDAG.dag_cycle += 1
-            myDAG.add_dependency(CirqInstruction(op, custom_gateset=custom_gateset))
+            myDAG.add_dependency(CirqInstruction(op))
     
         myDAG.finish()
         while mySched.schedule(myDAG):
@@ -912,22 +947,102 @@ def schedule_circuit(circuit, architecture_config:dict = None, full_profile=Fals
     
         results_dict = {
             'Total time for execution': global_time,
-            'Circuit T-depth': mySched.t_depth,
-            'Number of qubits used': len(mySched.qubits)
+            'Circuit T-depth': int(mySched.t_depth),
+            'Number of qubits used': len(mySched.qubits),
+            'Gate profile': mySched.gate_profile
         }
 
         if full_profile:
-            results_dict['Gate profile'] = mySched.gate_profile
             #parallelism results will only be reported if decomp_level='Full'. otherwise they get pretty mangled by the recursion
             if parallelism_results: 
                 results_dict['Active qubit distribution'] = mySched.active_qubits
                 results_dict['T-widths'] = mySched.t_width
+                results_dict['T-proportion'] = mySched.t_proportions
+                results_dict['Clifford/T ratios'] = mySched.step_tracking
             if decomposition_protocol == decomposition_protocol.hierarchical:
                 results_dict['T-widths'] = mySched.t_width
+                results_dict['T-proportion'] = mySched.t_proportions
+
+        if instance_name is not None:
+            results_dict['Instance name'] = instance_name
 
         if display_op_cache:
             for op in mySched.op_cache:
+                op_str = str(op._op.gate)
                 print(f'{op._op.gate} occurred {mySched.op_cache[op][1]} times and had the following cached results: Execution time: {mySched.op_cache[op][0]["Execution time"]}, T-depth: {mySched.op_cache[op][0]["T-depth"]}, Gates: {mySched.op_cache[op][0]["Gates"]}, Qubits: {len(mySched.op_cache[op][0]["Qubits"])}.')
+
+        if json_output_filename is not None:
+            if instance_name is None:
+                results_dict['Instance name'] = json_output_filename
+            json_dict = results_dict.copy()
+
+            if architecture_config is None:
+                json_dict['Input parameters'] = {
+                    'Gate times': {
+                        'T': str([state_factory(production_time=100, consumption_time=100, production_limit=10, success_prob=0.7)]),
+                        'H': 100,
+                        'S': 100,
+                        'CX': 200,
+                        'CZ': 200,
+                        'Toffoli': str([state_factory(production_time=200, consumption_time=300, production_limit=10, success_prob=0.7)]),
+                        'Pauli (X, Y, Z)': 100,
+                        'Measurement/Reset': 100 
+                    },
+                    'Max simultaneous T-gates': 20,
+                    'Factory Configurations': {
+                        'T': {
+                            'Production time': 100,
+                            'Consumption time': 100,
+                            'Production limit': 10,
+                            'Success probability': 0.7
+                        },
+                        'Toffoli': {
+                            'Production time': 200,
+                            'Consumption time': 300,
+                            'Production limit': 10,
+                            'Success probability': 0.7
+                        }
+                    }
+                }
+            else:
+                json_dict['Input parameters'] = {
+                    'Gate times': {},
+                    'Max simultaneous T-gates': architecture_config.limits['T'],
+                    'Factory Configurations': {}
+                }
+                
+
+                for gate_type in architecture_config.standard_times:
+                    json_dict['Input parameters']['Gate times'][gate_type] = str(architecture_config.standard_times[gate_type])
+                    if type(architecture_config.standard_times[gate_type]) == state_factory:
+                        factory = architecture_config.standard_times[gate_type]
+                        factory_params = {
+                            'Production time': factory.production_time,
+                            'Consumption time': factory.consumption_time,
+                            'Production limit': factory.production_limit,
+                            'Success probability': factory.success_prob
+                        }
+                        json_dict['Input parameters']['Factory Configurations'][gate_type] = factory_params
+                    elif type(architecture_config.standard_times[gate_type]) == list:
+                        factory_list = architecture_config.standard_times[gate_type]
+                        factory_params = {}
+                        factory_idx = 0
+                        for factory in factory_list:
+                            individual_factory_params = {
+                                'Production time': factory.production_time,
+                                'Consumption time': factory.consumption_time,
+                                'Production limit': factory.production_limit,
+                                'Success probability': factory.success_prob
+                            }
+                            factory_params[f'Factory {factory_idx} parameters'] = individual_factory_params
+                            factory_idx += 1
+                        json_dict['Input parameters']['Factory Configurations'][gate_type] = factory_params
+
+
+
+            with open(f"{json_output_filename}.json", "w") as outfile:
+                json.dump(json_dict, outfile, indent=4)
+
         return results_dict
     
 

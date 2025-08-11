@@ -1,8 +1,7 @@
 # Debugger
 
-The debugger is the most important tool to have to expediate testing and development of code. 
+The debugger is the most important tool to have to expediate testing and development of code.
 It allows the coder to quickly find and resolve bugs in the code.
-
 
 ## Configuring pyliqtr to be debugged
 
@@ -13,35 +12,34 @@ To do setup the debugger do the following:
 2. On the nex GUI click the "launch.json" file link.
 3. Paste the following into the launch.json file (this file lives at the root project directory)
 
-{
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Python: Current File",
-            "type": "python",
-            "request": "launch",
-            "console": "integratedTerminal",
-            "module": "pytest",
-            "args": [
-                "-s",
-                "-m run_this_test"
-            ],
-            "justMyCode": false,
-            "env": {
-                "PYTHONPATH": "${workspaceRoot}"
+    {
+        // Use IntelliSense to learn about possible attributes.
+        // Hover to view descriptions of existing attributes.
+        // For more information, visit: <https://go.microsoft.com/fwlink/?linkid=830387>
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Python: Current File",
+                "type": "python",
+                "request": "launch",
+                "console": "integratedTerminal",
+                "module": "pytest",
+                "args": [
+                    "-s",
+                    "-m run_this_test"
+                ],
+                "justMyCode": false,
+                "env": {
+                    "PYTHONPATH": "${workspaceRoot}"
+                }
             }
-        }
-    ]
-}
+        ]
+    }
 
 4. Save the launch.json file.
 5. The GUI to the left will change and at the top, next to the "Run" triangle, there will be a dropdown with "Python: Current File (pyliqtr)" visible.
 
 If it was configured correctly you'll see the env for your main conda environment started and the Terminal session will automatically change to wherever pyliqtr lives.
-
 
 ## Configuring specific tests to be debugged
 
@@ -71,6 +69,15 @@ an example of a marked test is below:
         assert len(settings_obj.amplitude_list) == len(settings_obj.bias_list)
         assert all([settings_obj.amplitude_list[n] == 1.5 for n in range(2)])
 
+## Writing notebook unit tests
+
+We now have the ability to use `testbook` to create unit test that will run the notebooks and make sure that they are not broken by future enhancements/bugs.
+
+In order to do this, you should be running the `dev` install so make sure when you are creating your conda environment you used the <a href="..\..\..\README.md#developer-install">developer install command</a>
+
+Things to remember:
+    1. Use the notebooks tag feature to mark a cell that you want to run. See <a href="..\..\Examples\ApplicationInstances\FermiHubbard\fermi_hubbard-dynamics-qubitized.ipynb">fermi_hubbard-dynamics-qubitized.ipynb</a>
+    1. Look at the example test in <a href="..\..\src\notebooks\tests\test_fermi_hubbard_notebooks.py">test_fermi_hubbard_notebooks.py</a>
 
 ## Running the debugger
 

@@ -1,4 +1,39 @@
 # High-level changelog (not all inclusive of all changes)
+## v1.4.0
+* Adds circuit decompositions for the first quantized block encoding
+* Adds implementations of CFD matrices
+* Adds scheduler handling of bloq.Allocate, bloq.Free, and bloq.Toffoli
+
+## v1.3.6
+* Contains the fix for [IndexError when intializing DoubleFactorized block encoding](https://github.com/isi-usc-edu/pyLIQTR/issues/42)
+* Double factorized sf_error_threshold passed to alpha calculation in [#43](https://github.com/isi-usc-edu/pyLIQTR/pull/43)
+
+## v1.3.5
+* Contains the fix for [One-norm does not account for double factorization truncation threshold](https://github.com/isi-usc-edu/pyLIQTR/issues/31) in [#41](https://github.com/isi-usc-edu/pyLIQTR/pull/41)
+
+## v1.3.4
+* Contains the fix for [#26](https://github.com/isi-usc-edu/pyLIQTR/issues/26) as well as the citation update for [#32](https://github.com/isi-usc-edu/pyLIQTR/issues/32)
+
+## v1.3.3
+* Added [#23](https://github.com/isi-usc-edu/pyLIQTR/issues/23) the Fermi Hubbard Nearest Neighbor Instance
+
+## v1.3.1
+* Added missing picture from [#7](https://github.com/isi-usc-edu/pyLIQTR/issues/7) and missing csv file from [#24](https://github.com/isi-usc-edu/pyLIQTR/issues/24)
+
+## v1.3.0
+* Scheduler - allows for time-accurate, resource reliant circuit execution and advanced parallelism analysis
+* Resource estimation for First Quantized block encoding
+* Updated to [Qualtran 0.4.0](https://github.com/quantumlib/Qualtran/tree/v0.4.0)
+* Call graph support
+* Generator-based circuit decomposition
+* [Online documentation](https://isi-usc-edu.github.io/pyLIQTR/)
+* Various bugfixes to include
+    * [Cannot instantiate Heisenberg model with zero local terms](https://github.com/isi-usc-edu/pyLIQTR/issues/12)
+    * [DoubleFactorized block encoding fails when sf_error_threshold is zero](https://github.com/isi-usc-edu/pyLIQTR/issues/21)
+
+## v1.2.1
+* Contains the fix for [Qubit Hamiltonians not supported in phase estimation](https://github.com/isi-usc-edu/pyLIQTR/issues/18)
+
 ## v1.2.0
 * Double Factorization improvements/tweaks (primarily to decrease resource requirements)
     * RotationsQROM changes to support measurement based uncompute

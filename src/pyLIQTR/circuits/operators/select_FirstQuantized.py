@@ -2,18 +2,22 @@
 Copyright (c) 2024 Massachusetts Institute of Technology 
 SPDX-License-Identifier: BSD-2-Clause
 """
+import cirq
 from cirq import MeasurementGate, ClassicallyControlledOperation
 from functools import cached_property
+from attrs import frozen
 from typing import Dict, Tuple, Optional, Callable, Union, Sequence
+from numpy.typing import NDArray
 
-from qualtran import BloqBuilder, Soquet, SoquetT, BoundedQUInt, Register, Side, QBit
-from qualtran.bloqs.chemistry.pbc.first_quantization.select_and_prepare import SelectFirstQuantization
+from qualtran import BoundedQUInt, Register, Side, QBit, QAny, Signature
+from qualtran.bloqs.block_encoding.lcu_select_and_prepare import SelectOracle
 from qualtran.bloqs.chemistry.pbc.first_quantization.select_and_prepare import MultiplexedCSwap3D
 
-from pyLIQTR.circuits.operators.SelectUV_FirstQuantized import SelectUVFirstQuantizationPYL
+from pyLIQTR.circuits.operators.SelectUV_FirstQuantized import SelectUVFirstQuantization
 from pyLIQTR.circuits.operators.SelectT_FirstQuantized import SelectT_FirstQuantized
 
-class SelectFirstQuantizationPYL(SelectFirstQuantization):
+@frozen
+class SelectFirstQuantizationPYL(SelectOracle):
     """SELECT operation for the first quantized chemistry Hamiltonian.
 
     Registers:
@@ -35,10 +39,12 @@ class SelectFirstQuantizationPYL(SelectFirstQuantization):
         nu_x: x component of the momentum register for Coulomb potential.
         nu_y: y component of the momentum register for Coulomb potential.
         nu_z: z component of the momentum register for Coulomb potential.
-        m: an ancilla register in a uniform superposition.
-        l: The register for selecting the nuclei.
+        m: An ancilla register in a uniform superposition.
+        Rl: A register storing the value of :math:`R_\\ell`.
+        overflow: Carry bits resulting from addition/subtraction.
+        phase_gradient_state: The phase gradient state register.
         sys: The system register. Will store $\eta$ registers (x, y and z)
-            compents of size num_bits_p.
+            components of size num_bits_p.
 
     References:
         `Fault-Tolerant Quantum Simulations of Chemistry in First Quantization <https://arxiv.org/abs/2105.12767>`_
@@ -55,6 +61,15 @@ class SelectFirstQuantizationPYL(SelectFirstQuantization):
     :param int num_bits_rot_aa: The number of bits of precision for the rotation for
         amplitude amplification.
     """
+    num_bits_p: int
+    eta: int
+    num_atoms: int
+    lambda_zeta: int
+    m_param: int = 2**8
+    num_bits_nuc_pos: int = 16
+    num_bits_t: int = 16
+    num_bits_rot_aa: int = 8
+
     @cached_property
     def control_registers(self) -> Tuple[Register, ...]:
         return (
@@ -67,8 +82,8 @@ class SelectFirstQuantizationPYL(SelectFirstQuantization):
     def selection_registers(self) -> Tuple[Register, ...]:
         n_nu = self.num_bits_p + 1
         n_eta = (self.eta - 1).bit_length()
-        n_at = (self.num_atoms - 1).bit_length()
         n_m = (self.m_param - 1).bit_length()
+        bphi = max(self.num_bits_t,self.num_bits_nuc_pos)
         return (
             Register("uv", QBit(),side=Side.RIGHT),
             Register('i', BoundedQUInt(bitsize=n_eta, iteration_length=self.eta)),
@@ -81,88 +96,59 @@ class SelectFirstQuantizationPYL(SelectFirstQuantization):
             Register("nu_y", BoundedQUInt(bitsize=n_nu)),
             Register("nu_z", BoundedQUInt(bitsize=n_nu)),
             Register("m", BoundedQUInt(bitsize=n_m)),
-            Register("l", BoundedQUInt(bitsize=n_at)),
+            Register("Rl", QAny(bitsize=self.num_bits_nuc_pos), shape=(3,)),
+            Register("overflow", QAny(bitsize=2), shape=(3,)),
+            Register("phase_gradient_state", QAny(bitsize=bphi))
+        )
+    
+    @cached_property
+    def target_registers(self) -> Tuple[Register, ...]:
+        return (Register("sys", QAny(bitsize=self.num_bits_p), shape=(self.eta, 3)),)
+
+    @cached_property
+    def signature(self) -> Signature:
+        return Signature(
+            [*self.control_registers, *self.selection_registers, *self.target_registers]
         )
 
-    def build_composite_bloq(
+    def pretty_name(self) -> str:
+        return r'SELECT'
+    
+    def decompose_from_registers(
         self,
-        bb: BloqBuilder,
-        tuv: SoquetT,
-        i_ne_j: SoquetT,
-        plus_t: SoquetT,
-        i: SoquetT,
-        j: SoquetT,
-        w: SoquetT,
-        r: SoquetT,
-        s: SoquetT,
-        mu: SoquetT,
-        nu_x: Soquet,
-        nu_y: Soquet,
-        nu_z: Soquet,
-        m: SoquetT,
-        l: SoquetT,
-        sys: SoquetT,
-    ) -> Dict[str, 'SoquetT']:
-        # ancilla for swaps from electronic system registers.
-        # we assume these are left in a clean state after SELECT operations
-        p = [bb.allocate(self.num_bits_p) for _ in range(3)]
-        q = [bb.allocate(self.num_bits_p) for _ in range(3)]
-        rl = bb.allocate(self.num_bits_nuc_pos)
-        i, sys, p = bb.add(
-            MultiplexedCSwap3D(self.num_bits_p, self.eta), sel=i, targets=sys, junk=p
-        )
-        j, sys, q = bb.add(
-            MultiplexedCSwap3D(self.num_bits_p, self.eta), sel=j, targets=sys, junk=q
-        )
-        tuv, plus_t, w, r, s, p = bb.add(
-            SelectT_FirstQuantized(self.num_bits_p),
-            plus=plus_t,
-            flag_T=tuv,
-            w=w,
-            r=r,
-            s=s,
-            sys=p,
-        )
-        tuv, uv, l, rl, [nu_x, nu_y, nu_z], p, q = bb.add(
-            SelectUVFirstQuantizationPYL(
-                self.num_bits_p, self.eta, self.num_atoms, self.num_bits_nuc_pos
-            ),
-            flag_tuv=tuv,
-            l=l,
-            rl=rl,
-            nu=[nu_x, nu_y, nu_z],
-            p=p,
-            q=q,
-        )
-        i, sys, p = bb.add(
-            MultiplexedCSwap3D(self.num_bits_p, self.eta), sel=i, targets=sys, junk=p
-        )
-        j, sys, q = bb.add(
-            MultiplexedCSwap3D(self.num_bits_p, self.eta), sel=j, targets=sys, junk=q
-        )
-        for pi in p:
-            bb.free(pi)
-        for qi in q:
-            bb.free(qi)
-        bb.free(rl)
-        return {
-            'tuv': tuv,
-            'uv': uv,
-            'plus_t': plus_t,
-            'i_ne_j': i_ne_j,
-            'i': i,
-            'j': j,
-            'w': w,
-            'r': r,
-            's': s,
-            'mu': mu,
-            'nu_x': nu_x,
-            'nu_y': nu_y,
-            'nu_z': nu_z,
-            'm': m,
-            'l': l,
-            'sys': sys,
-        }
+        *,
+        context: cirq.DecompositionContext,
+        **quregs: NDArray[cirq.Qid],
+    ) -> cirq.OP_TREE:
+        i = quregs['i']
+        j = quregs['j']
+        sys = quregs['sys']
+        plus_t, tuv, uv = quregs['plus_t'], quregs['tuv'], quregs['uv']
+        w, r, s = quregs['w'], quregs['r'], quregs['s']
+        Rl = quregs['Rl']
+        nu_x, nu_y, nu_z = quregs['nu_x'], quregs['nu_y'], quregs['nu_z']
+        phi = quregs['phase_gradient_state']
+        overflow = quregs['overflow']
+        bphi = max(self.num_bits_t,self.num_bits_nuc_pos)
+
+        p = [context.qubit_manager.qalloc(self.num_bits_p) for _ in range(3)]
+        yield MultiplexedCSwap3D(self.num_bits_p, self.eta).on_registers( sel=i, targets=sys, junk=p)
+
+        q = [context.qubit_manager.qalloc(self.num_bits_p) for _ in range(3)]
+        yield MultiplexedCSwap3D(self.num_bits_p, self.eta).on_registers(sel=j, targets=sys, junk=q)
+
+        yield SelectT_FirstQuantized(self.num_bits_p).on_registers(plus=plus_t, flag_T=tuv, w=w, r=r, s=s, sys=p)
+
+        yield SelectUVFirstQuantization(self.num_bits_p, self.eta, self.num_atoms, self.num_bits_nuc_pos, bphi=bphi).on_registers(flag_tuv=tuv, uv = uv, Rl=Rl, nu=[nu_x, nu_y, nu_z], phi=phi, p=p, q=q, overflow=overflow)
+
+        yield MultiplexedCSwap3D(self.num_bits_p, self.eta).on_registers( sel=i, targets=sys, junk=p)
+        for i in range(3):
+            context.qubit_manager.qfree(p[i])
+
+        yield MultiplexedCSwap3D(self.num_bits_p, self.eta).on_registers(sel=j, targets=sys, junk=q)
+        for i in range(3):
+            context.qubit_manager.qfree(q[i])
+
 
     def call_graph(
         self,

@@ -25,7 +25,7 @@ def get_version(rel_path: str) -> str:
 
 DISTNAME = "pyLIQTR"
 LICENSE = "BDS-2"
-AUTHOR = "Kevin Obenland, Justin Elenewski, Arthur Kurlej,  Joe Belarge, John Blue, and Robert Rood"
+AUTHOR = "Kevin Obenland, Justin Elenewski, Kaitlyn Morrell, Rylee Stuart Neumann, Arthur Kurlej, Robert Rood, John Blue, Joe Belarge, Benjamin Rempfer & Parker Kuklinski"
 AUTHOR_EMAIL = "Kevin.Obenland@ll.mit.edu"
 DESCRIPTION = (
     "A python package for generating quantum circuits using quantum algorithms."

@@ -5,12 +5,13 @@ SPDX-License-Identifier: BSD-2-Clause
 import pytest
 import cirq
 
-from qualtran.cirq_interop.testing import assert_circuit_inp_out_cirqsim, GateHelper
+from qualtran.cirq_interop.testing import GateHelper
 from pyLIQTR.utils.global_ancilla_manager import gam as gam
 from pyLIQTR.utils.printing import openqasm
 from pyLIQTR.circuits.operators.SelectT_FirstQuantized import SelectT_FirstQuantized
 from pyLIQTR.utils.resource_analysis import estimate_resources
 from pyLIQTR.utils.circuit_decomposition import decompose_once, generator_decompose
+from pyLIQTR.scheduler.scheduler import schedule_circuit
 
 class TestSelectT_FirstQuantized:    
 
@@ -74,3 +75,21 @@ class TestSelectT_FirstQuantized:
         '''
         gate = SelectT_FirstQuantized(num_bits_p=3)
         call_graph, _ = gate.call_graph()
+
+    def test_SelectT_FirstQuantizated_scheduler(self):
+        # initialize operator
+        gate = SelectT_FirstQuantized(num_bits_p=3)
+        helper = GateHelper(gate=gate)
+        res = schedule_circuit(helper.circuit, full_profile=True, decomp_level=0)
+        assert res is not None
+        for r in res:
+            pass
+
+    def test_SelectT_FirstQuantizated_scheduler_full(self):
+        # initialize operator
+        gate = SelectT_FirstQuantized(num_bits_p=3)
+        helper = GateHelper(gate=gate)
+        res = schedule_circuit(helper.circuit, full_profile=True, decomp_level='Full')
+        assert res is not None
+        for r in res:
+            pass

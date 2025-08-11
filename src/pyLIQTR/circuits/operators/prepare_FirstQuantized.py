@@ -109,7 +109,6 @@ class PrepareFirstQuantization(PrepareOracle):
     def selection_registers(self) -> Tuple[Register, ...]:
         n_nu = self.num_bits_p + 1
         n_eta = (self.eta - 1).bit_length()
-        n_at = (self.num_atoms - 1).bit_length()
         n_m = (self.m_param - 1).bit_length()
         n_eta_zeta = (self.eta + 2 * self.lambda_zeta - 1).bit_length()
         return (
@@ -132,6 +131,7 @@ class PrepareFirstQuantization(PrepareOracle):
     @cached_property
     def junk_registers(self) -> Tuple[Register, ...]:
         n_m = (self.m_param - 1).bit_length()
+        bphi = max(self.num_bits_t,self.num_bits_nuc_pos)
         return (
             Register("succ_nu", QBit()), 
             Register("plus_t", QBit()),
@@ -148,7 +148,7 @@ class PrepareFirstQuantization(PrepareOracle):
             Register('T_less_than_ancilla',QBit()),
             Register('T_rotation_ancilla',QBit()),
             Register('catalytic',QBit()),
-            Register('phase_gradient_state',QAny(self.num_bits_t)),
+            Register('phase_gradient_state',QAny(bphi)),
             Register("flag_dim", QBit(), shape=(3,), side=Side.RIGHT),
             Register("flag_zero_and_ancilla", QAny(self.num_bits_p - 1), shape=(3,), side=Side.RIGHT),
             Register("flag_minus_zero", QBit(), side=Side.RIGHT),
@@ -193,9 +193,10 @@ class PrepareFirstQuantization(PrepareOracle):
         flag_ineq_m_nu: SoquetT,
         flag_nu_lt_mu: SoquetT,
     ) -> Dict[str, 'SoquetT']:
+        bphi = max(self.num_bits_t,self.num_bits_nuc_pos)
         tuv, uv, rotation_ancilla_uv,flag_prep_success_uv, flag_ineq_uv, uv_superposition, phase_gradient_state = bb.add(
             PrepareTUVSuperpositions(
-                self.num_bits_t, self.eta, self.lambda_zeta
+                self.num_bits_t, self.eta, self.lambda_zeta, bphi=bphi
             ),
             tuv=tuv,
             rot_ancilla=rotation_ancilla_uv,flag_prep_success=flag_prep_success_uv,

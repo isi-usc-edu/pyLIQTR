@@ -21,7 +21,9 @@ In pyLIQTR, we have introduced a set of utilities that wrap the `cirq` / `qualtr
 
 In general, decompositions require operators to have decompositions defined. All `pyLIQTR.circuits.operators` will have decompositions defined, but not all `cirq` / `qualtran` operators necessarily have circuit-based decompositions defined. If this happens, you will get an error. You may also receive errors akin to `Duplicate QIDs`, which is an error that comes up in some `qualtran` bloqs due to an ancilla allocation issue. A temporary fix can be done by changing the context to `context=cirq.DecompositionContext(cirq.SimpleQubitManager())`, which generally resolves this issue. If you discover this issue please let us know so we can reach out to the `qualtran` developers or see if we can resolve the issues ourselves.
 
- All examples shown in `pyLIQTR` should support decomposition into "basic gates" (1-2Q gates + Toffolis. We are hoping to eventually support custom gatesets), and an easy test is feeding your circuit of choice into `pyLIQTR.utils.printing.openqasm` and verifying that you can loop through the circuit to completion.
+ All examples shown in `pyLIQTR` should support decomposition into "basic gates" (1-2Q gates + Toffolis), and an easy test is feeding your circuit of choice into `pyLIQTR.utils.printing.openqasm` and verifying that you can loop through the circuit to completion.
+
+ For further analysis of small to mid-sized circuits, `pyLIQTR` also features an 'advanced' decomposition tool in `pyLIQTR.scheduler.advanced_decomposition`. This tool allows for circuits to be decomposed efficiently while performing some specified analysis on each operator. Existing classes support decomposition of a circuit into a custom set of gates and/or decomposition to a specified level with information about sub-gate counts or scheduling included. This tool is designed to be extendable to custom use cases. See the `Decompose()` class for details about building your own analysis class with this tool. An example of as-is use of this tool can be found in `Examples/Algorithms_and_Infrastructure/advanced_decomposition_examples`.
 
 #### LIQTR Like 👍 : Export of circuits to OpenQASM
 Export of circuits can be done using a provided `pyLIQTR` utility (`pyLIQTR.utils.printing.openqasm`) that wraps `cirq`'s native openQASM export. This is introduced since some new cirq-ft operators do not yet have a decomposition in terms of gates defined, or `cirq` has begun to use features (mid-circuit measurement, classical control, etc) not supported by OpenQASM2.
@@ -49,18 +51,17 @@ Note that if your circuit has rotations, you may also want to specify a level of
 Circuits can be 'scheduled' using the `pyLIQTR.scheduler.scheduler.schedule_circuit` function. This will provide circuit runtime, realistic qubit counts, T-depth, and more!
  
 `schedule_circuit` takes a number of optional arguments depending on desired outputs. They are:
-* `architecture_config`: a dictionary specifying timing for various gate types and restrictions on how many T gates can operate simultaneously. This dictionary must be formatted as follows:
-    * `{'Execution Times': {('Gate 1',): Time X, ('Gate 2', 'Gate 3'): Time Y}, 'Max T': Z # of simultaneous T-gates allowed}`
- 
-* `full_profile`: default `False`. If set to `True`, function output will include individual gate counts, T-widths, and parallelism distribution data. (NOTE: T-widths and parallelism data will only be available if `decomp_level` is set to `'Full'`.)
- 
-* `decomp_level`: int, default 0. Levels of decomposition implemented before scheduling. If set to `0`, each operator will be decomposed to one/two-qubit gates only on its first occurance and cached for each future occurance. If set to `'Full'`, entire circuit will be decomposed to one/two-qubit gates before scheduling.
+* `architecture_config`: an `architecture` class object specifying gate times and state factory parameters. See `scheduling_example.ipynb` for details.
+
+* `full_profile`: default `False`. If set to `True`, function output will include T-widths and parallelism distribution data. (NOTE: T-widths and parallelism data will only be accurate if `decomp_level` is set to `'Full'`.)
+
+* `decomp_level`: int, default 0. Levels of decomposition implemented before scheduling. If set to `0`, each operator will be decomposed to one/two-qubit gates only on its first occurance and cached for each future occurance. If set to `'Full'`, entire circuit will be decomposed to one/two-qubit gates before scheduling. 
 
 * `context` : cirq.DecompositionContext, default is none which will result in the use of a context manager that tries to minimize the number of ancilla generated. At times, certain Qualtran Bloqs may have an error in their decomposition which results in ancilla not being properly cleared. If this happens, we recommend passing `context=cirq.DecompositionContext(cirq.SimpleQubitManager())` to resolve this issue, at the cost of an overzealous qubit allocation.
 
-* `circuit_precision`: default 1e-3. The approximation error for each rotation gate decomposition will be bounded by this value divided by the number of rotation gates determined to be in the circuit. This can be passed explicitly using this keyword argument. If no precision argument is provided, the default value will be used. Note that higher-precision will generally increase the resource cost.
+* `rotation_gate_precision`: default 5e-6. Rotations are decomposed to a given precision. This can be passed explicitly using the `rotation_gate_precision` keyword argument. If no precision argument is provided, the default value will be used. Note that higher-precision will generally increase the resource cost.
 
-For further details on scheduler capabilities, see `Algorithms_and_Infrastructure/scheduling_example.ipynb`
+For further details on scheduler capabilities, see `Algorithms_and_Infrastructure/scheduling_example.ipynb`.
 
 ### Clifford+T Decomposition
 #### Overview

@@ -6,6 +6,7 @@ SPDX-License-Identifier: BSD-2-Clause
 """
 import random
 import cachetools
+import json
 import numpy    as  np
 import cirq     as  cirq
 import qualtran as  qt
@@ -17,8 +18,8 @@ from warnings import warn
 from qsharp.estimator import EstimatorResult
 from qsharp.estimator import LogicalCounts
 
-from   pyLIQTR.utils.circuit_decomposition import decompose_once, circuit_decompose_multi
-from   pyLIQTR.gate_decomp.cirq_transforms import clifford_plus_t_direct_transform
+from pyLIQTR.utils.circuit_decomposition import decompose_once, circuit_decompose_multi
+from pyLIQTR.gate_decomp.cirq_transforms import clifford_plus_t_direct_transform
 from pyLIQTR.gate_decomp.rotation_gates import T_COUNT_CONST, T_COUNT_SLOPE, T_COUNT_STD_DEV
 
 from qualtran.cirq_interop.t_complexity_protocol import TComplexity, _get_hash,_t_complexity_from_strategies, \
@@ -272,3 +273,49 @@ def legacy_resource_profile(gate):
     t_complexity = t_complexity_from_circuit(circ_cops)
 
     return(t_complexity)
+
+def write_resource_estimation_json(estimates:dict, application_id: str, category: str, plot_legend_name: str, plot_color: str, reference:str='',version:str="v0.1.0", tgate_improvement_factor=None, qubit_improvement_factor=None):
+    """
+    Accepts a nested dictionary of resource estimates and writes to a formatted JSON file.
+    """
+    re_list = []
+    for model in estimates:
+        t_count = estimates[model]['T']
+        q_count = estimates[model]['LogicalQubits']
+
+        resource_dict = {}
+        resource_dict['num_logical_qubits'] = q_count
+        resource_dict['num_t_gates'] = t_count
+
+        if qubit_improvement_factor is not None:
+            resource_dict['expected_num_logical_qubits'] = np.ceil(q_count / qubit_improvement_factor)
+        else:
+            resource_dict['expected_num_logical_qubits'] = q_count
+
+        if tgate_improvement_factor is not None:
+            resource_dict['expected_num_t_gates'] = np.ceil(t_count / tgate_improvement_factor)
+        else:
+            resource_dict['expected_num_t_gates'] = t_count
+
+        re_list.append(resource_dict)
+
+    plotting_params = {
+        "label": plot_legend_name,
+        "color": plot_color,
+        "face_color":"none",
+        "marker": "o",
+        "zorder":1
+    }
+
+    top_dict = {
+        "application_id": application_id,
+        "version": version,
+        "category": category,
+        "references": reference,
+        "logical_resource_estimates": re_list,
+        "plotting_parameters": plotting_params,
+    }
+
+    json_object = json.dumps(top_dict, indent=4)
+    with open(f"{application_id}.json", "w") as outfile:
+        outfile.write(json_object)

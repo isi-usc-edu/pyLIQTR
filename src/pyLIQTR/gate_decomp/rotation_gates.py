@@ -238,6 +238,10 @@ class rz_decomp(cirq.Rz, decomp_mixin):
         decomp_mixin.__init__(
             self, rads=rads, precision=precision, use_random_decomp=use_random_decomp
         )
+    
+    @property
+    def __class__(self):
+        return cirq.Rz
 
     def _circuit_diagram_info_(
         self, args: "cirq.CircuitDiagramInfoArgs"
@@ -275,6 +279,7 @@ class rz_decomp(cirq.Rz, decomp_mixin):
         qasm_string_list.append("// " + tuple_string)
         return "\n".join(qasm_string_list)
 
+    
 
 class ry_decomp(cirq.Ry, decomp_mixin):
     """
@@ -288,6 +293,10 @@ class ry_decomp(cirq.Ry, decomp_mixin):
         decomp_mixin.__init__(
             self, rads=rads, precision=precision, use_random_decomp=use_random_decomp
         )
+    
+    @property
+    def __class__(self):
+        return cirq.Ry
 
     def _decompose_(self, qubits) -> List[cirq.Operation]:
         q = qubits[0]
@@ -349,6 +358,10 @@ class rx_decomp(cirq.Rx, decomp_mixin):
             self, rads=rads, precision=precision, use_random_decomp=use_random_decomp
         )
 
+    @property
+    def __class__(self):
+        return cirq.Rx
+    
     def _circuit_diagram_info_(
         self, args: "cirq.CircuitDiagramInfoArgs"
     ) -> Union[str, "protocols.CircuitDiagramInfo"]:

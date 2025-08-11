@@ -15,7 +15,7 @@ from pyLIQTR.utils.resource_analysis import estimate_resources
 
 class TestSignedIntegerToTwosComplement:
 
-    @pytest.mark.parametrize("bitsize,initial_state,expected_out",[(4,[0,0,0,0,0,1,1,1],[0,0,0,0,0,1,1,1]),(4,[0,0,0,0,1,0,1,0],[0,0,0,0,1,1,1,0]),(5,[0,0,0,0,0,0,1,0,1,0],[0,0,0,0,0,0,1,0,1,0]),(5,[0,0,0,0,0,1,0,1,0,0],[0,0,0,0,0,1,1,1,0,0])])
+    @pytest.mark.parametrize("bitsize,initial_state,expected_out",[(4,[0,1,1,1],[0,1,1,1]),(4,[1,0,1,0],[1,1,1,0]),(5,[0,1,0,1,0],[0,1,0,1,0]),(5,[1,0,1,0,0],[1,1,1,0,0])])
     def test_SignedIntegerToTwosComplement(self,bitsize,initial_state,expected_out):
         '''
         Tests the gate carries out the expected operation by comparing simulation output with the expected output for different input values.
@@ -24,7 +24,20 @@ class TestSignedIntegerToTwosComplement:
         helper = GateHelper(gate=gate)
         # operation = helper.operation
         # circuit
-        qubit_order=[*helper.quregs['x'],*helper.quregs['y']]
+        qubit_order=helper.quregs['x']
+        circuit = helper.circuit
+        assert_circuit_inp_out_cirqsim(circuit,inputs=initial_state, outputs=expected_out,qubit_order=qubit_order)
+
+    @pytest.mark.parametrize("bitsize,initial_state,expected_out",[(4,[0,1,1,1],[0,1,1,1]),(4,[1,1,1,0],[1,0,1,0]),(5,[0,1,0,1,0],[0,1,0,1,0]),(5,[1,1,1,0,0],[1,0,1,0,0])])
+    def test_SignedIntegerToTwosComplement_reverse(self,bitsize,initial_state,expected_out):
+        '''
+        Tests the gate inverse carries out the expected operation by comparing simulation output with the expected output for different input values.
+        '''
+        gate = SignedIntegerToTwosComplement(bitsize=bitsize).adjoint()
+        helper = GateHelper(gate=gate)
+        # operation = helper.operation
+        # circuit
+        qubit_order=helper.quregs['x']
         circuit = helper.circuit
         assert_circuit_inp_out_cirqsim(circuit,inputs=initial_state, outputs=expected_out,qubit_order=qubit_order)
         
