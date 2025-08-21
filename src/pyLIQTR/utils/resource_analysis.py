@@ -25,7 +25,7 @@ from pyLIQTR.gate_decomp.rotation_gates import T_COUNT_CONST, T_COUNT_SLOPE, T_C
 from qualtran.cirq_interop.t_complexity_protocol import TComplexity, _get_hash,_t_complexity_from_strategies, \
          _t_complexity_for_gate_or_op,\
         _from_explicit_annotation,\
-        _from_directly_countable,\
+        _from_directly_countable_cirq,\
         _from_cirq_decomposition,\
         _from_iterable
 from typing import Any, Hashable
@@ -51,6 +51,15 @@ def _plyqt_from_bloq_build_call_graph(stc: Any) -> Optional[TComplexity]:
         ret += n * r
     return ret
 
+def _from_directly_countable(stc:Any)->Optional[TComplexity]:
+    if isinstance(stc, (cirq.Gate, cirq.Operation)):
+        return _from_directly_countable_cirq(stc)
+    return None
+
+def _from_bloq(stc: Any) -> Optional[TComplexity]:
+    if isinstance(stc, Bloq):
+        return stc.t_complexity()
+    return None
 
 @cachetools.cached(cachetools.LRUCache(128), key=_get_hash, info=True)
 def _pylqt_t_complexity_for_gate_or_op(
@@ -69,6 +78,7 @@ def _pylqt_t_complexity_for_gate_or_op(
             _plyqt_from_bloq_build_call_graph,
             _from_cirq_decomposition,
             _from_iterable,
+            _from_bloq,
         ]
     return _t_complexity_from_strategies(gate_or_op, strategies)
     
@@ -101,7 +111,7 @@ def pylqt_t_complexity(stc: Any) -> TComplexity:
         strategies = [
             from_measurement,
             _from_explicit_annotation,
-            _from_directly_countable,
+            _from_directly_countable_cirq,
             _plyqt_from_bloq_build_call_graph,
             _from_cirq_decomposition,
             _from_iterable,

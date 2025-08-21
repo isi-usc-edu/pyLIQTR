@@ -7,7 +7,6 @@ import cirq
 import numpy as np
 
 from qualtran.cirq_interop.testing import assert_circuit_inp_out_cirqsim, GateHelper
-from qualtran.cirq_interop.bit_tools import iter_bits
 from pyLIQTR.utils.global_ancilla_manager import gam as gam
 from pyLIQTR.utils.printing import openqasm
 from pyLIQTR.circuits.operators.EqualityTest import EqualityTest

@@ -6,7 +6,7 @@ import qualtran as qt
 import cirq
 import numpy as np
 from qualtran import Register, GateWithRegisters, Signature, QBit, BoundedQUInt, QAny
-from qualtran._infra.gate_with_registers import total_bits
+import qualtran.cirq_interop as qt_ci
 from functools import cached_property
 from typing import List, Tuple, Sequence, Optional
 from numpy.typing import NDArray
@@ -115,7 +115,7 @@ class FermionicSelect_LinearT(GateWithRegisters):
         yield qt.bloqs.multiplexers.apply_gate_to_lth_target.ApplyGateToLthQubit(
             selection_regs=q_selection_regs,
             nth_gate=lambda *_: cirq.Z,
-            control_regs=Register('control', QAny(1 + total_bits(self.control_registers))),
+            control_regs=Register('control', QAny(1 + qt_ci.total_bits(self.control_registers))),
         ).on_registers(
             q=q, b=b, control=[*V, *control], target=target_qubits_for_apply_to_lth_gate
         )
