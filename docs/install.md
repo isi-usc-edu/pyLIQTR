@@ -14,9 +14,9 @@ Most people use [conda](https://docs.conda.io/en/latest/) for virutal environmen
 
     ```sh
     on Windows use:
-    conda create -n <Environment Name> "python>=3.8,<=3.11.5" pip
+    conda create -n <Environment Name> "python>=3.8,<=3.12.2" pip
     on Mac use:
-    conda create -n <Environment Name> python'>=3.8,<=3.11.5' pip
+    conda create -n <Environment Name> python'>=3.8,<=3.12.2' pip
     conda activate <Environment Name>
     ```
 
