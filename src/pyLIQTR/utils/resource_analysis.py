@@ -14,10 +14,6 @@ from typing import Dict, Any, Tuple, Union, Optional
 
 from warnings import warn
 
-# From Microsoft's(r) Azure
-from qsharp.estimator import EstimatorResult
-from qsharp.estimator import LogicalCounts
-
 from pyLIQTR.utils.circuit_decomposition import decompose_once, circuit_decompose_multi
 from pyLIQTR.gate_decomp.cirq_transforms import clifford_plus_t_direct_transform
 from pyLIQTR.gate_decomp.rotation_gates import T_COUNT_CONST, T_COUNT_SLOPE, T_COUNT_STD_DEV
@@ -164,7 +160,6 @@ def estimate_resources(circuit_element:Any, rotation_gate_precision=1e-10, circu
         ##
         resource_dict["Rotations"] = t_cliff_rot_resources.rotations
 
-    # Some additional resources to be able to return that can be used in the current Azure(r) hardware estimates
     """    
         "numQubits" resource_dict['LogicalQubits']
         "tCount" resource_dict["T"]

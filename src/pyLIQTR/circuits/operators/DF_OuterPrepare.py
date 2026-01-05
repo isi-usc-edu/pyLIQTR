@@ -6,11 +6,9 @@ from numpy.typing import NDArray
 from typing import Tuple
 
 import cirq
-import qualtran as qt
 from qualtran.bloqs.state_preparation import StatePreparationAliasSampling
 from qualtran.bloqs.arithmetic import LessThanEqual
 from qualtran.bloqs.basic_gates.swap import CSwap
-from qualtran.bloqs.state_preparation.prepare_uniform_superposition import PrepareUniformSuperposition
 from qualtran.bloqs.data_loading.qrom import QROM
 from functools import cached_property
 from qualtran._infra.registers import Register
@@ -58,7 +56,7 @@ class OuterPrepare(StatePreparationAliasSampling):
         )
         yield qrom_gate.on_registers(selection=selection, target0_=alt, target1_=keep)
 
-        yield LessThanEqualGate(self.mu, self.mu).on(
+        yield LessThanEqual(self.mu, self.mu).on(
             *keep, *sigma_mu, *less_than_equal
         )
         yield CSwap.make_on(
@@ -66,6 +64,6 @@ class OuterPrepare(StatePreparationAliasSampling):
         )
 
         # uncompute less than equal
-        yield LessThanEqualGate(self.mu, self.mu).on(
+        yield LessThanEqual(self.mu, self.mu).on(
             *keep, *sigma_mu, *less_than_equal
         )

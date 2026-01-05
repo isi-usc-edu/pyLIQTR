@@ -62,27 +62,7 @@ The features of this package are described in detail in [FEATURES.md](docs/Featu
         pip install git+https://github.com/isi-usc-edu/pyLIQTR.git
 
 If you are going to be activelty developing the pyLIQTR source code, it is recommended that conda be used to manage the environment. A setup.py file is included to facilitate this.
-Change directory to the location of setup.py, then perform the following commands.
-
-- Create and activate the environment:
-
-        on Windows use:
-        conda create -n <Environment Name> "python>=3.8,<=3.12.2"
-        on Mac use:
-        conda create -n <Environment Name> python'>=3.8,<=3.12.2'
-
-        conda activate <Environment Name>
-
-- Install the package
-
-        pip install .
-
-- If you are working as a developer (for all platforms and shells):
-<a id="developer-install"></a>
-        on Windows use:
-        pip install -e .[dev]
-        on Mac use:
-        pip install -e ."[dev]"
+Follow the instructions in [intall.md](docs/install.md) if you wish to build an environment for developing.
 
 <a id="optional-installs"></a>
 ### Optional Installs

@@ -20,9 +20,32 @@ if 'sphinx' not in sys.modules:
 import numpy as np
 import scipy as sp
 import itertools
-from openfermion import FermionOperator, hermitian_conjugated, normal_ordered, QubitOperator
+from openfermion import FermionOperator, normal_ordered, InteractionOperator
 import openfermion as of
 from warnings import warn
+
+def integrals2intop(h1, eri, ecore):
+    '''
+    reshapes one and two body integrals read in from an fcidump file into the form needed for the InteractionOperator
+    '''
+    norb = h1.shape[0]
+    h2_so = np.zeros((2*norb, 2*norb, 2*norb, 2*norb))
+    h1_so = np.zeros((2*norb, 2*norb))
+
+    # Populate h1_so
+    h1_so[:norb, :norb] = h1 
+    h1_so[norb:, norb:] = h1_so[:norb, :norb]
+
+    # Populate h2_so
+    h2_so[0::2, 0::2, 0::2, 0::2] = eri 
+    h2_so[1::2, 1::2, 0::2, 0::2] = eri
+    h2_so[0::2, 0::2, 1::2, 1::2] = eri
+    h2_so[1::2, 1::2, 1::2, 1::2] = eri
+
+    # Transpose from 1122 to 1221 
+    h2_so = np.transpose(h2_so, (1, 2, 3, 0))
+
+    return InteractionOperator(constant=ecore, one_body_tensor=h1_so, two_body_tensor=h2_so)
 
 """!!! ALL FUNCTIONS BELOW ARE FROM QUANTUMMAMBO UNTIL INDICATED !!!"""
 # https://github.com/iloaiza/QuantumMAMBO.jl
@@ -237,7 +260,7 @@ def DF_decomposition(h0,obt,tbt, tol=1e-8, tiny=1e-12):
         if sym_dif > tiny:
             #Hermitian test
             if np.sum(abs(np.add(full_l, full_l.transpose()))) > tiny:
-                warn(f"Fragment {i} is neither Hermitian or anti-Hermitian!",stacklevel=2) 
+                #Fragment {i} is neither Hermitian or anti-Hermitian
                 cur_l = jl.LinearAlgebra.Hermitian(full_l)
                 vals[i] = -1 * vals[i]
         wl, Ul = np.linalg.eigh(cur_l)
