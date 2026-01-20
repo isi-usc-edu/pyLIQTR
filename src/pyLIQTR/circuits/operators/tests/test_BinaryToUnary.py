@@ -6,8 +6,8 @@ import pytest
 import cirq
 
 from pyLIQTR.circuits.operators.BinaryToUnary import BinaryToUnaryBits
+from qualtran import QUInt
 from qualtran.cirq_interop.testing import assert_circuit_inp_out_cirqsim
-from qualtran.cirq_interop.bit_tools import iter_bits
 from pyLIQTR.utils.global_ancilla_manager import gam as gam
 from pyLIQTR.utils.printing import openqasm
 from pyLIQTR.utils.resource_analysis import estimate_resources
@@ -25,12 +25,13 @@ class TestBinaryToUnaryBits:
         operation = BinaryToUnaryBits(n_bits=n_bits).on_registers(binary=binary_reg,unary=unary_reg)
         circuit = cirq.Circuit(operation)
         # input state is binary rep of selection index where msb is first reading left to right and unary qubits all 0
-        input_state = list(iter_bits(selection_index,width=n_bits))+[0]*n_bits
+        bits = QUInt(n_bits).to_bits(selection_index)
+        input_state = bits+[0]*n_bits
         # output state unary qubits are binary rep of selection index rounded up to closest power of 2 where msb is first reading left to right
         rounded_up_to_power_of_2 = 2**(selection_index).bit_length()
         num_ones = (rounded_up_to_power_of_2-1).bit_length()
         num_leading_zeros = n_bits - num_ones
-        output_state = list(iter_bits(selection_index,width=n_bits)) +[0]*num_leading_zeros+[1]*num_ones
+        output_state = bits +[0]*num_leading_zeros+[1]*num_ones
 
         assert_circuit_inp_out_cirqsim(circuit,qubit_order=[*binary_reg,*unary_reg],inputs=input_state,outputs=output_state)
 

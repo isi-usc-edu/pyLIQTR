@@ -11,7 +11,7 @@ from typing import Sequence, Set, Tuple, Optional
 from qualtran.drawing import Text, TextBox, WireSymbol
 from qualtran.bloqs.mcmt.and_bloq import And
 from qualtran.cirq_interop.t_complexity_protocol import TComplexity
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli as mcmtp # remove later
+from qualtran.bloqs.mcmt import MultiControlPauli as mcmtp # remove later
 from pyLIQTR.utils.global_ancilla_manager import GlobalQubitManager as manager
 from qualtran import Register, QAny, Signature, GateWithRegisters, DecomposeTypeError, CompositeBloq
 from qualtran.bloqs.basic_gates import CNOT, XGate, Hadamard, SGate, TGate, Toffoli

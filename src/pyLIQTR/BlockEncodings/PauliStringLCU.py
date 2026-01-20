@@ -61,10 +61,10 @@ class PauliStringLCU(BlockEncoding_select_prepare):
                 coeff = np.real(t.coefficient)
                 if coeff < 0:
                     warnings.warn("Alias sampling preparation with negative coefficients is not supported yet. Circuits and estimates will assume positive coefficients.",stacklevel=2)
-            
-            self._prepare_gate         =  StatePreparationAliasSampling.from_lcu_probs(
-                                                lcu_probabilities=[np.abs(np.real(t.coefficient)) for t in self.getTerms]
-                                                    , probability_epsilon=probability_eps)
+
+            self._prepare_gate = StatePreparationAliasSampling.from_probabilities(
+                unnormalized_probabilities=[np.abs(np.real(t.coefficient)) for t in self.getTerms]
+                , precision=probability_eps)
 
 
     @property

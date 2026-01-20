@@ -9,9 +9,9 @@ from numpy.typing import NDArray
 from functools import cached_property
 from cirq.value.condition import Condition
 from qualtran.bloqs.multiplexers.unary_iteration_bloq import UnaryIterationGate
-from qualtran._infra.registers import Signature, Register
-from qualtran._infra.gate_with_registers import total_bits
-from qualtran._infra.data_types import BoundedQUInt, QBit, QAny
+from qualtran import Signature, Register
+from qualtran.cirq_interop import total_bits
+from qualtran import BoundedQUInt, QBit, QAny
 
 class FixupTableQROM(UnaryIterationGate):
     '''

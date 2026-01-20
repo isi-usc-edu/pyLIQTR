@@ -11,7 +11,7 @@ from qualtran import GateWithRegisters, Signature, Register, QBit, QAny, Bounded
 from qualtran.bloqs.basic_gates import Toffoli, ZGate, Hadamard, CZPowGate
 from qualtran.bloqs.bookkeeping import ArbitraryClifford
 from qualtran.cirq_interop import CirqGateAsBloq
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli
+from qualtran.bloqs.mcmt import MultiControlPauli
 
 from pyLIQTR.circuits.operators.ControlledCopy import MultiplexedControlledCopy
 
