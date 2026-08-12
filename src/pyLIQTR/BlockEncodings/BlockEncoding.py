@@ -127,8 +127,8 @@ class BlockEncoding_select_prepare(BlockEncoding):
     @property
     def signature(self):
         return qt._infra.registers.Signature(
-            [*self.control_registers, *self.selection_registers, 
-             *self.target_registers, *self.junk_registers] )
+            [*self.control_registers, *self.selection_registers,
+             *self.junk_registers, *self.target_registers] )
 
 
 
