@@ -1,4 +1,5 @@
 {
+  "_comment": "Runtime Julia dependencies for double-factorized chemistry and BLISS. JuliaPkg resolves these compatible versions before use; do not install QuantumMAMBO with Pkg.add during imports or method calls.",
   "julia": "~1.9",
   "packages": {
     "QuantumMAMBO": {
