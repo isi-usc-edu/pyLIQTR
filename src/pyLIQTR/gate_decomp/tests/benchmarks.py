@@ -7,7 +7,7 @@ SPDX-License-Identifier: BSD-2-Clause
 import cirq
 from random import seed, randint
 from time import perf_counter
-import pkg_resources
+from importlib.resources import files
 import gmpy2
 from gmpy2 import mpfr
 import numpy as np
@@ -24,9 +24,7 @@ from pyLIQTR.gate_decomp.gate_approximation import (
     approximate_rz_fallback,
 )
 
-GSE_CIRCUIT_FILE = pkg_resources.resource_filename(
-    "pyLIQTR", r"gate_decomp/tests/data/gse_h2_decomp_circuit_example.json"
-)
+GSE_CIRCUIT_FILE = str(files("pyLIQTR").joinpath("gate_decomp/tests/data/gse_h2_decomp_circuit_example.json"))
 
 
 def estimate_t_count_direct(num_samples):

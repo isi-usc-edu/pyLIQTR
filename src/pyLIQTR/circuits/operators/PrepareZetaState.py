@@ -12,7 +12,7 @@ from numpy.typing import NDArray
 import numpy as np
 from attrs import evolve, frozen
 
-from qualtran import GateWithRegisters, QAny, Register, Signature, QBit, BoundedQUInt
+from qualtran import GateWithRegisters, QAny, Register, Signature, QBit, BQUInt
 from qualtran.bloqs.basic_gates import XGate
 from qualtran.bloqs.data_loading import QROM
 from qualtran.symbolics.math_funcs import bit_length
@@ -52,7 +52,7 @@ class PrepareZetaState(GateWithRegisters):
     def signature(self) -> Signature:
         n_eta_zeta = bit_length(self.eta + 2 * self.lambda_zeta - 1)
         return Signature([Register("control", QBit()),
-            Register("select", BoundedQUInt(bitsize=n_eta_zeta)),
+            Register("select", BQUInt(bitsize=n_eta_zeta)),
             Register("Rl", QAny(bitsize=self.num_bits_nuc_pos), shape=(3,))])
 
     @cached_property

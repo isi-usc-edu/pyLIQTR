@@ -94,9 +94,9 @@ class PrepareUV_FirstQuantized(GateWithRegisters):
                 Register("Rl", QAny(bitsize=self.num_bits_nuc_pos), shape=(3,)),
                 Register("flag_dim", QBit(), shape=(3,), side=Side.RIGHT),
                 Register("flag_minus_zero", QBit(), side=Side.RIGHT),
-                Register("flag_ineq", QBit()),
-                Register("flag_nu_lt_mu", QBit()),
-                Register("flag_nu", QBit()),
+                Register("flag_ineq", QBit(), side=Side.RIGHT),
+                Register("flag_nu_lt_mu", QBit(), side=Side.RIGHT),
+                Register("flag_nu", QBit(), side=Side.RIGHT),
                 Register("flag_ineq_uv", QBit()),
                 Register("catalytic",QBit()),
                 *self.ancilla_registers

@@ -10,7 +10,7 @@ from attrs import frozen
 from qualtran import (
     Bloq,
     BloqBuilder,
-    BoundedQUInt,
+    BQUInt,
     QAny,
     QBit,
     Register,
@@ -19,7 +19,7 @@ from qualtran import (
     SoquetT,
     Side
 )
-from qualtran.bloqs.block_encoding.lcu_select_and_prepare import PrepareOracle
+from qualtran.bloqs.state_preparation.prepare_base import PrepareOracle
 from qualtran.bloqs.basic_gates import Hadamard
 
 from pyLIQTR.circuits.operators.PrepareTUVSuperpositions import PrepareTUVSuperpositions
@@ -114,17 +114,17 @@ class PrepareFirstQuantization(PrepareOracle):
         return (
             Register('tuv', QBit()),
             Register('uv', QBit(),side=Side.RIGHT),
-            Register('i', BoundedQUInt(bitsize=n_eta, iteration_length=self.eta)),
-            Register('j', BoundedQUInt(bitsize=n_eta, iteration_length=self.eta)),
-            Register('w', BoundedQUInt(bitsize=2,iteration_length=3)),
-            Register("r", BoundedQUInt(bitsize=self.num_bits_p)),
-            Register("s", BoundedQUInt(bitsize=self.num_bits_p)),
-            Register("uv_superposition",BoundedQUInt(bitsize=n_eta_zeta)),
-            Register("mu", BoundedQUInt(bitsize=self.num_bits_p)),
-            Register("nu_x", BoundedQUInt(bitsize=n_nu)),
-            Register("nu_y", BoundedQUInt(bitsize=n_nu)),
-            Register("nu_z", BoundedQUInt(bitsize=n_nu)),
-            Register("m", BoundedQUInt(bitsize=n_m)),
+            Register('i', BQUInt(bitsize=n_eta, iteration_length=self.eta)),
+            Register('j', BQUInt(bitsize=n_eta, iteration_length=self.eta)),
+            Register('w', BQUInt(bitsize=2,iteration_length=3)),
+            Register("r", BQUInt(bitsize=self.num_bits_p)),
+            Register("s", BQUInt(bitsize=self.num_bits_p)),
+            Register("uv_superposition",BQUInt(bitsize=n_eta_zeta)),
+            Register("mu", BQUInt(bitsize=self.num_bits_p)),
+            Register("nu_x", BQUInt(bitsize=n_nu)),
+            Register("nu_y", BQUInt(bitsize=n_nu)),
+            Register("nu_z", BQUInt(bitsize=n_nu)),
+            Register("m", BQUInt(bitsize=n_m)),
             Register("Rl", QAny(bitsize=self.num_bits_nuc_pos), shape=(3,)),
         )
 
@@ -133,13 +133,13 @@ class PrepareFirstQuantization(PrepareOracle):
         n_m = (self.m_param - 1).bit_length()
         bphi = max(self.num_bits_t,self.num_bits_nuc_pos)
         return (
-            Register("succ_nu", QBit()), 
+            Register("succ_nu", QBit(), side=Side.RIGHT),
             Register("plus_t", QBit()),
             Register('succ_i', QBit(), side=Side.RIGHT),
             Register('succ_j', QBit(), side=Side.RIGHT),
             Register('flag_equal', QBit(), side=Side.RIGHT),
             Register('flag_ineq_uv', QBit()),
-            Register('flag_ineq_m_nu', QBit()),
+            Register('flag_ineq_m_nu', QBit(), side=Side.RIGHT),
             Register('flag_prep_success_uv',QBit()),
             Register('flag_w', QBit(),side=Side.RIGHT),
             Register('less_than_ancilla', QBit(), shape=(2,1), side=Side.RIGHT),
@@ -153,7 +153,7 @@ class PrepareFirstQuantization(PrepareOracle):
             Register("flag_zero_and_ancilla", QAny(self.num_bits_p - 1), shape=(3,), side=Side.RIGHT),
             Register("flag_minus_zero", QBit(), side=Side.RIGHT),
             Register("flag_ancilla", QBit(), side=Side.RIGHT),
-            Register("flag_nu_lt_mu", QBit()),
+            Register("flag_nu_lt_mu", QBit(), side=Side.RIGHT),
             Register("and_ancilla", QBit(),shape=(2,), side=Side.RIGHT),
             Register("nu_lt_mu_and_ancilla",QBit(),shape=(self.num_bits_p,2), side=Side.RIGHT),
             Register("sos_product_ancilla", QAny(bitsize=int(3*self.num_bits_p*(self.num_bits_p-1)/2)),side=Side.RIGHT),
@@ -188,10 +188,7 @@ class PrepareFirstQuantization(PrepareOracle):
         nu_y: Soquet,
         nu_z: Soquet,
         m: SoquetT,
-        succ_nu: SoquetT,
         Rl: SoquetT,
-        flag_ineq_m_nu: SoquetT,
-        flag_nu_lt_mu: SoquetT,
     ) -> Dict[str, 'SoquetT']:
         bphi = max(self.num_bits_t,self.num_bits_nuc_pos)
         tuv, uv, rotation_ancilla_uv,flag_prep_success_uv, flag_ineq_uv, uv_superposition, phase_gradient_state = bb.add(
@@ -234,9 +231,6 @@ class PrepareFirstQuantization(PrepareOracle):
             m=m,
             superposition_state=uv_superposition,
             Rl=Rl,
-            flag_ineq=flag_ineq_m_nu,
-            flag_nu_lt_mu=flag_nu_lt_mu,
-            flag_nu=succ_nu,
             flag_ineq_uv=flag_ineq_uv,
             catalytic=catalytic
         )

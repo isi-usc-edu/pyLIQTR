@@ -3,12 +3,14 @@ Copyright (c) 2024 Massachusetts Institute of Technology
 SPDX-License-Identifier: BSD-2-Clause
 """
 import cirq
+from qualtran.cirq_interop import cirq_gate_to_bloq
 from cirq.circuits.circuit import Circuit
 import numpy as np
 from qualtran.bloqs.arithmetic import Add as qtAdd
 from qualtran.bloqs.mod_arithmetic import ModAddK as qtAddConstantMod
 from qualtran import bloqs
 from qualtran.bloqs.mcmt import and_bloq
+from qualtran.bloqs.mcmt.multi_control_pauli import MultiControlPauli
 from qualtran.bloqs.basic_gates import CNOT
 from functools import cached_property
 from typing import List, Tuple, Sequence, Optional,Iterator
@@ -109,9 +111,9 @@ class AddMod(qtAddConstantMod):
             targetQubit = context.qubit_manager.qalloc(1)
             #i cant test version for some god forsake reason...
             try:
-                yield bloqs.multi_control_multi_target_pauli.MultiControlPauli(self.cvs).on(*(ctlQubits+targetQubit))
+                yield MultiControlPauli(self.cvs, target_bloq=cirq_gate_to_bloq(cirq.X)).on(*(ctlQubits+targetQubit))
             except:
-                yield bloqs.mcmt.MultiControlPauli(self.cvs,target_gate=cirq.X).on(*(ctlQubits+targetQubit))
+                yield MultiControlPauli(self.cvs,target_bloq=cirq_gate_to_bloq(cirq.X)).on(*(ctlQubits+targetQubit))
 
         
         #MSB is first qubit
@@ -226,9 +228,9 @@ class AddMod(qtAddConstantMod):
         if isControlled:
             ctlQubits = list(qubits[0:len(self.cvs)])
             try:
-                yield bloqs.multi_control_multi_target_pauli.MultiControlPauli(self.cvs).on(*(ctlQubits+targetQubit))
+                yield MultiControlPauli(self.cvs, target_bloq=cirq_gate_to_bloq(cirq.X)).on(*(ctlQubits+targetQubit))
             except:
-                yield bloqs.mcmt.MultiControlPauli(self.cvs,target_gate=cirq.X).on(*(ctlQubits+targetQubit))
+                yield MultiControlPauli(self.cvs,target_bloq=cirq_gate_to_bloq(cirq.X)).on(*(ctlQubits+targetQubit))
         
 
         context.qubit_manager.qfree(A)

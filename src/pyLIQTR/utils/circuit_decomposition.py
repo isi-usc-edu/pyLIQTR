@@ -5,6 +5,9 @@ SPDX-License-Identifier: BSD-2-Clause
 import sys
 import cirq
 import qualtran
+import qualtran.cirq_interop
+from qualtran.bloqs.mcmt.multi_control_pauli import MultiControlPauli
+from qualtran.bloqs.basic_gates import XGate, ZGate, TwoBitCSwap
 from cirq.ops.gate_operation import GateOperation
 
 import cirq.protocols.decompose_protocol as cpdp
@@ -44,6 +47,15 @@ def _controlled_decompose_dfs(current_pass:int, max_decomposition_passes: int,\
             return
 
     decomposed = cpdp._try_op_decomposer(item, args.intercepting_decomposer, context=args.context)
+
+    if decomposed is NotImplemented or decomposed is None:
+        bloq = getattr(getattr(item, "gate", None), "bloq", None)
+        if isinstance(bloq, TwoBitCSwap):
+            mapping = dict(zip(map(cirq.NamedQubit, ("ctrl", "x", "y")), item.qubits))
+            decomposed = [
+                op.transform_qubits(mapping)
+                for op in bloq.to_clifford_t_circuit().all_operations()
+            ]
 
     if decomposed is NotImplemented or decomposed is None:
         decomposed = cpdp.decompose_once(item, default=None, flatten=False, context=args.context)
@@ -194,18 +206,16 @@ def generator_decompose(
     sys.setrecursionlimit(min([reclim*100,100000]))
     for op in _controlled_decompose_dfs(0,max_decomposition_passes, val, args):
         if isinstance(op.gate,qualtran.cirq_interop._bloq_to_cirq.BloqAsCirqGate):
-            if "qualtran.bloqs.basic_gates" in op._gate.__module__:
-                yield op._gate.cirq_gate.on(*op.qubits)
+            if isinstance(op.gate.bloq, cirq.Gate):
+                yield op.gate.bloq.on(*op.qubits)
+            elif isinstance(op.gate.bloq, qualtran.cirq_interop.CirqGateAsBloqBase):
+                yield op.gate.bloq.cirq_gate.on(*op.qubits)
             elif "qualtran.cirq_interop._bloq_to_cirq" in op._gate.__module__:
-                gates = ['bloq.CNOT','bloq.XGate','bloq.YGate','bloq.ZGate','bloq.HGate','bloq.H','bloq.SGate','bloq.TGate','bloq.T','bloq.T†']
-                cirq_gates = [cirq.CNOT,cirq.X,cirq.Y,cirq.Z,cirq.H,cirq.H,cirq.S,cirq.T,cirq.T,cirq.inverse(cirq.T)]
+                gates = ['bloq.CNOT','bloq.XGate','bloq.YGate','bloq.ZGate','bloq.HGate','bloq.H','bloq.SGate','bloq.TGate','bloq.T','bloq.T†','bloq.X','bloq.Y','bloq.Z','bloq.S','bloq.CZ','bloq.S†']
+                cirq_gates = [cirq.CNOT,cirq.X,cirq.Y,cirq.Z,cirq.H,cirq.H,cirq.S,cirq.T,cirq.T,cirq.inverse(cirq.T),cirq.X,cirq.Y,cirq.Z,cirq.S,cirq.CZ,cirq.inverse(cirq.S)]
                 gate2cirq = {g:cg for g,cg in zip(gates,cirq_gates)}
                 if (str(op._gate) not in gate2cirq):
-                    #Annoying, there are some 'non basic' gates mixed in with these -_-
-                    if 'bloq.MultiAnd' in str(op._gate) or "bloq.Add" in str(op._gate) or 'bloq.TwoBitCSwap':
-                        yield op
-                    else:
-                        raise NotImplementedError(str(op._gate))
+                    yield op
                 else:
                     yield gate2cirq[str(op._gate)].on(*op.qubits)
             else:
@@ -217,7 +227,18 @@ def generator_decompose(
     sys.setrecursionlimit(reclim)
 
 
-def test_for_bad_gate_op(gate_op:cirq.GateOperation) -> str:
+def test_for_bad_gate_op(gate_op:cirq.GateOperation) -> Optional[cirq.Operation]:
+    gate = getattr(gate_op, "gate", None)
+    if isinstance(gate, qualtran.Adjoint) and isinstance(gate.subbloq, MultiControlPauli):
+        gate = gate.subbloq
+    if isinstance(gate, MultiControlPauli):
+        if len(gate.cvs) <= 2 and all(cv == 1 for cv in gate.cvs):
+            target = cirq.X if isinstance(gate.target_bloq, XGate) else (
+                cirq.Z if isinstance(gate.target_bloq, ZGate) else None
+            )
+            if target is not None:
+                return target.controlled(num_controls=len(gate.cvs)).on(*gate_op.qubits)
+        return None
     gate_op_str = str(gate_op)
     if hasattr(gate_op, '_gate'):
         gate_op_str = str(gate_op._gate)

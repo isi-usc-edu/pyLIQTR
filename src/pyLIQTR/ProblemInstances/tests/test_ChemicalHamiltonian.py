@@ -93,7 +93,8 @@ class TestChemicalHamiltonian:
         assert lcu_alpha2 == 1.4527183600000002
 
         df_alpha = h2_instance.get_alpha(encoding='DF')
-        assert df_alpha == 1.2543735419921236
+        expected = 1.2543735419921236
+        assert df_alpha == pytest.approx(expected, rel=0, abs=2 * np.spacing(expected))
 
         df_alpha_pass_err = h2_instance.get_alpha(encoding='DF',df_error_threshold=0.99)
         assert df_alpha_pass_err == 0.8006020005033776

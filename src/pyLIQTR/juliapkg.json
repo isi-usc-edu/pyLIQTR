@@ -1,0 +1,13 @@
+{
+  "julia": "~1.9",
+  "packages": {
+    "QuantumMAMBO": {
+      "uuid": "e290813f-b153-47cd-bc0b-49e404587c69",
+      "version": "=1.1.5"
+    },
+    "HDF5_jll": {
+      "uuid": "0234f1f7-429e-5d53-9886-15a909be8d59",
+      "version": "~1.12.2"
+    }
+  }
+}

@@ -5,7 +5,7 @@ It also lists all the various other applications you may need to install from sc
 
 ## Environments
 
-Most people use [conda](https://docs.conda.io/en/latest/) for virutal environment management, which is the currently supported configuration for using and developing `pyliqtr`.
+Most people use [conda](https://docs.conda.io/en/latest/) for virtual environment management, which is the currently supported configuration for using and developing `pyliqtr`.
 
 ## `pyliqtr` installation steps
 
@@ -13,10 +13,7 @@ Most people use [conda](https://docs.conda.io/en/latest/) for virutal environmen
     for pyliqtr, and activate it:
 
     ```sh
-    on Windows use:
-    conda create -n <Environment Name> "python>=3.8,<=3.12.2" pip
-    on Mac use:
-    conda create -n <Environment Name> python'>=3.8,<=3.12.2' pip
+    conda create -n <Environment Name> "python>=3.10,<=3.12.2" pip
     conda activate <Environment Name>
     ```
 
@@ -45,32 +42,26 @@ Most people use [conda](https://docs.conda.io/en/latest/) for virutal environmen
 
     ```sh
     cd repo
-    pip install .
+    python -m pip install .
     ```
 
     **Development requirements installation (*only needed if you are going to be doing coding work*):**
 
     ```sh
     cd repo
-    pip install -e .[dev]
-    ```
-
-    *N.B.* if using `zsh` instead of `bash` (e.g on a new Mac), the dependencies must be installed via a slightly modified command:
-
-    ```sh
-    pip install -e .'[dev]'
+    python -m pip install -e '.[dev]'
     ```
 
     Optional requirements can be combined with a comma-separated list like 
 
     ```sh
-    pip install -e .[pygpen,dev]
+    python -m pip install -e '.[pygpen,dev]'
     ```
 
 4. Quick verification that installation was successful: the following command should execute silently.
 
     ```sh
-    python -c "import pyliqtr"
+    python -c "import pyLIQTR"
     ```
 
 ## Disclaimer

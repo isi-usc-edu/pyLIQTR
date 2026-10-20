@@ -57,7 +57,7 @@ It is still a work in progress, so we ask that submitted code mostly conforms to
     The branch should have the form `type/issue#-short-description-of-issue`.
     Unfortunately, GitHub does not have the ability to automatically link branches with issues yet (+1 for GitLab and Bitbucket)
 3. Check that your code conforms to our style guidelines, has tests, and is well-documented.
-    Resolve any merge conflicts with `master`.
+    Resolve any merge conflicts with `main`.
 4. When the changes are ready for review, submit a Pull Request and assign
     it to one an admin or someone who would be familiar with the implentation.
     Be mindful of the fact that Code Review is hard, which is one motivation to keep PRs small in scope so that they are easy to review and evaluate!

@@ -11,7 +11,7 @@ import warnings
 import numpy as np
 
 from ..diagonal_bitstring import DiagonalBitstring
-from qualtran._infra.gate_with_registers import get_named_qubits
+from qualtran.cirq_interop import get_named_qubits
 from pyLIQTR.utils.circuit_decomposition import circuit_decompose_multi
 from pyLIQTR.utils.resource_analysis import pylqt_t_complexity as t_complexity
 

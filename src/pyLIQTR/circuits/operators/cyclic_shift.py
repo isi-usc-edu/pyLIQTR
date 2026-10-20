@@ -5,6 +5,7 @@ SPDX-License-Identifier: BSD-2-Clause
 
 
 import cirq
+from qualtran.cirq_interop import cirq_gate_to_bloq
 import numpy as np
 from typing import Tuple, Sequence
 from functools import cached_property
@@ -12,7 +13,7 @@ from qualtran import Register, QAny, QBit, Signature, GateWithRegisters
 from qualtran.bloqs.mcmt import And 
 from qualtran.cirq_interop.t_complexity_protocol import TComplexity
 from pyLIQTR.utils.global_ancilla_manager import GlobalQubitManager as manager
-from qualtran.bloqs.mcmt import MultiControlPauli as mcmtp
+from qualtran.bloqs.mcmt.multi_control_pauli import MultiControlPauli as mcmtp
 
 class CyclicShiftPermutation(GateWithRegisters):
     """
@@ -108,7 +109,7 @@ class CyclicShiftPermutation(GateWithRegisters):
                 for reg in data[1:len(list(data))]:   
                     if self.control[0]:
                         register = [reg] + list(control)
-                        yield mcmtp((1,) * self.control[1], target_gate=cirq.X).on(*register)
+                        yield mcmtp((1,) * self.control[1], target_bloq=cirq_gate_to_bloq(cirq.X)).on(*register)
                     elif not self.control[0]:
                         yield cirq.X.on(reg)
             for jdx, qbit in enumerate(data[::-1][:-1]):
@@ -117,22 +118,22 @@ class CyclicShiftPermutation(GateWithRegisters):
                 if len(cvs0) > 0:
                     if self.control[0]:
                         register = list(data[jdx:][::-1]) + list(control)
-                        yield mcmtp(cvs1, target_gate=cirq.X).on(*register)
+                        yield mcmtp(cvs1, target_bloq=cirq_gate_to_bloq(cirq.X)).on(*register)
                     elif not self.control[0]:
-                        yield mcmtp(cvs0, target_gate=cirq.X).on(*data[jdx:][::-1])
+                        yield mcmtp(cvs0, target_bloq=cirq_gate_to_bloq(cirq.X)).on(*data[jdx:][::-1])
                 elif len(cvs0) == 0:
                     yield cirq.X.on(data[jdx:][::-1]) 
             if self.vector[1][0] == "l" or self.vector[0] == 1:
                 if self.control[0]:
                     register = [data[-1]] + list(control)
-                    yield mcmtp((1,) * self.control[1], target_gate=cirq.X).on(*register)
+                    yield mcmtp((1,) * self.control[1], target_bloq=cirq_gate_to_bloq(cirq.X)).on(*register)
                 elif not self.control[0]:
                     yield cirq.X.on(data[-1])
             elif self.vector[1][0] == "r":
                 for reg in data[1:len(list(data))-1]:   
                     if self.control[0]:
                         register = [reg] + list(control)
-                        yield mcmtp((1,) * self.control[1], target_gate=cirq.X).on(*register)
+                        yield mcmtp((1,) * self.control[1], target_bloq=cirq_gate_to_bloq(cirq.X)).on(*register)
                     elif not self.control[0]:
                         yield cirq.X.on(reg)
         elif self.optimize and self.vector[0] > 2:

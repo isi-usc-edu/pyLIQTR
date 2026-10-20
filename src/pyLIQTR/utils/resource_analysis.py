@@ -10,6 +10,7 @@ import json
 import numpy    as  np
 import cirq     as  cirq
 import qualtran as  qt
+from collections.abc import Iterable
 from typing import Dict, Any, Tuple, Union, Optional
 
 from warnings import warn
@@ -21,12 +22,51 @@ from pyLIQTR.gate_decomp.rotation_gates import T_COUNT_CONST, T_COUNT_SLOPE, T_C
 from qualtran.cirq_interop.t_complexity_protocol import TComplexity, _get_hash,_t_complexity_from_strategies, \
          _t_complexity_for_gate_or_op,\
         _from_explicit_annotation,\
-        _from_directly_countable,\
-        _from_cirq_decomposition,\
-        _from_iterable
+        _from_directly_countable_cirq,\
+        _decompose_once_considering_known_decomposition
 from typing import Any, Hashable
-from qualtran import Bloq
+from qualtran import Bloq, Side, DecomposeNotImplementedError, DecomposeTypeError
+from qualtran.cirq_interop import BloqAsCirqGate, get_named_qubits
+from qualtran.cirq_interop.t_complexity_protocol import t_complexity as bloq_t_complexity
 
+def _from_directly_countable(stc: Any) -> Optional[TComplexity]:
+    # Cirq 1.5 gate-family equality can materialize a composite gate's unitary.
+    if isinstance(stc, Bloq) and not isinstance(stc, cirq.Gate):
+        if stc.signature.n_qubits() > 2 or any(reg.side != Side.THRU for reg in stc.signature):
+            return None
+        stc, _ = stc.as_cirq_op(
+            qubit_manager=cirq.SimpleQubitManager(), **get_named_qubits(stc.signature)
+        )
+        if stc is None or isinstance(stc.gate, BloqAsCirqGate):
+            return None
+    if isinstance(stc, (cirq.Gate, cirq.Operation)) and cirq.num_qubits(stc) <= 2:
+        return _from_directly_countable_cirq(stc)
+    return None
+
+
+def _from_bloq(stc: Any) -> Optional[TComplexity]:
+    if isinstance(stc, BloqAsCirqGate):
+        stc = stc.bloq
+    if isinstance(stc, Bloq):
+        try:
+            return bloq_t_complexity(stc)
+        except (DecomposeNotImplementedError, DecomposeTypeError):
+            return None
+    return None
+
+
+def _from_iterable(stc: Any) -> Optional[TComplexity]:
+    if not isinstance(stc, Iterable) or isinstance(stc, (str, bytes)):
+        return None
+    result = TComplexity()
+    for item in stc:
+        result += pylqt_t_complexity(item)
+    return result
+
+
+def _from_cirq_decomposition(stc: Any) -> Optional[TComplexity]:
+    decomposition = _decompose_once_considering_known_decomposition(stc)
+    return None if decomposition is None else _from_iterable(decomposition)
 
 
 def _plyqt_from_bloq_build_call_graph(stc: Any) -> Optional[TComplexity]:
@@ -63,6 +103,7 @@ def _pylqt_t_complexity_for_gate_or_op(
             _from_explicit_annotation,
             _from_directly_countable,
             _plyqt_from_bloq_build_call_graph,
+            _from_bloq,
             _from_cirq_decomposition,
             _from_iterable,
         ]
@@ -82,7 +123,7 @@ def pylqt_t_complexity(stc: Any) -> TComplexity:
     """
     if isinstance(stc, (cirq.Gate, cirq.Operation, Bloq)) and isinstance(stc, Hashable):
         ret = _pylqt_t_complexity_for_gate_or_op(stc)
-    elif isinstance(stc, (cirq.Circuit)) or issubclass(stc,cirq.Circuit):
+    elif isinstance(stc, cirq.AbstractCircuit):
         ret = TComplexity()
         for moment in stc:
             for op in moment:
@@ -99,6 +140,7 @@ def pylqt_t_complexity(stc: Any) -> TComplexity:
             _from_explicit_annotation,
             _from_directly_countable,
             _plyqt_from_bloq_build_call_graph,
+            _from_bloq,
             _from_cirq_decomposition,
             _from_iterable,
         ]

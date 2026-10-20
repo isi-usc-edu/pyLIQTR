@@ -5,7 +5,6 @@ SPDX-License-Identifier: BSD-2-Clause
 
 
 import cirq
-import pkg_resources
 import pytest
 from pathlib import Path
 import numpy as np
@@ -196,9 +195,9 @@ class TestPrinting:
         yield circuit
 
     # Marking these as skipped until we figure out how to protect the Windows users
-    @pytest.mark.skip
     @pytest.fixture(scope="class")
     def chemical_phase_estimation(self):
+        pytest.skip("Chemistry QASM printing fixture is not yet enabled")
         mol_data = MolecularData([('H', (0.0, 0.0, 0.63164)), ('H', (0.0, 0.0, 1.76836))],\
                                  'sto-3g', 1.0, 0, 'H2')
         mol = run_pyscf(mol_data, run_scf=1, run_mp2=0, run_cisd=0, run_ccsd=0, run_fci=0, verbose=0)
@@ -310,4 +309,3 @@ class TestPrinting:
                 assert result is not None
                 assert result is not NotImplementedError
                 assert result is not NotImplemented
-

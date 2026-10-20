@@ -4,6 +4,7 @@ SPDX-License-Identifier: BSD-2-Clause
 """
 import qualtran as qt
 import cirq
+from qualtran.cirq_interop import cirq_gate_to_bloq
 
 import numpy as np
 from functools import cached_property
@@ -19,11 +20,10 @@ from pyLIQTR.circuits.operators.DF_RotationsBlock import RotationsBlock
 from pyLIQTR.circuits.operators.RotationsQROM import RotationsQROM
 
 from qualtran.linalg.lcu_util import _differences, _partial_sums
-from qualtran.cirq_interop.bit_tools import iter_bits_fixed_point
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli
+from qualtran.bloqs.mcmt.multi_control_pauli import MultiControlPauli
 from qualtran.bloqs.rotations.phase_gradient import PhaseGradientState
 from qualtran.bloqs.data_loading import QROM
-from qualtran._infra.data_types import BoundedQUInt, QUInt, QBit
+from qualtran._infra.data_types import BQUInt, QUInt, QBit
 from qualtran import Register, Signature, Side
 
 class DoubleFactorized(BlockEncoding):
@@ -112,8 +112,8 @@ class DoubleFactorized(BlockEncoding):
 
     @cached_property
     def selection_registers(self) -> Tuple[Register]:
-        l_reg = Register(name='l', dtype=BoundedQUInt(bitsize=self.nL,iteration_length=self.L + 1))
-        p_reg = Register(name='p',dtype=BoundedQUInt(bitsize=self.nXi))
+        l_reg = Register(name='l', dtype=BQUInt(bitsize=self.nL,iteration_length=self.L + 1))
+        p_reg = Register(name='p',dtype=BQUInt(bitsize=self.nXi))
         return (l_reg, p_reg)
 
     @cached_property
@@ -136,7 +136,7 @@ class DoubleFactorized(BlockEncoding):
     @cached_property
     def inner_prep_extra_registers(self)-> Tuple[Register]:
         return Signature(
-            [ Register('contiguous_index', BoundedQUInt(self.nLXi+1),side=Side.RIGHT),
+            [ Register('contiguous_index', BQUInt(self.nLXi+1),side=Side.RIGHT),
             Register('rot_ancilla', QBit()), # target for aa rotation
             Register('unary_ancilla', QUInt(self.nXi)),
             Register('alt', QUInt(self.nXi)),
@@ -207,7 +207,7 @@ class DoubleFactorized(BlockEncoding):
             for p in range(p_sum_limits[l]): 
                 for i,theta in enumerate(self.givens_angle_tensor[l,p,:]):
                     theta_normalized = theta/(2*np.pi) % 1
-                    binary_theta = list(iter_bits_fixed_point(theta_normalized,width=self.bits_rot_givens))
+                    binary_theta = QUInt(self.bits_rot_givens).to_bits(int(theta_normalized * 2**self.bits_rot_givens))
                     givens_angles[m,i*self.bits_rot_givens:(i+1)*self.bits_rot_givens] = binary_theta #lsb is last element in list
                 m += 1
         return givens_angles
@@ -234,7 +234,9 @@ class DoubleFactorized(BlockEncoding):
         # prepare superposition over l
         # calculate outer coeffs. First element should be l=0 term (ie sum(Tpq)), then l=1 to L terms correspond to sum_p(fp^l)
         outer_coefficients = np.concatenate(([sum(self.one_body_mags)],np.sum(self.two_body_mags,axis=1)))
-        outer_prep = OuterPrepare.from_lcu_probs(lcu_probabilities=outer_coefficients,probability_epsilon=self.outer_prep_eps) #epsilon should be consistent with keep_bitsize_outer
+        outer_prep = OuterPrepare.from_probabilities(
+            outer_coefficients, precision=self.outer_prep_eps * sum(outer_coefficients)
+        )
         yield outer_prep.on_registers(success=succ_l,selection=l_reg,sigma_mu=sigma_l,alt=alt_l,keep=keep_l,less_than_equal=less_than_equal_ancilla,rot_ancilla=rot_ancilla_outer)
 
         # load l != 0, Xi^l (truncation), offset, and rot (amplitude amplification) data
@@ -276,20 +278,20 @@ class DoubleFactorized(BlockEncoding):
         if not self._controlled:
             control_bits = [[bit] for bit in [*succ_l,*succ_p]]
             # controlled Z1 
-            controlled_Z1 = MultiControlPauli(cvs=(1,1),target_gate=Z1)
+            controlled_Z1 = MultiControlPauli(cvs=(1,1),target_bloq=cirq_gate_to_bloq(Z1))
             yield controlled_Z1.on_registers(controls=control_bits,target=target_down[0])
 
             # controlled Z for sign qubit
-            sign_controlled_Z = MultiControlPauli(cvs=(1,1),target_gate=cirq.Z)
+            sign_controlled_Z = MultiControlPauli(cvs=(1,1),target_bloq=cirq_gate_to_bloq(cirq.Z))
             yield sign_controlled_Z.on_registers(controls=control_bits,target=sign_qb)
         else:
             control_bits = [[bit] for bit in [*control,*succ_l,*succ_p]]
             # controlled Z1
-            controlled_Z1 = MultiControlPauli(cvs=(self._control_val,1,1),target_gate=Z1)
+            controlled_Z1 = MultiControlPauli(cvs=(self._control_val,1,1),target_bloq=cirq_gate_to_bloq(Z1))
             yield controlled_Z1.on_registers(controls=control_bits,target=target_down[0])
 
             # controlled Z for sign qubit
-            sign_controlled_Z = MultiControlPauli(cvs=(self._control_val,1,1),target_gate=cirq.Z)
+            sign_controlled_Z = MultiControlPauli(cvs=(self._control_val,1,1),target_bloq=cirq_gate_to_bloq(cirq.Z))
             yield sign_controlled_Z.on_registers(controls=control_bits,target=sign_qb)
         #################################### partial uncompute ####################################
 
@@ -313,11 +315,11 @@ class DoubleFactorized(BlockEncoding):
         #################################### reflect ####################################
         if not self._controlled:
             control_bits = [[bit] for bit in [*succ_l,*l_neq_0,*p_reg,*rot_aa_ancilla,*sigma]]
-            reflect = MultiControlPauli(cvs=(1,1,)+(0,)*(self.nXi+1+self.keep_bitsize),target_gate=cirq.Z)
+            reflect = MultiControlPauli(cvs=(1,1,)+(0,)*(self.nXi+1+self.keep_bitsize),target_bloq=cirq_gate_to_bloq(cirq.Z))
             yield reflect.on_registers(controls=control_bits,target=spin_select)
         else:
             control_bits = [[bit] for bit in [*control,*succ_l,*l_neq_0,*p_reg,*rot_aa_ancilla,*sigma]]
-            reflect = MultiControlPauli(cvs=(self._control_val,1,1,)+(0,)*(self.nXi+1+self.keep_bitsize),target_gate=cirq.Z)
+            reflect = MultiControlPauli(cvs=(self._control_val,1,1,)+(0,)*(self.nXi+1+self.keep_bitsize),target_bloq=cirq_gate_to_bloq(cirq.Z))
             yield reflect.on_registers(controls=control_bits,target=spin_select)
 
         #################################### redo steps BUT for two-body term only ####################################
@@ -345,20 +347,20 @@ class DoubleFactorized(BlockEncoding):
         if not self._controlled:
             control_bits = [[bit] for bit in [*succ_l,*succ_p,*l_neq_0]]
             # controlled Z1 
-            more_controlled_Z1 = MultiControlPauli(cvs=(1,1,1),target_gate=Z1)
+            more_controlled_Z1 = MultiControlPauli(cvs=(1,1,1),target_bloq=cirq_gate_to_bloq(Z1))
             yield more_controlled_Z1.on_registers(controls=control_bits,target=target_down[0])
 
             # controlled Z for sign qubit
-            sign_more_controlled_Z = MultiControlPauli(cvs=(1,1,1),target_gate=cirq.Z)
+            sign_more_controlled_Z = MultiControlPauli(cvs=(1,1,1),target_bloq=cirq_gate_to_bloq(cirq.Z))
             yield sign_more_controlled_Z.on_registers(controls=control_bits,target=sign_qb)
         else:
             control_bits = [[bit] for bit in [*control,*succ_l,*succ_p,*l_neq_0]]
             # controlled Z1
-            more_controlled_Z1 = MultiControlPauli(cvs=(self._control_val,1,1,1),target_gate=Z1)
+            more_controlled_Z1 = MultiControlPauli(cvs=(self._control_val,1,1,1),target_bloq=cirq_gate_to_bloq(Z1))
             yield more_controlled_Z1.on_registers(controls=control_bits,target=target_down[0])
 
             # controlled Z for sign qubit
-            sign_more_controlled_Z = MultiControlPauli(cvs=(self._control_val,1,1,1),target_gate=cirq.Z)
+            sign_more_controlled_Z = MultiControlPauli(cvs=(self._control_val,1,1,1),target_bloq=cirq_gate_to_bloq(cirq.Z))
             yield sign_more_controlled_Z.on_registers(controls=control_bits,target=sign_qb)
 
         #################################### full uncompute ####################################
@@ -383,12 +385,12 @@ class DoubleFactorized(BlockEncoding):
         yield qrom_gate.on_registers(selection=l_reg,target0_=l_neq_0,target1_=Xi_l,target2_=offset,target3_=rot)
 
         ## undo OuterPrepare
-        yield cirq.inverse(outer_prep.on_registers(success=succ_l,selection=l_reg,sigma_mu=sigma_l,alt=alt_l,keep=keep_l,less_than_equal=less_than_equal_ancilla))
+        yield cirq.inverse(outer_prep.on_registers(success=succ_l,selection=l_reg,sigma_mu=sigma_l,alt=alt_l,keep=keep_l,less_than_equal=less_than_equal_ancilla,rot_ancilla=rot_ancilla_outer))
 
 def approx_angles_as_ints_with_br_bits(angles:NDArray[float],br:int=10):
     angles_normalized = angles / (2*np.pi) % 1
     approx_ints = np.zeros(len(angles),dtype=int)
     for i,angle in enumerate(angles_normalized):
-        binary_angle = [*iter_bits_fixed_point(angle,width=br,signed=False)]
+        binary_angle = QUInt(br).to_bits(int(angle * 2**br))
         approx_ints[i] = int(''.join(str(b) for b in binary_angle), 2)
     return approx_ints

@@ -1,5 +1,6 @@
 import cirq.protocols
 import pytest
+import numpy as np
 
 import cirq
 from cirq.circuits.circuit import Circuit
@@ -10,6 +11,19 @@ from qualtran.bloqs.state_preparation.prepare_uniform_superposition import Prepa
 from cirq.protocols.inverse_protocol import inverse
 from cirq.protocols.decompose_protocol import decompose, DecompositionContext
 
+def assert_inverse_preparation(decomposed, control, target):
+    circuit = cirq.Circuit(decomposed)
+    extra = sorted(circuit.all_qubits() - set(control + target))
+    qubits = control + target + extra
+    initial = np.zeros(2**len(qubits), dtype=np.complex128)
+    for value in range(3):
+        initial[value * 2**len(extra)] = 1 / np.sqrt(3)
+    result = cirq.Simulator(dtype=np.complex128).simulate(
+        circuit, qubit_order=qubits, initial_state=initial
+    )
+    assert abs(result.final_state_vector[0]) == pytest.approx(1, abs=1e-12)
+    assert all(len(op.qubits) == len(set(op.qubits)) for op in decomposed)
+
 class TestGreedyQubitManager:
     def test_gqm(self):
         n=3
@@ -18,9 +32,8 @@ class TestGreedyQubitManager:
         circuit_error = inverse(Circuit(PrepareUniformSuperposition(n,cvs=(0,)).on_registers(ctrl=control,target=target)))
 
         gqm = GreedyQubitManager(prefix="_ancilla", maximize_reuse=True)
-        with pytest.raises(ValueError, match='Duplicate qids'):
-            decomposed_circuit = decompose(circuit_error,context = DecompositionContext(gqm))
-            assert len(decomposed_circuit) == 294
+        decomposed_circuit = decompose(circuit_error,context = DecompositionContext(gqm))
+        assert_inverse_preparation(decomposed_circuit, control, list(target))
         
     def test_sqm(self):
         n=3
@@ -30,4 +43,4 @@ class TestGreedyQubitManager:
 
         gqm = SimpleQubitManager(prefix="_ancilla")
         decomposed_circuit = decompose(circuit_error,context = DecompositionContext(gqm))
-        assert len(decomposed_circuit) == 294
+        assert_inverse_preparation(decomposed_circuit, control, list(target))

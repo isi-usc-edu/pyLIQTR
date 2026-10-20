@@ -11,11 +11,12 @@ import numpy as np
 
 from functools import cached_property
 from qualtran._infra.registers import Register, Signature
-from qualtran._infra.gate_with_registers import GateWithRegisters, total_bits
+from qualtran import GateWithRegisters
+from qualtran._infra.gate_with_registers import total_bits
 from qualtran.cirq_interop.t_complexity_protocol import TComplexity
 from qualtran.bloqs.multiplexers.unary_iteration_bloq import UnaryIterationGate
 from qualtran.bloqs.mcmt.and_bloq import And
-from qualtran._infra.data_types import QAny, BoundedQUInt
+from qualtran._infra.data_types import QAny, BQUInt
 from qualtran.bloqs.basic_gates import CNOT, XGate
 
 @attr.frozen
@@ -55,7 +56,7 @@ class BinaryToUnary(UnaryIterationGate):
         controlled = True if quregs.get('control', 0) else False
         return BinaryToUnary(
             selection_regs=Register(
-                'selection', dtype=BoundedQUInt(bitsize=len(quregs['selection']),iteration_length=len(quregs['target']))
+                'selection', dtype=BQUInt(bitsize=len(quregs['selection']),iteration_length=len(quregs['target']))
             ),
             controlled = controlled
         ).on_registers(**quregs)
@@ -140,6 +141,10 @@ class BinaryToUnaryBits(GateWithRegisters):
     """
 
     n_bits: int
+    uncompute: bool = False
+
+    def adjoint(self):
+        return attr.evolve(self, uncompute=not self.uncompute)
 
     @classmethod
     def make_on(
@@ -160,20 +165,28 @@ class BinaryToUnaryBits(GateWithRegisters):
     ) -> cirq.OP_TREE:
         binary, unary = quregs['binary'], quregs['unary']
 
-        open_and_gate = And(cv1=0,cv2=0)
+        open_and_gate = And(cv1=0,cv2=0,uncompute=self.uncompute)
 
         # copy the msb from the binary register to the unary register
-        yield cirq.CNOT(binary[0],unary[0])
+        if not self.uncompute:
+            yield cirq.CNOT(binary[0],unary[0])
 
         # do (n_bits-1) OR operations such that unary[n] = (binary[n] OR unary[n-1]) for n=[1,n_bits-1], where n=0 is the msb.
-        for n in range(1,self.n_bits):
+        indices = reversed(range(1,self.n_bits)) if self.uncompute else range(1,self.n_bits)
+        for n in indices:
+            if self.uncompute:
+                yield cirq.X(unary[n])
             yield open_and_gate.on_registers(ctrl=[[binary[n]],[unary[n-1]]], target=unary[n])
-            yield cirq.X(unary[n])
+            if not self.uncompute:
+                yield cirq.X(unary[n])
+        if self.uncompute:
+            yield cirq.CNOT(binary[0],unary[0])
 
     def build_call_graph(self, ssa: 'SympySymbolAllocator') -> Set['BloqCountT']:
-        return {(CNOT(), 1),(And(cv1=0,cv2=0),self.n_bits-1),(XGate(),self.n_bits-1)}
+        return {(CNOT(), 1),(And(cv1=0,cv2=0,uncompute=self.uncompute),self.n_bits-1),(XGate(),self.n_bits-1)}
 
     def _t_complexity_(self,adjoint=False) -> TComplexity:
         num_ands = self.n_bits-1
-        resources_per_and = And(cv1=0,cv2=0,uncompute=adjoint)._t_complexity_()
+        from pyLIQTR.utils.resource_analysis import pylqt_t_complexity
+        resources_per_and = pylqt_t_complexity(And(cv1=0,cv2=0,uncompute=self.uncompute != adjoint))
         return TComplexity(t=resources_per_and.t*num_ands,clifford=resources_per_and.clifford*num_ands+self.n_bits)

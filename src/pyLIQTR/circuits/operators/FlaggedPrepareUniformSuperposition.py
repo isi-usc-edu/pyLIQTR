@@ -6,6 +6,7 @@ from typing import Tuple, Set
 
 import attrs
 import cirq
+from qualtran.cirq_interop import cirq_gate_to_bloq
 import numpy as np
 from functools import cached_property
 from numpy.typing import NDArray
@@ -13,8 +14,8 @@ from numpy.typing import NDArray
 from qualtran import GateWithRegisters, Signature
 from qualtran.bloqs.mcmt.and_bloq import And, MultiAnd
 from qualtran.bloqs.arithmetic import LessThanConstant
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli
-from qualtran.bloqs.basic_gates import XGate, Hadamard, CZPowGate, CNOT, Ry, OnEach
+from qualtran.bloqs.mcmt.multi_control_pauli import MultiControlPauli
+from qualtran.bloqs.basic_gates import XGate, Hadamard, CZ, CNOT, Ry, OnEach
 
 class FlaggedPrepareUniformSuperposition(GateWithRegisters):
     '''
@@ -73,15 +74,15 @@ class FlaggedPrepareUniformSuperposition(GateWithRegisters):
 
         # iv. Rotate ancilla qubit
         rotation_angle = 2*np.arcsin(np.sqrt(2**(logL)/(4*l)))
-        yield Ry(angle=rotation_angle)(*rot_ancilla)
+        yield Ry(angle=rotation_angle).on(*rot_ancilla)
 
         # v. Reflection on result of inequality test and ancilla
         yield XGate().on(*rot_ancilla)
-        yield CZPowGate().on(*less_than,*rot_ancilla)
+        yield CZ().on(*less_than,*rot_ancilla)
         yield XGate().on(*rot_ancilla)
 
         # vi. Invert rotation
-        yield Ry(angle=-rotation_angle)(*rot_ancilla)
+        yield Ry(angle=-rotation_angle).on(*rot_ancilla)
         ## and invert inequality test
         yield LessThanConstant(logL, l).on_registers(x=logL_qubits, target=less_than)
 
@@ -90,7 +91,7 @@ class FlaggedPrepareUniformSuperposition(GateWithRegisters):
 
         # viii. Reflect about zero state 
         yield XGate().on(*rot_ancilla)
-        yield MultiControlPauli(cvs=(0,)*logL,target_gate=cirq.Z).on_registers(controls=[[q] for q in logL_qubits],target=rot_ancilla)
+        yield MultiControlPauli(cvs=(0,)*logL,target_bloq=cirq_gate_to_bloq(cirq.Z)).on_registers(controls=[[q] for q in logL_qubits],target=rot_ancilla)
         yield XGate().on(*rot_ancilla)
 
         # ix. Repeat Hadamards 
@@ -110,4 +111,4 @@ class FlaggedPrepareUniformSuperposition(GateWithRegisters):
         if not logL:
             return{(OnEach(self.nd_bits, Hadamard()), 1),(XGate(),1)}
         rotation_angle = 2*np.arcsin(np.sqrt(2**(logL)/(4*l)))
-        return {(OnEach(self.nd_bits+1, Hadamard()), 1),(OnEach(logL+1, Hadamard()),2), (LessThanConstant(logL,l),4),(Ry(angle=rotation_angle),1),(Ry(angle=-rotation_angle),1),(XGate(),4),(CZPowGate(),1),(MultiControlPauli(cvs=(0,)*logL,target_gate=cirq.Z),1), (CNOT(),1)}
+        return {(OnEach(self.nd_bits+1, Hadamard()), 1),(OnEach(logL+1, Hadamard()),2), (LessThanConstant(logL,l),4),(Ry(angle=rotation_angle),1),(Ry(angle=-rotation_angle),1),(XGate(),4),(CZ(),1),(MultiControlPauli(cvs=(0,)*logL,target_bloq=cirq_gate_to_bloq(cirq.Z)),1), (CNOT(),1)}

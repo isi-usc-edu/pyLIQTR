@@ -12,17 +12,16 @@ from numpy.typing import NDArray
 from typing import List, Set
 
 from qualtran import GateWithRegisters, Signature
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiTargetCNOT
+from qualtran.bloqs.mcmt.multi_target_cnot import MultiTargetCNOT
 from qualtran.bloqs.arithmetic import Add, AddK
 from qualtran.bloqs.basic_gates import XGate
-from qualtran.cirq_interop.bit_tools import iter_bits_fixed_point
 from qualtran._infra.data_types import QUInt
 
 def approx_angle_with_br_bits(angle:float,br:int=8):
     # normalize angle
     angle_norm = angle / (2*np.pi) % 1
     # approximate to br bits and express in binary
-    binary_angle = list(iter_bits_fixed_point(angle_norm,width=br,signed=False))
+    binary_angle = QUInt(br).to_bits(int(angle_norm * 2**br))
     return binary_angle
 
 @attrs.frozen
@@ -127,7 +126,7 @@ class PhaseGradientZRotation(GateWithRegisters):
             yield Add(a_dtype=QUInt(self.br),b_dtype=QUInt(self.bphi)).on_registers(a=angle,b=phase_gradient_state)
         else:
             int_angle = self.approx_angle_as_br_int()
-            yield AddK(bitsize=self.bphi,k=int_angle).on_registers(x=phase_gradient_state)
+            yield AddK(dtype=QUInt(self.bphi),k=int_angle).on_registers(x=phase_gradient_state)
 
         # apply CNOT to register storing phi+angle
         yield MultiTargetCNOT(self.bphi).on_registers(control=rotation_target,targets=phase_gradient_state)
@@ -139,7 +138,7 @@ class PhaseGradientZRotation(GateWithRegisters):
         if self.do_negative_z_rotation: X_counts = {(XGate(),2)}
         else: X_counts = set()
 
-        if self.classical_angle: adder = AddK(bitsize=self.bphi,k=self.approx_angle_as_br_int())
+        if self.classical_angle: adder = AddK(dtype=QUInt(self.bphi),k=self.approx_angle_as_br_int())
         else: adder = Add(a_dtype=QUInt(self.br),b_dtype=QUInt(self.bphi))
 
         return {(MultiTargetCNOT(self.bphi),2),(adder,1)} | X_counts

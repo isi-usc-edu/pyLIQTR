@@ -9,7 +9,7 @@ from numpy.typing import NDArray
 
 from qualtran import (
     GateWithRegisters,
-    BoundedQUInt,
+    BQUInt,
     QBit,
     Register,
     Signature,
@@ -48,8 +48,8 @@ class UniformSuperpositionIJFirstQuantization(GateWithRegisters):
     def signature(self) -> Signature:
         return Signature(
             [
-                Register('i', BoundedQUInt(bitsize=self.n_eta, iteration_length=self.eta)),
-                Register('j', BoundedQUInt(bitsize=self.n_eta, iteration_length=self.eta)),
+                Register('i', BQUInt(bitsize=self.n_eta, iteration_length=self.eta)),
+                Register('j', BQUInt(bitsize=self.n_eta, iteration_length=self.eta)),
                 Register('succ_i', QBit(), side=Side.RIGHT),
                 Register('succ_j', QBit(), side=Side.RIGHT),
                 Register('flag_equal', QBit(), side=Side.RIGHT),

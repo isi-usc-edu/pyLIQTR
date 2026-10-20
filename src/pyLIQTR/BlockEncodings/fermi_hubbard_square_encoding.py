@@ -9,6 +9,9 @@ import  qualtran                     as  qt
 import  qualtran.cirq_interop.testing  as  qt_test
 
 import  qualtran.bloqs.chemistry.hubbard_model.qubitization as  qt_hm
+from qualtran.bloqs.multiplexers.select_base import SelectOracle
+from functools import cached_property
+import attrs
 
 
 from    pyLIQTR.BlockEncodings                 import   VALID_ENCODINGS
@@ -18,6 +21,34 @@ from    pyLIQTR.circuits.operators.prepare_FermiHubbard import PrepareHubbardPYL
 
 
 
+
+
+@attrs.frozen
+class _SelectHubbardZeroControl(SelectOracle):
+    x_dim: int
+    y_dim: int
+
+    @cached_property
+    def uncontrolled(self):
+        return qt_hm.SelectHubbard(self.x_dim, self.y_dim)
+
+    @cached_property
+    def selection_registers(self):
+        return self.uncontrolled.selection_registers
+
+    @cached_property
+    def target_registers(self):
+        return self.uncontrolled.target_registers
+
+    @cached_property
+    def control_registers(self):
+        return (qt.Register("control", qt.QBit()),)
+
+    def decompose_from_registers(self, *, context, **quregs):
+        control = quregs.pop("control")
+        yield self.uncontrolled.controlled(qt.CtrlSpec(cvs=0)).on_registers(
+            ctrl=control, **quregs
+        )
 
 
 class fermi_hubbard_square_encoding(BlockEncoding_select_prepare):
@@ -33,9 +64,12 @@ class fermi_hubbard_square_encoding(BlockEncoding_select_prepare):
 
         self._encoding_type  =  VALID_ENCODINGS.FermiHubbardSquare
 
-        self._select_gate    =  qt_hm.SelectHubbard( x_dim=self.dims[0], 
-                                                       y_dim=self.dims[1], 
-                                                       control_val=self._control_val )
+        if self._control_val == 0:
+            self._select_gate = _SelectHubbardZeroControl(*self.dims)
+        else:
+            self._select_gate = qt_hm.SelectHubbard(
+                x_dim=self.dims[0], y_dim=self.dims[1], control_val=self._control_val
+            )
    
         self._prepare_gate   =  PrepareHubbardPYL( x_dim=self.dims[0], 
                                                         y_dim=self.dims[1], 
@@ -54,5 +88,3 @@ class fermi_hubbard_square_encoding(BlockEncoding_select_prepare):
         U  =  np.abs(self.PI.U)
         alpha = 2*N*J + U*N/2
         return (alpha)
-
-

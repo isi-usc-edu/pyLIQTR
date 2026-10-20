@@ -32,7 +32,7 @@ class ChemicalHamiltonian(ProblemInstance):
 
     def __init__(self, mol_ham: InteractionOperator, mol_name=None, **kwargs):
         # We need to setup Julia if this hasn't happened yet, hopefully this only runs once!
-        juliapkg.require_julia("~1.8,~1.9")
+        juliapkg.require_julia("~1.9")
         juliapkg.resolve()
         
         # Now start the real initialization
