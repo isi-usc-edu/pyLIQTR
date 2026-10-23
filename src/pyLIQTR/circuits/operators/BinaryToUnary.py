@@ -13,7 +13,7 @@ from functools import cached_property
 from qualtran._infra.registers import Register, Signature
 from qualtran import GateWithRegisters
 from qualtran._infra.gate_with_registers import total_bits
-from qualtran.cirq_interop.t_complexity_protocol import TComplexity
+from qualtran.cirq_interop.t_complexity_protocol import TComplexity, t_complexity
 from qualtran.bloqs.multiplexers.unary_iteration_bloq import UnaryIterationGate
 from qualtran.bloqs.mcmt.and_bloq import And
 from qualtran._infra.data_types import QAny, BQUInt
@@ -187,6 +187,5 @@ class BinaryToUnaryBits(GateWithRegisters):
 
     def _t_complexity_(self,adjoint=False) -> TComplexity:
         num_ands = self.n_bits-1
-        from pyLIQTR.utils.resource_analysis import pylqt_t_complexity
-        resources_per_and = pylqt_t_complexity(And(cv1=0,cv2=0,uncompute=self.uncompute != adjoint))
+        resources_per_and = t_complexity(And(cv1=0,cv2=0,uncompute=self.uncompute != adjoint))
         return TComplexity(t=resources_per_and.t*num_ands,clifford=resources_per_and.clifford*num_ands+self.n_bits)
