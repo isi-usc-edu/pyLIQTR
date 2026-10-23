@@ -10,7 +10,7 @@ import warnings
 import numpy as np
 
 from ..translation import Translation
-from qualtran._infra.gate_with_registers import get_named_qubits
+from qualtran.cirq_interop import get_named_qubits
 
 class TestTranslation:
     """

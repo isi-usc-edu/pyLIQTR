@@ -5,7 +5,7 @@ SPDX-License-Identifier: BSD-2-Clause
 import qualtran as qt
 import cirq
 import numpy as np
-from qualtran import Register, GateWithRegisters, Signature, QBit, BoundedQUInt, QAny
+from qualtran import Register, GateWithRegisters, Signature, QBit, BQUInt, QAny
 from qualtran._infra.gate_with_registers import total_bits
 from functools import cached_property
 from typing import List, Tuple, Sequence, Optional
@@ -44,13 +44,13 @@ class FermionicSelect_LinearT(GateWithRegisters):
 
     @cached_property
     def selection_registers(self) -> Tuple[Register]:
-        p_reg = Register(name='p',dtype=BoundedQUInt(bitsize=self.__Np_bits,iteration_length=int(self.__N/2)))
-        q_reg = Register(name='q',dtype=BoundedQUInt(bitsize=self.__Np_bits,iteration_length=int(self.__N/2)))
+        p_reg = Register(name='p',dtype=BQUInt(bitsize=self.__Np_bits,iteration_length=int(self.__N/2)))
+        q_reg = Register(name='q',dtype=BQUInt(bitsize=self.__Np_bits,iteration_length=int(self.__N/2)))
         theta_reg = Register(name="theta",dtype=QBit())
-        U_reg = Register(name="U",dtype=BoundedQUInt(1,2))
-        V_reg = Register(name="V",dtype=BoundedQUInt(1,2))
-        a_reg = Register(name="a",dtype=BoundedQUInt(1,2))
-        b_reg = Register(name="b",dtype=BoundedQUInt(1,2))
+        U_reg = Register(name="U",dtype=BQUInt(1,2))
+        V_reg = Register(name="V",dtype=BQUInt(1,2))
+        a_reg = Register(name="a",dtype=BQUInt(1,2))
+        b_reg = Register(name="b",dtype=BQUInt(1,2))
         return (theta_reg,U_reg,V_reg,p_reg,a_reg,q_reg,b_reg)
 
     @cached_property
@@ -78,8 +78,8 @@ class FermionicSelect_LinearT(GateWithRegisters):
 
         yield qt.bloqs.multiplexers.selected_majorana_fermion.SelectedMajoranaFermion(
             selection_regs=(
-                Register('a',BoundedQUInt(1,2)),
-                Register('p',BoundedQUInt(self.signature.get_left('p').total_bits(),iteration_length=int(self.__N/2))),
+                Register('a',BQUInt(1,2)),
+                Register('p',BQUInt(self.signature.get_left('p').total_bits(),iteration_length=int(self.__N/2))),
             ),
             control_regs=self.control_registers,
             target_gate=cirq.Y, 

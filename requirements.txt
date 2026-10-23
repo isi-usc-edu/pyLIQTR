@@ -1,27 +1,31 @@
 # pyLIQTR package requirements.
 
 # Google originated
-# October 2023 release currently required by qualtran 0.2.0
-# cirq-core==1.3.0.dev20231018023458
-# removing the restriction and letting Qualtran add their restriction(s) and the wheel will figure it out
-cirq-core
-# November 2023 release we were previously using
-# cirq-core==1.3.0.dev20231102230836
-qualtran==0.4.0
+# Current Cirq releases beyond 1.6 (1.6.1 and 1.7.0) eagerly materialize large unitaries
+# for Qualtran 0.7-based circuits, whereas Cirq 1.5.0 uses a statevector representation.
+# For 16Q simulations, the former approach takes about 64 GB of memory,
+# while the latter only takes around 1 MB.
+cirq-core>=1.5,<1.6
+qualtran==0.7.0
 
 # Other requirements
 ipykernel
-numpy
-pandas
-scipy
-matplotlib
+numpy>2.0,<3
+pandas>=2.2.2
+scipy>=1.13
+matplotlib>=3.9
+h5py>=3.11
+mpmath
+cachetools
+# PennyLane on Python 3.10 requires autoray<0.8; cotengra 0.8 uses autoray>=0.8.
+cotengra<0.8; python_version < '3.11'
 tqdm
-openfermion
+openfermion>=1.7.1
 portalocker
 ply
 gmpy2
 networkx
-juliacall
+juliacall==0.9.23
 juliapkg
 rustworkx
 pydot

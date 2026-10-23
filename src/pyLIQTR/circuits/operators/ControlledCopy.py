@@ -7,12 +7,12 @@ import numpy as np
 from functools import cached_property
 from typing import Set, Optional, Tuple, Sequence
 from numpy.typing import NDArray
-from attrs import frozen
+from attrs import frozen, evolve
 
 from qualtran import (
     QUInt,
     QBit,
-    BoundedQUInt,
+    BQUInt,
     Register,
     Side,
     Signature,
@@ -41,6 +41,10 @@ class ControlledCopy(GateWithRegisters):
 
     bitsize: int
     control_val: Optional[int] = 1
+    uncompute: bool = False
+
+    def adjoint(self):
+        return evolve(self, uncompute=not self.uncompute)
 
     @cached_property
     def signature(self) -> Signature:
@@ -70,15 +74,15 @@ class ControlledCopy(GateWithRegisters):
             yield XGate().on(*control)
 
         for i,bit in enumerate(original):
-            yield And().on_registers(ctrl=[control,[bit]],target=target[i])
+            yield And(uncompute=self.uncompute).on_registers(ctrl=[control,[bit]],target=target[i])
 
         if self.control_val == 0:
             yield XGate().on(*control)
 
     def build_call_graph(self, ssa: 'SympySymbolAllocator') -> Set['BloqCountT']:
         if self.control_val == 0:
-            return {(And(), self.bitsize),(XGate(),2)}
-        return {(And(), self.bitsize)}
+            return {(And(uncompute=self.uncompute), self.bitsize),(XGate(),2)}
+        return {(And(uncompute=self.uncompute), self.bitsize)}
 
 class MultiplexedControlledCopy(UnaryIterationGate):
     """
@@ -111,7 +115,7 @@ class MultiplexedControlledCopy(UnaryIterationGate):
     @cached_property
     def selection_registers(self) -> Tuple[Register, ...]:
         return (Register(
-                'selection', dtype=BoundedQUInt(bitsize=self.selection_bitsize,iteration_length=self.iteration_length) # w 
+                'selection', dtype=BQUInt(bitsize=self.selection_bitsize,iteration_length=self.iteration_length) # w
             ),)
 
     @cached_property

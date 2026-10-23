@@ -7,7 +7,7 @@ import cirq
 import numpy as np
 
 from qualtran.cirq_interop.testing import assert_circuit_inp_out_cirqsim
-from qualtran.cirq_interop.bit_tools import iter_bits
+from qualtran import QUInt
 from  pyLIQTR.utils.global_ancilla_manager import gam as gam
 from  pyLIQTR.utils.printing import openqasm
 from pyLIQTR.circuits.operators.PhaseGradientRotation import approx_angle_with_br_bits
@@ -39,7 +39,7 @@ class TestRotationsQROM:
         circuit = cirq.Circuit(operation)
         # loop over selection indices
         for index in range(num_coeffs):
-            binary_index = list(iter_bits(index,width=n_select))
+            binary_index = QUInt(n_select).to_bits(index)
             # input state
             input_state = binary_index + [0]*n_data
             # output state
@@ -71,7 +71,7 @@ class TestRotationsQROM:
         circuit.append(operation**(-1))
         # loop over selection indices
         for index in range(num_coeffs):
-            binary_index = list(iter_bits(index,width=n_select))
+            binary_index = QUInt(n_select).to_bits(index)
             # input state
             input_state = binary_index + [0]*n_data
             # output state equals input
@@ -105,7 +105,7 @@ class TestRotationsQROM:
         ])
         # loop over selection indices
         for index in range(num_coeffs):
-            binary_index = list(iter_bits(index,width=n_select))
+            binary_index = QUInt(n_select).to_bits(index)
             # input state
             input_state = binary_index + [0]*n_data + [0]
             # output state equals input

@@ -53,7 +53,8 @@ setup(
     author_email=AUTHOR_EMAIL,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    python_requires=">=3.8,<=3.12.2",
+    package_data={"pyLIQTR": ["juliapkg.json"]},
+    python_requires=">=3.10,<=3.12.2",
     install_requires=REQUIREMENTS,
     extras_require={"dev": REQUIREMENTS_DEV},
 )

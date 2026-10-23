@@ -7,7 +7,7 @@ import cirq
 import numpy as np
 
 from qualtran.cirq_interop.testing import assert_circuit_inp_out_cirqsim, GateHelper
-from qualtran.cirq_interop.bit_tools import iter_bits_twos_complement
+from qualtran import QInt
 from  pyLIQTR.utils.global_ancilla_manager import gam as gam
 from  pyLIQTR.utils.printing import openqasm
 from pyLIQTR.utils.resource_analysis import estimate_resources

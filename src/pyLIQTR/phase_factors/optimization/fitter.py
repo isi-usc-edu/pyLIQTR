@@ -134,8 +134,8 @@ class Fitter(ChebyshevPoly):
         self.coeffs_m       = None
 
 
-        self.fit_err_linf   = -np.Inf
-        self.fit_err_rel    = -np.Inf
+        self.fit_err_linf   = -np.inf
+        self.fit_err_rel    = -np.inf
         self.conv_err_linf  = []
 
         if pts_init is None:
@@ -173,7 +173,7 @@ class Fitter(ChebyshevPoly):
             x = xpts[j]
 
             fx[j]     = self.f_tgt(x)
-            BAPx[j]   = self.eval(x)
+            BAPx[j]   = self.eval(x).item()
             resi[j]   = BAPx[j] - fx[j]
 
         return(BAPx,fx,resi)
@@ -283,7 +283,7 @@ class Fitter(ChebyshevPoly):
                     self._success = 0
                     return
 
-                if (roots[j] == np.NaN):
+                if mpm.isnan(roots[j]):
                     self._success = 0
                     return
 
@@ -294,7 +294,7 @@ class Fitter(ChebyshevPoly):
             pts_new           =  copy.deepcopy(self.pts)
             max_resi_tot      =  mpm.fabs(bap_sol[self.deg])
 
-            rabs_max   = -np.Inf;       rrel_max   = -np.Inf
+            rabs_max   = -np.inf;       rrel_max   = -np.inf
 
 
             ##  Find points that maximize the fitting residual
@@ -469,7 +469,7 @@ def _findroot_brent_m(f, ibounds, maxsteps=1000, tol=1.0e-18, tol_diff=None,
 
     if ( f(a)*f(b) > 0 ):
         print("REMEZ-BRENT:\tError in endpoint condition f(a)f(b) > 0\n")
-        return(np.NaN)
+        return(np.nan)
 
     tol_func = tol
 
@@ -497,7 +497,7 @@ def _findroot_brent_m(f, ibounds, maxsteps=1000, tol=1.0e-18, tol_diff=None,
 
         if( itr > self.root_max_iter ):
             print("REMEZ-BRENT:\tMax number ( N = ", self.root_max_iter, ") of iterations reached!\n")
-            return(np.NaN)
+            return(np.nan)
 
         if( ( mpm.fabs(b-a) < tol_diff ) or ( mpm.fabs(f(s)) < tol_func ) ):
             return(s)

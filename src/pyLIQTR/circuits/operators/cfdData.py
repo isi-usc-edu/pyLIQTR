@@ -11,11 +11,11 @@ from typing import Sequence, Set, Tuple, Optional
 from qualtran.drawing import Text, TextBox, WireSymbol
 from qualtran.bloqs.mcmt.and_bloq import And
 from qualtran.cirq_interop.t_complexity_protocol import TComplexity
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli as mcmtp # remove later
+from qualtran.bloqs.mcmt.multi_control_pauli import MultiControlPauli as mcmtp # remove later
 from pyLIQTR.utils.global_ancilla_manager import GlobalQubitManager as manager
 from qualtran import Register, QAny, Signature, GateWithRegisters, DecomposeTypeError, CompositeBloq
 from qualtran.bloqs.basic_gates import CNOT, XGate, Hadamard, SGate, TGate, Toffoli
-from qualtran.cirq_interop import CirqGateAsBloqBase
+from qualtran.cirq_interop import cirq_gate_to_bloq, CirqGateAsBloqBase
 from pyLIQTR.gate_decomp.rotation_gates import ry_decomp
 from functools import cached_property
 
@@ -128,7 +128,7 @@ class vPrep(GateWithRegisters):
     
     def build_call_graph(self, ssa: "SympySymbolAllocator") -> Set['BloqCountT']:
         return {(Toffoli(),4), (CNOT(),6), (And(),2), (And(uncompute=True),2), (cH(),12),
-                (mcmtp((1,1,1), target_gate=cirq.Z),1), (mcmtp((0,0,0,0,0,0,1), target_gate=cirq.X),1)}
+                (mcmtp((1,1,1), target_bloq=cirq_gate_to_bloq(cirq.Z)),1), (mcmtp((0,0,0,0,0,0,1), target_bloq=cirq_gate_to_bloq(cirq.X)),1)}
 
     def _circuit_diagram_info_(self, _) -> cirq.CircuitDiagramInfo:
         wire_symbols = []
@@ -168,14 +168,14 @@ class vPrep(GateWithRegisters):
             yield cH().on(data[0],control)
             yield cH().on(data[1],control)
             yield cH().on(ancilla[1],control)
-            yield mcmtp((1,1,1), target_gate=cirq.Z).on(control,ancilla[1],*data[:2])
+            yield mcmtp((1,1,1), target_bloq=cirq_gate_to_bloq(cirq.Z)).on(control,ancilla[1],*data[:2])
             yield And().on(control,ancilla[1],clean[0])
             yield cH().on(data[1],clean[0])
             yield cH().on(data[0],clean[0])
             yield And(uncompute=True).on(control,ancilla[1],clean[0])
             yield cH().on(ancilla[1],control)
             yield cirq.CX.on(control,ancilla[0])
-            yield mcmtp((0,0,0,0,0,0,1), target_gate=cirq.X).on(*data[:6],control,ancilla[0])
+            yield mcmtp((0,0,0,0,0,0,1), target_bloq=cirq_gate_to_bloq(cirq.X)).on(*data[:6],control,ancilla[0])
             for idx in range(6):
                 yield cH().on(data[idx],control)
             qm.qfree(qubits=[*clean])
@@ -431,9 +431,9 @@ class Grover(GateWithRegisters):
     
     def build_call_graph(self, ssa: "SympySymbolAllocator") -> Set['BloqCountT']:
         if self.control == 0:
-            return {(Hadamard(),12),(mcmtp(0,0,0,0,0,target_gate=cirq.Z),1),(XGate(),2)}
+            return {(Hadamard(),12),(mcmtp(0,0,0,0,0,target_bloq=cirq_gate_to_bloq(cirq.Z)),1),(XGate(),2)}
         elif self.control == 3:
-            return {(And(),2),(And(uncompute=True),2),(cH(),12),(mcmtp((0,0,0,0,0,0,1,1),target_gate=cirq.Z),1)}
+            return {(And(),2),(And(uncompute=True),2),(cH(),12),(mcmtp((0,0,0,0,0,0,1,1),target_bloq=cirq_gate_to_bloq(cirq.Z)),1)}
         else:
             assert(False)
 
@@ -472,7 +472,7 @@ class Grover(GateWithRegisters):
                 assert(False)
 
             yield cirq.X.on(data[-1])
-            yield mcmtp((1,1,1,0,0,0,0,0), target_gate=cirq.Z).on(*control, *data)
+            yield mcmtp((1,1,1,0,0,0,0,0), target_bloq=cirq_gate_to_bloq(cirq.Z)).on(*control, *data)
             yield cirq.X.on(data[-1])
             
             if self.control == 3:
@@ -492,7 +492,7 @@ class Grover(GateWithRegisters):
                 yield cirq.H.on(data[idx])
             
             yield cirq.X.on(data[-1])
-            yield mcmtp((0,0,0,0,0), target_gate=cirq.Z).on(*data)
+            yield mcmtp((0,0,0,0,0), target_bloq=cirq_gate_to_bloq(cirq.Z)).on(*data)
             yield cirq.X.on(data[-1])
 
             for jdx in range(len(data)):
@@ -602,9 +602,9 @@ class AMatrix(GateWithRegisters):
         if self.control == 0:
             return {(Hadamard(), 4), (Toffoli(), 1)}
         elif self.control == 1:
-            return {(cH(), 4), (mcmtp((1,1,1),target_gate=cirq.X), 1)}
+            return {(cH(), 4), (mcmtp((1,1,1),target_bloq=cirq_gate_to_bloq(cirq.X)), 1)}
         elif self.control == 2:
-            return {(cH(), 4), (And(), 1), (And(uncompute=True), 1), (mcmtp((1,1,1,1),target_gate=cirq.X), 1)}
+            return {(cH(), 4), (And(), 1), (And(uncompute=True), 1), (mcmtp((1,1,1,1),target_bloq=cirq_gate_to_bloq(cirq.X)), 1)}
         else:
             assert(False)
 
@@ -637,13 +637,13 @@ class AMatrix(GateWithRegisters):
                 yield cH().on(ancilla,clean)
                 yield cH().on(data[0],clean)
                 yield cH().on(data[1],clean)
-                yield mcmtp((1,)*(2+self.control), target_gate=cirq.X).on(ancilla,*control,*data[::-1])
+                yield mcmtp((1,)*(2+self.control), target_bloq=cirq_gate_to_bloq(cirq.X)).on(ancilla,*control,*data[::-1])
                 yield cH().on(clean,ancilla)
                 yield And(uncompute=True).on(*control,clean)
             else:
                 yield And().on(*control,clean)
                 yield cH().on(ancilla,clean)
-                yield mcmtp((1,)*(2+self.control), target_gate=cirq.X).on(ancilla,*control,*data[::-1])
+                yield mcmtp((1,)*(2+self.control), target_bloq=cirq_gate_to_bloq(cirq.X)).on(ancilla,*control,*data[::-1])
                 yield cH().on(data[1],clean)
                 yield cH().on(data[0],clean)
                 yield cH().on(ancilla,clean)
@@ -655,11 +655,11 @@ class AMatrix(GateWithRegisters):
                 yield cH().on(ancilla,control)
                 yield cH().on(data[0],control)
                 yield cH().on(data[1],control)
-                yield mcmtp((1,)*(2+self.control), target_gate=cirq.X).on(ancilla,control,*data[::-1])
+                yield mcmtp((1,)*(2+self.control), target_bloq=cirq_gate_to_bloq(cirq.X)).on(ancilla,control,*data[::-1])
                 yield cH().on(clean,control)
             else:
                 yield cH().on(ancilla,control)
-                yield mcmtp((1,)*(2+self.control), target_gate=cirq.X).on(ancilla,control,*data[::-1])
+                yield mcmtp((1,)*(2+self.control), target_bloq=cirq_gate_to_bloq(cirq.X)).on(ancilla,control,*data[::-1])
                 yield cH().on(data[1],control)
                 yield cH().on(data[0],control)
                 yield cH().on(ancilla,control)
@@ -755,7 +755,7 @@ class F3_operator(GateWithRegisters):
         for jdx in range(6):
             yield cirq.H.on(ancilla[jdx])
         yield cirq.X.on(ancilla[-1])
-        yield mcmtp((0,)*6, target_gate=cirq.X).on(*ancilla[:6],ancilla[-1])
+        yield mcmtp((0,)*6, target_bloq=cirq_gate_to_bloq(cirq.X)).on(*ancilla[:6],ancilla[-1])
 
 
 class F2_operator(GateWithRegisters):
@@ -800,7 +800,7 @@ class F2_operator(GateWithRegisters):
         yield LCU(eps = self.eps1).on(*data)
         yield WMatrix(eps=self.eps2).on(*data[:6],*ancilla[6:9])
         yield cirq.X.on(ancilla[9])
-        yield mcmtp((0,)*6,target_gate=cirq.X).on(*data[6:12],ancilla[9])
+        yield mcmtp((0,)*6,target_bloq=cirq_gate_to_bloq(cirq.X)).on(*data[6:12],ancilla[9])
         for idx in range(3):
             yield cirq.CCX.on(*data[2*idx:2*idx+2],ancilla[-idx-1])
 

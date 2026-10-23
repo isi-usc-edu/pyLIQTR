@@ -6,10 +6,19 @@ import cirq
 import numpy as np
 from functools import cached_property
 from typing import Set
-from qualtran import GateWithRegisters, Signature, Register, QAny, Side
+from qualtran import Adjoint, GateWithRegisters, Signature, Register, QAny, Side
 from qualtran.bloqs.mcmt import And
 from qualtran.bloqs.basic_gates import CNOT
 from qualtran.bloqs.arithmetic import OutOfPlaceAdder
+
+
+class _SumOf3SquaresAdjoint(Adjoint):
+    def decompose_from_registers(self, *, context, **quregs):
+        # Invert the Cirq arithmetic without treating reused carry wires as fresh outputs.
+        return cirq.inverse(tuple(self.subbloq.decompose_from_registers(
+            context=context, **quregs
+        )))
+
 
 class SumOf3Squares(GateWithRegisters):
     """This gate sums the squares of three :math:`n_p`-bit binary numbers using :math:`3 n_p^2 - n_p - 1` Toffoli gates. This is useful for calculating the norm of a vector, for example.
@@ -33,6 +42,9 @@ class SumOf3Squares(GateWithRegisters):
         self.num_bits_p = num_bits_p
         self.half_n = int(np.ceil(self.num_bits_p/2))
         self._even_n = self.num_bits_p % 2 == 0
+
+    def adjoint(self):
+        return _SumOf3SquaresAdjoint(self)
 
     @cached_property
     def signature(self):

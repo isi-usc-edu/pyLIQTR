@@ -5,7 +5,7 @@ SPDX-License-Identifier: BSD-2-Clause
 
 import platform
 import cirq
-import pkg_resources
+from importlib.resources import files
 import pytest
 from openfermion.circuits import trotterize_exp_qubop_to_qasm
 from openfermion import jordan_wigner
@@ -25,12 +25,8 @@ from pyLIQTR.utils.printing import openqasm
 from pyLIQTR.gate_decomp.cirq_transforms import clifford_plus_t_direct_transform
 
 
-TEST_QASM_FILE = pkg_resources.resource_filename(
-    "pyLIQTR", r"utils/tests/test_data/test_qasm_file.qasm"
-)
-TEST_QASM_NO_ROTATIONS_FILE = pkg_resources.resource_filename(
-    "pyLIQTR", r"utils/tests/test_data/test_qasm_file_with_decomposed_rotations.qasm"
-)
+TEST_QASM_FILE = str(files("pyLIQTR").joinpath("utils/tests/test_data/test_qasm_file.qasm"))
+TEST_QASM_NO_ROTATIONS_FILE = str(files("pyLIQTR").joinpath("utils/tests/test_data/test_qasm_file_with_decomposed_rotations.qasm"))
 
 class TestUtils:
     @pytest.fixture(scope="class")
@@ -55,9 +51,9 @@ class TestUtils:
         yield trotterized_hamiltonian
         del trotterized_hamiltonian
 
-    @pytest.mark.skip
     @pytest.fixture(scope="class")
     def vlasov_n8_qsp(self):
+        pytest.skip("Legacy QSP modules are no longer available")
         random.seed(0)
         N      = 8
         k      =  2.0

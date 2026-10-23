@@ -32,7 +32,7 @@ class ChemicalHamiltonian(ProblemInstance):
 
     def __init__(self, mol_ham: InteractionOperator, mol_name=None, **kwargs):
         # We need to setup Julia if this hasn't happened yet, hopefully this only runs once!
-        juliapkg.require_julia("~1.8,~1.9")
+        juliapkg.require_julia("~1.9")
         juliapkg.resolve()
         
         # Now start the real initialization
@@ -133,8 +133,6 @@ class ChemicalHamiltonian(ProblemInstance):
             from pyLIQTR.utils.df_utils import to_OBF
             if 'sphinx' not in sys.modules:
                 from juliacall import Main as jl
-                jl.seval('import Pkg')
-                jl.seval('Pkg.add("QuantumMAMBO")')
                 jl.seval("using QuantumMAMBO")
                 mambo = jl.QuantumMAMBO
 
@@ -162,8 +160,6 @@ class ChemicalHamiltonian(ProblemInstance):
         if method == 'BLISS':
             if 'sphinx' not in sys.modules:
                 from juliacall import Main as jl
-                jl.seval('import Pkg')
-                jl.seval('Pkg.add("QuantumMAMBO")')
                 jl.seval("using QuantumMAMBO")
                 mambo = jl.QuantumMAMBO
             else:

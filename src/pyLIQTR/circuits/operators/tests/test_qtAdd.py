@@ -8,7 +8,7 @@ import numpy as np
 
 from qualtran.bloqs.arithmetic.addition import Add as qtAdd
 from qualtran.cirq_interop.testing import assert_circuit_inp_out_cirqsim
-from qualtran.cirq_interop.bit_tools import iter_bits_twos_complement
+from qualtran import QInt
 from qualtran._infra.data_types import QUInt
 from  pyLIQTR.utils.global_ancilla_manager import gam as gam
 from  pyLIQTR.utils.printing import openqasm
@@ -40,10 +40,10 @@ class TestqtAdd:
         # input states
         int_out_add = int_x+int_y
         int_out_sub = int_y-int_x
-        init_state = list(iter_bits_twos_complement(int_x,width=nb_x)) + list(iter_bits_twos_complement(int_y,width=nout)) + [0]*len(zero_pad)
+        init_state = QUInt(nb_x).to_bits(int_x) + QUInt(nout).to_bits(int_y) + [0]*len(zero_pad)
         # output states
-        out_state_add = list(iter_bits_twos_complement(int_x,width=nb_x)) + list(iter_bits_twos_complement(int_out_add,width=nout)) + [0]*len(zero_pad)
-        out_state_sub = list(iter_bits_twos_complement(int_x,width=nb_x)) + list(iter_bits_twos_complement(int_out_sub,width=nout)) + [0]*len(zero_pad)
+        out_state_add = QUInt(nb_x).to_bits(int_x) + QUInt(nout).to_bits(int_out_add % 2**nout) + [0]*len(zero_pad)
+        out_state_sub = QUInt(nb_x).to_bits(int_x) + QUInt(nout).to_bits(int_out_sub % 2**nout) + [0]*len(zero_pad)
         # verify simulated results
         qubit_order = [*in_x,*out_y,*zero_pad]
         assert_circuit_inp_out_cirqsim(add_circuit,qubit_order=qubit_order,inputs=init_state,outputs=out_state_add)
@@ -116,7 +116,7 @@ class TestqtAdd:
         # input states
         int_out_add = int_x+int_y
         int_out_sub = int_y-int_x
-        init_state = list(iter_bits_twos_complement(int_x,width=nb_x)) + list(iter_bits_twos_complement(int_y,width=nout)) + [0]*len(zero_pad)
+        init_state = QUInt(nb_x).to_bits(int_x) + QUInt(nout).to_bits(int_y) + [0]*len(zero_pad)
         # output states equal input
         # verify simulated results
         qubit_order = [*in_x,*out_y,*zero_pad]

@@ -6,6 +6,7 @@ from typing import Tuple
 
 import attr
 import cirq
+from qualtran.cirq_interop import cirq_gate_to_bloq
 import numpy as np
 from functools import cached_property
 from numpy.typing import NDArray
@@ -13,7 +14,7 @@ from numpy.typing import NDArray
 from qualtran import GateWithRegisters, Signature
 from qualtran.bloqs.mcmt.and_bloq import And, MultiAnd
 from qualtran.bloqs.arithmetic import LessThanEqual
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli
+from qualtran.bloqs.mcmt.multi_control_pauli import MultiControlPauli
 
 from pyLIQTR.circuits.operators.BinaryToUnary import BinaryToUnaryBits
 from pyLIQTR.circuits.operators.PhaseGradientRotation import PhaseGradientZRotation
@@ -114,7 +115,7 @@ class ControlledPrepareUniformSuperposition(GateWithRegisters):
         if self.n_Xi == 1:
             yield cirq.CZ(*index_reg,*rot_ancilla)
         else:
-            yield MultiControlPauli(cvs=(1,)*self.n_Xi,target_gate=cirq.Z).on_registers(controls=[[q] for q in index_reg],target=rot_ancilla)
+            yield MultiControlPauli(cvs=(1,)*self.n_Xi,target_bloq=cirq_gate_to_bloq(cirq.Z)).on_registers(controls=[[q] for q in index_reg],target=rot_ancilla)
 
         # ix. Repeat controlled Hadamards. 
         yield [

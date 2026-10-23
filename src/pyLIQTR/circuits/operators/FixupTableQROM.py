@@ -11,7 +11,7 @@ from cirq.value.condition import Condition
 from qualtran.bloqs.multiplexers.unary_iteration_bloq import UnaryIterationGate
 from qualtran._infra.registers import Signature, Register
 from qualtran._infra.gate_with_registers import total_bits
-from qualtran._infra.data_types import BoundedQUInt, QBit, QAny
+from qualtran._infra.data_types import BQUInt, QBit, QAny
 
 class FixupTableQROM(UnaryIterationGate):
     '''
@@ -48,7 +48,7 @@ class FixupTableQROM(UnaryIterationGate):
     @cached_property
     def selection_registers(self) -> Tuple[Register]:
         iteration_length = int(np.ceil(len(self.data_to_uncompute)/2))
-        return (Register('selection',dtype=BoundedQUInt(bitsize=self.nSelect,iteration_length=iteration_length)),)
+        return (Register('selection',dtype=BQUInt(bitsize=self.nSelect,iteration_length=iteration_length)),)
 
     @cached_property
     def target_registers(self) -> Tuple[Register]:

@@ -47,6 +47,9 @@ class DAG:
         '''
         self.insts_in_dag += 1
         dependencies = inst.get_data_dependencies()
+        if not dependencies:
+            inst.index = self.dag.add_node(inst)
+            self.free_instructions.append(inst)
         for dep in dependencies.keys():
             self._link(dep,dependencies[dep],inst) #link current inst and dependency
 

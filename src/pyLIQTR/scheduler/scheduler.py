@@ -108,6 +108,8 @@ class Scheduler:
 
 
     def recursion_routine(self, inst:CirqInstruction):
+        if isinstance(inst._op.gate, cirq.GlobalPhaseGate):
+            return self.custom_gateset_decomposition_catchall(inst)
         found = False
         for op in self.op_cache:
             if found == False:
@@ -285,20 +287,14 @@ class Scheduler:
             return total_rotation_time
         
         #check if it's one of our common excepted bloqs
-        if inst_str.startswith("Allocate") or inst_str.startswith('Free'):
+        if (inst_str.startswith("Allocate") or inst_str.startswith('Free')
+                or isinstance(inst._op.gate, cirq.GlobalPhaseGate)):
             results_dict = {
                     'Execution time': 0,
                     'T-depth': 0,
                     'T-width': {},
                     'T-proportion': {},
-                    'Gates': {'T': 0,
-                            'H': 0,
-                            'S': 0, 
-                            'CX': 0,
-                            'CZ': 0,
-                            'Toffoli': 0,
-                            'Pauli (X, Y, Z)': 0,
-                            'Measurement/Reset': 0},
+                    'Gates': dict.fromkeys(self.gate_profile, 0),
                     'Qubits': inst.qubits,
                     'Executions': {},
                     'Cache': {}
@@ -789,8 +785,8 @@ class Scheduler:
         Decompose rotations into T-gates at a given precision.
         '''
         if str(inst).startswith(('Rx_d', 'Ry_d', 'Rz_d')):
-            cliff = inst._op.gate.get_gate().get_Clifford_count()
-            t = inst._op.gate.get_gate().get_T_count()
+            cliff = inst._op.gate.get_Clifford_count()
+            t = inst._op.gate.get_T_count()
             return (cliff, t)
 
         else:
@@ -1047,4 +1043,3 @@ def schedule_circuit(circuit, architecture_config:architecture = None, full_prof
     
 
                 
-

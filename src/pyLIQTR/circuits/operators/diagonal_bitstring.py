@@ -5,6 +5,7 @@ SPDX-License-Identifier: BSD-2-Clause
 
 
 import cirq
+from qualtran.cirq_interop import cirq_gate_to_bloq
 import warnings
 import numpy as np
 from typing import Sequence, Tuple
@@ -13,7 +14,7 @@ from qualtran.bloqs.mcmt.and_bloq import And
 from qualtran import QBit, QAny, Register, Signature, GateWithRegisters
 from qualtran.cirq_interop.t_complexity_protocol import TComplexity
 from pyLIQTR.utils.global_ancilla_manager import GlobalQubitManager as manager
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli as mcmtp
+from qualtran.bloqs.mcmt.multi_control_pauli import MultiControlPauli as mcmtp
 
 class DiagonalBitstring(GateWithRegisters):
     """
@@ -111,7 +112,7 @@ class DiagonalBitstring(GateWithRegisters):
                 if int(open_reg[qbit]) == 0:
                     yield cirq.X.on(data[idx])
             cvs = tuple((1, ) * len(data))
-            yield mcmtp(cvs, target_gate=cirq.X).on(*qbits)
+            yield mcmtp(cvs, target_bloq=cirq_gate_to_bloq(cirq.X)).on(*qbits)
             for idx, qbit in enumerate(range(len(open_reg))):
                 if int(open_reg[qbit]) == 0:
                     yield cirq.X.on(data[idx])
@@ -129,7 +130,7 @@ class DiagonalBitstring(GateWithRegisters):
                             temp_bitstring += "1"
                     cvs = tuple((1, ) * len(temp_bitstring))
                     register = list(anc) + list(data[:len(temp_bitstring)])
-                    yield mcmtp(cvs, target_gate=cirq.X).on(*register)
+                    yield mcmtp(cvs, target_bloq=cirq_gate_to_bloq(cirq.X)).on(*register)
             elif self.optimize:
                 qm = manager()
                 clean = np.array(qm.qalloc(n=(self.vector[1][0]*self.vector[1][1])))

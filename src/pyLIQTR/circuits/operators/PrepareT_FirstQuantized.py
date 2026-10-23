@@ -7,7 +7,7 @@ from functools import cached_property
 from typing import Set
 from numpy.typing import NDArray
 
-from qualtran import GateWithRegisters, Signature, Register, BoundedQUInt, QBit, Side
+from qualtran import GateWithRegisters, Signature, Register, BQUInt, QBit, Side
 
 from pyLIQTR.circuits.operators.PreparePowerTwoState import PreparePowerTwoState
 from pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition import FlaggedPrepareUniformSuperposition
@@ -50,9 +50,9 @@ class PrepareT_FirstQuantized(GateWithRegisters):
     @cached_property
     def signature(self) -> Signature:
         return Signature([
-            Register('w', BoundedQUInt(bitsize=2,iteration_length=3)),
-            Register("r", BoundedQUInt(bitsize=self.num_bits_p)),
-            Register("s", BoundedQUInt(bitsize=self.num_bits_p)),
+            Register('w', BQUInt(bitsize=2,iteration_length=3)),
+            Register("r", BQUInt(bitsize=self.num_bits_p)),
+            Register("s", BQUInt(bitsize=self.num_bits_p)),
             Register('less_than_ancilla', QBit()),
             Register('rot_ancilla', QBit()),
             Register('catalytic', QBit()),

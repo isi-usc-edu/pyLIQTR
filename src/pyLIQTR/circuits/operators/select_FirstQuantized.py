@@ -9,8 +9,8 @@ from attrs import frozen
 from typing import Dict, Tuple, Optional, Callable, Union, Sequence
 from numpy.typing import NDArray
 
-from qualtran import BoundedQUInt, Register, Side, QBit, QAny, Signature
-from qualtran.bloqs.block_encoding.lcu_select_and_prepare import SelectOracle
+from qualtran import BQUInt, Register, Side, QBit, QAny, Signature
+from qualtran.bloqs.multiplexers.select_base import SelectOracle
 from qualtran.bloqs.chemistry.pbc.first_quantization.select_and_prepare import MultiplexedCSwap3D
 
 from pyLIQTR.circuits.operators.SelectUV_FirstQuantized import SelectUVFirstQuantization
@@ -86,16 +86,16 @@ class SelectFirstQuantizationPYL(SelectOracle):
         bphi = max(self.num_bits_t,self.num_bits_nuc_pos)
         return (
             Register("uv", QBit(),side=Side.RIGHT),
-            Register('i', BoundedQUInt(bitsize=n_eta, iteration_length=self.eta)),
-            Register('j', BoundedQUInt(bitsize=n_eta, iteration_length=self.eta)),
-            Register("w", BoundedQUInt(bitsize=2,iteration_length=3)),
-            Register("r", BoundedQUInt(bitsize=self.num_bits_p)),
-            Register("s", BoundedQUInt(bitsize=self.num_bits_p)),
-            Register("mu", BoundedQUInt(bitsize=self.num_bits_p)),
-            Register("nu_x", BoundedQUInt(bitsize=n_nu)),
-            Register("nu_y", BoundedQUInt(bitsize=n_nu)),
-            Register("nu_z", BoundedQUInt(bitsize=n_nu)),
-            Register("m", BoundedQUInt(bitsize=n_m)),
+            Register('i', BQUInt(bitsize=n_eta, iteration_length=self.eta)),
+            Register('j', BQUInt(bitsize=n_eta, iteration_length=self.eta)),
+            Register("w", BQUInt(bitsize=2,iteration_length=3)),
+            Register("r", BQUInt(bitsize=self.num_bits_p)),
+            Register("s", BQUInt(bitsize=self.num_bits_p)),
+            Register("mu", BQUInt(bitsize=self.num_bits_p)),
+            Register("nu_x", BQUInt(bitsize=n_nu)),
+            Register("nu_y", BQUInt(bitsize=n_nu)),
+            Register("nu_z", BQUInt(bitsize=n_nu)),
+            Register("m", BQUInt(bitsize=n_m)),
             Register("Rl", QAny(bitsize=self.num_bits_nuc_pos), shape=(3,)),
             Register("overflow", QAny(bitsize=2), shape=(3,)),
             Register("phase_gradient_state", QAny(bitsize=bphi))

@@ -70,7 +70,7 @@ class Angler_opt:
         ## access by internal and external routines).
         ##
         self.parity      = self.poly.parity
-        self.f_tgt       = lambda x : self.poly.eval(np.array([x]))
+        self.f_tgt       = lambda x : self.poly.eval(np.array([x])).item()
 
         ## Set optimizer properties that will frequently be changed between
         ## different fucntions.
@@ -109,7 +109,7 @@ class Angler_opt:
 
         self.parity      = self.poly.parity
 
-        self.f_tgt = lambda x : self.poly.eval(np.array([x]))
+        self.f_tgt = lambda x : self.poly.eval(np.array([x])).item()
 
         return
 
@@ -634,7 +634,6 @@ def handle_scalar(x):
         x = x[np.newaxis]
 
     return(x)
-
 
 
 

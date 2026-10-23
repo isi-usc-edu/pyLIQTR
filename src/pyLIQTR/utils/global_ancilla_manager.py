@@ -15,6 +15,7 @@ class GlobalQubitManager(QubitManager):
         self._clean_set = set()
         self._dirty_set = set()
         self._inuse_set = set()
+        self._locked_qubits = dict()
         self._clean_id = 0
         self._dirty_id = 0
 
@@ -36,9 +37,14 @@ class GlobalQubitManager(QubitManager):
             self._locked_qubits[level] = set()
 
         for q in qubits:
+            # Ancillas can originate in a copied decomposition context.
             if isinstance(q, CleanQubit):
+                self._clean_id = max(self._clean_id, q.id + 1)
+                self._clean_set.discard(q)
                 self._locked_qubits[level].add(('clean',q))
             elif isinstance(q, BorrowableQubit):
+                self._dirty_id = max(self._dirty_id, q.id + 1)
+                self._dirty_set.discard(q)
                 self._locked_qubits[level].add(('dirty',q))
     
     def unlock_qubits(self, level:int):

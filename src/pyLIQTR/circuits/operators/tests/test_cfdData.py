@@ -31,9 +31,9 @@ class TestFMatrices:
         signature = [qualtran.Signature([data[0], ancilla[0]]),
                      qualtran.Signature([data[1], ancilla[1]]),
                      qualtran.Signature([data[2], ancilla[2]])]
-        registers = [qualtran._infra.gate_with_registers.get_named_qubits(signature[0]),
-                     qualtran._infra.gate_with_registers.get_named_qubits(signature[1]),
-                     qualtran._infra.gate_with_registers.get_named_qubits(signature[2])]
+        registers = [qualtran.cirq_interop.get_named_qubits(signature[0]),
+                     qualtran.cirq_interop.get_named_qubits(signature[1]),
+                     qualtran.cirq_interop.get_named_qubits(signature[2])]
         return registers
 
     def testCallGraph(self):

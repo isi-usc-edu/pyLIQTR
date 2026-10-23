@@ -1,8 +1,8 @@
 import IPython.display
-from qualtran.drawing.bloq_counts_graph import GraphvizCounts
+from qualtran.drawing import GraphvizCallGraph
 from qualtran import Bloq
 
-class BasicGraph(GraphvizCounts):
+class BasicGraph(GraphvizCallGraph):
 
     def get_node_title(self, b: Bloq):
         try:

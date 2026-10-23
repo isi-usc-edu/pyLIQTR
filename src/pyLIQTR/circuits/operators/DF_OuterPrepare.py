@@ -11,7 +11,9 @@ from qualtran.bloqs.arithmetic import LessThanEqual
 from qualtran.bloqs.basic_gates.swap import CSwap
 from qualtran.bloqs.data_loading.qrom import QROM
 from functools import cached_property
-from qualtran._infra.registers import Register
+from qualtran import Register, Signature
+from attrs import asdict
+from qualtran.cirq_interop import decompose_from_cirq_style_method
 
 from pyLIQTR.circuits.operators.FlaggedPrepareUniformSuperposition import FlaggedPrepareUniformSuperposition
 
@@ -20,6 +22,16 @@ class OuterPrepare(StatePreparationAliasSampling):
     Implements first block [prep] in Appendix C Fig 16 from https://arxiv.org/abs/2011.03494
     (Step 1 pg 51-52)
     '''
+    @classmethod
+    def from_probabilities(cls, unnormalized_probabilities, *, precision=1e-5):
+        prepared = StatePreparationAliasSampling.from_probabilities(
+            unnormalized_probabilities, precision=precision
+        )
+        return cls(**asdict(prepared, recurse=False))
+
+    def decompose_bloq(self):
+        return decompose_from_cirq_style_method(self)
+
     @cached_property
     def junk_registers(self) -> Tuple[Register, ...]:
         return tuple(
@@ -43,7 +55,7 @@ class OuterPrepare(StatePreparationAliasSampling):
         selection, less_than_equal = quregs['selection'], quregs['less_than_equal']
         sigma_mu, alt, keep = quregs.get('sigma_mu', ()), quregs['alt'], quregs.get('keep', ())
         success, rot_ancilla = quregs['success'], quregs['rot_ancilla']
-        N = self.selection_registers[0].iteration_length
+        N = self.selection_registers[0].dtype.iteration_length
 
         yield FlaggedPrepareUniformSuperposition(N).on_registers(target=selection,success=success,less_than_ancilla=less_than_equal,rot_ancilla=rot_ancilla)
 

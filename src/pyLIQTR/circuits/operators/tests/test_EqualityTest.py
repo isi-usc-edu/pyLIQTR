@@ -7,7 +7,7 @@ import cirq
 import numpy as np
 
 from qualtran.cirq_interop.testing import assert_circuit_inp_out_cirqsim, GateHelper
-from qualtran.cirq_interop.bit_tools import iter_bits
+from qualtran import QUInt
 from pyLIQTR.utils.global_ancilla_manager import gam as gam
 from pyLIQTR.utils.printing import openqasm
 from pyLIQTR.circuits.operators.EqualityTest import EqualityTest
@@ -28,7 +28,7 @@ class TestEqualityTest:
         # check simulation results. target qubit should end in 1 state only if i==j, other qubits should be unchanged.
         for i in range(2**bitsize):
             for j in range(2**bitsize):
-                input_state = list(iter_bits(i,width=bitsize))+list(iter_bits(j,width=bitsize))+[0]
+                input_state = QUInt(bitsize).to_bits(i)+QUInt(bitsize).to_bits(j)+[0]
                 output_state = input_state.copy()
                 if i==j:
                     output_state[-1] = 1

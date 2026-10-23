@@ -7,11 +7,11 @@ from functools import cached_property
 from typing import Set, Optional, Union, Sequence, Callable, Dict, Tuple
 from numpy.typing import NDArray
 
-from qualtran import GateWithRegisters, Signature, Register, QBit, QAny, BoundedQUInt
-from qualtran.bloqs.basic_gates import Toffoli, ZGate, Hadamard, CZPowGate
+from qualtran import GateWithRegisters, Signature, Register, QBit, QAny, BQUInt
+from qualtran.bloqs.basic_gates import Toffoli, ZGate, Hadamard, CZ
 from qualtran.bloqs.bookkeeping import ArbitraryClifford
-from qualtran.cirq_interop import CirqGateAsBloq
-from qualtran.bloqs.mcmt.multi_control_multi_target_pauli import MultiControlPauli
+from qualtran.cirq_interop import cirq_gate_to_bloq
+from qualtran.bloqs.mcmt.multi_control_pauli import MultiControlPauli
 
 from pyLIQTR.circuits.operators.ControlledCopy import MultiplexedControlledCopy
 
@@ -45,7 +45,7 @@ class SelectT_FirstQuantized(GateWithRegisters):
             [
                 Register("flag_T", QBit()),
                 Register("plus", QBit()),
-                Register("w", BoundedQUInt(bitsize=2,iteration_length=3)),
+                Register("w", BQUInt(bitsize=2,iteration_length=3)),
                 Register("r", QAny(bitsize=self.num_bits_p)),
                 Register("s", QAny(bitsize=self.num_bits_p)),
                 Register("sys", QAny(bitsize=self.num_bits_p), shape=(3,)),
@@ -84,7 +84,7 @@ class SelectT_FirstQuantized(GateWithRegisters):
 
         # controlled phase *unless* both bits are 1
         yield ZGate().on(*plus)
-        yield MultiControlPauli(cvs=(1,1),target_gate=cirq.Z).on_registers(controls=[[pr_target],[ps_target]],target=plus)
+        yield MultiControlPauli(cvs=(1,1),target_bloq=cirq_gate_to_bloq(cirq.Z)).on_registers(controls=[[pr_target],[ps_target]],target=plus)
 
         # erase ancilla using measurement and phase fixup. We measure the target bit once and then use classically controlled CZs on each set of controls for the phase fixup.
         ## for ps and pr
@@ -104,7 +104,7 @@ class SelectT_FirstQuantized(GateWithRegisters):
     def build_call_graph(self, ssa: 'SympySymbolAllocator') -> Set['BloqCountT']:
         # use ArbitraryClifford(n=1) for cirq.reset
         mcc = MultiplexedControlledCopy(target_bitsize=self.num_bits_p)
-        return {(mcc, 1),(MultiControlPauli(cvs=(1,1),target_gate=cirq.Z),1), (Toffoli(),2*self.num_bits_p),(ZGate(),1),(Hadamard(),2),(CirqGateAsBloq(cirq.MeasurementGate(num_qubits=1)),2),(cirq.ClassicallyControlledOperation(sub_operation=cirq.CZ(cirq.LineQubit(0),cirq.LineQubit(1)),conditions=''),2*self.num_bits_p),(ArbitraryClifford(n=1),2),(mcc.adjoint(),1)}
+        return {(mcc, 1),(MultiControlPauli(cvs=(1,1),target_bloq=cirq_gate_to_bloq(cirq.Z)),1), (Toffoli(),2*self.num_bits_p),(ZGate(),1),(Hadamard(),2),(cirq_gate_to_bloq(cirq.MeasurementGate(num_qubits=1)),2),(CZ(),2*self.num_bits_p),(ArbitraryClifford(n=1),2),(mcc.adjoint(),1)}
 
     def call_graph(
         self,

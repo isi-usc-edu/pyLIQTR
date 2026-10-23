@@ -49,7 +49,7 @@ class PauliStringLCU(BlockEncoding_select_prepare):
         selection_bitsize = int(np.ceil(np.log2(self.n_tot)))
 
         self._select_gate          =  SelectPauliLCU( selection_bitsize=selection_bitsize,
-                                                             target_bitsize=self.PI.n_qubits(),
+                                                             target_bitsize=int(self.PI.n_qubits()),
                                                              select_unitaries=self.getTerms,
                                                              control_val=self._control_val )
 
@@ -62,9 +62,10 @@ class PauliStringLCU(BlockEncoding_select_prepare):
                 if coeff < 0:
                     warnings.warn("Alias sampling preparation with negative coefficients is not supported yet. Circuits and estimates will assume positive coefficients.",stacklevel=2)
             
-            self._prepare_gate         =  StatePreparationAliasSampling.from_lcu_probs(
-                                                lcu_probabilities=[np.abs(np.real(t.coefficient)) for t in self.getTerms]
-                                                    , probability_epsilon=probability_eps)
+            probabilities = [np.abs(np.real(t.coefficient)) for t in self.getTerms]
+            self._prepare_gate = StatePreparationAliasSampling.from_probabilities(
+                probabilities, precision=probability_eps * sum(probabilities)
+            )
 
 
     @property

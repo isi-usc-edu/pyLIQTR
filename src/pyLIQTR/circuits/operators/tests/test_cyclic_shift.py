@@ -9,7 +9,7 @@ import pytest
 import numpy as np
 
 from ..cyclic_shift import CyclicShiftPermutation
-from qualtran._infra.gate_with_registers import get_named_qubits
+from qualtran.cirq_interop import get_named_qubits
 
 class TestTranslation:
     """

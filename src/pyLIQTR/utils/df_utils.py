@@ -5,14 +5,12 @@ SPDX-License-Identifier: BSD-2-Clause
 import juliapkg
 import sys
 if 'sphinx' not in sys.modules:
-    juliapkg.require_julia("~1.8,~1.9")
+    juliapkg.require_julia("~1.9")
     juliapkg.resolve()
 
     import juliacall
     from juliacall import Main as jl
 
-    jl.seval('import Pkg')
-    jl.seval('Pkg.add("QuantumMAMBO")')
     jl.seval("using QuantumMAMBO")
     jl.seval("using LinearAlgebra")
     mambo = jl.QuantumMAMBO

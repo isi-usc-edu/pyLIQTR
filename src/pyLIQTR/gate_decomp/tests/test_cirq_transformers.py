@@ -13,7 +13,7 @@ from typing import Union
 
 import cirq
 import numpy as np
-import pkg_resources
+from importlib.resources import files
 
 from pyLIQTR.gate_decomp.cirq_transforms import (
     clifford_plus_t_direct_transform,
@@ -24,12 +24,8 @@ from pyLIQTR.gate_decomp.cirq_transforms import (
 )
 from pyLIQTR.gate_decomp.rotation_gates import rz_decomp
 
-GSE_CIRCUIT_FILE = pkg_resources.resource_filename(
-    "pyLIQTR", r"gate_decomp/tests/data/gse_h2_decomp_circuit_example.json"
-)
-CIRCUIT_FILE = pkg_resources.resource_filename(
-    "pyLIQTR", r"gate_decomp/tests/data/test_circuit.json"
-)
+GSE_CIRCUIT_FILE = str(files("pyLIQTR").joinpath("gate_decomp/tests/data/gse_h2_decomp_circuit_example.json"))
+CIRCUIT_FILE = str(files("pyLIQTR").joinpath("gate_decomp/tests/data/test_circuit.json"))
 
 
 @pytest.mark.usefixtures("test_circuit_4_qubits")
